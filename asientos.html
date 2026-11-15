@@ -1,0 +1,1469 @@
+<!-- ASIENTOS CONTABLES -->
+<style>
+#pAsientos{color:var(--bs-body-color);font-family:'Segoe UI',system-ui,sans-serif;padding:10px 0}
+.asientos-tabs{display:flex;gap:6px;background:var(--bs-tertiary-bg);padding:6px;border-radius:12px;border:1px solid var(--bs-border-color);margin-bottom:18px;width:fit-content}
+.asientos-tab{display:flex;align-items:center;gap:8px;padding:9px 20px;border-radius:8px;font-size:.9rem;font-weight:600;color:var(--bs-secondary-color);background:transparent;border:none;cursor:pointer;transition:all .2s ease;white-space:nowrap}
+.asientos-tab:hover:not(.active){background:rgba(255,193,7,.08);color:var(--bs-body-color)}
+.asientos-tab.active{background:var(--bs-warning);color:#111;box-shadow:0 2px 8px rgba(255,193,7,.35)}
+.asientos-tab i{font-size:1.05rem}
+.appsheet-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.moneda-toggle-container{display:flex;align-items:center;gap:15px;background:var(--bs-tertiary-bg);padding:10px 18px;border-radius:12px;width:fit-content;border:1px solid var(--bs-border-color)}
+.moneda-labels{display:flex;gap:8px;font-size:.9rem;font-weight:bold}
+.moneda-label{color:var(--bs-secondary-color);transition:color .3s ease}
+.moneda-label.active{color:var(--bs-warning)}
+.moneda-toggle{position:relative;display:inline-block;width:44px;height:22px;margin:0}
+.moneda-toggle input{opacity:0;width:0;height:0}
+.moneda-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:var(--bs-secondary-bg);transition:.3s;border-radius:22px;border:1px solid var(--bs-warning)}
+.moneda-slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:3px;background-color:var(--bs-warning);transition:.3s;border-radius:50%}
+input:checked+.moneda-slider:before{transform:translateX(22px)}
+.asientos-card{background:var(--bs-body-bg);border:1px solid var(--bs-border-color);border-radius:12px;padding:0;overflow:hidden}
+.asientos-card-header{padding:14px 20px;background:var(--bs-tertiary-bg);border-bottom:1px solid var(--bs-border-color);display:flex;justify-content:space-between;align-items:center}
+.asientos-card-header h5{margin:0;font-weight:700;color:var(--bs-warning);font-size:1rem}
+.asientos-card-body{padding:0}
+#pAsientos table{width:100%;border-collapse:collapse;margin:0}
+#tablaAsientos td{padding:10px 14px;border-bottom:1px solid var(--bs-border-color)}
+#tablaAsientos thead th{padding:12px 14px;background:var(--bs-tertiary-bg);color:var(--bs-secondary-color);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;font-weight:700;border-bottom:1px solid var(--bs-border-color)}
+.nivel-1{background:var(--bs-secondary-bg);color:var(--bs-warning);font-weight:bold;cursor:pointer}
+.nivel-2{background:var(--bs-tertiary-bg);cursor:pointer}
+.nivel-3{background:var(--bs-body-bg);font-size:.9em;cursor:pointer;border-bottom:1px dashed var(--bs-border-color)}
+.nivel-4{background:var(--bs-body-bg);font-size:.85em;cursor:pointer;transition:background .15s ease-in-out}
+.nivel-4:hover{background:rgba(255,193,7,.08)!important}
+.arrow-icon{display:inline-block;transition:transform .2s ease}
+.collapsed .arrow-icon{transform:rotate(-90deg)}
+.fila-total-general{background:#111;color:#fff;font-weight:800;border-top:2px solid var(--bs-warning);font-size:1.05rem}
+[data-bs-theme="light"] .fila-total-general{background:#212529}
+.monto{text-align:right;font-family:'Consolas','Courier New',monospace;font-weight:bold}
+.negativo{color:var(--bs-danger)!important}
+.hidden{display:none!important}
+
+/* ===== MODAL ===== */
+.modal-cont{position:fixed;inset:0;width:100%;height:100%;background:rgba(0,0,0,.65);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:2000;padding:16px;overflow-y:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box}
+.modal-cont.active{display:flex}
+.modal-content-custom{background:var(--bs-body-bg);color:var(--bs-body-color);width:100%;max-width:850px;padding:25px;border-radius:12px;border:1px solid var(--bs-warning);box-shadow:0 10px 30px rgba(0,0,0,.5);max-height:calc(100dvh - 32px);overflow-y:auto;-webkit-overflow-scrolling:touch;margin:auto;box-sizing:border-box}
+.modal-content-custom .info-box{background:var(--bs-tertiary-bg);border:1px solid var(--bs-border-color);border-radius:8px}
+.modal-content-custom .info-box .desc{color:var(--bs-body-color)}
+.modal-content-custom table{width:100%;border-collapse:collapse;font-size:.85rem}
+.modal-content-custom table thead th{background:var(--bs-tertiary-bg);color:var(--bs-warning);border-bottom:2px solid var(--bs-warning);padding:.5rem .6rem;text-align:left}
+.modal-content-custom table tbody td{padding:.5rem .6rem;border-bottom:1px solid var(--bs-border-color);vertical-align:top}
+.modal-content-custom table tbody tr:hover{background:rgba(255,193,7,.06)}
+.modal-content-custom table tfoot td{padding:.6rem;font-weight:700;border-top:2px solid var(--bs-warning);background:var(--bs-tertiary-bg)}
+.modal-content-custom .table-wrapper{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.asientos-form-section{padding:20px}
+.asientos-form-section+.asientos-form-section{border-top:1px dashed var(--bs-border-color)}
+.asientos-form-section-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--bs-warning);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.input-asiento{background:var(--bs-secondary-bg);border:1px solid var(--bs-border-color);color:var(--bs-body-color);padding:8px 12px;border-radius:6px;width:100%;outline:none;transition:border-color .2s,box-shadow .2s}
+.input-asiento:focus{border-color:var(--bs-warning);box-shadow:0 0 0 .2rem rgba(255,193,7,.25)}
+.input-asiento:read-only{opacity:.7;cursor:not-allowed}
+.linea-entry-box{background:var(--bs-tertiary-bg);border:1px dashed var(--bs-warning);border-radius:8px;padding:14px}
+.validador-footer{display:flex;justify-content:space-between;align-items:center;background:var(--bs-tertiary-bg);padding:12px 18px;border-radius:8px;margin:16px 20px 0;gap:10px;flex-wrap:wrap}
+.asientos-loading{text-align:center;padding:50px 20px;color:var(--bs-secondary-color)}
+
+.nivel-4 .btn-link.text-warning {opacity: .6;transition: opacity .15s ease, transform .15s ease;text-decoration: none;}
+.nivel-4:hover .btn-link.text-warning {opacity: 1;}
+.nivel-4 .btn-link.text-warning:hover {transform: scale(1.15);}
+
+@media (max-width:576px){
+  .asientos-tab{padding:8px 14px;font-size:.85rem}
+  .asientos-tab span{display:none}
+  .asientos-tab i{font-size:1.2rem}
+  .appsheet-header{flex-direction:column;align-items:stretch}
+  .moneda-toggle-container{width:100%;justify-content:space-between}
+  .modal-cont{padding:8px;align-items:flex-start}
+  .modal-content-custom{padding:14px;max-height:calc(100dvh - 16px);border-radius:10px}
+  .modal-content-custom h4{font-size:1.05rem}
+  .modal-content-custom table{font-size:.75rem}
+  .modal-content-custom table thead th,.modal-content-custom table tbody td{padding:.35rem .4rem;white-space:nowrap}
+  .validador-footer{flex-direction:column;align-items:flex-start}
+}
+</style>
+
+<div id="pAsientos">
+    <div id="loadingAsientos" class="asientos-loading">
+        <div class="spinner-border text-warning" role="status" style="width: 3rem; height: 3rem;"></div>
+        <p class="mt-3 text-secondary">Procesando registros contables...</p>
+    </div>
+
+    <div id="cont-asientos-main" style="display:none">
+
+        <div class="asientos-tabs">
+            <button class="asientos-tab active" id="tab-btn-asientos" onclick="cambiarTabAsientos('asientos')">
+                <i class="bi bi-table"></i>
+                <span>Asientos</span>
+            </button>
+            <button class="asientos-tab" id="tab-btn-nuevo" onclick="abrirCreadorAsiento()">
+                <i class="bi bi-plus-circle"></i>
+                <span>Nuevo Asiento</span>
+            </button>
+        </div>
+
+        <div id="cont-asientos-header" class="appsheet-header">
+            <div class="moneda-toggle-container shadow-sm">
+                <div class="moneda-labels">
+                    <span class="moneda-label active" id="moneda-bs">Bs</span>
+                    <span class="moneda-label" id="moneda-usd">$</span>
+                </div>
+                <label class="moneda-toggle">
+                    <input type="checkbox" id="moneda-toggle-input" onchange="renderAsientos()">
+                    <span class="moneda-slider"></span>
+                </label>
+                <span class="tasa-info text-secondary small ms-2">Tasa: <span id="tasa-actual-valor" class="text-warning fw-bold">0.00</span></span>
+            </div>
+        </div>
+
+        <div id="tab-content-asientos">
+            <div class="asientos-card">
+                <div class="asientos-card-header">
+                    <h5><i class="bi bi-journal-text me-2"></i>Libro de Asientos</h5>
+                    <span class="text-secondary small" id="contador-asientos">0 registros</span>
+                </div>
+                <div class="asientos-card-body">
+                    <table id="tablaAsientos" class="hidden">
+                        <thead>
+                            <tr>
+                                <th class="ps-3">Cuenta / Grupo Contable</th>
+                                <th class="text-end pe-3">Saldo Actual</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpoAsientos"></tbody>
+                        <tfoot id="pieAsientos"></tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="formCargaAsiento" style="display:none">
+            <div class="asientos-card shadow">
+                <div class="asientos-card-header">
+                    <h5><i class="bi bi-pencil-square me-2"></i>Nuevo Asiento: <span id="numAsientoActual" class="text-body">...</span></h5>
+                    <button class="btn-close" type="button" onclick="cerrarCreadorAsiento()"></button>
+                </div>
+
+                <div class="asientos-card-body">
+                    <div class="asientos-form-section">
+                        <div class="asientos-form-section-title">
+                            <i class="bi bi-info-circle"></i> Datos Generales
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="text-warning small fw-bold mb-1">Fecha</label>
+                                <input type="date" id="f_fecha" class="input-asiento" onchange="actualizarGlosasAutomaticas()">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="text-warning small fw-bold mb-1">Tipo Asiento</label>
+                                <select id="f_tipo" class="input-asiento">
+                                    <option value="Manual">Manual</option>
+                                    <option value="Ajuste">Ajuste</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-warning small fw-bold mb-1">Cliente / Proveedor</label>
+                                <input type="text" id="f_cliente" class="input-asiento" placeholder="Nombre de la entidad o persona...">
+                            </div>
+                            <div class="col-12">
+                                <label class="text-warning small fw-bold mb-1">Glosa General del Asiento</label>
+                                <input type="text" id="f_descripcion" class="input-asiento" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="asientos-form-section">
+                        <div class="asientos-form-section-title">
+                            <i class="bi bi-plus-square"></i> Agregar Línea Contable
+                        </div>
+                        <div class="linea-entry-box">
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <label class="small text-secondary fw-bold">Cuenta Contable</label>
+                                    <select id="ent_cuenta" class="input-asiento"></select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="small text-secondary fw-bold">Tipo Mov.</label>
+                                    <select id="ent_sentido" class="input-asiento">
+                                        <option value="Ingreso">Debe (+)</option>
+                                        <option value="Egreso">Haber (-)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="small text-secondary fw-bold">Monto</label>
+                                    <input type="number" id="ent_monto" class="input-asiento" value="0" step="any" min="0">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="small text-secondary fw-bold">Ref. / Detalle</label>
+                                    <input type="text" id="ent_ref" class="input-asiento" placeholder="Nota de línea">
+                                </div>
+                                <div class="col-md-1 d-flex align-items-end">
+                                    <button class="btn btn-warning w-100 fw-bold" onclick="agregarLineaATabla()"><i class="bi bi-plus-lg"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="asientos-form-section">
+                        <div class="asientos-form-section-title">
+                            <i class="bi bi-list-ul"></i> Líneas del Asiento
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover align-middle mb-0">
+                                <thead>
+                                    <tr class="text-warning small">
+                                        <th>CUENTA</th>
+                                        <th>REFERENCIA / DETALLE</th>
+                                        <th class="text-end">MONTO</th>
+                                        <th class="text-center" style="width: 50px;">ACCIÓN</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cuerpoLineasTemp"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="validador-footer">
+                        <div id="msgValidacion" class="small text-secondary">
+                            <i class="bi bi-info-circle me-1"></i> La diferencia debe ser exactamente 0.00 para registrar.
+                        </div>
+                        <div class="fs-6 fw-bold">Diferencia: <span id="sumaDiferencia" class="text-danger font-monospace">0.00</span></div>
+                    </div>
+
+                    <div class="text-end p-3">
+                        <button class="btn btn-outline-secondary me-2" onclick="cerrarCreadorAsiento()">Cancelar</button>
+                        <button id="btnGuardar" class="btn btn-warning px-4 fw-bold" onclick="guardarAsiento()" disabled>Guardar Asiento</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DETALLE DE ASIENTO -->
+<div id="modalAsiento" class="modal-cont" onclick="cerrarModalFondo(event)">
+    <div class="modal-content-custom" onclick="event.stopPropagation()">
+        <div class="d-flex justify-content-between align-items-center border-bottom border-secondary mb-3 pb-2">
+            <h4 id="modalTitle" class="text-warning mb-0 fw-bold">Detalle del Asiento</h4>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-warning" type="button" onclick="imprimirAsientoActual()" title="Imprimir asiento">
+                    <i class="bi bi-printer"></i>
+                    <span class="d-none d-sm-inline ms-1">Imprimir</span>
+                </button>
+                <button class="btn-close" type="button" onclick="cerrarModalAsiento()"></button>
+            </div>
+        </div>
+        <div id="modalCuerpo"></div>
+    </div>
+</div>
+
+<script>
+    // =============================================
+    // UTILITARIOS
+    // =============================================
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str).replace(/[&<>"']/g, function(m) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+        });
+    }
+
+    function escapeJsAttr(str) {
+        if (str === null || str === undefined) return '';
+        return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n').replace(/\r/g, '');
+    }
+
+    function swalSeguro(opts) {
+        if (typeof Swal !== 'undefined' && Swal && typeof Swal.fire === 'function') {
+            return Swal.fire(opts);
+        }
+        const msg = typeof opts === 'string' ? opts : (opts && (opts.text || opts.title)) || '';
+        alert(msg);
+        return Promise.resolve();
+    }
+
+    // =============================================
+    // ESTADO GLOBAL
+    // =============================================
+    window.StateAsientos = window.StateAsientos || {
+        raw: [],
+        catalogo: [],
+        nro: "00-000",
+        tasa: 1,
+        lineasTemporales: [],
+        bodyOverflowPrev: '',
+        activo: false,          // true mientras el módulo está montado
+        instancia: 0,           // se incrementa en cada mount para invalidar callbacks viejos
+        timers: [],             // timeouts a limpiar en unmount
+        abortado: false         // flag para que los callbacks async ignoren resultados si ya salimos
+    };
+
+    // Listener global único de ESC (se registra UNA vez por vida de la página)
+    if (!window.__asientosEscListenerAttached) {
+        window.__asientosEscListenerAttached = true;
+        document.addEventListener('keydown', function(e) {
+            if (e.key !== 'Escape') return;
+            const S = window.StateAsientos;
+            if (!S || !S.activo) return;
+            const modal = document.getElementById('modalAsiento');
+            if (modal && modal.classList.contains('active')) {
+                cerrarModalAsiento();
+            }
+        });
+    }
+
+    // Listener global único para detectar cuando el módulo sale del DOM
+    // Útil si tu SPA no llama explícitamente a destroyAsientos()
+    if (!window.__asientosMutationObserver) {
+        window.__asientosMutationObserver = new MutationObserver(function() {
+            const S = window.StateAsientos;
+            if (!S || !S.activo) return;
+            const root = document.getElementById('pAsientos');
+            if (!root || !document.body.contains(root)) {
+                // El módulo ya no está en el DOM → limpiar
+                destroyAsientos();
+            }
+        });
+        // Observar cuando el body esté listo
+        if (document.body) {
+            window.__asientosMutationObserver.observe(document.body, { childList: true, subtree: true });
+        } else {
+            document.addEventListener('DOMContentLoaded', function() {
+                window.__asientosMutationObserver.observe(document.body, { childList: true, subtree: true });
+            });
+        }
+    }
+
+    // =============================================
+    // CICLO DE VIDA: MOUNT (entrar al módulo)
+    // =============================================
+    function initAsientos() {
+        const S = window.StateAsientos;
+
+        // Si por alguna razón ya estaba activo, hacemos unmount primero
+        if (S.activo) {
+            destroyAsientos();
+        }
+
+        // Nueva instancia: incrementa el contador para invalidar callbacks viejos
+        S.instancia++;
+        S.activo = true;
+        S.abortado = false;
+        S.raw = [];
+        S.catalogo = [];
+        S.lineasTemporales = [];
+        S.bodyOverflowPrev = '';
+        S.timers = [];
+        S.tasa = 1;
+
+        resetearInterfazAsientos();
+
+        const loadingEl = document.getElementById('loadingAsientos');
+        if (loadingEl) {
+            loadingEl.style.display = 'block';
+            loadingEl.innerHTML = '<div class="spinner-border text-warning" role="status" style="width: 3rem; height: 3rem;"></div><p class="mt-3 text-secondary">Cargando registros contables...</p>';
+        }
+
+        if (typeof google === 'undefined' || !google.script || !google.script.run) {
+            console.error("Google Apps Script API no disponible.");
+            if (loadingEl) {
+                loadingEl.innerHTML = '<div class="alert alert-danger text-center">Error: API de Google Apps Script no disponible.</div>';
+            }
+            return;
+        }
+
+        // Timeout de aviso, guardado en S.timers para poder limpiarlo
+        const t = setTimeout(function() {
+            if (!S.activo || S.instancia !== instanciaLocal) return;
+            if (loadingEl && loadingEl.style.display !== 'none') {
+                loadingEl.innerHTML = '<div class="spinner-border text-warning" role="status"></div><p class="mt-3 text-secondary">El servidor está tardando más de lo usual...</p>';
+            }
+        }, 8000);
+        const instanciaLocal = S.instancia;
+        S.timers.push(t);
+
+        cargarDatosAsientos(instanciaLocal);
+        cargarCatalogosContables(instanciaLocal);
+    }
+
+    // =============================================
+    // CICLO DE VIDA: UNMOUNT (salir del módulo)
+    // =============================================
+    function destroyAsientos() {
+        const S = window.StateAsientos;
+        if (!S) return;
+
+        S.activo = false;
+        S.abortado = true;
+
+        // Limpiar timers
+        (S.timers || []).forEach(function(t) { clearTimeout(t); });
+        S.timers = [];
+
+        // Cerrar modal y restaurar overflow
+        try {
+            const modal = document.getElementById('modalAsiento');
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = '';
+            }
+        } catch (e) {}
+        document.body.style.overflow = S.bodyOverflowPrev || '';
+        S.bodyOverflowPrev = '';
+
+        // Resetear estado lógico
+        S.raw = [];
+        S.catalogo = [];
+        S.lineasTemporales = [];
+        S.nro = "00-000";
+        S.tasa = 1;
+
+        // Resetear la UI por si el HTML se reutiliza
+        try {
+            const loading = document.getElementById('loadingAsientos');
+            if (loading) loading.style.display = 'block';
+
+            const main = document.getElementById('cont-asientos-main');
+            if (main) main.style.display = 'none';
+
+            const cuerpo = document.getElementById('cuerpoAsientos');
+            if (cuerpo) cuerpo.innerHTML = '';
+
+            const pie = document.getElementById('pieAsientos');
+            if (pie) pie.innerHTML = '';
+
+            const cuerpoTemp = document.getElementById('cuerpoLineasTemp');
+            if (cuerpoTemp) cuerpoTemp.innerHTML = '';
+
+            const modalCuerpo = document.getElementById('modalCuerpo');
+            if (modalCuerpo) modalCuerpo.innerHTML = '';
+
+            const sel = document.getElementById('ent_cuenta');
+            if (sel) sel.innerHTML = '<option value="">Seleccione cuenta...</option>';
+
+            const inputFecha = document.getElementById('f_fecha');
+            if (inputFecha) inputFecha.value = '';
+
+            const inputCliente = document.getElementById('f_cliente');
+            if (inputCliente) inputCliente.value = '';
+
+            const inputDesc = document.getElementById('f_descripcion');
+            if (inputDesc) inputDesc.value = '';
+
+            const inputMonto = document.getElementById('ent_monto');
+            if (inputMonto) inputMonto.value = '0';
+
+            const inputRef = document.getElementById('ent_ref');
+            if (inputRef) inputRef.value = '';
+
+            const numAsiento = document.getElementById('numAsientoActual');
+            if (numAsiento) numAsiento.innerText = '...';
+
+            const diffEl = document.getElementById('sumaDiferencia');
+            if (diffEl) {
+                diffEl.innerText = '0.00';
+                diffEl.className = 'text-danger font-monospace';
+            }
+
+            const btnGuardar = document.getElementById('btnGuardar');
+            if (btnGuardar) btnGuardar.disabled = true;
+
+            // Volver al tab inicial
+            cambiarTabAsientos('asientos');
+        } catch (e) {
+            console.warn('destroyAsientos reset parcial:', e);
+        }
+    }
+
+    function resetearInterfazAsientos() {
+        const loading = document.getElementById('loadingAsientos');
+        if (loading) loading.style.display = 'block';
+        const main = document.getElementById('cont-asientos-main');
+        if (main) main.style.display = 'none';
+        const tbl = document.getElementById('tablaAsientos');
+        if (tbl) tbl.classList.add('hidden');
+        const form = document.getElementById('formCargaAsiento');
+        if (form) form.style.display = 'none';
+        const tabA = document.getElementById('tab-content-asientos');
+        if (tabA) tabA.style.display = 'block';
+
+        const modal = document.getElementById('modalAsiento');
+        if (modal) {
+            modal.classList.remove('active');
+            modal.style.display = '';
+        }
+        document.body.style.overflow = '';
+    }
+
+    // =============================================
+    // CARGA DE DATOS (con guardas de instancia)
+    // =============================================
+    function cargarDatosAsientos(instanciaLocal) {
+        const S = window.StateAsientos;
+
+        google.script.run
+            .withSuccessHandler(function(res) {
+                // Si salimos del módulo o entramos de nuevo, ignorar respuesta
+                if (!S.activo || S.abortado || S.instancia !== instanciaLocal) return;
+
+                const loading = document.getElementById('loadingAsientos');
+                if (loading) loading.style.display = 'none';
+
+                if (!res || res.error) {
+                    swalSeguro({ title: "Error Contable", text: (res && res.error) || 'Sin datos', icon: "error" });
+                    return;
+                }
+
+                S.raw = (res.asientos || []).map(function(x) {
+                    return Object.assign({}, x, { monto: parseFloat(x.monto) || 0 });
+                });
+                S.tasa = parseFloat(res.tasa) || 1;
+
+                const tasaValorEl = document.getElementById('tasa-actual-valor');
+                if (tasaValorEl) {
+                    tasaValorEl.innerText = S.tasa.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+
+                const main = document.getElementById('cont-asientos-main');
+                if (main) main.style.display = 'block';
+                const tbl = document.getElementById('tablaAsientos');
+                if (tbl) tbl.classList.remove('hidden');
+
+                const contadorEl = document.getElementById('contador-asientos');
+                if (contadorEl) contadorEl.innerText = (S.raw || []).length + ' registros';
+
+                renderAsientos();
+            })
+            .withFailureHandler(function(error) {
+                if (!S.activo || S.abortado || S.instancia !== instanciaLocal) return;
+                const loading = document.getElementById('loadingAsientos');
+                if (loading) loading.style.display = 'none';
+                swalSeguro({ title: "Error de Conexión", text: (error && error.message) || "Fallo al comunicar con Apps Script", icon: "error" });
+            })
+            .getAsientosData();
+    }
+
+    function cargarCatalogosContables(instanciaLocal) {
+        const S = window.StateAsientos;
+
+        google.script.run
+            .withSuccessHandler(function(res) {
+                if (!S.activo || S.abortado || S.instancia !== instanciaLocal) return;
+
+                S.catalogo = res || [];
+                const sel = document.getElementById('ent_cuenta');
+                if (sel) {
+                    sel.innerHTML = '<option value="">Seleccione cuenta...</option>' +
+                        (res || []).map(function(c) {
+                            return '<option value="' + escapeHtml(c.cod) + '">' + escapeHtml(c.cod) + ' | ' + escapeHtml(c.nom) + '</option>';
+                        }).join('');
+                }
+            })
+            .withFailureHandler(function() {
+                console.warn('No se pudo cargar el catálogo contable');
+            })
+            .getCatalogosContables();
+    }
+
+    // =============================================
+    // TABS
+    // =============================================
+    function cambiarTabAsientos(tab) {
+        const tabAsientos = document.getElementById('tab-content-asientos');
+        const tabNuevo = document.getElementById('formCargaAsiento');
+        const btnAsientos = document.getElementById('tab-btn-asientos');
+        const btnNuevo = document.getElementById('tab-btn-nuevo');
+        const headerControl = document.getElementById('cont-asientos-header');
+
+        if (tab === 'asientos') {
+            if (tabAsientos) tabAsientos.style.display = 'block';
+            if (tabNuevo) tabNuevo.style.display = 'none';
+            if (headerControl) headerControl.style.display = 'flex';
+            if (btnAsientos) btnAsientos.classList.add('active');
+            if (btnNuevo) btnNuevo.classList.remove('active');
+        } else {
+            if (tabAsientos) tabAsientos.style.display = 'none';
+            if (tabNuevo) tabNuevo.style.display = 'block';
+            if (headerControl) headerControl.style.display = 'none';
+            if (btnAsientos) btnAsientos.classList.remove('active');
+            if (btnNuevo) btnNuevo.classList.add('active');
+        }
+    }
+
+// =============================================
+// RENDER ÁRBOL
+// =============================================
+function renderAsientos() {
+    const S = window.StateAsientos;
+    if (!S.activo) return;
+
+    const checkDolar = document.getElementById('moneda-toggle-input');
+    const esDolar = checkDolar ? checkDolar.checked : false;
+
+    const lblBs = document.getElementById('moneda-bs');
+    const lblUsd = document.getElementById('moneda-usd');
+    if (lblBs) lblBs.classList.toggle('active', !esDolar);
+    if (lblUsd) lblUsd.classList.toggle('active', esDolar);
+
+    const cuerpo = document.getElementById('cuerpoAsientos');
+    const pie = document.getElementById('pieAsientos');
+    if (!cuerpo || !pie) return;
+
+    const tree = {};
+    let totalGeneralBs = 0;
+
+    (S.raw || []).forEach(function(item) {
+        const g = item.cuenta || 'OTROS';
+        const s = item.subcuenta || 'GENERAL';
+        const c = item.cuentaContable || 'SIN CLASIFICAR';
+        const monto = parseFloat(item.monto) || 0;
+
+        if (!tree[g]) tree[g] = { total: 0, subs: {} };
+        if (!tree[g].subs[s]) tree[g].subs[s] = { total: 0, cuentas: {} };
+        if (!tree[g].subs[s].cuentas[c]) tree[g].subs[s].cuentas[c] = { total: 0, det: [] };
+
+        tree[g].total += monto;
+        tree[g].subs[s].total += monto;
+        tree[g].subs[s].cuentas[c].total += monto;
+        tree[g].subs[s].cuentas[c].det.push(item);
+
+        totalGeneralBs += monto;
+    });
+
+    let html = "";
+    let gIdx = 0;
+
+    Object.keys(tree).forEach(function(g) {
+        const gid = 'g' + gIdx;
+        const mG = esDolar ? (tree[g].total / S.tasa) : tree[g].total;
+
+        // Nivel 1: Grupo Mayor
+        html += '<tr class="nivel-1 collapsed" data-node="' + gid + '" data-level="1" onclick="toggleAsiento(\'' + gid + '\')" id="p-' + gid + '">' +
+                    '<td class="ps-3"><i class="bi bi-chevron-down arrow-icon me-2"></i>' + escapeHtml(g) + '</td>' +
+                    '<td class="monto">' + formatoAsientos(mG, esDolar) + '</td>' +
+                '</tr>';
+
+        let sIdx = 0;
+        Object.keys(tree[g].subs).forEach(function(s) {
+            const sid = gid + '_s' + sIdx;
+            const mS = esDolar ? (tree[g].subs[s].total / S.tasa) : tree[g].subs[s].total;
+
+            // Nivel 2: Subgrupo
+            html += '<tr class="nivel-2 hidden collapsed" data-node="' + sid + '" data-level="2" data-parent="' + gid + '" onclick="toggleAsiento(\'' + sid + '\')" id="p-' + sid + '">' +
+                        '<td style="padding-left:35px"><i class="bi bi-chevron-down arrow-icon me-2"></i>' + escapeHtml(s) + '</td>' +
+                        '<td class="monto">' + formatoAsientos(mS, esDolar) + '</td>' +
+                    '</tr>';
+
+            let cIdx = 0;
+            Object.keys(tree[g].subs[s].cuentas).forEach(function(c) {
+                const cid = sid + '_c' + cIdx;
+                const mC = esDolar ? (tree[g].subs[s].cuentas[c].total / S.tasa) : tree[g].subs[s].cuentas[c].total;
+
+                // Nivel 3: Cuenta Unificada
+                html += '<tr class="nivel-3 hidden collapsed" data-node="' + cid + '" data-level="3" data-parent="' + sid + '" onclick="toggleAsiento(\'' + cid + '\')" id="p-' + cid + '">' +
+                            '<td style="padding-left:55px" class="fw-bold"><i class="bi bi-journal-bookmark me-2 text-warning"></i>' + escapeHtml(c) + '</td>' +
+                            '<td class="monto ' + (mC < 0 ? 'negativo' : 'text-success') + '">' + formatoAsientos(mC, esDolar) + '</td>' +
+                        '</tr>';
+
+                // Nivel 4: Detalle individual con botón de imprimir
+                tree[g].subs[s].cuentas[c].det.forEach(function(d) {
+                    const mD = esDolar ? (d.monto / S.tasa) : d.monto;
+                    const ref = d.transaccionRef || d.descripcion || 'Sin referencia';
+                    const nroJs = escapeJsAttr(d.nro);
+
+                    html += '<tr class="nivel-4 hidden" data-level="4" data-parent="' + cid + '" ' +
+                                'onclick="verAsientoDetalle(\'' + nroJs + '\')" style="cursor:pointer;">' +
+                                '<td style="padding-left:80px" class="text-secondary small">' +
+                                    '<i class="bi bi-receipt me-2"></i>' +
+                                    'Asiento ' + escapeHtml(d.nro) +
+                                    ' <span class="ms-2 text-muted">(' + escapeHtml(ref) + ')</span>' +
+                                '</td>' +
+                                '<td class="monto small ' + (mD < 0 ? 'negativo' : 'text-success') + '">' +
+                                    formatoAsientos(mD, esDolar) +
+                                    ' <button type="button" class="btn btn-sm btn-link text-warning p-0 ms-2" ' +
+                                        'title="Imprimir asiento" ' +
+                                        'onclick="event.stopPropagation(); imprimirAsiento(\'' + nroJs + '\')">' +
+                                        '<i class="bi bi-printer"></i>' +
+                                    '</button>' +
+                                '</td>' +
+                            '</tr>';
+                });
+                cIdx++;
+            });
+            sIdx++;
+        });
+        gIdx++;
+    });
+
+    cuerpo.innerHTML = html;
+
+    const totalMostrado = esDolar ? (totalGeneralBs / S.tasa) : totalGeneralBs;
+    pie.innerHTML = '<tr class="fila-total-general">' +
+                        '<td class="ps-3">TOTAL GENERAL</td>' +
+                        '<td class="monto pe-3">' + formatoAsientos(totalMostrado, esDolar) + '</td>' +
+                     '</tr>';
+}
+
+    function toggleAsiento(id) {
+        const parent = document.getElementById('p-' + id);
+        if (!parent) return;
+
+        const estaCerrado = parent.classList.contains('collapsed');
+
+        if (estaCerrado) {
+            parent.classList.remove('collapsed');
+            const hijos = document.querySelectorAll('tr[data-parent="' + id + '"]');
+            hijos.forEach(function(h) {
+                h.classList.remove('hidden');
+                const subId = h.getAttribute('data-node');
+                if (subId) {
+                    const nietos = document.querySelectorAll('tr[data-parent="' + subId + '"]');
+                    nietos.forEach(function(n) { n.classList.add('hidden'); });
+                }
+            });
+        } else {
+            parent.classList.add('collapsed');
+            ocultarDescendientes(id);
+        }
+    }
+
+    function ocultarDescendientes(id) {
+        const hijos = document.querySelectorAll('tr[data-parent="' + id + '"]');
+        hijos.forEach(function(h) {
+            h.classList.add('hidden');
+            h.classList.add('collapsed');
+            const subId = h.getAttribute('data-node');
+            if (subId) ocultarDescendientes(subId);
+        });
+    }
+
+    // =============================================
+    // MODAL
+    // =============================================
+    function verAsientoDetalle(nro) {
+        const S = window.StateAsientos;
+        if (!S.activo) return;
+
+        const movs = (S.raw || []).filter(function(x) {
+            return String(x.nro) === String(nro);
+        });
+        const esDolar = document.getElementById('moneda-toggle-input')?.checked || false;
+
+        if (movs.length === 0) {
+            swalSeguro({ title: "Información", text: "No se encontró el detalle del asiento " + nro, icon: "info" });
+            return;
+        }
+
+        document.getElementById('modalTitle').innerText = "Asiento: " + nro;
+
+        let totalDebe = 0;
+        let totalHaber = 0;
+
+        let h = '<div class="info-box mb-3 p-3">' +
+                    '<div class="small text-warning fw-bold mb-1">Descripción:</div>' +
+                    '<div class="mb-2 desc">' + escapeHtml(movs[0].descripcion || 'Sin descripción') + '</div>' +
+                    '<div class="d-flex flex-wrap gap-3 text-secondary small">' +
+                        '<span><i class="bi bi-calendar3 me-1"></i>' + escapeHtml(movs[0].fecha || 'N/A') + '</span>' +
+                        '<span><i class="bi bi-person me-1"></i>' + escapeHtml(movs[0].cliente || 'General') + '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="table-wrapper">' +
+                '<table>' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th>Cuenta Contable</th>' +
+                            '<th>Detalle / Ref</th>' +
+                            '<th class="text-end" style="width:140px;">DEBE (+)</th>' +
+                            '<th class="text-end" style="width:140px;">HABER (-)</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                    '<tbody>';
+
+        movs.forEach(function(m) {
+            const val = esDolar ? (m.monto / S.tasa) : m.monto;
+            let debeStr = "-";
+            let haberStr = "-";
+
+            if (val >= 0) {
+                debeStr = formatoAsientos(val, esDolar);
+                totalDebe += val;
+            } else {
+                haberStr = formatoAsientos(Math.abs(val), esDolar);
+                totalHaber += Math.abs(val);
+            }
+
+            const cCod = m.codigoCuenta ? (escapeHtml(m.codigoCuenta) + ' - ') : '';
+            h += '<tr>' +
+                    '<td class="fw-bold">' + cCod + escapeHtml(m.cuentaContable) + '</td>' +
+                    '<td class="text-secondary">' + escapeHtml(m.descripcionTransaccion || m.transaccionRef || '-') + '</td>' +
+                    '<td class="text-end text-success fw-bold font-monospace">' + debeStr + '</td>' +
+                    '<td class="text-end text-danger fw-bold font-monospace">' + haberStr + '</td>' +
+                 '</tr>';
+        });
+
+        h += '</tbody>' +
+             '<tfoot>' +
+                '<tr>' +
+                    '<td colspan="2" class="text-end text-warning">TOTALES:</td>' +
+                    '<td class="text-end text-success fs-6 font-monospace">' + formatoAsientos(totalDebe, esDolar) + '</td>' +
+                    '<td class="text-end text-danger fs-6 font-monospace">' + formatoAsientos(totalHaber, esDolar) + '</td>' +
+                '</tr>' +
+             '</tfoot>' +
+             '</table>' +
+             '</div>';
+
+        document.getElementById('modalCuerpo').innerHTML = h;
+        abrirModalAsiento();
+    }
+
+    function abrirModalAsiento() {
+        const modal = document.getElementById('modalAsiento');
+        if (!modal) return;
+        const S = window.StateAsientos;
+        S.bodyOverflowPrev = document.body.style.overflow || '';
+        document.body.style.overflow = 'hidden';
+        modal.classList.add('active');
+        setTimeout(function() {
+            const closeBtn = modal.querySelector('.btn-close');
+            if (closeBtn) closeBtn.focus();
+        }, 50);
+    }
+
+    function cerrarModalAsiento(silencioso) {
+        const modal = document.getElementById('modalAsiento');
+        if (!modal) return;
+        modal.classList.remove('active');
+        const S = window.StateAsientos;
+        document.body.style.overflow = S.bodyOverflowPrev || '';
+        if (!silencioso) {
+            const modalCuerpo = document.getElementById('modalCuerpo');
+            if (modalCuerpo) modalCuerpo.innerHTML = '';
+        }
+    }
+
+    function cerrarModalFondo(e) {
+        if (e.target === e.currentTarget) {
+            cerrarModalAsiento();
+        }
+    }
+
+    function formatoAsientos(n, usd) {
+        return new Intl.NumberFormat(usd ? 'en-US' : 'de-DE', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(n || 0) + (usd ? ' $' : '');
+    }
+
+    // =============================================
+    // CREADOR DE ASIENTOS MANUALES
+    // =============================================
+    function abrirCreadorAsiento() {
+        const S = window.StateAsientos;
+        if (!S.activo) return;
+
+        cambiarTabAsientos('nuevo');
+
+        S.lineasTemporales = [];
+        actualizarTablaTemporal();
+
+        const hoy = new Date();
+        const yyyy = hoy.getFullYear();
+        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+        const dd = String(hoy.getDate()).padStart(2, '0');
+        document.getElementById('f_fecha').value = yyyy + '-' + mm + '-' + dd;
+
+        const instanciaLocal = S.instancia;
+
+        google.script.run
+            .withSuccessHandler(function(n) {
+                if (!S.activo || S.abortado || S.instancia !== instanciaLocal) return;
+                S.nro = n;
+                document.getElementById('numAsientoActual').innerText = n;
+                actualizarGlosasAutomaticas();
+            })
+            .withFailureHandler(function() {
+                if (!S.activo || S.instancia !== instanciaLocal) return;
+                swalSeguro({ title: "Error", text: "No se pudo obtener el correlativo de asiento", icon: "error" });
+            })
+            .getSiguienteNroAsiento();
+    }
+
+    function cerrarCreadorAsiento() {
+        cambiarTabAsientos('asientos');
+        window.StateAsientos.lineasTemporales = [];
+    }
+
+    function actualizarGlosasAutomaticas() {
+        const S = window.StateAsientos;
+        const fechaVal = document.getElementById('f_fecha').value;
+        if (!fechaVal) return;
+
+        const partes = fechaVal.split('-');
+        const anio = partes[0];
+        const mes = partes[1];
+        const dia = partes[2];
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const nombreMes = meses[parseInt(mes, 10) - 1];
+
+        document.getElementById('f_descripcion').value = S.nro + ' Asiento manual ' + nombreMes + ' ' + anio;
+        document.getElementById('ent_ref').value = 'Asiento manual fecha ' + dia + '/' + mes + '/' + anio;
+    }
+
+    function agregarLineaATabla() {
+        const S = window.StateAsientos;
+        if (!S.activo) return;
+
+        const cod = document.getElementById('ent_cuenta').value;
+        const sentido = document.getElementById('ent_sentido').value;
+        let monto = parseFloat(document.getElementById('ent_monto').value) || 0;
+        const ref = document.getElementById('ent_ref').value.trim();
+
+        if (!cod || monto <= 0) {
+            swalSeguro({ title: "Atención", text: "Debe seleccionar una cuenta y registrar un monto positivo", icon: "warning" });
+            return;
+        }
+
+        const info = (S.catalogo || []).find(function(c) { return String(c.cod) === String(cod); });
+        const nombreCuenta = info ? info.nom : 'Cuenta no clasificada';
+        const mayor = info ? info.mayor : '';
+        const sub = info ? info.sub : '';
+
+        monto = (sentido === "Egreso") ? -Math.abs(monto) : Math.abs(monto);
+
+        S.lineasTemporales.push({
+            cod: cod, nom: nombreCuenta, monto: monto, ref: ref, mayor: mayor, sub: sub
+        });
+
+        actualizarTablaTemporal();
+        document.getElementById('ent_monto').value = "0";
+    }
+
+    function eliminarLineaTemp(i) {
+        const S = window.StateAsientos;
+        if (!S.activo) return;
+        S.lineasTemporales.splice(i, 1);
+        actualizarTablaTemporal();
+    }
+
+    function actualizarTablaTemporal() {
+        const S = window.StateAsientos;
+        const tbody = document.getElementById('cuerpoLineasTemp');
+        if (!tbody) return;
+
+        tbody.innerHTML = "";
+        let suma = 0;
+
+        S.lineasTemporales.forEach(function(l, i) {
+            suma += l.monto;
+            tbody.innerHTML += '<tr>' +
+                '<td class="small fw-bold">' + escapeHtml(l.cod) + ' | ' + escapeHtml(l.nom) + '</td>' +
+                '<td class="small text-secondary">' + escapeHtml(l.ref) + '</td>' +
+                '<td class="text-end font-monospace fw-bold ' + (l.monto < 0 ? 'text-danger' : 'text-success') + '">' +
+                    l.monto.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+                '</td>' +
+                '<td class="text-center">' +
+                    '<button class="btn btn-sm btn-link text-danger p-0" onclick="eliminarLineaTemp(' + i + ')"><i class="bi bi-trash"></i></button>' +
+                '</td>' +
+            '</tr>';
+        });
+
+        const sumaRedondeada = Math.round(suma * 100) / 100;
+        const esCuadrado = Math.abs(sumaRedondeada) < 0.009;
+
+        const diffEl = document.getElementById('sumaDiferencia');
+        if (diffEl) {
+            diffEl.innerText = sumaRedondeada.toFixed(2);
+            diffEl.className = esCuadrado ? "text-success font-monospace" : "text-danger font-monospace";
+        }
+
+        const btnGuardar = document.getElementById('btnGuardar');
+        if (btnGuardar) {
+            btnGuardar.disabled = !(esCuadrado && S.lineasTemporales.length > 0);
+        }
+    }
+
+    function guardarAsiento() {
+        const S = window.StateAsientos;
+        if (!S.activo || S.lineasTemporales.length === 0) return;
+
+        const payload = S.lineasTemporales.map(function(l) {
+            return {
+                nroAsiento: S.nro,
+                fechaAsiento: document.getElementById('f_fecha').value,
+                tipoAsiento: document.getElementById('f_tipo').value,
+                clienteProveedor: document.getElementById('f_cliente').value,
+                descripcionGeneral: document.getElementById('f_descripcion').value,
+                codigoCuenta: l.cod,
+                cuentaContable: l.nom,
+                montoTransaccion: l.monto,
+                descripcionTransaccion: l.ref,
+                transaccionRef: l.ref,
+                mayor: l.mayor,
+                subcuenta: l.sub
+            };
+        });
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Guardando Asiento...',
+                text: 'Por favor espere',
+                allowOutsideClick: false,
+                didOpen: function() { Swal.showLoading(); }
+            });
+        }
+
+        const instanciaLocal = S.instancia;
+
+        google.script.run
+            .withSuccessHandler(function(n) {
+                if (!S.activo || S.instancia !== instanciaLocal) return;
+                swalSeguro({ title: "Registrado", text: "Asiento " + n + " guardado con éxito", icon: "success" });
+                cerrarCreadorAsiento();
+                // Recargar datos respetando la instancia actual
+                cargarDatosAsientos(S.instancia);
+            })
+            .withFailureHandler(function(error) {
+                if (!S.activo || S.instancia !== instanciaLocal) return;
+                swalSeguro({ title: "Error", text: "No se pudo guardar: " + ((error && error.message) || ''), icon: "error" });
+            })
+            .guardarAsientoMasivo(payload);
+    }
+
+// =============================================
+// IMPRESIÓN DE ASIENTO
+// =============================================
+function imprimirAsiento(nro) {
+    const S = window.StateAsientos;
+    if (!S.activo) return;
+
+    const movs = (S.raw || []).filter(function(x) {
+        return String(x.nro) === String(nro);
+    });
+
+    if (movs.length === 0) {
+        swalSeguro({ title: "Información", text: "No se encontró el asiento " + nro + " para imprimir", icon: "info" });
+        return;
+    }
+
+    const esDolar = document.getElementById('moneda-toggle-input')?.checked || false;
+    const html = construirHtmlImpresionAsiento(movs, {
+        nro: nro,
+        esDolar: esDolar,
+        tasa: S.tasa,
+        empresa: (typeof EMPRESA_NOMBRE !== 'undefined' ? EMPRESA_NOMBRE : (S.empresa || 'Empresa')),
+        rif: (typeof EMPRESA_RIF !== 'undefined' ? EMPRESA_RIF : (S.rif || '')),
+        direccion: (typeof EMPRESA_DIRECCION !== 'undefined' ? EMPRESA_DIRECCION : (S.direccion || ''))
+    });
+
+    lanzarImpresion(html);
+}
+
+// Construye el HTML completo listo para imprimir
+function construirHtmlImpresionAsiento(movs, opts) {
+    opts = opts || {};
+    const esDolar = !!opts.esDolar;
+    const tasa = parseFloat(opts.tasa) || 1;
+    const empresa = opts.empresa || 'Empresa';
+    const rif = opts.rif || '';
+    const direccion = opts.direccion || '';
+    const nro = opts.nro || (movs[0] && movs[0].nro) || '';
+
+    // Encabezado de datos generales (tomamos del primer movimiento)
+    const primero = movs[0] || {};
+    const fecha = primero.fecha || '';
+    const tipo = primero.tipo || 'Manual';
+    const cliente = primero.cliente || 'General';
+    const descripcion = primero.descripcion || 'Sin descripción';
+
+    // Calcular totales
+    let totalDebe = 0;
+    let totalHaber = 0;
+
+    const filas = movs.map(function(m) {
+        const val = esDolar ? (m.monto / tasa) : m.monto;
+        let debeStr = '';
+        let haberStr = '';
+
+        if (val >= 0) {
+            debeStr = formatoAsientos(val, esDolar);
+            totalDebe += val;
+        } else {
+            haberStr = formatoAsientos(Math.abs(val), esDolar);
+            totalHaber += Math.abs(val);
+        }
+
+        const cod = m.codigoCuenta ? escapeHtml(m.codigoCuenta) : '';
+        const nom = escapeHtml(m.cuentaContable || '');
+        const ref = escapeHtml(m.descripcionTransaccion || m.transaccionRef || '');
+        const mayor = escapeHtml(m.mayor || '');
+        const sub = escapeHtml(m.subcuenta || '');
+
+        return '<tr>' +
+                    '<td class="col-cod">' + cod + '</td>' +
+                    '<td class="col-cuenta">' +
+                        '<div class="nom">' + nom + '</div>' +
+                        (mayor || sub ? '<div class="sub">' + mayor + (sub ? ' / ' + sub : '') + '</div>' : '') +
+                    '</td>' +
+                    '<td class="col-ref">' + ref + '</td>' +
+                    '<td class="col-monto debe">' + debeStr + '</td>' +
+                    '<td class="col-monto haber">' + haberStr + '</td>' +
+                '</tr>';
+    }).join('');
+
+    const fechaImp = new Date().toLocaleString('es-VE', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+    });
+
+    // Estilos de impresión: A4 vertical, tipografía sobria, sin colores fuertes
+    const estilo = `
+        @page { size: A4 portrait; margin: 12mm 10mm; }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #111;
+            font-size: 10.5pt;
+            background: #fff;
+        }
+        .hoja {
+            width: 190mm;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 6mm 4mm;
+        }
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #111;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+        }
+        .cabecera .emp {
+            font-size: 14pt;
+            font-weight: 800;
+            letter-spacing: .3px;
+        }
+        .cabecera .emp small {
+            display: block;
+            font-size: 8.5pt;
+            font-weight: 400;
+            color: #555;
+            letter-spacing: 0;
+            margin-top: 2px;
+        }
+        .cabecera .doc {
+            text-align: right;
+            font-size: 9pt;
+            color: #333;
+        }
+        .cabecera .doc .titulo {
+            font-size: 13pt;
+            font-weight: 800;
+            color: #111;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .cabecera .doc .nro {
+            display: inline-block;
+            background: #111;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 10pt;
+            letter-spacing: .5px;
+        }
+        .meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4px 16px;
+            font-size: 9.5pt;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px 10px;
+            background: #fafafa;
+        }
+        .meta .item {
+            display: flex;
+            gap: 6px;
+        }
+        .meta .item .lbl {
+            color: #555;
+            min-width: 70px;
+        }
+        .meta .item .val {
+            font-weight: 600;
+            color: #111;
+            word-break: break-word;
+        }
+        .descripcion {
+            font-size: 9.5pt;
+            margin-bottom: 8px;
+            padding: 6px 10px;
+            border-left: 3px solid #111;
+            background: #f5f5f5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            table-layout: fixed;
+        }
+        thead th {
+            background: #111;
+            color: #fff;
+            text-align: left;
+            padding: 6px 8px;
+            font-size: 8.5pt;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            border: 1px solid #111;
+        }
+        thead th.col-monto { text-align: right; }
+        tbody td {
+            padding: 5px 8px;
+            border: 1px solid #ccc;
+            vertical-align: top;
+        }
+        tbody tr:nth-child(even) td { background: #fafafa; }
+        td.col-monto { text-align: right; font-family: 'Consolas','Courier New',monospace; font-weight: 600; white-space: nowrap; }
+        td.col-cod { font-family: 'Consolas','Courier New',monospace; width: 18mm; }
+        td.col-ref { color: #444; width: 45mm; font-size: 9pt; }
+        td.col-cuenta .nom { font-weight: 600; }
+        td.col-cuenta .sub { font-size: 8pt; color: #666; margin-top: 1px; }
+        td.debe { color: #0a6b2b; }
+        td.haber { color: #a11; }
+        tfoot td {
+            padding: 6px 8px;
+            border-top: 2px solid #111;
+            font-weight: 700;
+            background: #f0f0f0;
+            font-size: 10pt;
+        }
+        tfoot td.col-monto { font-family: 'Consolas','Courier New',monospace; }
+        .pie {
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 8pt;
+            color: #666;
+        }
+        .firmas {
+            margin-top: 26mm;
+            display: flex;
+            justify-content: space-around;
+            gap: 20mm;
+        }
+        .firma {
+            flex: 1;
+            text-align: center;
+            font-size: 8.5pt;
+        }
+        .firma .linea {
+            border-top: 1px solid #333;
+            margin-bottom: 3px;
+        }
+        .firma .rol {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            font-size: 7.5pt;
+            color: #333;
+        }
+        .firma .nombre {
+            color: #666;
+            margin-top: 1px;
+        }
+        .marca-agua {
+            position: fixed;
+            bottom: 4mm;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 7.5pt;
+            color: #aaa;
+            letter-spacing: .5px;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { font-size: 10pt; }
+            thead { display: table-header-group; }
+            tfoot { display: table-footer-group; }
+            tr { page-break-inside: avoid; }
+        }
+    `;
+
+    return '<!DOCTYPE html>' +
+        '<html lang="es">' +
+        '<head>' +
+            '<meta charset="UTF-8">' +
+            '<title>Asiento ' + escapeHtml(nro) + '</title>' +
+            '<style>' + estilo + '</style>' +
+        '</head>' +
+        '<body>' +
+            '<div class="hoja">' +
+                '<div class="cabecera">' +
+                    '<div class="emp">' +
+                        escapeHtml(empresa) +
+                        '<small>' + (rif ? 'RIF: ' + escapeHtml(rif) : '') + (direccion ? (rif ? ' &middot; ' : '') + escapeHtml(direccion) : '') + '</small>' +
+                    '</div>' +
+                    '<div class="doc">' +
+                        '<span class="titulo">COMPROBANTE CONTABLE</span>' +
+                        '<span class="nro">Nº ' + escapeHtml(nro) + '</span>' +
+                    '</div>' +
+                '</div>' +
+
+                '<div class="meta">' +
+                    '<div class="item"><span class="lbl">Fecha:</span><span class="val">' + escapeHtml(fecha || '-') + '</span></div>' +
+                    '<div class="item"><span class="lbl">Tipo:</span><span class="val">' + escapeHtml(tipo) + '</span></div>' +
+                    '<div class="item"><span class="lbl">Cliente/Prov:</span><span class="val">' + escapeHtml(cliente) + '</span></div>' +
+                    '<div class="item"><span class="lbl">Moneda:</span><span class="val">' + (esDolar ? 'USD ($) — Tasa ' + tasa.toLocaleString('de-DE', {minimumFractionDigits:2, maximumFractionDigits:2}) : 'Bolívares (Bs)') + '</span></div>' +
+                '</div>' +
+
+                '<div class="descripcion"><strong>Glosa:</strong> ' + escapeHtml(descripcion) + '</div>' +
+
+                '<table>' +
+                    '<colgroup>' +
+                        '<col style="width:18mm">' +
+                        '<col>' +
+                        '<col style="width:45mm">' +
+                        '<col style="width:28mm">' +
+                        '<col style="width:28mm">' +
+                    '</colgroup>' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th class="col-cod">Código</th>' +
+                            '<th>Cuenta Contable</th>' +
+                            '<th class="col-ref">Detalle / Ref.</th>' +
+                            '<th class="col-monto">Debe (+)</th>' +
+                            '<th class="col-monto">Haber (-)</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                    '<tbody>' + filas + '</tbody>' +
+                    '<tfoot>' +
+                        '<tr>' +
+                            '<td colspan="3" style="text-align:right;">TOTALES</td>' +
+                            '<td class="col-monto debe">' + formatoAsientos(totalDebe, esDolar) + '</td>' +
+                            '<td class="col-monto haber">' + formatoAsientos(totalHaber, esDolar) + '</td>' +
+                        '</tr>' +
+                    '</tfoot>' +
+                '</table>' +
+
+                '<div class="firmas">' +
+                    '<div class="firma"><div class="linea"></div><div class="rol">Elaborado por</div><div class="nombre">Nombre y Firma</div></div>' +
+                    '<div class="firma"><div class="linea"></div><div class="rol">Revisado por</div><div class="nombre">Nombre y Firma</div></div>' +
+                    '<div class="firma"><div class="linea"></div><div class="rol">Autorizado por</div><div class="nombre">Nombre y Firma</div></div>' +
+                '</div>' +
+
+                '<div class="pie">' +
+                    '<div>Impreso: ' + escapeHtml(fechaImp) + '</div>' +
+                    '<div>Sistema Contable</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="marca-agua">Documento generado electrónicamente</div>' +
+        '</body>' +
+        '</html>';
+}
+
+// Lanza la impresión usando iframe oculto (más confiable en Apps Script)
+function lanzarImpresion(html) {
+    // Eliminar iframe previo si quedó
+    const prev = document.getElementById('__asientos_print_iframe');
+    if (prev && prev.parentNode) prev.parentNode.removeChild(prev);
+
+    const iframe = document.createElement('iframe');
+    iframe.id = '__asientos_print_iframe';
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = '0';
+    iframe.style.opacity = '0';
+    iframe.setAttribute('aria-hidden', 'true');
+
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(html);
+    doc.close();
+
+    // Esperar a que cargue el contenido y las fuentes
+    const disparar = function() {
+        try {
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+        } catch (e) {
+            console.warn('Fallback a window.open por:', e);
+            abrirEnVentanaNueva(html);
+        }
+    };
+
+    if (iframe.contentWindow.document.readyState === 'complete') {
+        setTimeout(disparar, 250);
+    } else {
+        iframe.onload = function() { setTimeout(disparar, 250); };
+        // Por si onload no dispara (iframe ya cargado)
+        setTimeout(function() {
+            if (iframe.contentWindow && iframe.contentWindow.document.readyState === 'complete') {
+                disparar();
+            }
+        }, 700);
+    }
+
+    // Limpiar el iframe después de un tiempo prudencial
+    setTimeout(function() {
+        const f = document.getElementById('__asientos_print_iframe');
+        if (f && f.parentNode) f.parentNode.removeChild(f);
+    }, 60000);
+}
+
+// Fallback: abrir en ventana nueva (para navegadores que bloquean print en iframe)
+function abrirEnVentanaNueva(html) {
+    try {
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const w = window.open(url, '_blank');
+        if (!w) {
+            swalSeguro({ title: "Bloqueado", text: "Permite las ventanas emergentes para imprimir", icon: "warning" });
+            return;
+        }
+        setTimeout(function() { URL.revokeObjectURL(url); }, 60000);
+    } catch (e) {
+        swalSeguro({ title: "Error", text: "No se pudo abrir la impresión: " + e.message, icon: "error" });
+    }
+}
+
+// API pública: imprimir el asiento que está abierto en el modal
+function imprimirAsientoActual() {
+    const titulo = document.getElementById('modalTitle')?.innerText || '';
+    const m = titulo.match(/Asiento:\s*(.+)$/);
+    if (!m) {
+        swalSeguro({ title: "Atención", text: "No hay asiento abierto para imprimir", icon: "warning" });
+        return;
+    }
+    imprimirAsiento(m[1].trim());
+}
+    // =============================================
+    // EXPOSICIÓN GLOBAL
+    // =============================================
+    window.initAsientos = initAsientos;
+    window.destroyAsientos = destroyAsientos;
+    window.renderAsientos = renderAsientos;
+    window.toggleAsiento = toggleAsiento;
+    window.verAsientoDetalle = verAsientoDetalle;
+    window.cerrarModalAsiento = cerrarModalAsiento;
+    window.cerrarModalFondo = cerrarModalFondo;
+    window.abrirCreadorAsiento = abrirCreadorAsiento;
+    window.cerrarCreadorAsiento = cerrarCreadorAsiento;
+    window.agregarLineaATabla = agregarLineaATabla;
+    window.eliminarLineaTemp = eliminarLineaTemp;
+    window.guardarAsiento = guardarAsiento;
+    window.actualizarGlosasAutomaticas = actualizarGlosasAutomaticas;
+    window.cambiarTabAsientos = cambiarTabAsientos;
+
+    window.imprimirAsiento = imprimirAsiento;
+    window.imprimirAsientoActual = imprimirAsientoActual;
+    window.construirHtmlImpresionAsiento = construirHtmlImpresionAsiento;
+    window.lanzarImpresion = lanzarImpresion;
+</script>

@@ -1,0 +1,2182 @@
+<!-- =============================================================== -->
+<!-- MÓDULO DE REPORTES E IMPUESTOS - VISTA IMPRESIÓN ALTO CONTRASTE -->
+<!-- =============================================================== -->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+.saas-container-taxflow{--primary-50:#eff6ff;--primary-100:#dbeafe;--primary-200:#bfdbfe;--primary-500:#3b82f6;--primary-600:#2563eb;--primary-700:#1d4ed8;--primary-800:#1e40af;--primary-900:#1e3a8a;--gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;--gray-900:#111827;--success-50:#f0fdf4;--success-500:#22c55e;--success-600:#16a34a;--warning-50:#fffbeb;--warning-500:#f59e0b;--danger-50:#fef2f2;--danger-500:#ef4444;--shadow-sm:0 1px 2px 0 rgb(0 0 0/.05);--shadow-md:0 4px 6px -1px rgb(0 0 0/.1),0 2px 4px -2px rgb(0 0 0/.1);--shadow-lg:0 10px 15px -3px rgb(0 0 0/.1),0 4px 6px -4px rgb(0 0 0/.1);--shadow-xl:0 20px 25px -5px rgb(0 0 0/.1),0 8px 10px -6px rgb(0 0 0/.1);--radius-sm:6px;--radius-md:8px;--radius-lg:12px;--radius-xl:16px;--transition-fast:150ms ease;--transition-base:250ms ease;--tax-bg-body:#f5f6fa;--tax-bg-card:#fff;--tax-bg-header:linear-gradient(135deg,#111827 0%,#1f2937 100%);--tax-text-primary:#111827;--tax-text-muted:#9ca3af;--tax-border-color:#e5e7eb;--tax-input-bg:#fff;--tax-input-border:#d1d5db;--tax-hover-bg:#f3f4f6;--tax-table-header:#f9fafb;--tax-modal-overlay:rgba(17,24,39,.7);--purple-500:#8b5cf6;--purple-600:#7c3aed;--purple-700:#6d28d9}
+
+[data-bs-theme="dark"] .saas-container-taxflow{--gray-50:#1e1e2d;--gray-100:#2d2d44;--gray-200:#3f3f5f;--gray-300:#4a5568;--gray-400:#718096;--gray-500:#a0aec0;--gray-600:#cbd5e0;--gray-700:#e2e8f0;--gray-800:#f7fafc;--gray-900:#fff;--tax-bg-body:#1e1e2d;--tax-bg-card:#2d2d44;--tax-bg-header:linear-gradient(135deg,#0f0f1a 0%,#1e1e2d 100%);--tax-text-primary:#fff;--tax-text-secondary:#a0aec0;--tax-text-muted:#718096;--tax-border-color:#3f3f5f;--tax-input-bg:#1e1e2d;--tax-input-border:#4a5568;--tax-hover-bg:rgba(255,107,53,.1);--tax-table-header:#2d2d44;--tax-modal-overlay:rgba(0,0,0,.85);--shadow-sm:0 1px 2px 0 rgb(0 0 0/.3);--shadow-md:0 4px 6px -1px rgb(0 0 0/.4),0 2px 4px -2px rgb(0 0 0/.4);--shadow-lg:0 10px 15px -3px rgb(0 0 0/.5),0 4px 6px -4px rgb(0 0 0/.5);--shadow-xl:0 20px 25px -5px rgb(0 0 0/.6),0 8px 10px -6px rgb(0 0 0/.6)}.saas-container-taxflow{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background-color:var(--tax-bg-body);color:var(--tax-text-primary);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;transition:background-color .3s ease,color .3s ease}
+.app-header-taxflow{padding:1.5rem 2rem;box-shadow:var(--shadow-lg);position:sticky;top:0;z-index:100}.header-content-taxflow{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}.brand-taxflow{display:flex;align-items:center;gap:.75rem;padding:10px;border-radius:8px}.brand-icon-taxflow{width:40px;height:40px;background:linear-gradient(135deg,var(--primary-500),var(--primary-700));border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.25rem;box-shadow:var(--shadow-md);color:#fff}.brand-text-taxflow h1{font-size:1.5rem;font-weight:700;letter-spacing:-.025em;margin:0;color:#fff}.brand-text-taxflow span{font-size:.875rem;color:rgba(255,255,255,.7);font-weight:400}.header-meta-taxflow{display:flex;align-items:center;gap:1rem}.badge-period-taxflow{background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);padding:.5rem 1rem;border-radius:9999px;font-size:.875rem;font-weight:500;display:flex;align-items:center;gap:.5rem;color:#fff}.badge-period-taxflow::before{content:'';width:8px;height:8px;background:var(--success-500);border-radius:50%;animation:pulse-taxflow 2s infinite}@keyframes pulse-taxflow{0%,100%{opacity:1}50%{opacity:.5}}.main-content-taxflow{flex:1;max-width:1400px;width:100%;margin:0 auto;padding:2rem}.nav-section-taxflow{animation:fadeIn-taxflow .5s ease-out}@keyframes fadeIn-taxflow{from{opacity:0}to{opacity:1}}.section-header-taxflow{margin-bottom:2rem}.section-header-taxflow h2{font-size:1.875rem;font-weight:700;color:var(--tax-text-primary);margin-bottom:.5rem;letter-spacing:-.025em}.section-header-taxflow p{color:var(--tax-text-secondary);font-size:1rem}.cards-grid-taxflow{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem}.nav-card-taxflow{background:var(--tax-bg-card);border:1px solid var(--tax-border-color);border-radius:var(--radius-xl);padding:1.5rem;cursor:pointer;transition:all var(--transition-base);position:relative;overflow:hidden;box-shadow:var(--shadow-sm)}.nav-card-taxflow::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary-500),var(--primary-700));transform:scaleX(0);transition:transform var(--transition-base)}.nav-card-taxflow:hover{transform:translateY(-4px);box-shadow:var(--shadow-xl);border-color:var(--primary-200)}[data-bs-theme="dark"] .nav-card-taxflow:hover{border-color:var(--primary-700)}.nav-card-taxflow:hover::before{transform:scaleX(1)}.card-icon-wrapper-taxflow{width:56px;height:56px;border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1.25rem;transition:transform var(--transition-fast)}.nav-card-taxflow:hover .card-icon-wrapper-taxflow{transform:scale(1.1) rotate(3deg)}
+.bg-primary-taxflow{background:linear-gradient(135deg,var(--primary-500),var(--primary-700));color:#fff}.bg-success-taxflow{background:linear-gradient(135deg,var(--success-500),var(--success-600));color:#fff}.bg-warning-taxflow{background:linear-gradient(135deg,var(--warning-500),#d97706);color:#fff}.bg-purple-taxflow{background:linear-gradient(135deg,var(--purple-500),var(--purple-700));color:#fff}.card-content-taxflow h3{font-size:1.125rem;font-weight:600;color:var(--tax-text-primary);margin-bottom:.5rem}.card-content-taxflow p{font-size:.875rem;color:var(--tax-text-secondary);line-height:1.5;margin:0}.card-arrow-taxflow{position:absolute;bottom:1.5rem;right:1.5rem;width:32px;height:32px;background:var(--tax-hover-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--tax-text-muted);transition:all var(--transition-fast);opacity:0;transform:translateX(-10px)}.nav-card-taxflow:hover .card-arrow-taxflow{opacity:1;transform:translateX(0);background:var(--primary-500);color:#fff}.content-section-taxflow{background:var(--tax-bg-card);border-radius:var(--radius-xl);box-shadow:var(--shadow-md);border:1px solid var(--tax-border-color);animation:slideUp-taxflow .4s ease-out;overflow:hidden;display:none}.content-section-taxflow.d-block-taxflow{display:block}@keyframes slideUp-taxflow{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.section-toolbar-taxflow{padding:1.5rem 2rem;border-bottom:1px solid var(--tax-border-color);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to right,var(--tax-bg-card),var(--tax-hover-bg))}.toolbar-left-taxflow,.toolbar-right-taxflow{display:flex;align-items:center;gap:1rem}.btn-back-taxflow{display:inline-flex;align-items:center;gap:.5rem;padding:.625rem 1rem;background:var(--tax-bg-card);border:1px solid var(--tax-input-border);border-radius:var(--radius-md);color:var(--tax-text-primary);font-size:.875rem;font-weight:500;cursor:pointer;transition:all var(--transition-fast)}.btn-back-taxflow:hover{background:var(--tax-hover-bg);border-color:var(--tax-text-muted);transform:translateX(-2px)}.section-title-taxflow{font-size:1.25rem;font-weight:600;color:var(--tax-text-primary);margin:0}.filters-container-taxflow{padding:1.25rem 2rem;background:var(--tax-bg-card);border-bottom:1px solid var(--tax-border-color)}.filters-grid-taxflow{display:grid;grid-template-columns:180px 180px 1fr auto;gap:1.25rem;align-items:flex-end}.form-group-taxflow{display:flex;flex-direction:column;gap:.5rem;min-width:0}.form-label-taxflow{font-size:.75rem;font-weight:600;color:var(--tax-text-secondary);text-transform:uppercase;letter-spacing:.05em}.form-control-taxflow{height:42px;padding:.625rem .875rem;border:1px solid var(--tax-input-border);border-radius:var(--radius-md);font-size:.875rem;background:var(--tax-input-bg);color:var(--tax-text-primary);transition:all var(--transition-fast);width:100%}.form-control-taxflow:focus{outline:0;border-color:var(--primary-500);box-shadow:0 0 0 3px var(--primary-100)}select.form-control-taxflow{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-position:right .5rem center;background-repeat:no-repeat;background-size:1.5em 1.5em;padding-right:2.5rem}[data-bs-theme="dark"] select.form-control-taxflow{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23a0aec0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")}
+.btn-primary-taxflow{height:42px;padding:0 1.5rem;display:flex;align-items:center;justify-content:center;gap:.75rem;white-space:nowrap;background:linear-gradient(135deg,var(--primary-600),var(--primary-700));color:#fff;border:none;border-radius:var(--radius-md);cursor:pointer;transition:all var(--transition-base);font-weight:600}.btn-primary-taxflow:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);background:linear-gradient(135deg,var(--primary-700),var(--primary-800))}.btn-primary-taxflow:active{transform:translateY(0)}.btn-purple-taxflow{background:linear-gradient(135deg,var(--purple-600),var(--purple-700))}.btn-purple-taxflow:hover{background:linear-gradient(135deg,var(--purple-700),var(--purple-800))}.table-container-taxflow{padding:0;overflow-x:auto}.data-table-taxflow{width:100%;border-collapse:separate;border-spacing:0;font-size:.875rem}.data-table-taxflow thead{background:var(--tax-table-header);position:sticky;top:0;z-index:10}.data-table-taxflow th{padding:.875rem 1.5rem;text-align:left;font-weight:600;color:var(--tax-text-secondary);text-transform:uppercase;font-size:.75rem;letter-spacing:.05em;border-bottom:2px solid var(--tax-border-color);white-space:nowrap}.data-table-taxflow th:first-child,.data-table-taxflow td:first-child{padding-left:2rem}.data-table-taxflow th:last-child,.data-table-taxflow td:last-child{padding-right:2rem}.data-table-taxflow tbody tr{transition:background-color var(--transition-fast)}.data-table-taxflow tbody tr:hover{background-color:var(--tax-hover-bg)}.data-table-taxflow td{padding:1rem 1.5rem;border-bottom:1px solid var(--tax-border-color);color:var(--tax-text-primary);vertical-align:middle;white-space:nowrap}.badge-taxflow{display:inline-flex;align-items:center;padding:.25rem .75rem;border-radius:9999px;font-size:.75rem;font-weight:600}.badge-currency-taxflow{background:var(--success-50);color:var(--success-600)}.badge-retention-taxflow{background:var(--primary-50);color:var(--primary-700);font-family:'Courier New',monospace}.amount-taxflow{font-family:'Courier New',monospace;font-weight:600}.amount-positive-taxflow{color:var(--success-600)}.text-muted-taxflow{color:var(--tax-text-muted)}.text-dark-taxflow{color:var(--tax-text-primary);font-weight:600}.loading-state-taxflow{padding:4rem 2rem;text-align:center;color:var(--tax-text-secondary)}.spinner-modern-taxflow{width:48px;height:48px;border:3px solid var(--tax-border-color);border-top-color:var(--primary-500);border-radius:50%;animation:spin-taxflow 1s linear infinite;margin:0 auto 1rem}@keyframes spin-taxflow{to{transform:rotate(360deg)}}.empty-state-taxflow{padding:4rem 2rem;text-align:center;color:var(--tax-text-secondary)}.empty-state-icon-taxflow{width:64px;height:64px;background:var(--tax-hover-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem;color:var(--tax-text-muted)}.d-none-taxflow{display:none!important}.d-block-taxflow{display:block!important}.text-center-taxflow{text-align:center}.text-end-taxflow{text-align:right}.report-modal-taxflow-overlay{position:fixed;inset:0;background:var(--tax-modal-overlay);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1rem;animation:fadeIn-taxflow .3s ease;overflow-y:auto}.report-modal-taxflow{background:var(--tax-bg-card);border-radius:var(--radius-xl);box-shadow:var(--shadow-xl),0 25px 50px -12px rgba(0,0,0,.5);width:100%;max-width:500px;max-height:90vh;display:flex;flex-direction:column;position:relative;margin:auto;animation:slideUp-taxflow .4s cubic-bezier(.16,1,.3,1);border:1px solid var(--tax-border-color)}.report-modal-header-taxflow{padding:1.5rem;border-bottom:1px solid var(--tax-border-color);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to right,var(--tax-hover-bg),var(--tax-bg-card))}.report-modal-header-taxflow h3{font-size:1.25rem;font-weight:700;color:var(--tax-text-primary);margin:0}.report-modal-header-taxflow button{background:var(--tax-hover-bg);border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--tax-text-muted);cursor:pointer;font-size:1.25rem}.report-modal-body-taxflow{padding:1.5rem;display:flex;flex-direction:column;gap:1.25rem;overflow-y:auto;max-height:calc(90vh - 200px)}.report-modal-footer-taxflow{padding:1.25rem 1.5rem;border-top:1px solid var(--tax-border-color);background:var(--tax-hover-bg);display:flex;justify-content:flex-end;gap:.75rem}.report-container-taxflow{padding:2rem;background:var(--tax-bg-card)}.sidebar-modal-overlay{position:fixed;inset:0;background:var(--tax-modal-overlay);backdrop-filter:blur(4px);z-index:9998;opacity:0;visibility:hidden;transition:all .3s ease}.sidebar-modal-overlay.active{opacity:1;visibility:visible}.sidebar-modal{position:fixed;top:0;right:0;width:400px;max-width:90vw;height:100vh;background:var(--tax-bg-card);box-shadow:var(--shadow-xl);z-index:9999;transform:translateX(100%);transition:transform .4s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}.sidebar-modal.active{transform:translateX(0)}.sidebar-header{padding:1.5rem;background:linear-gradient(135deg,var(--primary-600),var(--primary-700));color:#fff;display:flex;justify-content:space-between;align-items:center}.sidebar-close{background:rgba(255,255,255,.2);border:none;width:36px;height:36px;border-radius:50%;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.25rem}.sidebar-body{flex:1;padding:1.5rem;overflow-y:auto;display:flex;flex-direction:column;gap:1.25rem}.sidebar-footer{padding:1.25rem 1.5rem;border-top:1px solid var(--tax-border-color);background:var(--tax-hover-bg);display:flex;gap:.75rem}.empresa-info-sidebar{background:var(--tax-hover-bg);padding:1rem;border-radius:var(--radius-md);border-left:4px solid var(--primary-500)}.toggle-container{display:flex;background:var(--tax-hover-bg);border-radius:var(--radius-md);padding:4px;gap:4px}.toggle-option{flex:1;padding:.75rem;text-align:center;border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;font-size:.875rem;color:var(--tax-text-secondary)}.toggle-option.active{background:var(--tax-bg-card);color:var(--primary-600);border-color:var(--primary-500);box-shadow:var(--shadow-sm)}.fab-container{position:fixed;bottom:2rem;right:2rem;z-index:9997;display:flex;flex-direction:column;align-items:flex-end;gap:.75rem}.fab-main{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--primary-600),var(--primary-700));color:#fff;border:none;cursor:pointer;box-shadow:0 4px 12px rgba(37,99,235,.4);display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:all .3s cubic-bezier(.16,1,.3,1)}.fab-main.active{transform:rotate(45deg);background:linear-gradient(135deg,var(--danger-500),#dc2626)}.fab-menu{display:flex;flex-direction:column;gap:.5rem;opacity:0;transform:translateY(20px) scale(.9);pointer-events:none;transition:all .3s ease}.fab-menu.active{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}.fab-item{display:flex;align-items:center;gap:.75rem;background:var(--tax-bg-card);padding:.75rem 1rem;border-radius:var(--radius-md);box-shadow:var(--shadow-lg);border:1px solid var(--tax-border-color);cursor:pointer;white-space:nowrap}.swipe-indicator{position:fixed;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--primary-600);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;z-index:99999;opacity:0;pointer-events:none;transition:opacity .15s ease,transform .15s ease;box-shadow:0 4px 12px rgba(37,99,235,.4)}.swipe-indicator.left{left:16px}.swipe-indicator.right{right:16px}.swipe-indicator.visible{opacity:1;transform:translateY(-50%) scale(1.1)}.content-section-taxflow.swiping{transition:none!important}.content-section-taxflow.swipe-animating{transition:transform .25s cubic-bezier(.16,1,.3,1),opacity .25s ease}.content-section-taxflow.swipe-out-left{transform:translateX(-30%);opacity:0}.content-section-taxflow.swipe-out-right{transform:translateX(30%);opacity:0}.content-section-taxflow.swipe-in-right{transform:translateX(30%);opacity:0}.modal-drag-handle{display:none;width:40px;height:4px;background:var(--tax-border-color);border-radius:2px;margin:0 auto .75rem;cursor:grab}.ptr-indicator{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-60px);width:44px;height:44px;border-radius:50%;background:var(--tax-bg-card);border:1px solid var(--tax-border-color);box-shadow:var(--shadow-lg);display:flex;align-items:center;justify-content:center;z-index:9998;transition:transform .2s ease;color:var(--primary-600)}.ptr-indicator.visible{transform:translateX(-50%) translateY(12px)}.ptr-indicator.refreshing{transform:translateX(-50%) translateY(12px)}.ptr-indicator i{font-size:1.1rem}.ptr-indicator.refreshing i{animation:spin-taxflow .8s linear infinite}.nav-card-taxflow.swipe-active{transform:scale(.96);transition:transform .1s ease}.content-section-taxflow{will-change:transform}@media(max-width:768px){.saas-container-taxflow{min-height:100vh;padding-bottom:80px}.app-header-taxflow{padding:.75rem 1rem;position:sticky;top:0}.header-content-taxflow{flex-direction:row;align-items:center;gap:.5rem}.brand-taxflow{padding:4px;gap:.5rem;flex:1;min-width:0}.brand-icon-taxflow{width:36px;height:36px;font-size:1rem;flex-shrink:0}.brand-text-taxflow h1{font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.brand-text-taxflow span{font-size:.7rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.header-meta-taxflow{flex-shrink:0}.badge-period-taxflow{padding:.35rem .7rem;font-size:.7rem}.badge-period-taxflow span{display:none}.main-content-taxflow{padding:1rem .75rem}.section-header-taxflow{margin-bottom:1.25rem}.section-header-taxflow h2{font-size:1.35rem}.section-header-taxflow p{font-size:.85rem}.cards-grid-taxflow{grid-template-columns:repeat(2,1fr);gap:.75rem}.nav-card-taxflow{padding:1rem .85rem;border-radius:var(--radius-lg);min-height:140px;display:flex;flex-direction:column;justify-content:space-between}.card-icon-wrapper-taxflow{width:44px;height:44px;font-size:1.15rem;margin-bottom:.75rem}.card-content-taxflow h3{font-size:.95rem;margin-bottom:.25rem}.card-content-taxflow p{font-size:.75rem;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.card-arrow-taxflow{display:none}.section-toolbar-taxflow{padding:.875rem 1rem;flex-direction:column;align-items:stretch;gap:.75rem}.toolbar-left-taxflow,.toolbar-right-taxflow{width:100%;gap:.5rem;flex-wrap:wrap}.toolbar-left-taxflow{align-items:center}.section-title-taxflow{font-size:1rem;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.toolbar-right-taxflow .btn-back-taxflow,.toolbar-right-taxflow .btn-primary-taxflow{flex:1;min-width:0;padding:.5rem .75rem;font-size:.8rem;justify-content:center}.toolbar-right-taxflow .btn-back-taxflow span,.toolbar-right-taxflow .btn-primary-taxflow span{display:none}.toolbar-right-taxflow .btn-back-taxflow i,.toolbar-right-taxflow .btn-primary-taxflow i{font-size:1rem}.filters-container-taxflow{padding:1rem;border-bottom:1px solid var(--tax-border-color)}.filters-grid-taxflow{grid-template-columns:1fr!important;gap:.75rem}.form-label-taxflow{font-size:.7rem}.form-control-taxflow{height:44px;font-size:.9rem}.btn-primary-taxflow{height:44px;width:100%}.table-container-taxflow{padding:.75rem;overflow-x:visible}.data-table-taxflow{display:block;font-size:.85rem}.data-table-taxflow thead{display:none}.data-table-taxflow tbody{display:block}.data-table-taxflow tbody tr{display:block;background:var(--tax-bg-card);border:1px solid var(--tax-border-color);border-radius:var(--radius-lg);margin-bottom:.75rem;padding:.875rem;box-shadow:var(--shadow-sm);transition:all .2s ease;position:relative}.data-table-taxflow tbody tr:active{transform:scale(.98);box-shadow:var(--shadow-md)}.data-table-taxflow tbody tr:hover{background:var(--tax-bg-card)}.data-table-taxflow td{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0!important;border-bottom:1px dashed var(--tax-border-color);white-space:normal;text-align:right!important;font-size:.8rem}.data-table-taxflow td:last-child{border-bottom:none}.data-table-taxflow td::before{content:attr(data-label);font-weight:600;color:var(--tax-text-secondary);font-size:.7rem;text-transform:uppercase;letter-spacing:.03em;text-align:left;padding-right:.5rem;flex-shrink:0}.data-table-taxflow tbody tr td:first-child{font-weight:700;font-size:.95rem;color:var(--primary-600);border-bottom:1px solid var(--tax-border-color);padding-bottom:.5rem!important;margin-bottom:.25rem}[data-bs-theme="dark"] .data-table-taxflow tbody tr td:first-child{color:var(--primary-400,#60a5fa)}.data-table-taxflow td:not([data-label])::before{display:none}.data-table-taxflow tbody tr td[colspan]{display:block;text-align:center!important;padding:2rem 1rem!important;border:none}.data-table-taxflow tbody tr td[colspan]::before{display:none}.report-modal-taxflow-overlay{padding:0;align-items:flex-end}.report-modal-taxflow{max-width:100%;width:100%;max-height:92vh;border-radius:var(--radius-xl) var(--radius-xl) 0 0;margin:0;animation:slideUpMobile .35s cubic-bezier(.16,1,.3,1)}@keyframes slideUpMobile{from{transform:translateY(100%)}to{transform:translateY(0)}}.report-modal-header-taxflow{padding:1rem 1.25rem;position:sticky;top:0;background:var(--tax-bg-card);z-index:1;border-radius:var(--radius-xl) var(--radius-xl) 0 0}.report-modal-header-taxflow h3{font-size:1.05rem}.report-modal-body-taxflow{padding:1rem 1.25rem;max-height:calc(92vh - 140px)}.report-modal-footer-taxflow{padding:1rem 1.25rem;position:sticky;bottom:0;background:var(--tax-bg-card);flex-direction:column-reverse;gap:.5rem}.report-modal-footer-taxflow button{width:100%;height:44px;justify-content:center}.modal-drag-handle{display:block}.report-modal-taxflow.dragging{transition:none!important}.report-modal-taxflow.dragging-back{transition:transform .25s cubic-bezier(.16,1,.3,1)}.sidebar-modal{width:100%;max-width:100%}.sidebar-header{padding:1rem 1.25rem}.sidebar-header h3{font-size:1rem}.sidebar-body{padding:1rem 1.25rem;gap:1rem}.sidebar-footer{padding:1rem 1.25rem;flex-wrap:wrap;gap:.5rem}.sidebar-footer button{flex:1;min-width:calc(50% - .25rem);height:44px;justify-content:center}.sidebar-footer button:first-child{flex-basis:100%}.toggle-container{padding:4px}.toggle-option{padding:.65rem .5rem;font-size:.8rem}.fab-container{bottom:1.25rem;right:1.25rem}.fab-main{width:52px;height:52px;font-size:1.35rem}.fab-item{padding:.65rem .875rem;font-size:.85rem}.loading-state-taxflow,.empty-state-taxflow{padding:2.5rem 1rem}.form-check{padding:.6rem .6rem .6rem 2rem;border:1px solid var(--tax-border-color);border-radius:var(--radius-md);margin-bottom:.4rem;background:var(--tax-hover-bg);transition:all .15s ease}.form-check:active{background:var(--primary-50)}[data-bs-theme="dark"] .form-check:active{background:var(--gray-200)}.form-check-input{margin-left:-1.4rem;margin-top:.2rem;width:1.15em;height:1.15em}.form-check-label{font-size:.85rem;width:100%}.content-section-taxflow{touch-action:pan-y}}@media(max-width:380px){.cards-grid-taxflow{grid-template-columns:1fr}.nav-card-taxflow{min-height:auto;flex-direction:row;align-items:center;gap:.75rem}.card-icon-wrapper-taxflow{margin-bottom:0}.brand-text-taxflow span{display:none}}@media(min-width:769px) and (max-width:1024px){.main-content-taxflow{padding:1.5rem}.cards-grid-taxflow{grid-template-columns:repeat(2,1fr)}.filters-grid-taxflow{grid-template-columns:1fr 1fr!important}.filters-grid-taxflow>*:last-child{grid-column:1/-1}}@media print{#sidebar,#sidebarToggle,nav.navbar,.app-header-taxflow,.filters-container-taxflow,.section-toolbar-taxflow,.fab-container,.orb,#globalLoadingOverlay,.swipe-indicator,.ptr-indicator{display:none!important}
+
+.saas-container-taxflow{min-height:auto!important}.content-section-taxflow{display:none!important;box-shadow:none!important;border:none!important}#vistaReporteVertical{display:block!important;width:100%!important;margin:0!important;padding:0!important;background:#fff!important}#contenidoReporteVertical,#contenidoReporteVertical *{visibility:visible!important}}#vistaReporteVertical{--tax-bg-card:#fff!important;--tax-bg-body:#fff!important;--tax-text-primary:#111827!important;--tax-text-secondary:#374151!important;--tax-text-muted:#6b7280!important;--tax-border-color:#d1d5db!important;--tax-table-header:#f3f4f6!important;background-color:#fff!important;color:#111827!important;border:1px solid #e5e7eb!important;padding:30px!important;border-radius:12px!important;box-shadow:0 4px 6px -1px rgba(0,0,0,.05)!important}#vistaReporteVertical *{color:#111827!important}#vistaReporteVertical table{background-color:#fff!important;border:1px solid #d1d5db!important}#vistaReporteVertical th{background-color:#f3f4f6!important;color:#111827!important;border-bottom:2px solid #9ca3af!important;font-weight:700!important;padding:8px!important}#vistaReporteVertical td{background-color:#fff!important;color:#374151!important;border-bottom:1px solid #e5e7eb!important;padding:6px!important}#vistaReporteVertical tr:nth-child(even) td{background-color:#f9fafb!important}#vistaReporteVertical .amount-positive-taxflow,#vistaReporteVertical [style*="color:#16a34a"],#vistaReporteVertical [style*="color:var(--success-500)"]{color:#15803d!important;font-weight:700!important}#vistaReporteVertical .text-danger,#vistaReporteVertical .negative,#vistaReporteVertical [style*="color:red"]{color:#b91c1c!important;font-weight:700!important}
+
+[data-bs-theme="dark"] .badge-retention-taxflow {
+    background: rgba(59, 130, 246, 0.2) !important;
+    color: #60a5fa !important;
+}
+/* Y para los badges vacíos o que muestran guiones */
+[data-bs-theme="dark"] .badge-taxflow {
+    background: var(--gray-100);
+    color: var(--gray-800);
+}
+
+</style>
+
+<div class="saas-container-taxflow" id="moduloImpuestos">
+  
+  <main class="main-content-taxflow">
+    
+    <!-- MENU PRINCIPAL -->
+    <section id="vistaMenuImpuestos" class="nav-section-taxflow d-block-taxflow">
+      <div class="section-header-taxflow"><h2>Panel de Control</h2><p>Selecciona un módulo para gestionar tus obligaciones tributarias</p></div><div class="cards-grid-taxflow">
+        <div class="nav-card-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaTablaImpuestos')"><div class="card-icon-wrapper-taxflow bg-primary-taxflow"><i class="fas fa-file-invoice-dollar"></i></div><div class="card-content-taxflow"><h3>Retenciones</h3><p>Visualiza y filtra todas las retenciones de IVA e ISLR.</p></div><div class="card-arrow-taxflow"><i class="fas fa-arrow-right"></i></div></div>
+        <div class="nav-card-taxflow" onclick="TaxFlowApp.mostrarMayorAnalitico()"><div class="card-icon-wrapper-taxflow bg-purple-taxflow"><i class="fas fa-book-open"></i></div><div class="card-content-taxflow"><h3>Mayor Analítico</h3><p>Detalle de movimientos por cuenta contable desde la hoja de Asientos.</p></div><div class="card-arrow-taxflow"><i class="fas fa-arrow-right"></i></div></div>
+        <div class="nav-card-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaResumen')"><div class="card-icon-wrapper-taxflow bg-success-taxflow"><i class="fas fa-chart-pie"></i></div><div class="card-content-taxflow"><h3>Resumen Tributario</h3><p>Métricas, consolidados y análisis visual de tus obligaciones.</p></div><div class="card-arrow-taxflow"><i class="fas fa-arrow-right"></i></div></div>
+        <div class="nav-card-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaPorPagar')"><div class="card-icon-wrapper-taxflow bg-warning-taxflow"><i class="fas fa-exclamation-triangle"></i></div><div class="card-content-taxflow"><h3>Impuestos por Pagar</h3><p>Compromisos pendientes, alertas y fechas de declaración.</p></div><div class="card-arrow-taxflow"><i class="fas fa-arrow-right"></i></div></div>
+        <div class="nav-card-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaProductos')"><div class="card-icon-wrapper-taxflow bg-warning-taxflow"><i class="fas fa-boxes"></i></div><div class="card-content-taxflow"><h3>Lista Productos</h3><p>Reporte de Productos y Carga Masiva.</p></div><div class="card-arrow-taxflow"><i class="fas fa-arrow-right"></i></div></div>
+        <div class="nav-card-taxflow" onclick="TaxFlowApp.abrirSidebarEEFF()"><div class="card-icon-wrapper-taxflow bg-purple-taxflow"><i class="fas fa-file-contract"></i></div><div class="card-content-taxflow"><h3>Estados Financieros</h3><p>Genera informes financieros de Situación, Resultados o Balance de Comprobación.</p></div><div class="card-arrow-taxflow"><i class="fas fa-arrow-right"></i></div></div>
+        <div class="nav-card-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaMovimientos')"><div class="card-icon-wrapper-taxflow bg-purple-taxflow"><i class="fas fa-university"></i></div><div class="card-content-taxflow"><h3>Movimientos Bancarios</h3><p>Monitorea transacciones y genera reportes de conciliación.</p></div><div class="card-arrow-taxflow"><i class="fas fa-arrow-right"></i></div></div>
+      </div>
+    </section>
+
+    <!-- DETALLE DE RETENCIONES -->
+    <section id="vistaTablaImpuestos" class="content-section-taxflow d-none-taxflow">
+      <div class="section-toolbar-taxflow">
+        <div class="toolbar-left-taxflow">
+          <button class="btn-back-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaMenuImpuestos')"><i class="fas fa-arrow-left"></i> Volver</button>
+          <h2 class="section-title-taxflow">Detalle de Retenciones</h2>
+        </div>
+        <div class="toolbar-right-taxflow">
+          <button class="btn-back-taxflow" onclick="TaxFlowApp.imprimirRetenciones()"><i class="fas fa-print"></i><span>Imprimir</span></button>
+          <button class="btn-primary-taxflow bg-success-taxflow" onclick="TaxFlowApp.generarXMLISLR()"><i class="fas fa-file-code"></i><span>Generar XML ISLR</span></button>
+        </div>
+      </div>
+      <div class="filters-container-taxflow">
+        <div class="filters-grid-taxflow">
+          <div class="form-group-taxflow"><label class="form-label-taxflow">Fecha Desde</label><input type="date" id="filtroDesde" class="form-control-taxflow"></div>
+          <div class="form-group-taxflow"><label class="form-label-taxflow">Fecha Hasta</label><input type="date" id="filtroHasta" class="form-control-taxflow"></div>
+          <div class="form-group-taxflow"><label class="form-label-taxflow">Tipo de Retención</label><select id="filtroTipoRet" class="form-control-taxflow"><option value="TODOS">Todos los tipos</option><option value="IVA">Retenciones de IVA</option><option value="ISLR">Retenciones de ISLR</option></select></div>
+          <div class="form-group-taxflow"><button class="btn-primary-taxflow" onclick="TaxFlowApp.aplicarFiltros()"><i class="fas fa-search"></i><span>Filtrar</span></button></div>
+        </div>
+      </div>
+      <div id="spinnerImpuestos" class="loading-state-taxflow"><div class="spinner-modern-taxflow"></div><p>Cargando registros...</p></div>
+      <div class="table-container-taxflow">
+        <table class="data-table-taxflow">
+          <thead><tr><th>Fecha</th><th>Cliente/Proveedor</th><th>RIF</th><th>Factura</th><th>N° Control</th><th>Referencia</th><th class="text-end-taxflow">Monto Bs</th><th class="text-center-taxflow">% Ret.</th><th>Comprobante</th><th class="text-center-taxflow">Moneda</th><th class="text-end-taxflow">Tasa</th><th class="text-end-taxflow">Monto USD</th></tr></thead>
+          <tbody id="bodyTablaImpuestos"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- RESUMEN TRIBUTARIO-->
+    <section id="vistaResumen" class="content-section-taxflow d-none-taxflow">
+      <div class="section-toolbar-taxflow"><div class="toolbar-left-taxflow"><button class="btn-back-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaMenuImpuestos')"><i class="fas fa-arrow-left"></i> Volver</button><h2 class="section-title-taxflow">Resumen Tributario</h2></div></div>
+      <div class="empty-state-taxflow"><div class="empty-state-icon-taxflow"><i class="fas fa-hard-hat"></i></div><h3>Módulo en Desarrollo</h3><p>Pronto disponible.</p></div>
+    </section>
+
+    <!-- IMPUESTOS POR PAGAR -->
+    <section id="vistaPorPagar" class="content-section-taxflow d-none-taxflow">
+      <div class="section-toolbar-taxflow"><div class="toolbar-left-taxflow"><button class="btn-back-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaMenuImpuestos')"><i class="fas fa-arrow-left"></i> Volver</button><h2 class="section-title-taxflow">Impuestos por Pagar</h2></div></div>
+      <div class="empty-state-taxflow"><div class="empty-state-icon-taxflow"><i class="fas fa-hard-hat"></i></div><h3>Módulo en Desarrollo</h3><p>Pronto disponible.</p></div>
+    </section>
+
+    <!-- VISTA REPORTES DE IMPRESIÓN -->
+    <section id="vistaReporteVertical" class="content-section-taxflow d-none-taxflow">
+      <div class="section-toolbar-taxflow no-print">
+        <div class="toolbar-left-taxflow"><button class="btn-back-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaMenuImpuestos')"><i class="fas fa-arrow-left"></i> Volver</button><h2 id="tituloReporte" class="section-title-taxflow">Reporte</h2></div>
+        <div class="toolbar-right-taxflow">
+          <button class="btn-back-taxflow" onclick="TaxFlowApp.exportarReporteExcel()"><i class="fas fa-file-excel"></i><span>Excel</span></button>
+          <button class="btn-primary-taxflow" onclick="TaxFlowApp.imprimirReporte()"><i class="fas fa-print"></i><span>Imprimir</span></button>
+        </div>
+      </div>
+      <div id="contenidoReporteVertical" class="report-container-taxflow"></div>
+    </section>
+
+    <!-- MAYOR ANALÍTICO -->
+    <section id="vistaMayorAnalitico" class="content-section-taxflow d-none-taxflow">
+      <div class="section-toolbar-taxflow">
+        <div class="toolbar-left-taxflow"><button class="btn-back-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaMenuImpuestos')"><i class="fas fa-arrow-left"></i> Volver</button><h2 class="section-title-taxflow">Mayor Analítico</h2></div>
+        <div class="toolbar-right-taxflow">
+          <button class="btn-back-taxflow" onclick="TaxFlowApp.imprimirMayorAnalitico()"><i class="fas fa-print"></i><span>Imprimir</span></button>
+          <button class="btn-primary-taxflow btn-purple-taxflow" onclick="TaxFlowApp.abrirModalMayorAnalitico()"><i class="fas fa-filter"></i><span>Filtrar</span></button>
+        </div>
+      </div>
+      <div class="filters-container-taxflow"><div style="display: flex; align-items: center; gap: 1rem;"><i class="fas fa-info-circle" style="color: var(--purple-600);"></i><span id="mayorInfoText">Cargando datos...</span></div></div>
+      <div id="spinnerMayorAnalitico" class="loading-state-taxflow"><div class="spinner-modern-taxflow"></div><p>Cargando asientos contables...</p></div>
+      <div class="table-container-taxflow">
+        <table class="data-table-taxflow">
+          <thead><tr><th>Fecha</th><th>N° Asiento</th><th>Tipo</th><th>Cliente/Proveedor</th><th>Descripción</th><th>Código Cuenta</th><th>Cuenta Contable</th><th class="text-end-taxflow">Monto</th><th>Transacción</th></tr></thead>
+          <tbody id="bodyMayorAnalitico"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PRODUCTOS -->
+    <section id="vistaProductos" class="content-section-taxflow d-none-taxflow">
+      <div class="section-toolbar-taxflow">
+        <div class="toolbar-left-taxflow"><button class="btn-back-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaMenuImpuestos')"><i class="fas fa-arrow-left"></i> Volver</button><h2 class="section-title-taxflow">Inventario de Productos</h2></div>
+        <div class="toolbar-right-taxflow">
+          <button class="btn-primary-taxflow bg-success-taxflow" onclick="TaxFlowApp.abrirModalCargaMasiva()"><i class="fas fa-file-excel"></i><span>Carga Masiva</span></button>
+          <button class="btn-primary-taxflow" onclick="TaxFlowApp.imprimirProductos()"><i class="fas fa-print"></i><span>Imprimir Reporte</span></button>
+        </div>
+      </div>
+      <div class="filters-container-taxflow">
+        <div class="filters-grid-taxflow" style="grid-template-columns: 1fr 200px 200px auto;">
+          <div class="form-group-taxflow"><label class="form-label-taxflow">Buscar Producto</label><input type="text" id="filtroBuscarProducto" class="form-control-taxflow" placeholder="Nombre, SKU o Categoría..." oninput="TaxFlowApp.filtrarProductos()"></div>
+          <div class="form-group-taxflow"><label class="form-label-taxflow">Estado Stock</label><select id="filtroStockProd" class="form-control-taxflow" onchange="TaxFlowApp.filtrarProductos()"><option value="TODOS">Todos</option><option value="MINIMO">Stock Mínimo</option><option value="CERO">Sin Stock</option></select></div>
+          <div class="form-group-taxflow"><label class="form-label-taxflow">Condición</label><select id="filtroCondicionProd" class="form-control-taxflow" onchange="TaxFlowApp.filtrarProductos()"><option value="TODAS">Todas</option><option value="nuevo">Nuevo</option><option value="ajuste">Ajuste</option><option value="Precio">Cambio Precio</option></select></div>
+          <div class="form-group-taxflow"><button class="btn-back-taxflow" onclick="TaxFlowApp.limpiarFiltrosProductos()">Limpiar</button></div>
+        </div>
+      </div>
+      <div id="spinnerProductos" class="loading-state-taxflow"><div class="spinner-modern-taxflow"></div><p>Cargando inventario...</p></div>
+      <div class="table-container-taxflow">
+        <table class="data-table-taxflow">
+          <thead><tr><th>SKU</th><th>Producto</th><th>Categoría</th><th class="text-end-taxflow">Costo ($)</th><th class="text-end-taxflow">Venta ($)</th><th class="text-center-taxflow">Stock</th><th class="text-center-taxflow">Condición</th></tr></thead>
+          <tbody id="bodyTablaProductos"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MOVIMIENTOS BANCARIOS -->
+    <section id="vistaMovimientos" class="content-section-taxflow d-none-taxflow">
+      <div class="section-toolbar-taxflow">
+        <div class="toolbar-left-taxflow"><button class="btn-back-taxflow" onclick="TaxFlowApp.mostrarSeccion('vistaMenuImpuestos')"><i class="fas fa-arrow-left"></i> Volver</button><h2 class="section-title-taxflow">Movimientos Bancarios</h2></div>
+        <div class="toolbar-right-taxflow">
+          <button class="btn-back-taxflow" onclick="TaxFlowApp.imprimirMovimientos()"><i class="fas fa-print"></i><span>Imprimir</span></button>
+          <button class="btn-back-taxflow" onclick="exportarPDF()"><i class="fas fa-file-pdf"></i><span>Exportar PDF</span></button>
+          <button class="btn-primary-taxflow bg-success-taxflow" onclick="exportarExcel()"><i class="fas fa-file-excel"></i><span>Exportar Excel</span></button>
+        </div>
+      </div>
+      <div class="filters-container-taxflow">
+        <div class="filters-grid-taxflow" style="grid-template-columns: 180px 180px 220px 1fr auto;">
+          <div class="form-group-taxflow"><label class="form-label-taxflow">Fecha Desde</label><input type="date" id="filtroMovDesde" class="form-control-taxflow" onchange="TaxFlowApp.filtrarMovimientos()"></div>
+          <div class="form-group-taxflow"><label class="form-label-taxflow">Fecha Hasta</label><input type="date" id="filtroMovHasta" class="form-control-taxflow" onchange="TaxFlowApp.filtrarMovimientos()"></div>
+          <div class="form-group-taxflow"><label class="form-label-taxflow">Banco/Caja</label><select id="filtroMovBanco" class="form-control-taxflow" onchange="TaxFlowApp.filtrarMovimientos()"><option value="TODOS">Todos los Bancos</option></select></div>
+          <div class="form-group-taxflow"><label class="form-label-taxflow">Buscar por descripción</label><input type="text" id="filtroMovBuscar" class="form-control-taxflow" placeholder="Buscar por descripción, referencia o ID..." oninput="TaxFlowApp.filtrarMovimientos()"></div>
+          <div class="form-group-taxflow"><button class="btn-back-taxflow" onclick="TaxFlowApp.limpiarFiltrosMovimientos()">Limpiar</button></div>
+        </div>
+      </div>
+      <div class="table-container-taxflow">
+        <table class="data-table-taxflow">
+          <thead><tr><th>ID</th><th>Fecha</th><th>Cuenta/Caja</th><th>Nro Cuenta</th><th>Banco/Caja</th><th>Referencia</th><th>Descripción</th><th class="text-end-taxflow">Monto (USD)</th><th class="text-end-taxflow">Monto (Bs)</th></tr></thead>
+          <tbody id="movimientos-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODALES DE CONTROL -->
+  <div id="modalFiltrosReporte" class="report-modal-taxflow-overlay d-none-taxflow" onclick="TaxFlowApp.cerrarModalExterno(event)">
+    <div class="report-modal-taxflow" onclick="event.stopPropagation()">
+      <div class="report-modal-header-taxflow"><h3>Generar Reporte Retenciones</h3><button onclick="TaxFlowApp.cerrarModalReporteAbonos()">&times;</button></div>
+      <div class="report-modal-body-taxflow">
+        <div class="form-group-taxflow"><label class="form-label-taxflow">Fecha Desde</label><input type="date" id="reporteDesde" class="form-control-taxflow"></div>
+        <div class="form-group-taxflow"><label class="form-label-taxflow">Fecha Hasta</label><input type="date" id="reporteHasta" class="form-control-taxflow"></div>
+        <div class="form-group-taxflow"><label class="form-label-taxflow">Tipo de Movimiento</label><select id="reporteTipo" class="form-control-taxflow"><option value="TODOS">Todos</option><option value="RET_ISLR">Retenciones de ISLR</option><option value="RET_IVA">Retenciones de IVA</option></select></div>
+      </div>
+      <div class="report-modal-footer-taxflow"><button class="btn-back-taxflow" onclick="TaxFlowApp.cerrarModalReporteAbonos()">Cancelar</button><button class="btn-primary-taxflow" onclick="TaxFlowApp.generarReporteAbonos()"><i class="fas fa-file-alt"></i><span>Generar</span></button></div>
+    </div>
+  </div>
+
+  <div id="modalMayorAnalitico" class="report-modal-taxflow-overlay d-none-taxflow" onclick="TaxFlowApp.cerrarModalMayorExterno(event)">
+    <div class="report-modal-taxflow" onclick="event.stopPropagation()">
+      <div class="report-modal-header-taxflow"><h3>Filtrar Mayor Analítico</h3><button onclick="TaxFlowApp.cerrarModalMayorAnalitico()">&times;</button></div>
+      <div class="report-modal-body-taxflow">
+        <div class="form-group-taxflow"><label class="form-label-taxflow">Fecha Desde</label><input type="date" id="mayorDesde" class="form-control-taxflow"></div>
+        <div class="form-group-taxflow"><label class="form-label-taxflow">Fecha Hasta</label><input type="date" id="mayorHasta" class="form-control-taxflow"></div>
+        <div class="form-group-taxflow"><label class="form-label-taxflow">Cuenta Contable</label><select id="mayorCuenta" class="form-control-taxflow"><option value="TODAS">Todas las cuentas</option></select></div>
+      </div>
+      <div class="report-modal-footer-taxflow"><button class="btn-back-taxflow" onclick="TaxFlowApp.cerrarModalMayorAnalitico()">Cancelar</button><button class="btn-primary-taxflow btn-purple-taxflow" onclick="TaxFlowApp.generarMayorAnalitico()">Filtrar</button></div>
+    </div>
+  </div>
+
+  <div id="modalCargaMasivaProductos" class="report-modal-taxflow-overlay d-none-taxflow" onclick="TaxFlowApp.cerrarModalExternoMasiva(event)">
+    <div class="report-modal-taxflow" style="max-width: 600px;" onclick="event.stopPropagation()">
+      <div class="report-modal-header-taxflow"><h3>Carga Masiva de Productos</h3><button onclick="TaxFlowApp.cerrarModalCargaMasiva()">&times;</button></div>
+      <div class="report-modal-body-taxflow" id="paso1Masiva">
+        <div style="background: rgba(59, 130, 246, 0.1); padding: 12px; border-radius: 8px; font-size: 0.85rem; color: var(--primary-700);">Sube tu archivo de Excel. El sistema identificará los productos por coincidencia de nombre exacto.</div>
+        <div class="form-group-taxflow"><label class="form-label-taxflow">Seleccionar Archivo (.xlsx, .xls)</label><input type="file" id="archivoExcelMasiva" accept=".xlsx, .xls" class="form-control-taxflow"></div>
+      </div>
+      <div class="report-modal-body-taxflow d-none-taxflow" id="paso2Masiva">
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+          <div style="flex:1; padding:8px; border:1px solid var(--tax-border-color); border-radius:6px; text-align:center;"><h4 id="prevNuevos" style="color:var(--success-500); margin:0;">0</h4><small>Nuevos</small></div>
+          <div style="flex:1; padding:8px; border:1px solid var(--tax-border-color); border-radius:6px; text-align:center;"><h4 id="prevActualizados" style="color:var(--warning-500); margin:0;">0</h4><small>Actualizados</small></div>
+          <div style="flex:1; padding:8px; border:1px solid var(--tax-border-color); border-radius:6px; text-align:center;"><h4 id="prevErrores" style="color:var(--danger-500); margin:0;">0</h4><small>Omitidos</small></div>
+        </div>
+        <div style="max-height: 200px; overflow-y: auto;"><table class="data-table-taxflow" style="font-size:0.75rem;"><thead><tr><th>Producto</th><th>Precio</th><th>Acción</th></tr></thead><tbody id="bodyPreviewMasiva"></tbody></table></div>
+      </div>
+      <div class="report-modal-footer-taxflow" id="footerPaso1Masiva"><button class="btn-back-taxflow" onclick="TaxFlowApp.cerrarModalCargaMasiva()">Cancelar</button><button class="btn-primary-taxflow" onclick="TaxFlowApp.procesarExcelMasivo(this)">Analizar</button></div>
+      <div class="report-modal-footer-taxflow d-none-taxflow" id="footerPaso2Masiva"><button class="btn-back-taxflow" onclick="TaxFlowApp.volverPaso1Masiva()">Atrás</button><button class="btn-primary-taxflow" id="btnConfirmarMasiva" onclick="TaxFlowApp.confirmarCargaMasiva()">Importar</button></div>
+    </div>
+  </div>
+
+  <div id="sidebarOverlayEEFF" class="sidebar-modal-overlay" onclick="TaxFlowApp.cerrarSidebarEEFF()"></div>
+
+  <div id="sidebarEEFF" class="sidebar-modal">
+    <div class="sidebar-header"><h3>Generar Estado Financiero</h3><button class="sidebar-close" onclick="TaxFlowApp.cerrarSidebarEEFF()">&times;</button></div>
+    <div class="sidebar-body">
+      <div class="empresa-info-sidebar"><h4><span id="sidebarEmpresaNombre">Cargando...</span></h4><p>RIF: <span id="sidebarEmpresaRIF">-</span></p></div>
+      <div class="form-group-taxflow"><label class="form-label-taxflow">Moneda de expresión</label><div class="toggle-container" id="toggleMoneda"><div class="toggle-option active" id="toggleMonedaDolares" onclick="TaxFlowApp.toggleMonedaEEFF(true)"><span>Dólares ($)</span></div><div class="toggle-option" id="toggleMonedaBolivares" onclick="TaxFlowApp.toggleMonedaEEFF(false)"><span>Bolívares (Bs)</span></div></div></div>
+      <div class="form-group-taxflow"><label class="form-label-taxflow">Seleccionar Reportes</label>
+        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkReporteES" value="ES" onchange="TaxFlowApp.toggleSeleccionReporteCorreo('ES')"><label class="form-check-label" for="checkReporteES">Estado de Situación (ES)</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkReporteER" value="ER" onchange="TaxFlowApp.toggleSeleccionReporteCorreo('ER')"><label class="form-check-label" for="checkReporteER">Estado de Resultado (ER)</label></div>
+        <div class="form-check"><input class="form-check-input" type="checkbox" id="checkReporteBalance" value="BALANCE" onchange="TaxFlowApp.toggleSeleccionReporteCorreo('BALANCE')"><label class="form-check-label" for="checkReporteBalance">Balance de Comprobación</label></div>
+      </div>
+      <div class="form-group-taxflow"><label class="form-label-taxflow">Fecha Desde</label><input type="date" id="eeffDesde" class="form-control-taxflow"></div>
+      <div class="form-group-taxflow"><label class="form-label-taxflow">Fecha Hasta</label><input type="date" id="eeffHasta" class="form-control-taxflow"></div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="btn-primary-taxflow" onclick="TaxFlowApp.generarEEFF()">Generar</button>
+      <button class="btn-back-taxflow" onclick="TaxFlowApp.cerrarSidebarEEFF()">Cerrar</button>
+      <button class="btn-primary-taxflow" onclick="TaxFlowApp.verEEFFEnModulo()">Ver EEFF</button>
+    </div>
+  </div>
+
+  <div class="fab-container" id="fabContainer">
+    <div class="fab-menu" id="fabMenu">
+      <div class="fab-item" onclick="TaxFlowApp.abrirSidebarEEFF()"><span>Generar EEFF</span></div>
+      <div class="fab-item" onclick="TaxFlowApp.mostrarSeccion('vistaTablaImpuestos')"><span>Retenciones</span></div>
+      <div class="fab-item" onclick="TaxFlowApp.mostrarMayorAnalitico()"><span>Mayor Analítico</span></div>
+    </div>
+    <button class="fab-main" id="fabMain" onclick="TaxFlowApp.toggleFab()"><i class="fas fa-plus"></i></button>
+  </div>
+
+</div>
+
+<script>
+
+window.TaxFlowApp = window.TaxFlowApp || {};
+
+// Función auxiliar para obtener la información de la empresa activa
+function getEmpresaActivaDatos() {
+  try {
+    const raw = sessionStorage.getItem('empresaActiva');
+    if (raw) {
+      const e = JSON.parse(raw);
+      if (e && (e.nombre || e.razonSocial)) {
+        return {
+          id: e.id || '',
+          idSpreadsheet: e.idSpreadsheet || e.id || '',
+          nombre: e.nombre || e.razonSocial || 'Mi Empresa, C.A.',
+          rif: e.rif || 'J-00000000-0',
+          direccion: e.direccion || 'Venezuela',
+          logo: e.logoUrl || e.logo || 'https://drive.google.com/thumbnail?id=1dCncG3S9eZYyFMl5LnkvWFKjV32kgyGX'
+        };
+      }
+    }
+  } catch (err) {}
+  return {
+    id: '',
+    idSpreadsheet: '',
+    nombre: 'Mi Empresa, C.A.',
+    rif: 'J-00000000-0',
+    direccion: 'Venezuela',
+    logo: 'https://drive.google.com/thumbnail?id=1dCncG3S9eZYyFMl5LnkvWFKjV32kgyGX'
+  };
+}
+
+(function(app) {
+  'use strict';
+
+  // ============================================================
+  // CONSTANTES Y CONFIGURACIÓN DINÁMICA
+  // ============================================================
+  const EMPRESA = getEmpresaActivaDatos();
+
+  const SECCIONES = [
+    'vistaMenuImpuestos',
+    'vistaTablaImpuestos',
+    'vistaResumen',
+    'vistaPorPagar',
+    'vistaReporteVertical',
+    'vistaMayorAnalitico',
+    'vistaProductos',
+    'vistaMovimientos'
+  ];
+
+  const SECCIONES_ORDEN = [
+    'vistaMenuImpuestos',
+    'vistaTablaImpuestos',
+    'vistaResumen',
+    'vistaPorPagar',
+    'vistaMayorAnalitico',
+    'vistaProductos',
+    'vistaMovimientos'
+  ];
+
+  const GESTURES = {
+    minSwipeDistance: 60,
+    maxVerticalDeviation: 80,
+    swipeTimeLimit: 500,
+    edgeThreshold: 40,
+    enabled: true
+  };
+
+  // ============================================================
+  // ESTADO
+  // ============================================================
+  let datosTablaBrutos = [];
+  let datosAsientosBrutos = [];
+  let datosProductosBrutos = [];
+  let datosProductosFiltrados = [];
+  let categoriasMap = {};
+  let datosCargaMasivaPreparados = [];
+  let codigoLoteActual = '';
+  let eeffDesde = '';
+  let eeffHasta = '';
+  let isModalDividedByTasa = true;
+  let tasaCambioActual = 1;
+  let tiposEEFFSeleccionados = new Set();
+  let infoFiltroMayor = { desde: '', hasta: '', cuenta: 'TODAS' };
+  let datosMayorFiltradosActual = [];
+  let infoFiltroRetenciones = { desde: '', hasta: '', tipo: 'TODOS' };
+  let datosRetencionesFiltradosActual = [];
+  let ultimoReporteHTML = '';
+  let touchState = { startX: 0, startY: 0, startTime: 0, tracking: false, target: null, section: null, direction: null, isEdgeSwipe: false };
+  let swipeIndicatorEl = null;
+
+  window.allData = window.allData || { movimientos: [] };
+  window.movimientosMostrados = window.movimientosMostrados || [];
+
+  // ============================================================
+  // HELPERS UI UNIFICADOS (spinner / toast / confirm)
+  // ============================================================
+  function uiLoading(show, titulo, sub, pct) {
+    try {
+      if (window.GProUI && typeof window.GProUI.mostrarLoading === 'function') {
+        if (show) window.GProUI.mostrarLoading(titulo || 'Cargando...', sub || 'Conectando con el servidor...', pct || 15);
+        else window.GProUI.ocultarLoading();
+        return;
+      }
+    } catch (e) {}
+    const spinners = ['spinnerImpuestos', 'spinnerMayorAnalitico', 'spinnerProductos'];
+    spinners.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = show ? 'block' : 'none';
+    });
+  }
+
+  function uiToast(msg, tipo, duracion) {
+    tipo = tipo || 'info';
+    try {
+      if (window.notificar && typeof window.notificar.toast === 'function') {
+        window.notificar.toast(msg, tipo, duracion);
+        return;
+      }
+      if (window.toast && typeof window.toast.toast === 'function') {
+        window.toast.toast(msg, tipo, duracion);
+        return;
+      }
+    } catch (e) {}
+    const c = document.getElementById('toastContainerTaxflow');
+    if (!c) return;
+    const t = document.createElement('div');
+    t.className = 'toast-modern';
+    t.innerHTML = "<div><strong>" + String(tipo).toUpperCase() + "</strong>: " + msg + "</div>";
+    c.appendChild(t);
+    setTimeout(() => t.remove(), duracion || 4000);
+  }
+
+  function uiConfirmar(msg, onOk, onCancel) {
+    try {
+      if (window.notificar && typeof window.notificar.confirmar === 'function') {
+        window.notificar.confirmar(msg, 'warning', 'Confirmar', 'Cancelar', ok => {
+          if (ok && onOk) onOk();
+          else if (!ok && onCancel) onCancel();
+        });
+        return;
+      }
+    } catch (e) {}
+    if (window.Swal) {
+      Swal.fire({
+        title: 'Confirmar',
+        text: msg,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar',
+        cancelButtonText: 'Cancelar'
+      }).then(r => {
+        if (r.isConfirmed && onOk) onOk();
+        else if (!r.isConfirmed && onCancel) onCancel();
+      });
+    } else {
+      if (confirm(msg) && onOk) onOk();
+    }
+  }
+
+  app.ui = { loading: uiLoading, toast: uiToast, confirmar: uiConfirmar };
+
+  // ============================================================
+  // HELPERS DE FORMATO Y PARSEO
+  // ============================================================
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function parseFechaLocal(str) {
+    if (!str) return null;
+    if (str instanceof Date) return str;
+    if (str.includes('/')) {
+      const p = str.split('/');
+      return new Date(parseInt(p[2]), parseInt(p[1]) - 1, parseInt(p[0]), 12, 0, 0);
+    }
+    if (str.includes('-')) {
+      const p = str.split('T')[0].split('-');
+      return new Date(parseInt(p[0]), parseInt(p[1]) - 1, parseInt(p[2]), 12, 0, 0);
+    }
+    return new Date(str);
+  }
+
+  function formatDate(str) {
+    if (!str) return '-';
+    try {
+      const d = parseFechaLocal(str);
+      if (!d || isNaN(d.getTime())) return str;
+      return d.toLocaleDateString('es-VE');
+    } catch (e) { return str; }
+  }
+
+  function formatoMoneda(v) {
+    if (v === undefined || v === null) return '0,00';
+    const n = Number(v);
+    if (isNaN(n)) return '0,00';
+    return n.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function parseMonto(val) {
+    if (typeof val === 'number') return val;
+    if (!val) return 0;
+    let str = val.toString().trim();
+    let neg = str.includes('(') || str.includes('-');
+    str = str.replace(/[\(\)-]/g, '').replace(/\./g, '').replace(/,/g, '.');
+    let num = parseFloat(str) || 0;
+    return neg ? -num : num;
+  }
+
+  function formatMonto(num) {
+    let f = new Intl.NumberFormat('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(Math.abs(num));
+    return num < 0 ? "(" + f + ")" : f;
+  }
+
+  function isTouchDevice() {
+    return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  }
+
+  function isMobileViewport() {
+    return window.innerWidth <= 768;
+  }
+
+  function getCurrentSectionIndex() {
+    for (let i = 0; i < SECCIONES_ORDEN.length; i++) {
+      const el = document.getElementById(SECCIONES_ORDEN[i]);
+      if (el && el.classList.contains('d-block-taxflow')) return i;
+    }
+    return -1;
+  }
+
+  function showSwipeIndicator(direction) {
+    if (!swipeIndicatorEl) {
+      swipeIndicatorEl = document.createElement('div');
+      swipeIndicatorEl.className = 'swipe-indicator';
+      document.body.appendChild(swipeIndicatorEl);
+    }
+    swipeIndicatorEl.className = 'swipe-indicator ' + direction + ' visible';
+    swipeIndicatorEl.innerHTML = direction === 'left' ? '<i class="fas fa-chevron-left"></i>' : '<i class="fas fa-chevron-right"></i>';
+  }
+
+  function hideSwipeIndicator() {
+    if (swipeIndicatorEl) swipeIndicatorEl.className = 'swipe-indicator';
+  }
+
+  app.navegarConSwipe = function(direccion) {
+    const currentIdx = getCurrentSectionIndex();
+    if (currentIdx < 0) return;
+    let nextIdx = direccion === 'right' ? currentIdx - 1 : currentIdx + 1;
+    if (nextIdx < 0 || nextIdx >= SECCIONES_ORDEN.length) return;
+    const currentId = SECCIONES_ORDEN[currentIdx];
+    const nextId = SECCIONES_ORDEN[nextIdx];
+    const currentEl = document.getElementById(currentId);
+    const nextEl = document.getElementById(nextId);
+    if (!currentEl || !nextEl) return;
+
+    const outClass = direccion === 'right' ? 'swipe-out-right' : 'swipe-out-left';
+    currentEl.classList.add('swipe-animating', outClass);
+    nextEl.classList.remove('d-none-taxflow');
+    nextEl.classList.add('d-block-taxflow', 'swipe-animating', 'swipe-in-right');
+    void nextEl.offsetWidth;
+    nextEl.classList.remove('swipe-in-right');
+
+    setTimeout(() => {
+      currentEl.classList.add('d-none-taxflow');
+      currentEl.classList.remove('d-block-taxflow', 'swipe-animating', 'swipe-out-left', 'swipe-out-right');
+      nextEl.classList.remove('swipe-animating');
+      if (nextId === 'vistaProductos' && datosProductosBrutos.length === 0) app.cargarProductosData();
+      if (nextId === 'vistaTablaImpuestos' && datosTablaBrutos.length === 0) cargarDatosRetenciones();
+      if (nextId === 'vistaMayorAnalitico' && datosAsientosBrutos.length === 0) cargarDatosAsientosContables();
+      if (nextId === 'vistaMovimientos' && (!window.allData.movimientos || window.allData.movimientos.length === 0)) cargarDatosMovimientosBancarios();
+    }, 260);
+  };
+
+  // ============================================================
+  // TOUCH HANDLERS Y GESTOS
+  // ============================================================
+  function handleTouchStart(e) {
+    if (!GESTURES.enabled || !isMobileViewport()) return;
+    if (document.querySelector('.report-modal-taxflow-overlay:not(.d-none-taxflow)')) return;
+    if (document.querySelector('.sidebar-modal.active')) return;
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (['input', 'select', 'textarea', 'button'].includes(tag)) return;
+    if (e.target.closest('input, select, textarea, .form-control-taxflow, .toggle-container, .data-table-taxflow')) return;
+
+    const touch = e.touches[0];
+    touchState.startX = touch.clientX;
+    touchState.startY = touch.clientY;
+    touchState.startTime = Date.now();
+    touchState.tracking = true;
+    touchState.direction = null;
+    touchState.target = e.target;
+    touchState.isEdgeSwipe = touch.clientX <= GESTURES.edgeThreshold || touch.clientX >= window.innerWidth - GESTURES.edgeThreshold;
+    const idx = getCurrentSectionIndex();
+    touchState.section = idx >= 0 ? document.getElementById(SECCIONES_ORDEN[idx]) : null;
+  }
+
+  function handleTouchMove(e) {
+    if (!touchState.tracking) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - touchState.startX;
+    const dy = touch.clientY - touchState.startY;
+
+    if (!touchState.direction) {
+      if (Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+        touchState.direction = Math.abs(dx) > Math.abs(dy) ? 'horizontal' : 'vertical';
+      }
+    }
+    if (touchState.direction !== 'horizontal') return;
+    if (Math.abs(dy) > GESTURES.maxVerticalDeviation) {
+      touchState.tracking = false;
+      hideSwipeIndicator();
+      return;
+    }
+    if (Math.abs(dx) > 20) {
+      e.preventDefault();
+      if (dx > 15) { if (getCurrentSectionIndex() > 0) showSwipeIndicator('left'); }
+      else if (dx < -15) { if (getCurrentSectionIndex() < SECCIONES_ORDEN.length - 1) showSwipeIndicator('right'); }
+      if (touchState.section) {
+        const resistance = 0.35;
+        const maxTranslate = 60;
+        const translate = Math.max(-maxTranslate, Math.min(maxTranslate, dx * resistance));
+        touchState.section.style.transform = 'translateX(' + translate + 'px)';
+        touchState.section.classList.add('swiping');
+      }
+    }
+  }
+
+  function handleTouchEnd(e) {
+    if (!touchState.tracking) return;
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchState.startX;
+    const dy = touch.clientY - touchState.startY;
+    const dt = Date.now() - touchState.startTime;
+
+    if (touchState.section) {
+      touchState.section.style.transform = '';
+      touchState.section.classList.remove('swiping');
+    }
+    hideSwipeIndicator();
+    const isValid = Math.abs(dx) >= GESTURES.minSwipeDistance &&
+                    Math.abs(dy) <= GESTURES.maxVerticalDeviation &&
+                    dt <= GESTURES.swipeTimeLimit &&
+                    touchState.direction === 'horizontal';
+    if (isValid) {
+      if (dx > 0) app.navegarConSwipe('right');
+      else app.navegarConSwipe('left');
+    }
+    touchState.tracking = false;
+    touchState.direction = null;
+  }
+
+  function setupModalSwipeToClose() {
+    const modals = document.querySelectorAll('.report-modal-taxflow-overlay');
+    modals.forEach(overlay => {
+      if (overlay.dataset.gesturesInit === '1') return;
+      overlay.dataset.gesturesInit = '1';
+      const modal = overlay.querySelector('.report-modal-taxflow');
+      if (!modal) return;
+      const header = modal.querySelector('.report-modal-header-taxflow');
+      if (header && !header.querySelector('.modal-drag-handle')) {
+        const handle = document.createElement('div');
+        handle.className = 'modal-drag-handle';
+        header.insertBefore(handle, header.firstChild);
+      }
+      let modalTouch = { startY: 0, currentY: 0, dragging: false };
+      overlay.addEventListener('touchstart', (e) => {
+        if (!isMobileViewport()) return;
+        const isHeader = e.target.closest('.report-modal-header-taxflow') || e.target.closest('.modal-drag-handle');
+        if (!isHeader) return;
+        modalTouch.startY = e.touches[0].clientY;
+        modalTouch.currentY = modalTouch.startY;
+        modalTouch.dragging = true;
+        modal.classList.add('dragging');
+      }, { passive: true });
+      overlay.addEventListener('touchmove', (e) => {
+        if (!modalTouch.dragging) return;
+        modalTouch.currentY = e.touches[0].clientY;
+        const dy = modalTouch.currentY - modalTouch.startY;
+        if (dy > 0) {
+          modal.style.transform = 'translateY(' + dy + 'px)';
+          modal.style.opacity = Math.max(0.5, 1 - dy / 600);
+        }
+      }, { passive: true });
+      overlay.addEventListener('touchend', () => {
+        if (!modalTouch.dragging) return;
+        const dy = modalTouch.currentY - modalTouch.startY;
+        modal.classList.remove('dragging');
+        modal.classList.add('dragging-back');
+        if (dy > 120) {
+          modal.style.transform = 'translateY(100%)';
+          modal.style.opacity = '0';
+          setTimeout(() => {
+            if (overlay.id === 'modalMayorAnalitico') app.cerrarModalMayorAnalitico();
+            else if (overlay.id === 'modalCargaMasivaProductos') app.cerrarModalCargaMasiva();
+            else if (overlay.id === 'modalFiltrosReporte') app.cerrarModalReporteAbonos();
+            else { overlay.classList.add('d-none-taxflow'); overlay.style.display = 'none'; }
+            modal.style.transform = '';
+            modal.style.opacity = '';
+            modal.classList.remove('dragging-back');
+          }, 250);
+        } else {
+          modal.style.transform = '';
+          modal.style.opacity = '';
+          setTimeout(() => modal.classList.remove('dragging-back'), 260);
+        }
+        modalTouch.dragging = false;
+      });
+    });
+  }
+
+  function setupSidebarSwipeToClose() {
+    const sidebar = document.getElementById('sidebarEEFF');
+    if (!sidebar || sidebar.dataset.gesturesInit === '1') return;
+    sidebar.dataset.gesturesInit = '1';
+    let sbTouch = { startX: 0, currentX: 0, dragging: false };
+    sidebar.addEventListener('touchstart', (e) => {
+      if (!isMobileViewport()) return;
+      sbTouch.startX = e.touches[0].clientX;
+      sbTouch.currentX = sbTouch.startX;
+      sbTouch.dragging = true;
+      sidebar.style.transition = 'none';
+    }, { passive: true });
+    sidebar.addEventListener('touchmove', (e) => {
+      if (!sbTouch.dragging) return;
+      sbTouch.currentX = e.touches[0].clientX;
+      const dx = sbTouch.currentX - sbTouch.startX;
+      if (dx > 0) sidebar.style.transform = 'translateX(' + dx + 'px)';
+    }, { passive: true });
+    sidebar.addEventListener('touchend', () => {
+      if (!sbTouch.dragging) return;
+      const dx = sbTouch.currentX - sbTouch.startX;
+      sidebar.style.transition = '';
+      if (dx > 80) app.cerrarSidebarEEFF();
+      sidebar.style.transform = '';
+      sbTouch.dragging = false;
+    });
+  }
+
+  function setupPullToRefresh() {
+    let ptr = { startY: 0, pulling: false, triggered: false, indicator: null };
+    function getPtr() {
+      if (!ptr.indicator) {
+        ptr.indicator = document.createElement('div');
+        ptr.indicator.className = 'ptr-indicator';
+        ptr.indicator.innerHTML = '<i class="fas fa-sync-alt"></i>';
+        document.body.appendChild(ptr.indicator);
+      }
+      return ptr.indicator;
+    }
+    document.addEventListener('touchstart', (e) => {
+      if (!isMobileViewport() || window.scrollY > 5) return;
+      if (document.querySelector('.report-modal-taxflow-overlay:not(.d-none-taxflow)')) return;
+      ptr.startY = e.touches[0].clientY;
+      ptr.pulling = true;
+      ptr.triggered = false;
+    }, { passive: true });
+    document.addEventListener('touchmove', (e) => {
+      if (!ptr.pulling || !isMobileViewport()) return;
+      const dy = e.touches[0].clientY - ptr.startY;
+      if (dy > 60 && window.scrollY <= 5) {
+        const ind = getPtr();
+        ind.classList.add('visible');
+        if (dy > 120) {
+          ind.querySelector('i').style.transform = 'rotate(180deg)';
+          ptr.triggered = true;
+        } else {
+          ind.querySelector('i').style.transform = 'rotate(' + dy + 'deg)';
+        }
+      }
+    }, { passive: true });
+    document.addEventListener('touchend', () => {
+      if (!ptr.pulling) return;
+      ptr.pulling = false;
+      const ind = getPtr();
+      if (ptr.triggered) {
+        ind.classList.add('refreshing');
+        ind.querySelector('i').style.transform = '';
+        refrescarSeccionActual();
+        setTimeout(() => {
+          ind.classList.remove('visible', 'refreshing');
+          ind.querySelector('i').style.transform = '';
+        }, 1200);
+      } else {
+        ind.classList.remove('visible');
+      }
+      ptr.triggered = false;
+    });
+  }
+
+  function refrescarSeccionActual() {
+    const idx = getCurrentSectionIndex();
+    if (idx < 0) return;
+    const currentId = SECCIONES_ORDEN[idx];
+    uiToast('Actualizando datos...', 'info');
+    if (currentId === 'vistaTablaImpuestos') cargarDatosRetenciones();
+    else if (currentId === 'vistaMayorAnalitico') cargarDatosAsientosContables();
+    else if (currentId === 'vistaProductos') app.cargarProductosData();
+    else if (currentId === 'vistaMovimientos') cargarDatosMovimientosBancarios();
+    else {
+      cargarDatosRetenciones();
+      cargarDatosAsientosContables();
+      cargarDatosMovimientosBancarios();
+    }
+  }
+
+  function setupCardTapFeedback() {
+    document.addEventListener('touchstart', (e) => {
+      const card = e.target.closest('.nav-card-taxflow');
+      if (card) card.classList.add('swipe-active');
+    }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      const card = e.target.closest('.nav-card-taxflow');
+      if (card) setTimeout(() => card.classList.remove('swipe-active'), 100);
+    }, { passive: true });
+    document.addEventListener('touchcancel', (e) => {
+      const card = e.target.closest('.nav-card-taxflow');
+      if (card) card.classList.remove('swipe-active');
+    }, { passive: true });
+  }
+
+  app.initGestures = function() {
+    if (!isTouchDevice()) return;
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+    setupModalSwipeToClose();
+    setupSidebarSwipeToClose();
+    setupPullToRefresh();
+    setupCardTapFeedback();
+  };
+
+  app.gestures = {
+    enable: () => { GESTURES.enabled = true; },
+    disable: () => { GESTURES.enabled = false; },
+    isEnabled: () => GESTURES.enabled
+  };
+
+  // ============================================================
+  // NAVEGACIÓN ENTRE SECCIONES
+  // ============================================================
+  app.mostrarSeccion = function(idSeccion, opciones = {}) {
+    const { animate = false, fromSwipe = false } = opciones;
+    if (fromSwipe) return;
+
+    SECCIONES.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('d-none-taxflow');
+        el.classList.remove('d-block-taxflow');
+        el.style.transform = '';
+        el.classList.remove('swiping', 'swipe-animating', 'swipe-out-left', 'swipe-out-right', 'swipe-in-right');
+      }
+    });
+
+    const target = document.getElementById(idSeccion);
+    if (target) {
+      target.classList.remove('d-none-taxflow');
+      target.classList.add('d-block-taxflow');
+
+      if (animate && isMobileViewport()) {
+        target.classList.add('swipe-in-right');
+        void target.offsetWidth;
+        target.classList.remove('swipe-in-right');
+      }
+
+      if (isMobileViewport()) window.scrollTo({ top: 0, behavior: 'smooth' });
+      else window.scrollTo(0, 0);
+    }
+
+    // Carga oportuna
+    if (idSeccion === 'vistaTablaImpuestos' && datosTablaBrutos.length === 0) {
+      cargarDatosRetenciones();
+    } else if (idSeccion === 'vistaTablaImpuestos' && datosTablaBrutos.length > 0) {
+      app.aplicarFiltros();
+    }
+
+    if (idSeccion === 'vistaProductos' && datosProductosBrutos.length === 0) {
+      app.cargarProductosData();
+    }
+
+    if (idSeccion === 'vistaMayorAnalitico' && datosAsientosBrutos.length === 0) {
+      cargarDatosAsientosContables();
+    }
+
+    if (idSeccion === 'vistaMovimientos' && (!window.allData.movimientos || window.allData.movimientos.length === 0)) {
+      cargarDatosMovimientosBancarios();
+    }
+  };
+
+  // ============================================================
+  // INICIALIZACIÓN
+  // ============================================================
+  app.init = function() {
+    setFechasPredeterminadas();
+    inicializarDatosEmpresa();
+    obtenerTasaCambio();
+    app.mostrarSeccion('vistaMenuImpuestos');
+    cargarDatosRetenciones();
+    cargarDatosAsientosContables();
+    cargarDatosMovimientosBancarios();
+    app.initGestures();
+  };
+
+  // ============================================================
+  // LLAMADAS AL BACKEND (Multi-Empresa)
+  // ============================================================
+  function obtenerTasaCambio() {
+    if (typeof google !== 'undefined' && google.script) {
+      google.script.run
+        .withSuccessHandler(tasa => {
+          try {
+            if (typeof tasa === 'object' && tasa !== null) {
+              tasaCambioActual = parseFloat(tasa.tasaUSD || tasa.tasaDolar) || 1;
+            } else {
+              tasaCambioActual = parseFloat(tasa) || 1;
+            }
+          } catch (e) { tasaCambioActual = 1; }
+        })
+        .withFailureHandler(() => { tasaCambioActual = 1; })
+        .obtenerTasaCambioActual();
+    }
+  }
+
+  function cargarDatosRetenciones() {
+    const spinner = document.getElementById('spinnerImpuestos');
+    if (spinner) spinner.style.display = 'block';
+    uiLoading(true, 'Cargando retenciones', 'Consultando CobrosPagos...', 25);
+
+    if (typeof google !== 'undefined' && google.script) {
+      const idEmpresa = EMPRESA.idSpreadsheet || EMPRESA.id || '';
+      google.script.run
+        .withSuccessHandler(res => {
+          datosTablaBrutos = res || [];
+
+          const desdeInput = document.getElementById('filtroDesde');
+          const hastaInput = document.getElementById('filtroHasta');
+
+          if (datosTablaBrutos.length > 0) {
+            const retenciones = datosTablaBrutos.filter(f => String(f.Transaccion || f.Referencia || '').toUpperCase().includes('RETENCION'));
+            if (retenciones.length > 0) {
+              const primerRet = retenciones[0];
+              const fStr = primerRet.fechaAbono || primerRet.FechaFactura || primerRet.Fecha;
+              if (fStr) {
+                const f = parseFechaLocal(fStr);
+                if (f) {
+                  const y = f.getFullYear();
+                  const m = String(f.getMonth() + 1).padStart(2, '0');
+                  const ultDia = new Date(y, f.getMonth() + 1, 0).getDate();
+                  if (desdeInput && !desdeInput.value) desdeInput.value = `${y}-${m}-01`;
+                  if (hastaInput && !hastaInput.value) hastaInput.value = `${y}-${m}-${ultDia}`;
+                }
+              }
+            }
+          }
+
+          app.aplicarFiltros();
+          if (spinner) spinner.style.display = 'none';
+          uiLoading(false);
+        })
+        .withFailureHandler(err => {
+          if (spinner) spinner.style.display = 'none';
+          uiLoading(false);
+          uiToast("Error al cargar retenciones: " + (err.message || err), "error");
+        })
+        .obtenerDatosAbonos(idEmpresa);
+    } else {
+      if (spinner) spinner.style.display = 'none';
+      uiLoading(false);
+    }
+  }
+
+  function cargarDatosAsientosContables() {
+    const spinner = document.getElementById('spinnerMayorAnalitico');
+    if (spinner) spinner.style.display = 'block';
+    uiLoading(true, 'Cargando asientos', 'Consultando hoja Asientos...', 40);
+
+    if (typeof google !== 'undefined' && google.script) {
+      const idEmpresa = EMPRESA.idSpreadsheet || EMPRESA.id || '';
+      google.script.run
+        .withSuccessHandler(datos => {
+          datosAsientosBrutos = datos || [];
+          datosMayorFiltradosActual = datosAsientosBrutos;
+          if (spinner) spinner.style.display = 'none';
+          uiLoading(false);
+          const infoText = document.getElementById('mayorInfoText');
+          if (infoText) infoText.textContent = 'Registros totales: ' + datosAsientosBrutos.length;
+          renderTablaMayor(datosAsientosBrutos);
+        })
+        .withFailureHandler(err => {
+          if (spinner) spinner.style.display = 'none';
+          uiLoading(false);
+          console.error("Error al cargar asientos:", err);
+        })
+        .obtenerDatosAsientos(idEmpresa);
+    } else {
+      if (spinner) spinner.style.display = 'none';
+      uiLoading(false);
+    }
+  }
+
+  function cargarDatosMovimientosBancarios() {
+    uiLoading(true, 'Cargando movimientos', 'Consultando MovBancoCaja...', 55);
+    if (typeof google !== 'undefined' && google.script) {
+      const idEmpresa = EMPRESA.idSpreadsheet || EMPRESA.id || '';
+      google.script.run
+        .withSuccessHandler(response => {
+          uiLoading(false);
+          if (response && response.success) {
+            window.allData.movimientos = response.movimientos || [];
+            window.movimientosMostrados = window.allData.movimientos;
+            llenarComboBancos(window.allData.movimientos);
+            renderTableMov(window.allData.movimientos);
+          }
+        })
+        .withFailureHandler(() => { uiLoading(false); })
+        .getInitialData(idEmpresa);
+    } else {
+      uiLoading(false);
+    }
+  }
+
+  // ============================================================
+  // FILTROS Y TABLA — RETENCIONES
+  // ============================================================
+  app.aplicarFiltros = function() {
+    const desde = document.getElementById('filtroDesde')?.value;
+    const hasta = document.getElementById('filtroHasta')?.value;
+    const tipo = document.getElementById('filtroTipoRet')?.value || 'TODOS';
+
+    infoFiltroRetenciones = { desde, hasta, tipo };
+
+    const dDesde = desde ? new Date(desde + 'T00:00:00') : null;
+    const dHasta = hasta ? new Date(hasta + 'T23:59:59') : null;
+
+    datosRetencionesFiltradosActual = datosTablaBrutos.filter(fila => {
+      const transStr = String(fila.Transaccion || fila.Referencia || '').toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      if (!transStr.includes('RETENCION')) return false;
+
+      if (tipo === 'IVA' && !transStr.includes('IVA')) return false;
+      if (tipo === 'ISLR' && !transStr.includes('ISLR')) return false;
+
+      if (dDesde || dHasta) {
+        const fStr = fila.fechaAbono || fila.FechaFactura || fila.Fecha;
+        if (fStr) {
+          const f = parseFechaLocal(fStr);
+          if (f && !isNaN(f.getTime())) {
+            if (dDesde && f < dDesde) return false;
+            if (dHasta && f > dHasta) return false;
+          }
+        }
+      }
+      return true;
+    });
+
+    renderTablaRetenciones(datosRetencionesFiltradosActual);
+  };
+
+  function renderTablaRetenciones(datos) {
+    const tbody = document.getElementById('bodyTablaImpuestos');
+    if (!tbody) return;
+
+    if (datos.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='12' class='text-center-taxflow' style='padding: 2rem;'>No se encontraron registros de retenciones para el período indicado.</td></tr>";
+      return;
+    }
+
+    tbody.innerHTML = datos.map(item => {
+      const f = item.fechaAbono || item.FechaFactura || item.Fecha;
+      const cliente = item.ProveedorCliente || item.Cliente || '-';
+      const rif = item.Rif || '-';
+      const factura = item.NroFactura || item.Factura || '-';
+      const control = item.NroControl || '-';
+      const referencia = item.Transaccion || item.Referencia || '-';
+      const comprobante = item.id || item.Comprobante || item['Nro Comprobante'] || '-';
+      const moneda = item.Moneda || 'USD';
+      const tasa = parseFloat(String(item.Tasa || '1').replace(/\./g, '').replace(',', '.')) || 1;
+      const montoUSD = parseFloat(String(item.MontoUSD || item.Abono || '0').replace(/\./g, '').replace(',', '.')) || 0;
+      const montoBs = parseFloat(String(item.MontoBs || item['Monto Bs'] || (montoUSD * tasa)).replace(/\./g, '').replace(',', '.')) || 0;
+      const pct = item['% Retencion'] || item.Porcentaje || '-';
+
+      return "<tr>" +
+        "<td>" + esc(formatDate(f)) + "</td>" +
+        "<td class='text-dark-taxflow'>" + esc(cliente) + "</td>" +
+        "<td><span class='badge-taxflow'>" + esc(rif) + "</span></td>" +
+        "<td>" + esc(factura) + "</td>" +
+        "<td class='text-muted-taxflow'>" + esc(control) + "</td>" +
+        "<td>" + esc(referencia) + "</td>" +
+        "<td class='text-end-taxflow amount-taxflow'>" + formatoMoneda(montoBs) + "</td>" +
+        "<td class='text-center-taxflow'>" + esc(pct) + (pct !== '-' ? '%' : '') + "</td>" +
+        "<td class='text-muted-taxflow'>" + esc(comprobante) + "</td>" +
+        "<td class='text-center-taxflow'>" + esc(moneda) + "</td>" +
+        "<td class='text-end-taxflow'>" + formatoMoneda(tasa) + "</td>" +
+        "<td class='text-end-taxflow amount-taxflow' style='color:var(--success-600);'>" + formatoMoneda(montoUSD) + "</td>" +
+        "</tr>";
+    }).join('');
+  }
+
+  // ============================================================
+  // MAYOR ANALÍTICO
+  // ============================================================
+  function renderTablaMayor(datos) {
+    const tbody = document.getElementById('bodyMayorAnalitico');
+    if (!tbody) return;
+    if (datos.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='9' class='text-center-taxflow' style='padding: 2rem;'>No hay registros de asientos contables.</td></tr>";
+      return;
+    }
+    tbody.innerHTML = datos.map(item => {
+      const f = item.FechaAsiento || item.Fecha;
+      const m = parseMonto(item.MontoTransaccion || item.Monto || 0);
+      return "<tr>" +
+        "<td>" + esc(formatDate(f)) + "</td>" +
+        "<td>" + esc(item.NroAsiento || '-') + "</td>" +
+        "<td>" + esc(item.TipoAsiento || '-') + "</td>" +
+        "<td>" + esc(item['cliente/Proveedor'] || item.Cliente || '-') + "</td>" +
+        "<td>" + esc(item.Descripcion || '-') + "</td>" +
+        "<td>" + esc(item.CodigoCuenta || '-') + "</td>" +
+        "<td>" + esc(item.CuentaContable || '-') + "</td>" +
+        "<td class='text-end-taxflow amount-taxflow'>" + formatoMoneda(m) + "</td>" +
+        "<td>" + esc(item.Transaccion || '-') + "</td>" +
+        "</tr>";
+    }).join('');
+  }
+
+// ============================================================
+  // NAVEGACIÓN DIRECTA AL MAYOR ANALÍTICO
+  // ============================================================
+  app.mostrarMayorAnalitico = function() {
+    app.mostrarSeccion('vistaMayorAnalitico');
+  };
+
+  // ============================================================
+  // MODAL Y FILTRO — MAYOR ANALÍTICO
+  // ============================================================
+  app.abrirModalMayorAnalitico = function() {
+    const modal = document.getElementById('modalMayorAnalitico');
+    if (!modal) return;
+    
+    // El select en tu HTML tiene id="mayorCuenta"
+    const select = document.getElementById('mayorCuenta') || document.getElementById('mayorFiltroCuenta');
+    if (select) {
+      select.innerHTML = '<option value="TODAS">Todas las cuentas</option>';
+      const cuentas = [...new Set(datosAsientosBrutos.map(a => a.CuentaContable).filter(Boolean))].sort();
+      cuentas.forEach(c => { 
+        select.innerHTML += "<option value='" + esc(c) + "'>" + esc(c) + "</option>"; 
+      });
+      select.value = infoFiltroMayor.cuenta || 'TODAS';
+    }
+
+    // Colocar fechas por defecto en el modal si están vacías
+    const d = document.getElementById('mayorDesde');
+    const h = document.getElementById('mayorHasta');
+    if (d && !d.value) {
+      const hoy = new Date();
+      d.value = new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString().split('T')[0];
+    }
+    if (h && !h.value) {
+      const hoy = new Date();
+      h.value = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).toISOString().split('T')[0];
+    }
+
+    modal.classList.remove('d-none-taxflow');
+    modal.style.display = 'flex';
+  };
+
+  app.cerrarModalMayorAnalitico = function() {
+    const modal = document.getElementById('modalMayorAnalitico');
+    if (modal) { 
+      modal.classList.add('d-none-taxflow'); 
+      modal.style.display = 'none'; 
+    }
+  };
+
+  app.cerrarModalMayorExterno = function(e) {
+    if (e && e.target && e.target.id === 'modalMayorAnalitico') {
+      app.cerrarModalMayorAnalitico();
+    }
+  };
+
+  // El botón "Filtrar" del modal llama a generarMayorAnalitico
+  app.generarMayorAnalitico = function() {
+    const desde = document.getElementById('mayorDesde')?.value;
+    const hasta = document.getElementById('mayorHasta')?.value;
+    const select = document.getElementById('mayorCuenta') || document.getElementById('mayorFiltroCuenta');
+    const cuenta = select?.value || 'TODAS';
+    
+    infoFiltroMayor = { desde, hasta, cuenta };
+    app.cerrarModalMayorAnalitico();
+
+    const dDesde = desde ? new Date(desde + 'T00:00:00') : null;
+    const dHasta = hasta ? new Date(hasta + 'T23:59:59') : null;
+
+    datosMayorFiltradosActual = datosAsientosBrutos.filter(item => {
+      const f = item.FechaAsiento || item.Fecha;
+      if (dDesde || dHasta) {
+        if (!f) return false;
+        const d = parseFechaLocal(f);
+        if (d && !isNaN(d.getTime())) {
+          if (dDesde && d < dDesde) return false;
+          if (dHasta && d > dHasta) return false;
+        }
+      }
+      if (cuenta !== 'TODAS' && item.CuentaContable !== cuenta) return false;
+      return true;
+    });
+
+    const infoText = document.getElementById('mayorInfoText');
+    if (infoText) {
+      infoText.textContent = "Registros filtrados: " + datosMayorFiltradosActual.length + " (Filtro: " + cuenta + ")";
+    }
+    renderTablaMayor(datosMayorFiltradosActual);
+  };
+
+  // Alias por compatibilidad
+  app.aplicarFiltrosMayor = app.generarMayorAnalitico;
+
+
+app.cerrarModalExternoMasiva = function(e) {
+    if (e && e.target && e.target.id === 'modalCargaMasivaProductos') {
+      app.cerrarModalCargaMasiva();
+    }
+  };
+
+  app.volverPaso1Masiva = function() {
+    document.getElementById('paso1Masiva')?.classList.remove('d-none-taxflow');
+    document.getElementById('footerPaso1Masiva')?.classList.remove('d-none-taxflow');
+    document.getElementById('paso2Masiva')?.classList.add('d-none-taxflow');
+    document.getElementById('footerPaso2Masiva')?.classList.add('d-none-taxflow');
+  };
+
+  
+  app.cerrarModalMayorAnalitico = function() {
+    const modal = document.getElementById('modalMayorAnalitico');
+    if (modal) { modal.classList.add('d-none-taxflow'); modal.style.display = 'none'; }
+  };
+
+  app.aplicarFiltrosMayor = function() {
+    const desde = document.getElementById('mayorDesde')?.value;
+    const hasta = document.getElementById('mayorHasta')?.value;
+    const cuenta = document.getElementById('mayorFiltroCuenta')?.value || 'TODAS';
+    infoFiltroMayor = { desde, hasta, cuenta };
+    app.cerrarModalMayorAnalitico();
+
+    const dDesde = desde ? new Date(desde + 'T00:00:00') : null;
+    const dHasta = hasta ? new Date(hasta + 'T23:59:59') : null;
+
+    datosMayorFiltradosActual = datosAsientosBrutos.filter(item => {
+      const f = item.FechaAsiento || item.Fecha;
+      if (dDesde || dHasta) {
+        if (!f) return false;
+        const d = parseFechaLocal(f);
+        if (d && !isNaN(d.getTime())) {
+          if (dDesde && d < dDesde) return false;
+          if (dHasta && d > dHasta) return false;
+        }
+      }
+      if (cuenta !== 'TODAS' && item.CuentaContable !== cuenta) return false;
+      return true;
+    });
+
+    const infoText = document.getElementById('mayorInfoText');
+    if (infoText) infoText.textContent = "Registros filtrados: " + datosMayorFiltradosActual.length + " (Filtro: " + cuenta + ")";
+    renderTablaMayor(datosMayorFiltradosActual);
+  };
+
+  // ============================================================
+  // MOVIMIENTOS BANCARIOS
+  // ============================================================
+  function renderTableMov(movimientos) {
+    const tbody = document.getElementById('movimientos-table-body');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    if (movimientos.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='9' class='text-center-taxflow' style='padding: 2rem;'>No se encontraron movimientos registrados.</td></tr>";
+      return;
+    }
+    movimientos.forEach(mov => {
+      const mUSD = parseMonto(mov.MontoMovUSD);
+      const mBs = parseMonto(mov.MontoMovBs);
+      const esNegativa = String(mov.TipoTransaccion).toLowerCase().includes('negativa');
+      const clase = esNegativa ? 'text-danger' : 'text-success';
+      const signo = esNegativa ? '-' : '+';
+      tbody.innerHTML += "<tr>" +
+        "<td class='ps-4 text-muted small'>" + esc(String(mov.IdMovimiento).slice(-6)) + "</td>" +
+        "<td>" + esc(formatDate(mov.FechaMov)) + "</td>" +
+        "<td><span class='badge bg-dark border text-light'>" + esc(mov.Cuenta) + "</span></td>" +
+        "<td class='text-muted small'>" + esc(mov.NroCuenta) + "</td>" +
+        "<td>" + esc(mov.NombreBanco) + "</td>" +
+        "<td>" + esc(mov.ReferenciaMov) + "</td>" +
+        "<td class='small'>" + esc(mov.descMov || '-') + "</td>" +
+        "<td class='fw-bold " + clase + " text-end'>" + signo + " $ " + mUSD.toLocaleString('es-VE', { minimumFractionDigits: 2 }) + "</td>" +
+        "<td class='fw-bold " + clase + " text-end'>" + signo + " Bs " + mBs.toLocaleString('es-VE', { minimumFractionDigits: 2 }) + "</td>" +
+        "</tr>";
+    });
+  }
+
+  function llenarComboBancos(movimientos) {
+    const select = document.getElementById('filtroMovBanco');
+    if (!select) return;
+    select.innerHTML = '<option value="TODOS">Todos los Bancos</option>';
+    const unicos = [...new Set(movimientos.map(m => m.NombreBanco || m.nombreBanco).filter(Boolean))];
+    unicos.sort().forEach(b => {
+      select.innerHTML += "<option value='" + esc(b.toUpperCase()) + "'>" + esc(b) + "</option>";
+    });
+  }
+
+  app.filtrarMovimientos = function() {
+    const desde = document.getElementById('filtroMovDesde')?.value;
+    const hasta = document.getElementById('filtroMovHasta')?.value;
+    const banco = document.getElementById('filtroMovBanco')?.value || 'TODOS';
+    const buscar = String(document.getElementById('filtroMovBuscar')?.value || '').toLowerCase();
+    const dDesde = desde ? new Date(desde + 'T00:00:00') : null;
+    const dHasta = hasta ? new Date(hasta + 'T23:59:59') : null;
+
+    window.movimientosMostrados = window.allData.movimientos.filter(mov => {
+      if (dDesde || dHasta) {
+        const fMov = new Date(mov.FechaMov || mov.fecha);
+        if (dDesde && fMov < dDesde) return false;
+        if (dHasta && fMov > dHasta) return false;
+      }
+      if (banco !== 'TODOS') {
+        const bNom = String(mov.NombreBanco || mov.nombreBanco || '').toUpperCase();
+        if (bNom !== banco.toUpperCase()) return false;
+      }
+      if (buscar) {
+        const desc = String(mov.descMov || mov.descripcionMov || '').toLowerCase();
+        const ref = String(mov.ReferenciaMov || mov.referenciaMov || '').toLowerCase();
+        const id = String(mov.IdMovimiento || '').toLowerCase();
+        if (!desc.includes(buscar) && !ref.includes(buscar) && !id.includes(buscar)) return false;
+      }
+      return true;
+    });
+    renderTableMov(window.movimientosMostrados);
+  };
+
+  app.limpiarFiltrosMovimientos = function() {
+    const hoy = new Date();
+    document.getElementById('filtroMovDesde').value = new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString().split('T')[0];
+    document.getElementById('filtroMovHasta').value = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).toISOString().split('T')[0];
+    document.getElementById('filtroMovBanco').value = 'TODOS';
+    document.getElementById('filtroMovBuscar').value = '';
+    app.filtrarMovimientos();
+  };
+
+  // ============================================================
+  // ESTADOS FINANCIEROS (EEFF)
+  // ============================================================
+  app.abrirSidebarEEFF = function() {
+    tiposEEFFSeleccionados = new Set();
+    ['checkReporteES', 'checkReporteER', 'checkReporteBalance'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.checked = false;
+    });
+    const overlay = document.getElementById('sidebarOverlayEEFF');
+    const sidebar = document.getElementById('sidebarEEFF');
+    if (overlay && sidebar) { overlay.classList.add('active'); sidebar.classList.add('active'); }
+  };
+
+  app.cerrarSidebarEEFF = function() {
+    const overlay = document.getElementById('sidebarOverlayEEFF');
+    const sidebar = document.getElementById('sidebarEEFF');
+    if (overlay && sidebar) { overlay.classList.remove('active'); sidebar.classList.remove('active'); }
+  };
+
+  app.toggleMonedaEEFF = function(usarDolares) {
+    isModalDividedByTasa = usarDolares;
+    const btnD = document.getElementById('toggleMonedaDolares');
+    const btnB = document.getElementById('toggleMonedaBolivares');
+    if (btnD && btnB) {
+      btnD.classList.toggle('active', usarDolares);
+      btnB.classList.toggle('active', !usarDolares);
+    }
+  };
+
+  app.toggleSeleccionReporteCorreo = function(tipo) {
+    if (tiposEEFFSeleccionados.has(tipo)) tiposEEFFSeleccionados.delete(tipo);
+    else tiposEEFFSeleccionados.add(tipo);
+  };
+
+  app.generarEEFF = function() {
+    const desdeStr = document.getElementById('eeffDesde')?.value;
+    const hastaStr = document.getElementById('eeffHasta')?.value;
+    if (!desdeStr || !hastaStr) { uiToast('Rango de fechas para EEFF requerido.', 'warning'); return; }
+    eeffDesde = desdeStr;
+    eeffHasta = hastaStr;
+    const seleccionados = Array.from(tiposEEFFSeleccionados);
+    if (seleccionados.length === 0) { uiToast('Selecciona al menos un tipo de Estado Financiero.', 'warning'); return; }
+    app.cerrarSidebarEEFF();
+
+    if (datosAsientosBrutos.length === 0) {
+      uiToast('Cargando asientos contables...', 'info');
+      const idEmpresa = EMPRESA.idSpreadsheet || EMPRESA.id || '';
+      google.script.run
+        .withSuccessHandler(datos => {
+          datosAsientosBrutos = datos || [];
+          procesarGeneracionEEFFMultiple(datosAsientosBrutos, seleccionados, true);
+        })
+        .withFailureHandler(err => { uiToast('Error al cargar asientos: ' + err.message, 'error'); })
+        .obtenerDatosAsientos(idEmpresa);
+    } else {
+      procesarGeneracionEEFFMultiple(datosAsientosBrutos, seleccionados, true);
+    }
+  };
+
+  app.verEEFFEnModulo = function() {
+    app.cerrarSidebarEEFF();
+    const seleccionados = Array.from(tiposEEFFSeleccionados);
+    if (seleccionados.length === 0) { uiToast('Selecciona al menos un tipo de Estado Financiero.', 'warning'); return; }
+    const desdeStr = document.getElementById('eeffDesde')?.value;
+    const hastaStr = document.getElementById('eeffHasta')?.value;
+    if (!desdeStr || !hastaStr) { uiToast('Rango de fechas requerido.', 'warning'); return; }
+    eeffDesde = desdeStr;
+    eeffHasta = hastaStr;
+
+    if (datosAsientosBrutos.length === 0) {
+      const idEmpresa = EMPRESA.idSpreadsheet || EMPRESA.id || '';
+      google.script.run
+        .withSuccessHandler(datos => {
+          datosAsientosBrutos = datos || [];
+          procesarGeneracionEEFFMultiple(datosAsientosBrutos, seleccionados, false);
+        })
+        .withFailureHandler(err => { uiToast('Error: ' + err.message, 'error'); })
+        .obtenerDatosAsientos(idEmpresa);
+    } else {
+      procesarGeneracionEEFFMultiple(datosAsientosBrutos, seleccionados, false);
+    }
+  };
+
+  function procesarGeneracionEEFFMultiple(datos, seleccionados, autoPrint) {
+    if (autoPrint === undefined) autoPrint = true;
+    if (!tasaCambioActual || tasaCambioActual <= 0) tasaCambioActual = 1;
+
+    const desde = parseFechaLocal(eeffDesde);
+    const hasta = parseFechaLocal(eeffHasta);
+    hasta.setHours(23, 59, 59);
+
+    const filtrados = datos.filter(row => {
+      const f = row.FechaAsiento || row.Fecha;
+      if (!f) return false;
+      const fItem = parseFechaLocal(f);
+      return (fItem && fItem >= desde && fItem <= hasta);
+    });
+
+    if (filtrados.length === 0) {
+      uiToast('No existen movimientos registrados para construir Estados Financieros en esa fecha.', 'warning');
+      return;
+    }
+
+    const resultados = {};
+    seleccionados.forEach(tipo => {
+      const agrupado = {};
+      let totalGeneral = 0;
+      let banderaDatos = false;
+
+      filtrados.forEach(row => {
+        let eeffVal = String(row.EEFF || row.Eeff || '').toUpperCase().trim();
+        eeffVal = eeffVal.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        let esValido = false;
+        if (tipo === 'ES') esValido = (eeffVal === 'ES' || eeffVal.includes('SITUACION'));
+        else if (tipo === 'ER') esValido = (eeffVal === 'ER' || eeffVal.includes('RESULTADO'));
+        else if (tipo === 'BALANCE') esValido = (eeffVal === 'BALANCE');
+        if (!esValido) return;
+
+        banderaDatos = true;
+        const nombreEeff = tipo === 'ES' ? 'ESTADO DE SITUACIÓN' : tipo === 'ER' ? 'ESTADO DE RESULTADO' : 'BALANCE DE COMPROBACIÓN';
+        const cuenta = row.CUENTA || row.CuentaContable || 'Sin Asignar';
+        const tipoCuenta = row.TipoCuenta || 'Sin Clasificar';
+        const grupoBalance = row.GrupoBalance || 'Sin Clasificar';
+        const subcuenta = row.SUBCUENTA || row.SubCuenta || 'Sin Clasificar';
+        let m = parseMonto(row.MontoTransaccion || row.Monto || 0);
+        if (isModalDividedByTasa && tasaCambioActual > 0) m = m / tasaCambioActual;
+
+        if (!agrupado[nombreEeff]) agrupado[nombreEeff] = { total: 0, cuentas: {} };
+        if (!agrupado[nombreEeff].cuentas[cuenta]) agrupado[nombreEeff].cuentas[cuenta] = { total: 0, tipos: {} };
+        if (!agrupado[nombreEeff].cuentas[cuenta].tipos[tipoCuenta]) agrupado[nombreEeff].cuentas[cuenta].tipos[tipoCuenta] = { total: 0, grupos: {} };
+        if (!agrupado[nombreEeff].cuentas[cuenta].tipos[tipoCuenta].grupos[grupoBalance]) agrupado[nombreEeff].cuentas[cuenta].tipos[tipoCuenta].grupos[grupoBalance] = { total: 0, subcuentas: {} };
+        if (!agrupado[nombreEeff].cuentas[cuenta].tipos[tipoCuenta].grupos[grupoBalance].subcuentas[subcuenta]) agrupado[nombreEeff].cuentas[cuenta].tipos[tipoCuenta].grupos[grupoBalance].subcuentas[subcuenta] = 0;
+
+        agrupado[nombreEeff].cuentas[cuenta].tipos[tipoCuenta].grupos[grupoBalance].subcuentas[subcuenta] += m;
+        agrupado[nombreEeff].cuentas[cuenta].tipos[tipoCuenta].grupos[grupoBalance].total += m;
+        agrupado[nombreEeff].cuentas[cuenta].tipos[tipoCuenta].total += m;
+        agrupado[nombreEeff].cuentas[cuenta].total += m;
+        agrupado[nombreEeff].total += m;
+        totalGeneral += m;
+      });
+
+      if (banderaDatos) resultados[tipo] = { agrupado, totalGeneral };
+    });
+
+    if (Object.keys(resultados).length === 0) {
+      uiToast("No se encontraron rubros clasificados en las cuentas asignadas.", "warning");
+      return;
+    }
+
+    let htmlCombinado = '';
+    const orden = ['BALANCE', 'ES', 'ER'];
+    orden.forEach(tipo => {
+      if (resultados[tipo]) {
+        htmlCombinado += generarHTMLImpresionEEFFMultiple(resultados[tipo].agrupado, resultados[tipo].totalGeneral, tipo);
+        htmlCombinado += '<div style="page-break-after: always;"></div>';
+      }
+    });
+
+    ultimoReporteHTML = htmlCombinado;
+    app.mostrarSeccion('vistaReporteVertical');
+    const container = document.getElementById('contenidoReporteVertical');
+    if (container) container.innerHTML = htmlCombinado;
+    const titulo = document.getElementById('tituloReporte');
+    if (titulo) titulo.textContent = 'Estados Financieros';
+    if (autoPrint) setTimeout(() => { window.print(); }, 800);
+  }
+
+  function generarHTMLImpresionEEFFMultiple(agrupado, totalGeneral, tipo) {
+    const fEmision = new Date().toLocaleDateString('es-VE') + ' ' + new Date().toLocaleTimeString('es-VE');
+    const per = formatDate(eeffDesde) + " al " + formatDate(eeffHasta);
+    const tit = tipo === 'ES' ? 'ESTADO DE SITUACIÓN' : tipo === 'ER' ? 'ESTADO DE RESULTADO' : 'BALANCE DE COMPROBACIÓN';
+    const mon = isModalDividedByTasa ? 'Dólares ($)' : 'Bolívares (Bs)';
+
+    let html = "<style>.eeff-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 11px; }.eeff-table th { background: #f3f4f6; padding: 8px; font-weight: bold; border-bottom: 2px solid #ddd; }.eeff-table td { padding: 6px; border-bottom: 1px solid #eee; }.nivel-1 td { background-color: rgba(37,99,235,0.08); font-weight: bold; font-size: 12px; }.nivel-2 td { font-weight: bold; padding-left: 15px; }.nivel-5 td { padding-left: 35px; color: #555; }.right { text-align: right; }.negative { color: red; }</style>" +
+      "<div style='display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #2563eb; padding-bottom:10px; margin-bottom:15px;'>" +
+      "<div><h2 style='margin:0; font-size:16px;'>" + esc(EMPRESA.nombre) + "</h2><span style='font-size:10px; color:#666;'>RIF: " + esc(EMPRESA.rif) + " | " + esc(EMPRESA.direccion) + "</span></div>" +
+      "<div style='text-align:right;'><h3 style='margin:0; font-size:14px; color:#2563eb;'>" + tit + "</h3><span style='font-size:10px; color:#666;'>Período: " + per + "</span></div>" +
+      "</div><table class='eeff-table'><thead><tr><th>Cuenta / Descripción</th><th class='right'>Saldo en " + mon + "</th></tr></thead><tbody>";
+
+    for (const [eeff, dataEeff] of Object.entries(agrupado)) {
+      html += "<tr class='nivel-1'><td colspan='2'>" + esc(eeff) + "</td></tr>";
+      for (const [cuenta, dataCuenta] of Object.entries(dataEeff.cuentas)) {
+        html += "<tr class='nivel-2'><td colspan='2'>" + esc(cuenta) + "</td></tr>";
+        for (const [tipoCuenta, dataTipo] of Object.entries(dataCuenta.tipos)) {
+          for (const [grupo, dataGrupo] of Object.entries(dataTipo.grupos)) {
+            for (const [subcuenta, montoSub] of Object.entries(dataGrupo.subcuentas)) {
+              if (Math.abs(montoSub) > 0.001) html += "<tr class='nivel-5'><td>" + esc(subcuenta) + "</td><td class='right " + (montoSub < 0 ? 'negative' : '') + "'>" + formatMonto(montoSub) + "</td></tr>";
+            }
+          }
+        }
+        html += "<tr style='font-weight:bold; background:#fafafa;'><td style='padding-left:15px;'>TOTAL " + esc(cuenta) + "</td><td class='right " + (dataCuenta.total < 0 ? 'negative' : '') + "'>" + formatMonto(dataCuenta.total) + "</td></tr>";
+      }
+    }
+    html += "</tbody><tfoot><tr style='font-weight:bold; font-size:12px; background:#f0fdf4; border-top:2px solid #22c55e;'><td>TOTAL GENERAL CONSOLIDADO</td><td class='right " + (totalGeneral < 0 ? 'negative' : '') + "'>" + formatMonto(totalGeneral) + "</td></tr></tfoot></table><div style='font-size:9px; color:#888; margin-top:15px; text-align:right;'>Generado el " + fEmision + "</div>";
+    return html;
+  }
+
+  // ============================================================
+  // PRODUCTOS (Inventario)
+  // ============================================================
+  app.cargarProductosData = function() {
+    const spinner = document.getElementById('spinnerProductos');
+    if (spinner) spinner.style.display = 'block';
+    uiLoading(true, 'Cargando inventario', 'Consultando categorías y productos...', 70);
+
+    if (typeof google !== 'undefined' && google.script) {
+      const idEmpresa = EMPRESA.idSpreadsheet || EMPRESA.id || '';
+      google.script.run
+        .withSuccessHandler(cats => {
+          if (cats) cats.forEach(c => { categoriasMap[c.id] = c.nombre || c.id; });
+          google.script.run
+            .withSuccessHandler(prods => {
+              if (spinner) spinner.style.display = 'none';
+              uiLoading(false);
+              datosProductosBrutos = (prods || []).filter(p => {
+                const nombre = p.NombreProducto || p.nombre || "";
+                return nombre.toString().trim() !== "";
+              }).map(p => ({
+                IdProducto: p.IdProducto || p.id || "-",
+                NombreProducto: (p.NombreProducto || p.nombre).toString().trim(),
+                CategoriaProducto: p.CategoriaProducto || p.categoria || "",
+                PrecioProducto: parseFloat(p.PrecioProducto || p.precio) || 0,
+                precioVenta: parseFloat(p.precioVenta || p.venta) || 0,
+                StockProducto: parseInt(p.StockProducto || p.stock) || 0,
+                MinimoProducto: parseInt(p.MinimoProducto || p.minimo) || 0,
+                CuentaContable: p.CuentaContable || "",
+                IvaProducto: p.IvaProducto || "0",
+                Condicion: p.Condicion || p.condicion || "",
+                subida: p.subida || ""
+              }));
+              app.filtrarProductos();
+            })
+            .withFailureHandler(err => {
+              if (spinner) spinner.style.display = 'none';
+              uiLoading(false);
+              console.error(err);
+            })
+            .obtenerProductos(idEmpresa);
+        })
+        .withFailureHandler(err => {
+          if (spinner) spinner.style.display = 'none';
+          uiLoading(false);
+          console.error(err);
+        })
+        .obtenerCategoriasConId(idEmpresa);
+    } else {
+      if (spinner) spinner.style.display = 'none';
+      uiLoading(false);
+    }
+  };
+
+  app.filtrarProductos = function() {
+    const buscar = String(document.getElementById('filtroBuscarProducto')?.value || '').toLowerCase();
+    const stockFiltro = document.getElementById('filtroStockProd')?.value || 'TODOS';
+    const condicionFiltro = document.getElementById('filtroCondicionProd')?.value || 'TODAS';
+
+    datosProductosFiltrados = datosProductosBrutos.filter(p => {
+      const nombre = String(p.NombreProducto || '').toLowerCase();
+      const sku = String(p.IdProducto || '').toLowerCase();
+      const cat = String(categoriasMap[p.CategoriaProducto] || p.CategoriaProducto || '').toLowerCase();
+      if (buscar && !nombre.includes(buscar) && !sku.includes(buscar) && !cat.includes(buscar)) return false;
+
+      const stock = parseInt(p.StockProducto) || 0;
+      const minimo = parseInt(p.MinimoProducto) || 0;
+      if (stockFiltro === 'CERO' && stock > 0) return false;
+      if (stockFiltro === 'MINIMO' && (stock === 0 || stock > minimo)) return false;
+
+      const cond = String(p.Condicion || '').toLowerCase();
+      if (condicionFiltro !== 'TODAS' && cond !== condicionFiltro.toLowerCase()) return false;
+      return true;
+    });
+
+    renderTablaProductos(datosProductosFiltrados);
+  };
+
+  function renderTablaProductos(datos) {
+    const tbody = document.getElementById('bodyTablaProductos');
+    if (!tbody) return;
+    if (datos.length === 0) {
+      tbody.innerHTML = "<tr><td colspan='7' class='text-center-taxflow'>No hay registros cargados o que coincidan con la búsqueda.</td></tr>";
+      return;
+    }
+    tbody.innerHTML = datos.map(p => {
+      const cat = categoriasMap[p.CategoriaProducto] || p.CategoriaProducto || '-';
+      return "<tr>" +
+        "<td><span class='badge-taxflow'>" + esc(p.IdProducto) + "</span></td>" +
+        "<td class='text-dark-taxflow'>" + esc(p.NombreProducto) + "</td>" +
+        "<td>" + esc(cat) + "</td>" +
+        "<td class='text-end-taxflow'>$" + p.PrecioProducto.toFixed(2) + "</td>" +
+        "<td class='text-end-taxflow' style='color:var(--success-600); font-weight:bold;'>$" + p.precioVenta.toFixed(2) + "</td>" +
+        "<td class='text-center-taxflow'>" + p.StockProducto + "</td>" +
+        "<td class='text-center-taxflow'><span class='badge-taxflow badge-retention-taxflow'>" + esc(p.Condicion || '-') + "</span></td>" +
+        "</tr>";
+    }).join('');
+  }
+
+  app.limpiarFiltrosProductos = function() {
+    const b = document.getElementById('filtroBuscarProducto');
+    const s = document.getElementById('filtroStockProd');
+    const c = document.getElementById('filtroCondicionProd');
+    if (b) b.value = '';
+    if (s) s.value = 'TODOS';
+    if (c) c.value = 'TODAS';
+    app.filtrarProductos();
+  };
+
+  // Carga Masiva
+  app.abrirModalCargaMasiva = function() {
+    const modal = document.getElementById('modalCargaMasivaProductos');
+    document.getElementById('paso1Masiva')?.classList.remove('d-none-taxflow');
+    document.getElementById('footerPaso1Masiva')?.classList.remove('d-none-taxflow');
+    document.getElementById('paso2Masiva')?.classList.add('d-none-taxflow');
+    document.getElementById('footerPaso2Masiva')?.classList.add('d-none-taxflow');
+    const inp = document.getElementById('archivoExcelMasiva');
+    if (inp) inp.value = '';
+    if (modal) { modal.classList.remove('d-none-taxflow'); modal.style.display = 'flex'; }
+  };
+
+  app.cerrarModalCargaMasiva = function() {
+    const modal = document.getElementById('modalCargaMasivaProductos');
+    if (modal) { modal.classList.add('d-none-taxflow'); modal.style.display = 'none'; }
+  };
+
+  app.procesarExcelMasivo = function(btn) {
+    const fileInput = document.getElementById('archivoExcelMasiva');
+    const file = fileInput?.files[0];
+    if (!file) { uiToast("Selecciona un archivo Excel", "warning"); return; }
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analizando...';
+    btn.disabled = true;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const wb = XLSX.read(data, { type: 'array' });
+        const sheet = wb.Sheets[wb.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+        prepararDatosMasivos(json);
+        document.getElementById('paso1Masiva').classList.add('d-none-taxflow');
+        document.getElementById('footerPaso1Masiva').classList.add('d-none-taxflow');
+        document.getElementById('paso2Masiva').classList.remove('d-none-taxflow');
+        document.getElementById('footerPaso2Masiva').classList.remove('d-none-taxflow');
+        btn.innerHTML = orig;
+        btn.disabled = false;
+      } catch (err) {
+        btn.innerHTML = orig;
+        btn.disabled = false;
+        uiToast("Error de análisis: " + err.message, "error");
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  function prepararDatosMasivos(excelData) {
+    codigoLoteActual = 'LOTE-' + Date.now().toString().slice(-6);
+    datosCargaMasivaPreparados = [];
+    let nuevos = 0, actualizados = 0, omitidos = 0;
+    const tbody = document.getElementById('bodyPreviewMasiva');
+    let html = '';
+
+    excelData.forEach(row => {
+      const nombreRaw = row.NombreProducto || row.nombre || row.Nombre;
+      if (!nombreRaw) { omitidos++; return; }
+      const nombre = String(nombreRaw).trim().toUpperCase();
+      const precio = parseFloat(row.PrecioProducto || row.precio || 0);
+      const stock = parseInt(row.StockProducto || row.stock || 0);
+      const existe = datosProductosBrutos.find(p => p.NombreProducto.toUpperCase() === nombre);
+
+      if (existe) {
+        if (precio > existe.PrecioProducto) {
+          actualizados++;
+          datosCargaMasivaPreparados.push({
+            IdProducto: existe.IdProducto,
+            NombreProducto: nombre,
+            PrecioProducto: precio,
+            precioVenta: Math.round(precio * 1.3 * 100) / 100,
+            StockProducto: existe.StockProducto,
+            MinimoProducto: existe.MinimoProducto || 5,
+            Condicion: "Precio",
+            subida: codigoLoteActual,
+            esActualizacion: true
+          });
+          html += "<tr style='background:rgba(245,158,11,0.08);'><td>" + esc(nombre) + "</td><td>$" + precio.toFixed(2) + "</td><td>Modificar Precio</td></tr>";
+        } else {
+          omitidos++;
+        }
+      } else {
+        nuevos++;
+        const nuevoId = 'PROD' + String(datosProductosBrutos.length + nuevos).padStart(3, '0');
+        datosCargaMasivaPreparados.push({
+          IdProducto: nuevoId,
+          NombreProducto: nombre,
+          PrecioProducto: precio,
+          precioVenta: Math.round(precio * 1.3 * 100) / 100,
+          StockProducto: stock,
+          MinimoProducto: 5,
+          Condicion: "nuevo",
+          subida: codigoLoteActual,
+          esActualizacion: false
+        });
+        html += "<tr style='background:rgba(34,197,94,0.08);'><td>" + esc(nombre) + "</td><td>$" + precio.toFixed(2) + "</td><td>Crear Nuevo</td></tr>";
+      }
+    });
+
+    if (tbody) tbody.innerHTML = html || '<tr><td colspan="3" class="text-center-taxflow">No hay cambios detectados.</td></tr>';
+    document.getElementById('prevNuevos').textContent = nuevos;
+    document.getElementById('prevActualizados').textContent = actualizados;
+    document.getElementById('prevErrores').textContent = omitidos;
+  }
+
+  app.confirmarCargaMasiva = function() {
+    if (datosCargaMasivaPreparados.length === 0) { uiToast("No hay datos que importar.", "warning"); return; }
+    if (window.Swal) {
+      Swal.fire({ title: 'Procesando cambios', text: 'Guardando registros en la base de datos...', allowOutsideClick: false, didOpen: () => { Swal.showLoading(); } });
+    }
+    const idEmpresa = EMPRESA.idSpreadsheet || EMPRESA.id || '';
+    google.script.run
+      .withSuccessHandler(res => {
+        if (window.Swal) Swal.close();
+        app.cerrarModalCargaMasiva();
+        if (res && res.success) {
+          if (window.Swal) Swal.fire('Completado', res.message, 'success');
+          else uiToast(res.message, 'success');
+          app.cargarProductosData();
+        } else {
+          if (window.Swal) Swal.fire('Error', res.message || 'No se pudo guardar.', 'error');
+          else uiToast(res.message || 'No se pudo guardar.', 'error');
+        }
+      })
+      .withFailureHandler(err => {
+        if (window.Swal) Swal.close();
+        if (window.Swal) Swal.fire('Fallo de conexión', err.message, 'error');
+        else uiToast('Fallo de conexión: ' + err.message, 'error');
+      })
+      .procesarCargaMasivaProductos(datosCargaMasivaPreparados, codigoLoteActual, idEmpresa);
+  };
+
+  // ============================================================
+  // XML ISLR
+  // ============================================================
+  app.generarXMLISLR = async function() {
+    if (datosRetencionesFiltradosActual.length === 0) { uiToast("Aplica filtros para obtener retenciones primero", "warning"); return; }
+    const islr = datosRetencionesFiltradosActual.filter(item => (item.Referencia || item.Transaccion || '').toUpperCase().includes('ISLR'));
+    if (islr.length === 0) {
+      if (window.Swal) Swal.fire('Atención', 'No hay registros de ISLR en el rango seleccionado.', 'info');
+      else uiToast('No hay registros de ISLR en el rango seleccionado.', 'warning');
+      return;
+    }
+
+    const { value: formValues } = await Swal.fire({
+      title: 'Generador de XML ISLR (SENIAT)',
+      html: "<div style='text-align:left; font-size:12px;'><label style='font-weight:bold;'>RIF del Agente (Sin guiones)</label><input id='xml-rif' class='form-control' value='" + EMPRESA.rif.replace(/-/g, '') + "'><br><label style='font-weight:bold;'>Período Fiscal (AAAAMM)</label><input id='xml-periodo' class='form-control' placeholder='Ej: 202610'></div>",
+      showCancelButton: true,
+      preConfirm: () => {
+        return { rif: document.getElementById('xml-rif').value.trim().toUpperCase(), periodo: document.getElementById('xml-periodo').value.trim() };
+      }
+    });
+
+    if (!formValues || !formValues.rif || !formValues.periodo) return;
+    let xml = '<?xml version="1.0" encoding="ISO-8859-1"?>\n';
+    xml += '<RelacionRetencionesISLR RifAgente="' + formValues.rif + '" Periodo="' + formValues.periodo + '">\n';
+    islr.forEach(item => {
+      let rifRet = (item.Rif || '').replace(/-/g, '').trim().toUpperCase();
+      let fOperacion = '';
+      const fItem = item.FechaFactura || item.Fecha || item.fechaAbono;
+      if (fItem) {
+        let d = parseFechaLocal(fItem);
+        if (d) fOperacion = d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+      }
+      xml += "  <DetalleRetencion>\n    <RifRetenido>" + rifRet + "</RifRetenido>\n    <NumeroFactura>" + (item.Factura || item.NroFactura || '') + "</NumeroFactura>\n    <NumeroControl>" + (item.NroControl || '') + "</NumeroControl>\n    <FechaOperacion>" + fOperacion + "</FechaOperacion>\n    <CodigoConcepto>055</CodigoConcepto>\n    <MontoOperacion>" + Number(item.MontoBs || 0).toFixed(2) + "</MontoOperacion>\n    <PorcentajeRetencion>" + (item['% Retencion'] || item.Porcentaje || '0') + "</PorcentajeRetencion>\n  </DetalleRetencion>\n";
+    });
+    xml += "</RelacionRetencionesISLR>";
+
+    const blob = new Blob([xml], { type: 'application/xml;charset=ISO-8859-1' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = "XML_ISLR_" + formValues.rif + "_" + formValues.periodo + ".xml";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // ============================================================
+  // FECHAS POR DEFECTO Y DATOS DE EMPRESA
+  // ============================================================
+  function setFechasPredeterminadas() {
+    const hoy = new Date();
+    const primerDia = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+    const ultimoDia = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0);
+
+    const formatLocal = (d) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    };
+
+    const d = document.getElementById('filtroDesde');
+    const h = document.getElementById('filtroHasta');
+    if (d) d.value = formatLocal(primerDia);
+    if (h) h.value = formatLocal(ultimoDia);
+
+    const dM = document.getElementById('filtroMovDesde');
+    const hM = document.getElementById('filtroMovHasta');
+    if (dM) dM.value = formatLocal(primerDia);
+    if (hM) hM.value = formatLocal(ultimoDia);
+
+    const dE = document.getElementById('eeffDesde');
+    const hE = document.getElementById('eeffHasta');
+    if (dE) dE.value = formatLocal(primerDia);
+    if (hE) hE.value = formatLocal(ultimoDia);
+  }
+
+  function inicializarDatosEmpresa() {
+    const n = document.getElementById('sidebarEmpresaNombre');
+    const r = document.getElementById('sidebarEmpresaRIF');
+    if (n) n.textContent = EMPRESA.nombre;
+    if (r) r.textContent = EMPRESA.rif;
+    const b = document.getElementById('badgeQuincena');
+    if (b) b.textContent = hoyEsQuincena() + " - " + new Date().getFullYear();
+  }
+
+  function hoyEsQuincena() {
+    const d = new Date().getDate();
+    const m = new Date().toLocaleString('es-ES', { month: 'long' });
+    return d <= 15 ? "1ra Quincena de " + m : "2da Quincena de " + m;
+  }
+
+  app.mostrarToast = function(msg, tipo = 'info') { uiToast(msg, tipo); };
+
+  app.toggleFab = function() {
+    document.getElementById('fabMenu')?.classList.toggle('active');
+    document.getElementById('fabMain')?.classList.toggle('active');
+  };
+
+  // ============================================================
+  // PLANTILLA Y FORMATO DE IMPRESIÓN
+  // ============================================================
+  function generarPlantillaImpresion(titulo, subTitulo, cabecerasHtml, filasHtml, totalizadorHtml, numItems) {
+    const fEmision = new Date().toLocaleDateString('es-VE') + ' ' + new Date().toLocaleTimeString('es-VE');
+    return "<div style='font-family:Arial,sans-serif; color:#111827; padding:10px;'>" +
+      "<div style='display:flex; align-items:center; justify-content:space-between; border-bottom:3px solid #2563eb; padding-bottom:12px; margin-bottom:15px;'>" +
+        "<div style='display:flex; align-items:center; gap:12px;'>" +
+          "<img src='" + EMPRESA.logo + "' style='width:60px; height:60px; object-fit:contain; border:1px solid #d1d5db; padding:2px; border-radius:4px;' onerror='this.style.display=\"none\"'>" +
+          "<div><h2 style='margin:0; font-size:16px; font-weight:bold; color:#111827;'>" + esc(EMPRESA.nombre) + "</h2>" +
+          "<p style='margin:2px 0; font-size:10px; color:#374151;'><strong>RIF:</strong> " + esc(EMPRESA.rif) + " | " + esc(EMPRESA.direccion) + "</p></div>" +
+        "</div>" +
+        "<div style='text-align:right;'><h3 style='margin:0; font-size:14px; color:#2563eb; font-weight:bold; text-transform:uppercase;'>" + esc(titulo) + "</h3>" +
+        "<p style='margin:2px 0; font-size:10px; color:#4b5563;'>" + esc(subTitulo) + "</p></div>" +
+      "</div>" +
+      "<div style='background:#f3f4f6; padding:6px 10px; border-radius:4px; font-size:9px; color:#374151; margin-bottom:12px; display:flex; justify-content:space-between; border:1px solid #d1d5db;'>" +
+        "<span><strong>Emisión:</strong> " + fEmision + "</span><span><strong>Total Registros:</strong> " + numItems + "</span>" +
+      "</div>" +
+      "<table style='width:100%; border-collapse:collapse; font-size:9px; margin-bottom:15px; border:1px solid #d1d5db;'>" +
+        "<thead style='background:#e5e7eb; border-bottom:2px solid #9ca3af;'><tr style='text-align:left; color:#111827;'>" + cabecerasHtml + "</tr></thead>" +
+        "<tbody>" + filasHtml + "</tbody>" +
+      "</table>" +
+      (totalizadorHtml ? "<div style='display:flex; justify-content:flex-end; border-top:2px double #9ca3af; padding-top:8px; font-size:11px; font-weight:bold; color:#111827;'>" + totalizadorHtml + "</div>" : "") +
+      "<div style='margin-top:40px; display:flex; justify-content:space-between; font-size:9px; color:#4b5563; page-break-inside:avoid;'>" +
+        "<div style='width:200px; border-top:1px solid #9ca3af; padding-top:4px; text-align:center;'>Preparado por</div>" +
+        "<div style='width:200px; border-top:1px solid #9ca3af; padding-top:4px; text-align:center;'>Aprobado por</div>" +
+      "</div></div>";
+  }
+
+  // ============================================================
+  // IMPRIMIR — RETENCIONES (Corregido y con Totales)
+  // ============================================================
+  app.imprimirRetenciones = function() {
+    app.mostrarSeccion('vistaReporteVertical');
+    const con = document.getElementById('contenidoReporteVertical');
+    if (con) {
+      const cabeceras = '<th style="padding:6px; border-bottom:1px solid #ddd;">Fecha</th>' +
+                        '<th style="padding:6px; border-bottom:1px solid #ddd;">Cliente/Proveedor</th>' +
+                        '<th style="padding:6px; border-bottom:1px solid #ddd;">RIF</th>' +
+                        '<th style="padding:6px; border-bottom:1px solid #ddd;">Factura</th>' +
+                        '<th style="padding:6px; border-bottom:1px solid #ddd;">N° Control</th>' +
+                        '<th style="padding:6px; border-bottom:1px solid #ddd;">Referencia</th>' +
+                        '<th style="padding:6px; border-bottom:1px solid #ddd; text-align:right;">Monto Bs</th>' +
+                        '<th style="padding:6px; border-bottom:1px solid #ddd; text-align:center;">% Ret.</th>' +
+                        '<th style="padding:6px; border-bottom:1px solid #ddd; text-align:right;">Monto USD</th>';
+
+      let totalBs = 0, totalUSD = 0;
+      const filas = datosRetencionesFiltradosActual.map(r => {
+        const mBs = parseFloat(r.MontoBs || r['Monto Bs'] || 0) || 0;
+        const mUSD = parseFloat(r.MontoUSD || r.Abono || 0) || 0;
+        totalBs += mBs;
+        totalUSD += mUSD;
+        const pct = r['% Retencion'] || r.Porcentaje || '-';
+
+        return "<tr style='border-bottom:1px solid #eee;'>" +
+          "<td style='padding:5px;'>" + esc(formatDate(r.FechaFactura || r.Fecha || r.fechaAbono)) + "</td>" +
+          "<td style='padding:5px; font-weight:bold;'>" + esc(r.Cliente || r.ProveedorCliente || '-') + "</td>" +
+          "<td style='padding:5px;'>" + esc(r.Rif || '-') + "</td>" +
+          "<td style='padding:5px;'>" + esc(r.Factura || r.NroFactura || '-') + "</td>" +
+          "<td style='padding:5px; color:#555;'>" + esc(r.NroControl || '-') + "</td>" +
+          "<td style='padding:5px;'>" + esc(r.Referencia || r.Transaccion || '-') + "</td>" +
+          "<td style='padding:5px; text-align:right; font-family:monospace;'>Bs " + formatoMoneda(mBs) + "</td>" +
+          "<td style='padding:5px; text-align:center;'>" + esc(pct) + (pct !== '-' ? '%' : '') + "</td>" +
+          "<td style='padding:5px; text-align:right; font-family:monospace; color:#15803d;'>$" + formatoMoneda(mUSD) + "</td>" +
+          "</tr>";
+      }).join('');
+
+      const totales = "TOTAL RETENIDO: Bs " + formatoMoneda(totalBs) + " &nbsp;|&nbsp; USD $" + formatoMoneda(totalUSD);
+      const sub = document.getElementById('filtroDesde')?.value ? "Período: " + formatDate(document.getElementById('filtroDesde').value) + " al " + formatDate(document.getElementById('filtroHasta').value) : "Reporte general";
+
+      ultimoReporteHTML = generarPlantillaImpresion('Reporte de Retenciones', sub, cabeceras, filas, totales, datosRetencionesFiltradosActual.length);
+      con.innerHTML = ultimoReporteHTML;
+      const titulo = document.getElementById('tituloReporte');
+      if (titulo) titulo.textContent = 'Reporte de Retenciones';
+      setTimeout(() => { window.print(); }, 500);
+    }
+  };
+
+  // ============================================================
+  // IMPRIMIR — MAYOR ANALÍTICO
+  // ============================================================
+  app.imprimirMayorAnalitico = function() {
+    app.mostrarSeccion('vistaReporteVertical');
+    const con = document.getElementById('contenidoReporteVertical');
+    if (con) {
+      const cabeceras = '<th style="padding:6px; border-bottom:1px solid #ddd;">Fecha</th><th style="padding:6px; border-bottom:1px solid #ddd;">N° Asiento</th><th style="padding:6px; border-bottom:1px solid #ddd;">Tipo</th><th style="padding:6px; border-bottom:1px solid #ddd;">Cliente/Proveedor</th><th style="padding:6px; border-bottom:1px solid #ddd;">Descripción</th><th style="padding:6px; border-bottom:1px solid #ddd;">Cuenta Contable</th><th style="padding:6px; border-bottom:1px solid #ddd; text-align:right;">Monto Bs</th>';
+      let totalMonto = 0;
+      const filas = datosMayorFiltradosActual.map(m => {
+        const valor = parseMonto(m.MontoTransaccion || m.Monto) || 0;
+        totalMonto += valor;
+        return "<tr style='border-bottom:1px solid #eee;'><td style='padding:5px;'>" + esc(formatDate(m.FechaAsiento || m.Fecha)) + "</td><td style='padding:5px;'>" + esc(m.NroAsiento || '-') + "</td><td style='padding:5px;'>" + esc(m.TipoAsiento || '-') + "</td><td style='padding:5px;'>" + esc(m['cliente/Proveedor'] || m.Cliente || '-') + "</td><td style='padding:5px; color:#555;'>" + esc(m.Descripcion || '-') + "</td><td style='padding:5px;'>" + esc(m.CuentaContable || '-') + "</td><td style='padding:5px; text-align:right; font-family:monospace;'>" + formatoMoneda(valor) + "</td></tr>";
+      }).join('');
+      const totales = "TOTAL ACUMULADO: Bs " + formatoMoneda(totalMonto);
+      const sub = document.getElementById('mayorDesde')?.value ? "Período: " + formatDate(document.getElementById('mayorDesde').value) + " al " + formatDate(document.getElementById('mayorHasta').value) : "Mayor Analítico";
+      ultimoReporteHTML = generarPlantillaImpresion('Mayor Analítico General', sub, cabeceras, filas, totales, datosMayorFiltradosActual.length);
+      con.innerHTML = ultimoReporteHTML;
+      const titulo = document.getElementById('tituloReporte');
+      if (titulo) titulo.textContent = 'Mayor Analítico';
+      setTimeout(() => { window.print(); }, 500);
+    }
+  };
+
+  // ============================================================
+  // IMPRIMIR — PRODUCTOS
+  // ============================================================
+  app.imprimirProductos = function() {
+    app.mostrarSeccion('vistaReporteVertical');
+    const con = document.getElementById('contenidoReporteVertical');
+    if (con) {
+      const cabeceras = '<th style="padding:6px; border-bottom:1px solid #ddd;">SKU</th><th style="padding:6px; border-bottom:1px solid #ddd;">Nombre del Producto</th><th style="padding:6px; border-bottom:1px solid #ddd;">Categoría</th><th style="padding:6px; border-bottom:1px solid #ddd; text-align:center;">Stock</th><th style="padding:6px; border-bottom:1px solid #ddd; text-align:right;">Costo ($)</th><th style="padding:6px; border-bottom:1px solid #ddd; text-align:right;">Venta ($)</th>';
+      let totalCosto = 0;
+      const filas = datosProductosFiltrados.map(p => {
+        const costo = parseFloat(p.PrecioProducto) || 0;
+        const venta = parseFloat(p.precioVenta) || 0;
+        totalCosto += (costo * (parseInt(p.StockProducto) || 0));
+        return "<tr style='border-bottom:1px solid #eee;'><td style='padding:5px; font-weight:bold;'>" + esc(p.IdProducto) + "</td><td style='padding:5px;'>" + esc(p.NombreProducto) + "</td><td style='padding:5px; color:#555;'>" + esc(categoriasMap[p.CategoriaProducto] || p.CategoriaProducto || '-') + "</td><td style='padding:5px; text-align:center;'>" + p.StockProducto + "</td><td style='padding:5px; text-align:right; font-family:monospace;'>$" + costo.toFixed(2) + "</td><td style='padding:5px; text-align:right; font-family:monospace; color:#15803d;'>$" + venta.toFixed(2) + "</td></tr>";
+      }).join('');
+      const totales = "VALOR TOTAL DEL INVENTARIO (AL COSTO): $" + formatoMoneda(totalCosto);
+      ultimoReporteHTML = generarPlantillaImpresion('Reporte de Inventariado de Productos', 'Filtro de productos en existencia', cabeceras, filas, totales, datosProductosFiltrados.length);
+      con.innerHTML = ultimoReporteHTML;
+      const titulo = document.getElementById('tituloReporte');
+      if (titulo) titulo.textContent = 'Inventario de Productos';
+      setTimeout(() => { window.print(); }, 500);
+    }
+  };
+
+  // ============================================================
+  // IMPRIMIR — MOVIMIENTOS BANCARIOS
+  // ============================================================
+  app.imprimirMovimientos = function() {
+    app.mostrarSeccion('vistaReporteVertical');
+    const con = document.getElementById('contenidoReporteVertical');
+    if (con) {
+      const cabeceras = '<th style="padding:6px; border-bottom:1px solid #ddd;">Fecha</th><th style="padding:6px; border-bottom:1px solid #ddd;">Cuenta</th><th style="padding:6px; border-bottom:1px solid #ddd;">Banco/Caja</th><th style="padding:6px; border-bottom:1px solid #ddd;">Referencia</th><th style="padding:6px; border-bottom:1px solid #ddd;">Descripción</th><th style="padding:6px; border-bottom:1px solid #ddd; text-align:right;">USD</th><th style="padding:6px; border-bottom:1px solid #ddd; text-align:right;">Bs</th>';
+      let totalUSD = 0, totalBs = 0;
+      const filas = window.movimientosMostrados.map(mov => {
+        const mUSD = parseMonto(mov.MontoMovUSD);
+        const mBs = parseMonto(mov.MontoMovBs);
+        const esNegativa = String(mov.TipoTransaccion).toLowerCase().includes('negativa');
+        const signo = esNegativa ? '-' : '+';
+        totalUSD += (esNegativa ? -mUSD : mUSD);
+        totalBs += (esNegativa ? -mBs : mBs);
+        return "<tr style='border-bottom:1px solid #eee;'><td style='padding:5px;'>" + esc(formatDate(mov.FechaMov)) + "</td><td style='padding:5px;'>" + esc(mov.Cuenta || '-') + "</td><td style='padding:5px;'>" + esc(mov.NombreBanco || '-') + "</td><td style='padding:5px;'>" + esc(mov.ReferenciaMov || '-') + "</td><td style='padding:5px;'>" + esc(mov.descMov || '-') + "</td><td style='padding:5px; text-align:right; font-family:monospace; color:" + (esNegativa ? '#b91c1c' : '#15803d') + ";'>" + signo + " $" + formatoMoneda(mUSD) + "</td><td style='padding:5px; text-align:right; font-family:monospace; color:" + (esNegativa ? '#b91c1c' : '#15803d') + ";'>" + signo + " Bs " + formatoMoneda(mBs) + "</td></tr>";
+      }).join('');
+      const totales = "BALANCE FILTRADO: USD $" + formatoMoneda(totalUSD) + " &nbsp;|&nbsp; Bs " + formatoMoneda(totalBs);
+      const sub = document.getElementById('filtroMovDesde')?.value ? "Período: " + formatDate(document.getElementById('filtroMovDesde').value) + " al " + formatDate(document.getElementById('filtroMovHasta').value) : "Reporte de transacciones";
+      ultimoReporteHTML = generarPlantillaImpresion('Reporte de Movimientos Bancarios', sub, cabeceras, filas, totales, window.movimientosMostrados.length);
+      con.innerHTML = ultimoReporteHTML;
+      const titulo = document.getElementById('tituloReporte');
+      if (titulo) titulo.textContent = 'Movimientos Bancarios';
+      setTimeout(() => { window.print(); }, 500);
+    }
+  };
+
+  app.imprimirReporte = function() { window.print(); };
+
+  // ============================================================
+  // EXPORTAR REPORTE ACTIVO A EXCEL
+  // ============================================================
+  app.exportarReporteExcel = function() {
+    try {
+      if (typeof XLSX === 'undefined') { uiToast('Librería XLSX no disponible.', 'error'); return; }
+      if (!ultimoReporteHTML) { uiToast('Primero genera un reporte.', 'warning'); return; }
+      const temp = document.createElement('div');
+      temp.innerHTML = ultimoReporteHTML;
+      const tablas = temp.querySelectorAll('table');
+      if (tablas.length === 0) { uiToast('El reporte no contiene tablas exportables.', 'warning'); return; }
+      const wb = XLSX.utils.book_new();
+      const titulo = (document.getElementById('tituloReporte')?.textContent || 'Reporte').trim();
+      tablas.forEach((t, idx) => {
+        const ws = XLSX.utils.table_to_sheet(t, { raw: true });
+        const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+        const cols = [];
+        for (let c = range.s.c; c <= range.e.c; c++) {
+          let maxLen = 10;
+          for (let r = range.s.r; r <= range.e.r; r++) {
+            const cell = ws[XLSX.utils.encode_cell({ r, c })];
+            if (cell && cell.v != null) {
+              const len = String(cell.v).length;
+              if (len > maxLen) maxLen = len;
+            }
+          }
+          cols.push({ wch: Math.min(maxLen + 2, 50) });
+        }
+        ws['!cols'] = cols;
+        const nombreHoja = tablas.length > 1 ? ('Hoja' + (idx + 1)).substring(0, 31) : 'Reporte';
+        XLSX.utils.book_append_sheet(wb, ws, nombreHoja);
+      });
+      const hoy = new Date().toISOString().slice(0, 10);
+      const nombreArchivo = titulo.replace(/[^a-zA-Z0-9-_ ]/g, '').replace(/\s+/g, '_') + '_' + hoy + '.xlsx';
+      XLSX.writeFile(wb, nombreArchivo);
+      uiToast('Reporte exportado a Excel.', 'success');
+    } catch (e) {
+      console.error('exportarReporteExcel:', e);
+      uiToast('Error al exportar: ' + e.message, 'error');
+    }
+  };
+
+})(window.TaxFlowApp);
+
+// ================================================================
+// FUNCIONES GLOBALES DE EXPORTACIÓN (Movimientos Bancarios)
+// ================================================================
+function exportarExcel() {
+  try {
+    if (typeof XLSX === 'undefined') {
+      if (window.notificar) window.notificar.error('Librería XLSX no disponible.');
+      else alert('Librería XLSX no disponible.');
+      return;
+    }
+    const movs = window.movimientosMostrados || [];
+    if (movs.length === 0) {
+      if (window.notificar) window.notificar.advertencia('No hay movimientos para exportar.');
+      else alert('No hay movimientos para exportar.');
+      return;
+    }
+    const filas = movs.map(m => {
+      const mUSD = parseFloat(String(m.MontoMovUSD || 0).replace(/\./g, '').replace(',', '.')) || 0;
+      const mBs = parseFloat(String(m.MontoMovBs || 0).replace(/\./g, '').replace(',', '.')) || 0;
+      const esNeg = String(m.TipoTransaccion || '').toLowerCase().includes('negativa');
+      return {
+        'ID': String(m.IdMovimiento || '').slice(-8),
+        'Fecha': m.FechaMov ? new Date(m.FechaMov).toLocaleDateString('es-VE') : '',
+        'Cuenta/Caja': m.Cuenta || '',
+        'Nro Cuenta': m.NroCuenta || '',
+        'Banco/Caja': m.NombreBanco || '',
+        'Referencia': m.ReferenciaMov || '',
+        'Descripción': m.descMov || '',
+        'Tipo': m.TipoTransaccion || '',
+        'Monto USD': esNeg ? -mUSD : mUSD,
+        'Monto Bs': esNeg ? -mBs : mBs
+      };
+    });
+    let totUSD = 0, totBs = 0;
+    filas.forEach(f => { totUSD += f['Monto USD']; totBs += f['Monto Bs']; });
+    filas.push({ 'ID': '', 'Fecha': '', 'Cuenta/Caja': '', 'Nro Cuenta': '', 'Banco/Caja': '', 'Referencia': '', 'Descripción': 'TOTALES', 'Tipo': '', 'Monto USD': totUSD, 'Monto Bs': totBs });
+    const ws = XLSX.utils.json_to_sheet(filas);
+    ws['!cols'] = [{ wch: 10 }, { wch: 12 }, { wch: 16 }, { wch: 16 }, { wch: 20 }, { wch: 18 }, { wch: 40 }, { wch: 16 }, { wch: 14 }, { wch: 16 }];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Movimientos');
+    const hoy = new Date().toISOString().slice(0, 10);
+    XLSX.writeFile(wb, 'Movimientos_Bancarios_' + hoy + '.xlsx');
+    if (window.notificar) window.notificar.exito('Excel exportado correctamente.');
+  } catch (e) {
+    console.error('exportarExcel:', e);
+    if (window.notificar) window.notificar.error('Error al exportar: ' + e.message);
+    else alert('Error al exportar: ' + e.message);
+  }
+}
+
+function exportarPDF() {
+  try {
+    const movs = window.movimientosMostrados || [];
+    if (movs.length === 0) {
+      if (window.notificar) window.notificar.advertencia('No hay movimientos para exportar.');
+      else alert('No hay movimientos para exportar.');
+      return;
+    }
+    const empresa = getEmpresaActivaDatos();
+    const fmt = n => Number(n || 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmtFecha = f => {
+      if (!f) return '';
+      try { return new Date(f).toLocaleDateString('es-VE'); } catch (e) { return String(f); }
+    };
+    let totUSD = 0, totBs = 0;
+    const body = movs.map(m => {
+      const mUSD = parseFloat(String(m.MontoMovUSD || 0).replace(/\./g, '').replace(',', '.')) || 0;
+      const mBs = parseFloat(String(m.MontoMovBs || 0).replace(/\./g, '').replace(',', '.')) || 0;
+      const esNeg = String(m.TipoTransaccion || '').toLowerCase().includes('negativa');
+      const signo = esNeg ? '-' : '+';
+      totUSD += esNeg ? -mUSD : mUSD;
+      totBs += esNeg ? -mBs : mBs;
+      return [String(m.IdMovimiento || '').slice(-6), fmtFecha(m.FechaMov), m.Cuenta || '', m.NombreBanco || '', m.ReferenciaMov || '', (m.descMov || '').substring(0, 40), signo + ' $' + fmt(mUSD), signo + ' Bs ' + fmt(mBs)];
+    });
+    body.push([{ content: 'TOTALES', colSpan: 6, styles: { halign: 'right', fontStyle: 'bold' } }, { content: '$' + fmt(totUSD), styles: { halign: 'right', fontStyle: 'bold' } }, { content: 'Bs ' + fmt(totBs), styles: { halign: 'right', fontStyle: 'bold' } }]);
+
+    if (typeof window.jspdf !== 'undefined' && window.jspdf.jsPDF) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      doc.setFontSize(14); doc.setFont('helvetica', 'bold'); doc.text(empresa.nombre, 14, 15);
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.text('RIF: ' + empresa.rif + ' | ' + empresa.direccion, 14, 20);
+      doc.setFontSize(12); doc.setFont('helvetica', 'bold'); doc.text('REPORTE DE MOVIMIENTOS BANCARIOS', 14, 28);
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal'); doc.text('Emisión: ' + new Date().toLocaleString('es-VE'), 14, 33);
+      if (typeof doc.autoTable === 'function') {
+        doc.autoTable({
+          startY: 38,
+          head: [['ID', 'Fecha', 'Cuenta/Caja', 'Banco/Caja', 'Referencia', 'Descripción', 'Monto USD', 'Monto Bs']],
+          body: body,
+          styles: { fontSize: 7, cellPadding: 1.5 },
+          headStyles: { fillColor: [37, 99, 235], textColor: 255, fontStyle: 'bold' },
+          alternateRowStyles: { fillColor: [249, 250, 251] },
+          columnStyles: { 0: { cellWidth: 14 }, 1: { cellWidth: 18 }, 2: { cellWidth: 22 }, 3: { cellWidth: 30 }, 4: { cellWidth: 22 }, 5: { cellWidth: 60 }, 6: { cellWidth: 24, halign: 'right' }, 7: { cellWidth: 28, halign: 'right' } },
+          didDrawPage: function (data) {
+            doc.setFontSize(8); doc.setTextColor(120);
+            doc.text('Página ' + doc.internal.getNumberOfPages(), doc.internal.pageSize.getWidth() - 20, doc.internal.pageSize.getHeight() - 8);
+          }
+        });
+        doc.save('Movimientos_Bancarios_' + new Date().toISOString().slice(0, 10) + '.pdf');
+        if (window.notificar) window.notificar.exito('PDF exportado correctamente.');
+        return;
+      }
+    }
+
+    const filasHTML = movs.map(m => {
+      const mUSD = parseFloat(String(m.MontoMovUSD || 0).replace(/\./g, '').replace(',', '.')) || 0;
+      const mBs = parseFloat(String(m.MontoMovBs || 0).replace(/\./g, '').replace(',', '.')) || 0;
+      const esNeg = String(m.TipoTransaccion || '').toLowerCase().includes('negativa');
+      const signo = esNeg ? '-' : '+';
+      const color = esNeg ? '#b91c1c' : '#15803d';
+      return '<tr><td>' + String(m.IdMovimiento || '').slice(-6) + '</td><td>' + fmtFecha(m.FechaMov) + '</td><td>' + (m.Cuenta || '') + '</td><td>' + (m.NombreBanco || '') + '</td><td>' + (m.ReferenciaMov || '') + '</td><td>' + (m.descMov || '') + '</td><td style="text-align:right;color:' + color + ';">' + signo + ' $' + fmt(mUSD) + '</td><td style="text-align:right;color:' + color + ';">' + signo + ' Bs ' + fmt(mBs) + '</td></tr>';
+    }).join('');
+    const html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Movimientos Bancarios</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#111827;}h1{font-size:16px;margin:0 0 4px 0;}h2{font-size:14px;color:#2563eb;margin:16px 0 8px 0;}.meta{font-size:10px;color:#6b7280;margin-bottom:12px;}table{width:100%;border-collapse:collapse;font-size:9px;}th{background:#e5e7eb;padding:6px;text-align:left;border-bottom:2px solid #9ca3af;}td{padding:5px;border-bottom:1px solid #e5e7eb;}.tot{font-weight:bold;background:#f3f4f6;}@media print{body{padding:0;}.no-print{display:none;}}</style></head><body><h1>' + empresa.nombre + '</h1><div class="meta">RIF: ' + empresa.rif + ' | ' + empresa.direccion + '</div><h2>REPORTE DE MOVIMIENTOS BANCARIOS</h2><div class="meta">Emisión: ' + new Date().toLocaleString('es-VE') + ' | Total registros: ' + movs.length + '</div><table><thead><tr><th>ID</th><th>Fecha</th><th>Cuenta</th><th>Banco</th><th>Referencia</th><th>Descripción</th><th style="text-align:right;">USD</th><th style="text-align:right;">Bs</th></tr></thead><tbody>' + filasHTML + '<tr class="tot"><td colspan="6" style="text-align:right;">TOTALES</td><td style="text-align:right;">$' + fmt(totUSD) + '</td><td style="text-align:right;">Bs ' + fmt(totBs) + '</td></tr></tbody></table><div class="no-print" style="margin-top:20px;text-align:center;"><button onclick="window.print()" style="padding:10px 20px;font-size:14px;cursor:pointer;">Imprimir / Guardar PDF</button></div></body></html>';
+    const win = window.open('', '_blank');
+    if (!win) {
+      if (window.notificar) window.notificar.error('Permite las ventanas emergentes para exportar PDF.');
+      else alert('Permite las ventanas emergentes para exportar PDF.');
+      return;
+    }
+    win.document.write(html);
+    win.document.close();
+    setTimeout(() => { try { win.focus(); win.print(); } catch (e) {} }, 400);
+    if (window.notificar) window.notificar.info('Se abrió una ventana para imprimir/guardar como PDF.');
+  } catch (e) {
+    console.error('exportarPDF:', e);
+    if (window.notificar) window.notificar.error('Error al exportar PDF: ' + e.message);
+    else alert('Error al exportar PDF: ' + e.message);
+  }
+}
+
+// ================================================================
+// INICIALIZADORES DEL SPA
+// ================================================================
+window.initImpuestos = function() {
+  if (window.TaxFlowApp && typeof window.TaxFlowApp.init === 'function') {
+    window.TaxFlowApp.init();
+  }
+};
+window.initReportes = window.initImpuestos;
+
+document.addEventListener("DOMContentLoaded", function() {
+  if (window.TaxFlowApp && typeof window.TaxFlowApp.init === 'function') {
+    setTimeout(() => {
+      window.TaxFlowApp.init();
+    }, 400);
+  }
+});
+</script>

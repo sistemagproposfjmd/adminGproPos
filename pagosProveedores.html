@@ -1,0 +1,595 @@
+<!-- PAGOS PROVEEDORES -->
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Estilos específicos para Pagos (Tema Rojizo/Naranja) */
+        .card-header-pago { background-color: #6c2bd933; border-bottom: 1px solid #6f42c1; color: #d6bcfa; } /* Un tono distinto */
+        .text-pago { color: #ffca2c; }
+        .btn-pago { background-color: #d63384; border-color: #d63384; color: white; }
+        .btn-pago:hover { background-color: #a61e61; border-color: #a61e61; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid mt-4">
+
+        <div id="containerPrincipal">
+            <div class="card mb-4 border-danger">
+                <div class="card-header d-flex justify-content-between align-items-center border-danger">
+                    <h5 class="mb-0 text-danger"><i class="bi bi-wallet2"></i> Paso 1: Seleccionar Facturas por Pagar (Proveedores)</h5>
+                    <div>
+                        <button class="btn btn-secondary btn-sm" id="btnModoAnticipo"><i class="bi bi-piggy-bank"></i> Registrar Anticipo a Prov.</button>
+                        <button class="btn btn-outline-light btn-sm" onclick="cargarCompras()"><i class="bi bi-arrow-clockwise"></i> Recargar</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="searchProveedor" class="form-label">Buscar por Proveedor, RIF o N° de Factura:</label>
+                        <input type="text" class="form-control" id="searchProveedor" placeholder="Ingrese nombre, RIF o número...">
+                    </div>
+                    <div class="table-responsive">
+                        <table id="comprasLista" class="table table-striped table-hover align-middle">
+                            <thead class="table-danger">
+                                <tr>
+                                    <th><i class="bi bi-check-square"></i></th>
+                                    <th>Proveedor</th>
+                                    <th>Fecha</th>
+                                    <th>N° Factura</th>
+                                    <th class="text-end">Total USD</th>
+                                    <th class="text-end">Total Bs.</th>
+                                    <th class="text-end">Saldo USD</th> <!-- SaldoProveedorDivisa -->
+                                    <th class="text-end">Saldo Bs.</th> <!-- SaldoProveedor -->
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- COLUMNA IZQUIERDA: REVISIÓN -->
+                <div class="col-lg-8">
+                    <div class="card border-warning mb-3">
+                        <div class="card-header border-warning text-warning"><h5 class="mb-0">Paso 2: Revisar y Ajustar Monto a Pagar</h5></div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="pagosLista" class="table">
+                                    <thead><tr><th>Proveedor</th><th>N° Factura</th><th class="text-end">Saldo USD</th><th class="text-end">Saldo Bs.</th><th class="text-end">A Pagar USD</th><th class="text-end">A Pagar Bs.</th><th>Acción</th></tr></thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA: FORMULARIO DE PAGO -->
+                <div class="col-lg-4">
+                  <div class="card sticky-top-card border-danger">
+                    <div class="card-header bg-danger text-white"><h5 class="mb-0"><i class="bi bi-cash-coin"></i> Paso 3: Registrar Egreso</h5></div>
+                    <div class="card-body">
+                      <form id="formPago">
+                        <div class="row mb-2">
+                          <div class="col-4">
+                            <label for="fechaPago" class="form-label">Fecha Pago*</label>
+                            <input type="date" class="form-control" id="fechaPago" required>
+                          </div>
+                          <div class="col-4">
+                            <label for="modalidadPago" class="form-label">Modalidad*</label>
+                            <select id="modalidadPago" class="form-select" required>
+                              <option value="">Seleccione...</option>
+                              <option value="PagoMovil">Pago Móvil</option>
+                              <option value="Transferencia">Transferencia</option>
+                              <option value="Efectivo">Efectivo</option>
+                              <option value="Zelle">Zelle</option>
+                              <option value="Otro">Otro</option>
+                            </select>
+                          </div>
+                          <div class="col-4">
+                            <label for="referenciaPago" class="form-label">Referencia</label>
+                            <input type="text" class="form-control" id="referenciaPago" placeholder="N° ref.">
+                          </div>
+                        </div>
+
+                        <div class="row mb-2">
+                          <div class="col-6">
+                            <label for="monedaPago" class="form-label">Moneda Pago*</label>
+                            <select id="monedaPago" class="form-select" required>
+                              <option value="USD">USD</option>
+                              <option value="BS">BS</option>
+                              <option value="EUR">EUR</option>
+                            </select>
+                          </div>
+                          <div class="col-6">
+                            <label for="tasaDelDia" class="form-label">Tasa (a Bs.)*</label>
+                            <input type="number" class="form-control" id="tasaDelDia" step="0.01" min="0" placeholder="Ej: 36.50" required>
+                          </div>
+                        </div>
+                        
+                        <hr class="my-2">
+                        
+                        <div class="row mb-2">
+                          <div class="col-12">
+                            <label for="tipoMovPago" class="form-label">Origen del Dinero (Bco / Caja)*</label>
+                            <select id="tipoMovPago" class="form-select" required>
+                              <option value="">Seleccione...</option>
+                              <option value="Banco">Banco (Salida)</option>
+                              <option value="Caja">Caja (Salida)</option>
+                            </select>
+                          </div>
+                        </div>
+                        
+                        <div id="divBancoPago" style="display: none;">
+                          <div class="row mb-2">
+                             <div class="col-12">
+                                <label for="cuentaBancariaPago" class="form-label">Cuenta Bancaria Origen*</label>
+                                <select id="cuentaBancariaPago" class="form-select"></select>
+                             </div>
+                          </div>
+                          <div class="row mb-2">
+                            <div class="col-12">
+                               <small class="text-muted" id="infoBancoDisplay"></small>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div id="divCajaPago" style="display: none;">
+                            <div class="row mb-2">
+                                <div class="col-12">
+                                    <label for="cajaOrigenPago" class="form-label">Caja Origen*</label>
+                                    <select id="cajaOrigenPago" class="form-select"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-2">
+                        <div class="text-center bg-dark bg-opacity-50 p-2 rounded">
+                          <h6 class="text-uppercase text-danger">Total a Pagar</h6>
+                          <div class="d-flex justify-content-between px-2">
+                            <span class="fw-bold">USD:</span>
+                            <span id="totalPagoUsdDisplay" class="total-display text-warning">0.00</span>
+                          </div>
+                          <div class="d-flex justify-content-between px-2">
+                            <span class="fw-bold">BS:</span>
+                            <span id="totalPagoBsDisplay" class="total-display text-light">0.00</span>
+                          </div>
+                        </div>
+                        <hr class="my-2">
+                        <div class="d-grid gap-2">
+                          <button type="button" class="btn btn-danger btn-lg" id="btnGuardarPago">
+                            <i class="bi bi-box-arrow-right"></i> Registrar Egreso
+                          </button>
+                          <button type="button" class="btn btn-secondary" id="btnCancelar">
+                            <i class="bi bi-x-circle"></i> Cancelar / Limpiar
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+<script>
+    var modoAnticipo = false; 
+    var todasLasCompras = []; 
+    var facturasPendientes = []; 
+    var facturasAPagar = []; 
+    var datosBancarios = [];
+
+    var formatUSD = (value) => Number(value || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    var formatBS = (value) => Number(value || 0).toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+    // --- CARGA DE DATOS ---
+    function cargarCompras() { 
+        Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'Cargando Facturas de Proveedores...', showConfirmButton: false, timerProgressBar: true, didOpen: (toast) => { Swal.showLoading(toast); } }); 
+        
+        google.script.run.withSuccessHandler(data => { 
+            todasLasCompras = Array.isArray(data) ? data : []; 
+            filtrarTablaCompras(document.getElementById('searchProveedor').value || ''); 
+            Swal.close(); 
+        }).withFailureHandler(error => { 
+            Swal.fire('Error', 'No se pudieron cargar las compras: ' + error.message, 'error'); 
+            todasLasCompras = []; renderTablaCompras(); 
+        }).getCompras(); 
+    }
+
+    function cargarDatosBancarios() { 
+        google.script.run.withSuccessHandler(data => { 
+            datosBancarios = data; 
+            popularSelectsBancarios(data); 
+        }).getDatosBancarios(); 
+    }
+
+    // --- TABLA DE SELECCIÓN (PASO 1) ---
+    function filtrarTablaCompras(searchTerm) { 
+        const term = searchTerm.toLowerCase(); 
+        const facturasEnPagoIds = new Set(facturasAPagar.map(f => f.Id)); // Usamos ID único o NroFactura
+
+        facturasPendientes = todasLasCompras.filter(c => {
+            // Filtrar si ya está seleccionada para pagar
+            if (facturasEnPagoIds.has(c.Id)) return false;
+            
+            // Búsqueda por Nombre, RIF o Número de Factura
+            return (c.NombreProveedor || '').toLowerCase().includes(term) || 
+                   (c.RifProveedor || '').toLowerCase().includes(term) || 
+                   (c.NroFacturaProveedor || '').toString().toLowerCase().includes(term);
+        }); 
+        renderTablaCompras(); 
+    }
+
+function renderTablaCompras() { 
+        const tbody = document.querySelector("#comprasLista tbody"); 
+        tbody.innerHTML = ""; 
+        
+        if (facturasPendientes.length === 0) { 
+            tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted p-3">No se encontraron facturas por pagar (Revise que la columna 'cobradaPagada' diga 'porPagar').</td></tr>`; 
+            return; 
+        } 
+        
+        facturasPendientes.forEach(compra => { 
+            const row = document.createElement("tr"); 
+            row.dataset.id = compra.Id; 
+            
+            // Manejo seguro de fecha
+            let fechaMostrar = compra.FechaFacturaProveedor;
+            // Si viene en formato ISO (2026-01-19T...) lo formateamos bonito
+            if (fechaMostrar.includes('T') || fechaMostrar.includes('-')) {
+                const d = new Date(fechaMostrar);
+                if (!isNaN(d)) fechaMostrar = d.toLocaleDateString('es-ES');
+            }
+            // Si viene como texto plano "19/01/2026", lo mostramos tal cual
+
+            row.innerHTML = `
+                <td><input class="form-check-input" type="checkbox" onchange="moverFactura(this, '${compra.Id}')"></td>
+                <td>
+                    <span class="fw-bold">${compra.NombreProveedor}</span><br>
+                    <small class="text-muted" style="font-size: 0.8em;">${compra.RifProveedor}</small>
+                </td>
+                <td>${fechaMostrar}</td>
+                <td>${compra.NroFacturaProveedor}</td>
+                <td class="text-end text-secondary">${formatUSD(compra.TotalProveedorDivisa)}</td>
+                <td class="text-end text-secondary">${formatBS(compra.TotalProveedor)}</td>
+                <td class="text-end fw-bold text-warning" style="font-size:1.1em">${formatUSD(compra.SaldoProveedorDivisa)}</td>
+                <td class="text-end fw-bold">${formatBS(compra.SaldoProveedor)}</td>
+            `; 
+            tbody.appendChild(row); 
+        }); 
+    }
+
+    // --- MOVIMIENTO ENTRE TABLAS ---
+    function moverFactura(checkbox, id) { 
+        if (checkbox.checked) { 
+            const index = facturasPendientes.findIndex(c => c.Id == id); 
+            if (index > -1) { 
+                const [item] = facturasPendientes.splice(index, 1); 
+                // Inicializar monto a pagar con el saldo pendiente en USD
+                item.montoAPagarUSD = item.SaldoProveedorDivisa; 
+                facturasAPagar.push(item); 
+                renderTablaCompras(); 
+                renderTablaPagos(); 
+            } 
+        } 
+    }
+
+    function devolverFactura(id) { 
+        const index = facturasAPagar.findIndex(c => c.Id == id); 
+        if (index > -1) { 
+            const [item] = facturasAPagar.splice(index, 1); 
+            delete item.montoAPagarUSD; 
+            facturasPendientes.push(item); 
+            facturasPendientes.sort((a,b) => a.NombreProveedor.localeCompare(b.NombreProveedor)); 
+            renderTablaCompras(); 
+            renderTablaPagos(); 
+        } 
+    }
+
+    // --- TABLA DE REVISIÓN (PASO 2) ---
+    function renderTablaPagos() { 
+        const tbody = document.querySelector("#pagosLista tbody"); 
+        tbody.innerHTML = ""; 
+        const tasa = parseFloat(document.getElementById('tasaDelDia').value) || 0; 
+        
+        if (facturasAPagar.length === 0) { 
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">Seleccione facturas arriba.</td></tr>`; 
+        } else { 
+            facturasAPagar.forEach(compra => { 
+                const row = document.createElement("tr"); 
+                const montoPagarUSD = compra.montoAPagarUSD !== undefined ? compra.montoAPagarUSD : compra.SaldoProveedorDivisa; 
+                const montoPagarBS = montoPagarUSD * tasa; 
+                
+                row.innerHTML = `
+                    <td>${compra.NombreProveedor}</td>
+                    <td>${compra.NroFacturaProveedor}</td>
+                    <td class="text-end text-muted">${formatUSD(compra.SaldoProveedorDivisa)}</td>
+                    <td class="text-end text-muted">${formatBS(compra.SaldoProveedor)}</td>
+                    <td class="text-end">
+                        <input type="number" class="form-control form-control-sm text-end bg-dark text-warning border-secondary" 
+                            value="${Number(montoPagarUSD).toFixed(2)}" step="0.01" 
+                            onchange="actualizarMontos('${compra.Id}', this.value, 'USD')">
+                    </td>
+                    <td class="text-end">
+                        <input type="number" class="form-control form-control-sm text-end bg-dark text-white border-secondary" 
+                            value="${Number(montoPagarBS).toFixed(2)}" step="0.01" 
+                            onchange="actualizarMontos('${compra.Id}', this.value, 'BS')">
+                    </td>
+                    <td><button class="btn btn-sm btn-outline-danger" onclick="devolverFactura('${compra.Id}')"><i class="bi bi-x-lg"></i></button></td>
+                `; 
+                tbody.appendChild(row); 
+            }); 
+        } 
+        actualizarTotalPago(); 
+    }
+
+    function actualizarMontos(id, valor, monedaOrigen) { 
+        const compra = facturasAPagar.find(c => c.Id == id); 
+        if (!compra) return; 
+        
+        const tasa = parseFloat(document.getElementById('tasaDelDia').value); 
+        if (!tasa || tasa <= 0) { Swal.fire('Tasa Requerida', 'Ingrese la tasa de cambio.', 'warning'); renderTablaPagos(); return; } 
+        
+        let montoUSD = 0; 
+        const valorNum = parseFloat(valor); 
+        
+        if (monedaOrigen === 'USD') montoUSD = valorNum; 
+        else if (monedaOrigen === 'BS') montoUSD = valorNum / tasa; 
+        
+        // Validación básica: no pagar más de lo que se debe (opcional, a veces se pagan excesos)
+        if (montoUSD > compra.SaldoProveedorDivisa + 0.1) { 
+            Swal.fire('Advertencia', 'El monto a pagar excede el saldo pendiente.', 'warning'); 
+            // Si quieres bloquearlo, descomenta la siguiente linea:
+            // montoUSD = compra.SaldoProveedorDivisa; 
+        } 
+        
+        compra.montoAPagarUSD = montoUSD; 
+        renderTablaPagos(); 
+    }
+
+    function actualizarTotalPago() { 
+        const tasa = parseFloat(document.getElementById('tasaDelDia').value) || 0; 
+        const totalUSD = facturasAPagar.reduce((sum, c) => sum + Number(c.montoAPagarUSD || 0), 0); 
+        document.getElementById('totalPagoUsdDisplay').textContent = formatUSD(totalUSD); 
+        document.getElementById('totalPagoBsDisplay').textContent = formatBS(totalUSD * tasa); 
+    }
+
+    // --- FORMULARIO Y DATOS BANCARIOS ---
+    function popularSelectsBancarios(datos) {
+        const selectBanco = document.getElementById('cuentaBancariaPago');
+        const selectCaja = document.getElementById('cajaOrigenPago');
+        selectBanco.innerHTML = '<option value="">Seleccione cuenta origen...</option>';
+        selectCaja.innerHTML = '<option value="">Seleccione caja origen...</option>';
+        if (!datos) return;
+        datos.forEach(item => {
+            let option = document.createElement('option');
+            option.value = item.nombre;
+            option.text = item.nombre;
+            // Guardamos metadata
+            option.dataset.codContable = item.codigoContable || '';
+            option.dataset.nro = item.nroCuenta || '';
+            
+            if (item.tipo === 'Banco') selectBanco.appendChild(option);
+            else if (item.tipo === 'Caja') selectCaja.appendChild(option);
+        });
+    }
+
+    document.getElementById('tipoMovPago').addEventListener('change', function() {
+        const tipo = this.value;
+        const divBanco = document.getElementById('divBancoPago');
+        const divCaja = document.getElementById('divCajaPago');
+        const selBanco = document.getElementById('cuentaBancariaPago');
+        const selCaja = document.getElementById('cajaOrigenPago');
+
+        // Reset
+        selBanco.value = ""; selCaja.value = "";
+        selBanco.required = false; selCaja.required = false;
+
+        if (tipo === 'Banco') {
+            divBanco.style.display = 'block'; divCaja.style.display = 'none';
+            selBanco.required = true;
+        } else if (tipo === 'Caja') {
+            divBanco.style.display = 'none'; divCaja.style.display = 'block';
+            selCaja.required = true;
+        } else {
+            divBanco.style.display = 'none'; divCaja.style.display = 'none';
+        }
+    });
+
+    document.getElementById('cuentaBancariaPago').addEventListener('change', function() {
+       const opt = this.options[this.selectedIndex];
+       const info = document.getElementById('infoBancoDisplay');
+       if(opt.value) info.textContent = `Nro: ${opt.dataset.nro || 'N/A'}`;
+       else info.textContent = '';
+    });
+
+    function limpiarTodo() {
+        facturasAPagar.forEach(f => delete f.montoAPagarUSD);
+        facturasAPagar = [];
+        document.getElementById('formPago').reset();
+        document.getElementById('fechaPago').value = new Date().toISOString().split('T')[0];
+        document.getElementById('divBancoPago').style.display = 'none';
+        document.getElementById('divCajaPago').style.display = 'none';
+        filtrarTablaCompras('');
+        renderTablaPagos();
+    }
+
+    // --- ENVÍO AL SERVIDOR ---
+    document.getElementById('btnGuardarPago').addEventListener('click', function() {
+        if (facturasAPagar.length === 0) { Swal.fire('Sin facturas', 'Seleccione facturas de la lista superior.', 'info'); return; }
+        const form = document.getElementById('formPago');
+        if (!form.checkValidity()) { form.reportValidity(); return; }
+
+        const tipoMov = document.getElementById('tipoMovPago').value;
+        let cuentaOrigen, codigoContable;
+        
+        if (tipoMov === 'Banco') {
+            const sel = document.getElementById('cuentaBancariaPago');
+            cuentaOrigen = sel.value;
+            codigoContable = sel.options[sel.selectedIndex].dataset.codContable;
+        } else {
+            const sel = document.getElementById('cajaOrigenPago');
+            cuentaOrigen = sel.value;
+            codigoContable = sel.options[sel.selectedIndex].dataset.codContable;
+        }
+
+        const tasa = parseFloat(document.getElementById('tasaDelDia').value);
+
+        const datosPago = {
+            infoPago: {
+                fecha: document.getElementById('fechaPago').value,
+                modalidad: document.getElementById('modalidadPago').value,
+                moneda: document.getElementById('monedaPago').value,
+                referencia: document.getElementById('referenciaPago').value,
+                tasa: tasa,
+                tipoMovimiento: tipoMov,
+                cuentaOrigen: cuentaOrigen, // Es de donde SALE el dinero
+                codigoContable: codigoContable
+            },
+            facturas: facturasAPagar.map(f => ({
+                id: f.Id, // Usamos el ID de la hoja Compras
+                nroFactura: f.NroFacturaProveedor,
+                nombreProveedor: f.NombreProveedor,
+                montoPagadoUSD: f.montoAPagarUSD,
+                montoPagadoBS: f.montoAPagarUSD * tasa
+            }))
+        };
+
+        Swal.fire({ title: 'Procesando Pago...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+        google.script.run
+            .withSuccessHandler(() => {
+                Swal.fire('¡Pago Registrado!', 'Se ha descontado el saldo y creado el asiento.', 'success');
+                limpiarTodo();
+                cargarCompras();
+            })
+            .withFailureHandler(err => Swal.fire('Error', err.message, 'error'))
+            .registrarPago(datosPago);
+    });
+
+    document.getElementById('btnCancelar').addEventListener('click', limpiarTodo);
+
+    // --- INICIALIZACIÓN ---
+function initPagosProveedores() {
+        // 1. Establecer fecha de hoy
+        document.getElementById('fechaPago').value = new Date().toISOString().split('T')[0];
+        
+        const inputTasa = document.getElementById('tasaDelDia');
+        
+        // 2. Bloquear visualmente mientras carga
+        inputTasa.disabled = true; 
+        inputTasa.placeholder = "Buscando tasa...";
+        
+        // 3. Llamada al servidor con manejo de errores y formatos
+        google.script.run
+            .withSuccessHandler(tasas => {
+                console.log("Tasas recibidas:", tasas); // Para depuración en consola
+
+                if (tasas && tasas.tasaDolar) {
+                    // Asegurar formato: Reemplazar coma por punto si viene como texto
+                    let valor = tasas.tasaDolar;
+                    if (typeof valor === 'string') {
+                        valor = valor.replace(',', '.');
+                    }
+                    
+                    // Convertir a float y asignar
+                    const valorNumerico = parseFloat(valor);
+                    if (!isNaN(valorNumerico)) {
+                        inputTasa.value = valorNumerico.toFixed(2);
+                    }
+                }
+                
+                // Desbloquear siempre, haya o no dato, para permitir edición manual
+                inputTasa.disabled = false;
+                inputTasa.placeholder = "Ej: 36.50";
+                
+                // Cargar el resto de los datos
+                cargarCompras();
+                cargarDatosBancarios();
+                
+                // Activar evento para recálculos
+                inputTasa.addEventListener('input', renderTablaPagos);
+            })
+            .withFailureHandler(error => {
+                console.error("Error obteniendo tasas:", error);
+                
+                // Si falla, desbloqueamos para que el usuario pueda escribir manualmente
+                inputTasa.disabled = false;
+                inputTasa.value = "";
+                inputTasa.placeholder = "Ingrese tasa manual";
+                
+                // Importante: Cargar el resto de la página aunque falle la tasa
+                cargarCompras();
+                cargarDatosBancarios();
+                
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'No se pudo cargar la tasa automáticamente',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            })
+            .getTasasDeCambio();
+        
+        // Evento de búsqueda (se mantiene igual)
+        document.getElementById("searchProveedor").addEventListener("input", (e) => filtrarTablaCompras(e.target.value));
+        
+        // Lógica Anticipo (se mantiene igual)
+        document.getElementById('btnModoAnticipo').addEventListener('click', function() {
+            modoAnticipo = !modoAnticipo;
+            const btn = this;
+            const labelBusqueda = document.querySelector('label[for="searchProveedor"]');
+            
+            if (modoAnticipo) {
+                btn.innerHTML = '<i class="bi bi-file-earmark-text"></i> Volver a Facturas';
+                btn.classList.replace('btn-secondary', 'btn-light');
+                labelBusqueda.textContent = "Buscar Proveedor para Anticipo:";
+                renderTablaProveedoresAnticipo();
+            } else {
+                btn.innerHTML = '<i class="bi bi-piggy-bank"></i> Registrar Anticipo a Prov.';
+                btn.classList.replace('btn-light', 'btn-secondary');
+                labelBusqueda.textContent = "Buscar por Proveedor, RIF o N° de Factura:";
+                filtrarTablaCompras('');
+            }
+        });
+    }
+    
+    function renderTablaProveedoresAnticipo() {
+        const tbody = document.querySelector("#comprasLista tbody");
+        tbody.innerHTML = "";
+        // Extraer proveedores únicos
+        const provsUnicos = [...new Set(todasLasCompras.map(c => c.NombreProveedor))].sort();
+        
+        provsUnicos.forEach(prov => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td><button class="btn btn-sm btn-warning text-dark" onclick="seleccionarProvAnticipo('${prov}')"><i class="bi bi-plus-circle"></i> Elegir</button></td>
+                <td colspan="7"><strong>${prov}</strong> (Crear anticipo de pago)</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function seleccionarProvAnticipo(nombre) {
+        const idVirtual = "ANT-P-" + Date.now();
+        const item = {
+            Id: idVirtual,
+            NombreProveedor: nombre,
+            NroFacturaProveedor: "ANTICIPO",
+            SaldoProveedorDivisa: 0, 
+            SaldoProveedor: 0,
+            montoAPagarUSD: 0,
+            esAnticipo: true
+        };
+        facturasAPagar.push(item);
+        renderTablaPagos();
+        document.getElementById('btnModoAnticipo').click(); // Volver a modo normal
+    }
+
+    initPagosProveedores();
+</script>
+</body>
+</html>

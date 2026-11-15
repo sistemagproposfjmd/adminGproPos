@@ -1,0 +1,634 @@
+<style>
+/* =============================================
+   ESTILOS PLAN DE CUENTAS CONTABLE
+   ============================================= */
+.plan-cuentas-container {
+    padding: 15px;
+    color: var(--bs-body-color);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.plan-cuentas-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bs-tertiary-bg);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+    border: 1px solid var(--bs-border-color);
+}
+
+.plan-cuentas-toolbar-left {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.plan-cuentas-toolbar-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.plan-cuentas-btn {
+    padding: 7px 14px;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bs-secondary-bg);
+    color: var(--bs-body-color);
+    height: 36px;
+    white-space: nowrap;
+}
+
+.plan-cuentas-btn:hover {
+    background: var(--bs-primary-bg-subtle);
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+}
+
+.plan-cuentas-btn-primary {
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}
+
+.plan-cuentas-btn-primary:hover {
+    background: var(--bs-primary-text-emphasis);
+    color: #fff;
+}
+
+.plan-cuentas-search-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.plan-cuentas-search-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--bs-secondary-color);
+    font-size: 0.9rem;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.plan-cuentas-search {
+    padding: 7px 12px 7px 36px;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    width: 260px;
+    background: var(--bs-secondary-bg);
+    color: var(--bs-body-color);
+    outline: none;
+    height: 36px;
+    transition: border-color 0.3s ease;
+}
+
+.plan-cuentas-search:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+}
+
+.plan-cuentas-search::placeholder {
+    color: var(--bs-secondary-color);
+}
+
+.plan-cuentas-table-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--bs-border-color);
+    background: var(--bs-tertiary-bg);
+    margin-bottom: 0;
+}
+
+.plan-cuentas-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    background-color: transparent;
+}
+
+.plan-cuentas-table thead th {
+    background: var(--bs-secondary-bg);
+    color: var(--bs-body-color);
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 2px solid var(--bs-border-color);
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.plan-cuentas-table thead th:hover {
+    background: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+}
+
+.plan-cuentas-table tbody td {
+    padding: 10px 14px;
+    color: var(--bs-body-color);
+    border-bottom: 1px solid var(--bs-border-color);
+    vertical-align: middle;
+}
+
+.plan-cuentas-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.plan-cuentas-table tbody tr:hover {
+    background: var(--bs-primary-bg-subtle);
+}
+
+.plan-cuentas-table tbody tr.selected {
+    background: rgba(var(--bs-primary-rgb), 0.1) !important;
+}
+
+.plan-cuentas-table tbody tr.selected:hover {
+    background: rgba(var(--bs-primary-rgb), 0.15) !important;
+}
+
+.plan-cuentas-checkbox {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    accent-color: var(--bs-primary);
+}
+
+.plan-cuentas-sort-icon {
+    font-size: 0.7rem;
+    opacity: 0.4;
+    margin-left: 4px;
+    transition: opacity 0.3s ease;
+}
+
+.plan-cuentas-sorted-asc .plan-cuentas-sort-icon::after {
+    content: " ▲";
+    opacity: 1;
+    color: var(--bs-primary);
+}
+
+.plan-cuentas-sorted-desc .plan-cuentas-sort-icon::after {
+    content: " ▼";
+    opacity: 1;
+    color: var(--bs-primary);
+}
+
+.plan-cuentas-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: var(--bs-tertiary-bg);
+    border-radius: 0 0 12px 12px;
+    border: 1px solid var(--bs-border-color);
+    border-top: none;
+}
+
+.plan-cuentas-pagination-info {
+    color: var(--bs-secondary-color);
+    font-size: 0.8rem;
+}
+
+.plan-cuentas-pagination-controls {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.plan-cuentas-pagination-controls button {
+    padding: 5px 10px;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 6px;
+    background: var(--bs-secondary-bg);
+    color: var(--bs-body-color);
+    cursor: pointer;
+    font-size: 0.8rem;
+    min-width: 32px;
+    height: 32px;
+    transition: all 0.2s ease;
+}
+
+.plan-cuentas-pagination-controls button:hover:not(:disabled) {
+    background: var(--bs-primary-bg-subtle);
+    border-color: var(--bs-primary);
+}
+
+.plan-cuentas-pagination-controls button.active {
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+.plan-cuentas-pagination-controls button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.plan-cuentas-badge {
+    display: inline-block;
+    background: var(--bs-primary-bg-subtle);
+    color: var(--bs-primary);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid var(--bs-primary-border-subtle);
+}
+
+.plan-cuentas-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.plan-cuentas-modal-overlay.active {
+    display: flex;
+}
+
+.plan-cuentas-modal {
+    background: var(--bs-body-bg);
+    border-radius: 12px;
+    padding: 24px;
+    width: 90%;
+    max-width: 480px;
+    border: 1px solid var(--bs-border-color);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    color: var(--bs-body-color);
+}
+
+.plan-cuentas-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.plan-cuentas-modal-title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--bs-body-color);
+}
+
+.plan-cuentas-modal-close {
+    cursor: pointer;
+    font-size: 1.4rem;
+    color: var(--bs-secondary-color);
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.plan-cuentas-modal-close:hover {
+    color: var(--bs-body-color);
+    background: var(--bs-secondary-bg);
+}
+
+.plan-cuentas-form-group {
+    margin-bottom: 16px;
+}
+
+.plan-cuentas-form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--bs-body-color);
+}
+
+.plan-cuentas-form-group label .required {
+    color: var(--bs-danger);
+}
+
+.plan-cuentas-form-group input,
+.plan-cuentas-form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 8px;
+    background: var(--bs-secondary-bg);
+    color: var(--bs-body-color);
+    font-size: 0.9rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.plan-cuentas-form-group input:focus,
+.plan-cuentas-form-group textarea:focus {
+    outline: none;
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+}
+
+.plan-cuentas-form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.plan-cuentas-modal-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--bs-border-color);
+}
+
+.plan-cuentas-record-count {
+    font-size: 0.8rem;
+    color: var(--bs-secondary-color);
+}
+
+.plan-cuentas-selected-count {
+    color: var(--bs-primary);
+    font-weight: 600;
+}
+
+.plan-cuentas-text-right {
+    text-align: right;
+}
+
+.plan-cuentas-text-center {
+    text-align: center;
+}
+
+.plan-cuentas-font-mono {
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-weight: 600;
+}
+
+.plan-cuentas-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--bs-secondary-color);
+}
+
+@media (max-width: 768px) {
+    .plan-cuentas-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .plan-cuentas-toolbar-left,
+    .plan-cuentas-toolbar-right {
+        justify-content: center;
+    }
+    .plan-cuentas-search {
+        width: 100%;
+    }
+    .plan-cuentas-table {
+        font-size: 0.8rem;
+    }
+    .plan-cuentas-table thead th,
+    .plan-cuentas-table tbody td {
+        padding: 8px 10px;
+    }
+    .plan-cuentas-pagination {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
+
+<!-- =============================================
+     CONTENIDO PLAN DE CUENTAS CONTABLE
+     ============================================= -->
+<div class="plan-cuentas-container">
+    <!-- Toolbar -->
+    <div class="plan-cuentas-toolbar">
+        <div class="plan-cuentas-toolbar-left">
+            <div class="plan-cuentas-search-wrapper">
+                <span class="plan-cuentas-search-icon">🔍</span>
+                <input 
+                    type="text" 
+                    class="plan-cuentas-search" 
+                    id="planCuentasSearchInput" 
+                    placeholder="Buscar cuenta, agrupación..." 
+                    oninput="window.PlanCuentasModule.filter()"
+                >
+            </div>
+        </div>
+        <div class="plan-cuentas-toolbar-right">
+            <button class="plan-cuentas-btn" onclick="window.PlanCuentasModule.openEmail()" title="Enviar por correo">
+                📧 Enviar
+            </button>
+            <button class="plan-cuentas-btn" onclick="window.PlanCuentasModule.exportExcel()" title="Descargar Excel">
+                📥 Excel
+            </button>
+            <button class="plan-cuentas-btn" onclick="window.PlanCuentasModule.exportPDF()" title="Descargar PDF">
+                📄 PDF
+            </button>
+            <button class="plan-cuentas-btn" onclick="window.PlanCuentasModule.print()" title="Imprimir">
+                🖨️ Imprimir
+            </button>
+            <button class="plan-cuentas-btn" onclick="window.PlanCuentasModule.selectAll()" title="Seleccionar todo">
+                ☑️ Todo
+            </button>
+            <button class="plan-cuentas-btn" onclick="window.PlanCuentasModule.clearSelection()" title="Limpiar selección">
+                ❌ Limpiar
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="plan-cuentas-table-wrapper">
+        <table class="plan-cuentas-table" id="planCuentasTable">
+            <thead>
+                <tr>
+                    <th style="width: 40px;">
+                        <input 
+                            type="checkbox" 
+                            class="plan-cuentas-checkbox" 
+                            id="planCuentasSelectAllCheckbox" 
+                            onchange="window.PlanCuentasModule.toggleSelectAll()"
+                            onclick="event.stopPropagation()"
+                        >
+                    </th>
+                    <th onclick="window.PlanCuentasModule.sort(0)" id="planCuentasTh0">
+                        Agrupación <span class="plan-cuentas-sort-icon">⇅</span>
+                    </th>
+                    <th onclick="window.PlanCuentasModule.sort(1)" id="planCuentasTh1">
+                        Cuenta Contable <span class="plan-cuentas-sort-icon">⇅</span>
+                    </th>
+                    <th onclick="window.PlanCuentasModule.sort(2)" id="planCuentasTh2">
+                        Cuenta <span class="plan-cuentas-sort-icon">⇅</span>
+                    </th>
+                    <th onclick="window.PlanCuentasModule.sort(3)" id="planCuentasTh3" class="plan-cuentas-text-center">
+                        EEFF <span class="plan-cuentas-sort-icon">⇅</span>
+                    </th>
+                    <th onclick="window.PlanCuentasModule.sort(4)" id="planCuentasTh4" class="plan-cuentas-text-center">
+                        Tipo <span class="plan-cuentas-sort-icon">⇅</span>
+                    </th>
+                    <th onclick="window.PlanCuentasModule.sort(5)" id="planCuentasTh5" class="plan-cuentas-text-center">
+                        Tipo Cuenta <span class="plan-cuentas-sort-icon">⇅</span>
+                    </th>
+                    <th onclick="window.PlanCuentasModule.sort(6)" id="planCuentasTh6">
+                        Grupo Balance <span class="plan-cuentas-sort-icon">⇅</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="planCuentasTbody">
+                <tr>
+                    <td colspan="8" class="plan-cuentas-empty-state">
+                        <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem;"></div>
+                        <p class="mt-2">Cargando plan de cuentas contable...</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="plan-cuentas-pagination">
+        <div class="plan-cuentas-record-count">
+            <span id="planCuentasPaginationInfo">Cargando...</span> | 
+            Seleccionados: <span class="plan-cuentas-selected-count" id="planCuentasSelectedCount">0</span>
+        </div>
+        <div class="plan-cuentas-pagination-controls" id="planCuentasPaginationControls"></div>
+    </div>
+
+    <!-- Modal Email -->
+    <div class="plan-cuentas-modal-overlay" id="planCuentasEmailModal">
+        <div class="plan-cuentas-modal">
+            <div class="plan-cuentas-modal-header">
+                <h3 class="plan-cuentas-modal-title">📧 Enviar Plan de Cuentas por Correo</h3>
+                <button class="plan-cuentas-modal-close" onclick="window.PlanCuentasModule.closeEmail()">✕</button>
+            </div>
+            <div class="plan-cuentas-form-group">
+                <label>Destinatario <span class="required">*</span></label>
+                <input type="email" id="planCuentasEmailTo" placeholder="correo@ejemplo.com">
+            </div>
+            <div class="plan-cuentas-form-group">
+                <label>CC (opcional)</label>
+                <input type="text" id="planCuentasEmailCc" placeholder="copia@correo.com">
+            </div>
+            <div class="plan-cuentas-form-group">
+                <label>Asunto <span class="required">*</span></label>
+                <input type="text" id="planCuentasEmailSubject" value="Plan de Cuentas Contable">
+            </div>
+            <div class="plan-cuentas-form-group">
+                <label>Mensaje (opcional)</label>
+                <textarea id="planCuentasEmailMessage" placeholder="Agregue un mensaje o comentario..."></textarea>
+            </div>
+            <div class="plan-cuentas-modal-footer">
+                <button class="plan-cuentas-btn" onclick="window.PlanCuentasModule.closeEmail()">Cancelar</button>
+                <button class="plan-cuentas-btn plan-cuentas-btn-primary" onclick="window.PlanCuentasModule.sendEmail()">
+                    📧 Enviar Correo
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ==================== MÓDULO PLAN DE CUENTAS CONTABLE ====================
+(function() { 'use strict'; var allData = []; var filteredData = []; var currentPage = 1; var pageSize = 50; var selectedRows = new Set(); var sortColumn = -1; var sortDirection = 'asc'; var isInitialized = false;
+
+// ==================== 1. MOSTRAR TOAST ====================
+function showToast(msg, type) { type = type || 'info'; if (typeof Swal !== 'undefined') { var icons = { success: 'success', error: 'error', warning: 'warning', info: 'info' }; Swal.fire({ toast: true, position: 'top-end', icon: icons[type] || 'info', title: msg, showConfirmButton: false, timer: 3000, timerProgressBar: true }); } }
+
+// ==================== 2. MOSTRAR LOADER ====================
+function showLoader() { var overlay = document.getElementById('globalLoadingOverlay'); if (overlay) overlay.style.display = 'flex'; }
+
+// ==================== 3. OCULTAR LOADER ====================
+function hideLoader() { var overlay = document.getElementById('globalLoadingOverlay'); if (overlay) overlay.style.display = 'none'; }
+
+// ==================== 4. ESCAPE HTML ====================
+function escapeHtml(text) { if (text === null || text === undefined) return ''; if (typeof text !== 'string') text = String(text); var div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+// ==================== 5. CARGAR DATOS ====================
+function loadData() { showLoader(); if (typeof google === 'undefined' || !google.script || !google.script.run) { hideLoader(); showToast('Error: Google Apps Script no disponible', 'error'); document.getElementById('planCuentasTbody').innerHTML = '<tr><td colspan="8" class="plan-cuentas-empty-state"><p>Error de conexión con el servidor</p></td></tr>'; return; } google.script.run.withSuccessHandler(function(data) { allData = Array.isArray(data) ? data : []; filteredData = allData.slice(); currentPage = 1; selectedRows.clear(); renderTable(); hideLoader(); if (allData.length > 0) { showToast('Plan de cuentas cargado (' + allData.length + ' registros)', 'success'); } else { showToast('No se encontraron datos en PlandeCuentas', 'warning'); } }).withFailureHandler(function(error) { hideLoader(); showToast('Error: ' + (error.message || 'Error desconocido'), 'error'); document.getElementById('planCuentasTbody').innerHTML = '<tr><td colspan="8" class="plan-cuentas-empty-state"><p>Error al cargar: ' + escapeHtml(error.message || 'Error desconocido') + '</p><button class="plan-cuentas-btn" onclick="window.PlanCuentasModule.loadData()">Reintentar</button></td></tr>'; }).getDataPlanCuentas(); }
+
+// ==================== 6. RENDER TABLA ====================
+function renderTable() { var tbody = document.getElementById('planCuentasTbody'); if (!tbody) return; var start = (currentPage - 1) * pageSize; var end = Math.min(start + pageSize, filteredData.length); var pageData = filteredData.slice(start, end); if (pageData.length === 0) { tbody.innerHTML = '<tr><td colspan="8" class="plan-cuentas-empty-state"><p>No se encontraron registros</p><small class="text-muted">Intente ajustar los filtros de búsqueda</small></td></tr>'; document.getElementById('planCuentasPaginationInfo').textContent = '0 registros'; document.getElementById('planCuentasPaginationControls').innerHTML = ''; document.getElementById('planCuentasSelectedCount').textContent = '0'; return; } var html = ''; pageData.forEach(function(row, idx) { var globalIndex = start + idx; var isSelected = selectedRows.has(globalIndex); var agrupacion = row.Agrupacion || row.agrupacion || ''; var cuentaContable = row.CuentaContable || row['Cuenta Contable'] || row.cuentaContable || ''; var cuenta = row.Cuenta || row.cuenta || ''; var eeff = row.EEFF || row.eeff || ''; var tipo = row.Tipo || row.tipo || ''; var tipoCuenta = row.TipoCuenta || row['Tipo Cuenta'] || row.tipoCuenta || ''; var grupoBalance = row.GrupoBalance || row['Grupo Balance'] || row.grupoBalance || ''; html += '<tr class="' + (isSelected ? 'selected' : '') + '" onclick="window.PlanCuentasModule.rowClick(event, ' + globalIndex + ')" style="cursor: pointer;"><td onclick="event.stopPropagation()"><input type="checkbox" class="plan-cuentas-checkbox" ' + (isSelected ? 'checked' : '') + ' onchange="window.PlanCuentasModule.toggleRow(' + globalIndex + ', this)" onclick="event.stopPropagation()"></td><td><strong>' + escapeHtml(agrupacion) + '</strong></td><td style="font-family: monospace; font-weight: 600;">' + escapeHtml(cuentaContable) + '</td><td>' + escapeHtml(cuenta) + '</td><td class="plan-cuentas-text-center"><span class="plan-cuentas-badge">' + escapeHtml(eeff) + '</span></td><td class="plan-cuentas-text-center">' + escapeHtml(tipo) + '</td><td class="plan-cuentas-text-center">' + escapeHtml(tipoCuenta) + '</td><td>' + escapeHtml(grupoBalance) + '</td></tr>'; }); tbody.innerHTML = html; document.getElementById('planCuentasPaginationInfo').textContent = 'Mostrando ' + (start + 1) + '-' + end + ' de ' + filteredData.length; document.getElementById('planCuentasSelectedCount').textContent = selectedRows.size; updatePagination(); updateSelectAllCheckbox(); var allTh = document.querySelectorAll('#planCuentasTable thead th[onclick]'); allTh.forEach(function(th) { th.classList.remove('plan-cuentas-sorted-asc', 'plan-cuentas-sorted-desc'); }); if (sortColumn >= 0) { var th = document.getElementById('planCuentasTh' + sortColumn); if (th) { th.classList.add(sortDirection === 'asc' ? 'plan-cuentas-sorted-asc' : 'plan-cuentas-sorted-desc'); } } }
+
+// ==================== 7. ACTUALIZAR CHECKBOX SELECT ALL ====================
+function updateSelectAllCheckbox() { var selectAll = document.getElementById('planCuentasSelectAllCheckbox'); if (!selectAll) return; var start = (currentPage - 1) * pageSize; var end = Math.min(start + pageSize, filteredData.length); var total = end - start; var selected = 0; for (var i = start; i < end; i++) { if (selectedRows.has(i)) selected++; } selectAll.checked = (total > 0 && selected === total); selectAll.indeterminate = (selected > 0 && selected < total); }
+
+// ==================== 8. ACTUALIZAR PAGINACIÓN ====================
+function updatePagination() { var container = document.getElementById('planCuentasPaginationControls'); if (!container) return; var totalPages = Math.ceil(filteredData.length / pageSize) || 1; if (totalPages <= 1) { container.innerHTML = '<span style="color: var(--bs-secondary-color); font-size: 0.8rem;">Página 1 de 1</span>'; return; } var html = ''; html += '<button onclick="window.PlanCuentasModule.goToPage(1)" ' + (currentPage === 1 ? 'disabled' : '') + '>«</button>'; html += '<button onclick="window.PlanCuentasModule.goToPage(' + (currentPage - 1) + ')" ' + (currentPage === 1 ? 'disabled' : '') + '>‹</button>'; var startPage = Math.max(1, currentPage - 2); var endPage = Math.min(totalPages, startPage + 4); if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4); for (var i = startPage; i <= endPage; i++) { html += '<button onclick="window.PlanCuentasModule.goToPage(' + i + ')" class="' + (i === currentPage ? 'active' : '') + '">' + i + '</button>'; } html += '<button onclick="window.PlanCuentasModule.goToPage(' + (currentPage + 1) + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '>›</button>'; html += '<button onclick="window.PlanCuentasModule.goToPage(' + totalPages + ')" ' + (currentPage === totalPages ? 'disabled' : '') + '>»</button>'; container.innerHTML = html; }
+
+// ==================== 9. OBTENER DATOS SELECCIONADOS ====================
+function getSelectedData() { if (selectedRows.size > 0) { var indices = Array.from(selectedRows).sort(function(a, b) { return a - b; }); return indices.map(function(i) { return filteredData[i]; }).filter(Boolean); } return filteredData; }
+
+// ==================== 10. IR A PÁGINA ====================
+var module = { loadData: loadData, goToPage: function(page) { var totalPages = Math.ceil(filteredData.length / pageSize) || 1; if (page < 1 || page > totalPages) return; currentPage = page; renderTable(); var tableWrapper = document.querySelector('.plan-cuentas-table-wrapper'); if (tableWrapper) tableWrapper.scrollTop = 0; },
+
+// ==================== 11. TOGGLE ROW ====================
+toggleRow: function(globalIndex, checkbox) { if (checkbox.checked) selectedRows.add(globalIndex); else selectedRows.delete(globalIndex); document.getElementById('planCuentasSelectedCount').textContent = selectedRows.size; updateSelectAllCheckbox(); var tr = checkbox.closest('tr'); if (tr) { if (checkbox.checked) tr.classList.add('selected'); else tr.classList.remove('selected'); } },
+
+// ==================== 12. ROW CLICK ====================
+rowClick: function(event, globalIndex) { if (event.target.type === 'checkbox') return; var tr = event.target.closest('tr'); if (!tr) return; var checkbox = tr.querySelector('input[type="checkbox"]'); if (checkbox) { checkbox.checked = !checkbox.checked; module.toggleRow(globalIndex, checkbox); } },
+
+// ==================== 13. TOGGLE SELECT ALL ====================
+toggleSelectAll: function() { var selectAll = document.getElementById('planCuentasSelectAllCheckbox'); if (!selectAll) return; var start = (currentPage - 1) * pageSize; var end = Math.min(start + pageSize, filteredData.length); for (var i = start; i < end; i++) { if (selectAll.checked) selectedRows.add(i); else selectedRows.delete(i); } renderTable(); },
+
+// ==================== 14. SELECT ALL ====================
+selectAll: function() { if (filteredData.length === 0) { showToast('No hay datos', 'warning'); return; } for (var i = 0; i < filteredData.length; i++) selectedRows.add(i); renderTable(); showToast(filteredData.length + ' registros seleccionados', 'success'); },
+
+// ==================== 15. CLEAR SELECTION ====================
+clearSelection: function() { var count = selectedRows.size; selectedRows.clear(); renderTable(); if (count > 0) showToast('Selección limpiada', 'info'); },
+
+// ==================== 16. FILTRAR ====================
+filter: function() { var query = (document.getElementById('planCuentasSearchInput').value || '').toLowerCase().trim(); if (!query) { filteredData = allData.slice(); } else { filteredData = allData.filter(function(row) { var campos = [row.Agrupacion, row.agrupacion, row.CuentaContable, row['Cuenta Contable'], row.Cuenta, row.cuenta, row.EEFF, row.eeff, row.Tipo, row.tipo, row.TipoCuenta, row['Tipo Cuenta'], row.GrupoBalance, row['Grupo Balance']]; return campos.some(function(campo) { return String(campo || '').toLowerCase().indexOf(query) !== -1; }); }); } currentPage = 1; selectedRows.clear(); renderTable(); },
+
+// ==================== 17. SORT ====================
+sort: function(colIndex) { var keys = ['Agrupacion', 'CuentaContable', 'Cuenta', 'EEFF', 'Tipo', 'TipoCuenta', 'GrupoBalance']; var key = keys[colIndex]; if (sortColumn === colIndex) { sortDirection = sortDirection === 'asc' ? 'desc' : 'asc'; } else { sortColumn = colIndex; sortDirection = 'asc'; } filteredData.sort(function(a, b) { var valA = String(a[key] || a[key.toLowerCase()] || ''); var valB = String(b[key] || b[key.toLowerCase()] || ''); valA = valA.toLowerCase(); valB = valB.toLowerCase(); if (valA < valB) return sortDirection === 'asc' ? -1 : 1; if (valA > valB) return sortDirection === 'asc' ? 1 : -1; return 0; }); renderTable(); },
+
+// ==================== 18. OPEN EMAIL ====================
+openEmail: function() { var data = getSelectedData(); if (data.length === 0) { showToast('No hay datos para enviar', 'warning'); return; } document.getElementById('planCuentasEmailModal').classList.add('active'); },
+
+// ==================== 19. CLOSE EMAIL ====================
+closeEmail: function() { document.getElementById('planCuentasEmailModal').classList.remove('active'); },
+
+// ==================== 20. SEND EMAIL ====================
+sendEmail: function() { var to = (document.getElementById('planCuentasEmailTo').value || '').trim(); var cc = (document.getElementById('planCuentasEmailCc').value || '').trim(); var subject = (document.getElementById('planCuentasEmailSubject').value || '').trim(); var message = (document.getElementById('planCuentasEmailMessage').value || '').trim(); if (!to) { showToast('Destinatario obligatorio', 'error'); return; } if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) { showToast('Correo no válido', 'error'); return; } if (!subject) { showToast('Asunto obligatorio', 'error'); return; } var data = getSelectedData(); if (data.length === 0) { showToast('No hay datos', 'error'); return; } function executeSend() { showLoader(); google.script.run.withSuccessHandler(function(response) { hideLoader(); if (response && response.success) { showToast(response.message || 'Correo enviado', 'success'); module.closeEmail(); } else { showToast(response.message || 'Error al enviar', 'error'); } }).withFailureHandler(function(error) { hideLoader(); showToast('Error: ' + error.message, 'error'); }).sendPlanCuentasByEmail({ to: to, cc: cc, subject: subject, description: message, data: data }); } if (typeof Swal !== 'undefined') { Swal.fire({ title: 'Confirmar envío', html: '<p>¿Enviar <strong>' + data.length + ' registros</strong> a <strong>' + escapeHtml(to) + '</strong>?</p>', icon: 'question', showCancelButton: true, confirmButtonText: 'Enviar', cancelButtonText: 'Cancelar' }).then(function(result) { if (result.isConfirmed) executeSend(); }); } else { if (confirm('¿Enviar ' + data.length + ' registros a ' + to + '?')) executeSend(); } },
+
+// ==================== 21. EXPORT EXCEL ====================
+exportExcel: function() { var data = getSelectedData(); if (data.length === 0) { showToast('No hay datos', 'warning'); return; } if (typeof XLSX === 'undefined') { showToast('Librería XLSX no cargada', 'error'); return; } var exportData = data.map(function(row) { return { 'Agrupación': row.Agrupacion || row.agrupacion || '', 'Cuenta Contable': row.CuentaContable || row['Cuenta Contable'] || '', 'Cuenta': row.Cuenta || row.cuenta || '', 'EEFF': row.EEFF || row.eeff || '', 'Orden': row.Orden || row.orden || '', 'Tipo': row.Tipo || row.tipo || '', 'Tipo Cuenta': row.TipoCuenta || row['Tipo Cuenta'] || '', 'Grupo Balance': row.GrupoBalance || row['Grupo Balance'] || '' }; }); var wb = XLSX.utils.book_new(); var ws = XLSX.utils.json_to_sheet(exportData); ws['!cols'] = [{ wch: 20 }, { wch: 25 }, { wch: 40 }, { wch: 10 }, { wch: 10 }, { wch: 15 }, { wch: 15 }, { wch: 20 }]; XLSX.utils.book_append_sheet(wb, ws, "Plan de Cuentas"); XLSX.writeFile(wb, 'Plan_de_Cuentas_' + new Date().toISOString().split('T')[0] + '.xlsx'); showToast('Excel descargado', 'success'); },
+
+// ==================== 22. EXPORT PDF ====================
+exportPDF: function() { var data = getSelectedData(); if (data.length === 0) { showToast('No hay datos', 'warning'); return; } if (typeof window.jspdf === 'undefined') { showToast('Librería jsPDF no cargada', 'error'); return; } var doc = new window.jspdf.jsPDF('landscape', 'mm', 'a4'); var pageWidth = doc.internal.pageSize.getWidth(); var fecha = new Date().toLocaleDateString('es-VE', { year: 'numeric', month: 'long', day: 'numeric' }); doc.setFontSize(16); doc.setTextColor(40, 40, 40); doc.text('PLAN DE CUENTAS CONTABLE', pageWidth / 2, 15, { align: 'center' }); doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text('Fecha: ' + fecha + ' | Registros: ' + data.length, pageWidth / 2, 22, { align: 'center' }); var headers = ['Agrupación', 'Cuenta Contable', 'Cuenta', 'EEFF', 'Tipo', 'Tipo Cuenta', 'Grupo Balance']; var rows = data.map(function(row) { return [row.Agrupacion || row.agrupacion || '', row.CuentaContable || row['Cuenta Contable'] || '', row.Cuenta || row.cuenta || '', row.EEFF || row.eeff || '', row.Tipo || row.tipo || '', row.TipoCuenta || row['Tipo Cuenta'] || '', row.GrupoBalance || row['Grupo Balance'] || '']; }); doc.autoTable({ head: [headers], body: rows, startY: 28, theme: 'grid', styles: { fontSize: 8, cellPadding: 2 }, headStyles: { fillColor: [41, 128, 185], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 9 }, alternateRowStyles: { fillColor: [245, 245, 250] }, columnStyles: { 0: { cellWidth: 35 }, 1: { cellWidth: 40 }, 2: { cellWidth: 55 }, 3: { cellWidth: 15, halign: 'center' }, 4: { cellWidth: 25, halign: 'center' }, 5: { cellWidth: 25, halign: 'center' }, 6: { cellWidth: 40 } }, didDrawPage: function(data) { doc.setFontSize(8); doc.setTextColor(150, 150, 150); doc.text('Página ' + data.pageNumber + ' | Sistema GPro', pageWidth - 15, doc.internal.pageSize.getHeight() - 10, { align: 'right' }); } }); doc.save('Plan_de_Cuentas_' + new Date().toISOString().split('T')[0] + '.pdf'); showToast('PDF descargado', 'success'); },
+
+// ==================== 23. PRINT ====================
+print: function() { var data = getSelectedData(); if (data.length === 0) { showToast('No hay datos', 'warning'); return; } var today = new Date().toLocaleDateString('es-VE', { year: 'numeric', month: 'long', day: 'numeric' }); var rows = ''; data.forEach(function(row) { rows += '<tr><td>' + escapeHtml(row.Agrupacion || row.agrupacion || '') + '</td><td style="font-family: monospace;">' + escapeHtml(row.CuentaContable || row['Cuenta Contable'] || '') + '</td><td>' + escapeHtml(row.Cuenta || row.cuenta || '') + '</td><td style="text-align: center;">' + escapeHtml(row.EEFF || row.eeff || '') + '</td><td style="text-align: center;">' + escapeHtml(row.Tipo || row.tipo || '') + '</td><td style="text-align: center;">' + escapeHtml(row.TipoCuenta || row['Tipo Cuenta'] || '') + '</td><td>' + escapeHtml(row.GrupoBalance || row['Grupo Balance'] || '') + '</td></tr>'; }); var printContent = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Plan de Cuentas</title><style>body{font-family:Arial;margin:20px;color:#333}h1{text-align:center;color:#1a5276}.subtitle{text-align:center;color:#666;font-size:13px}table{width:100%;border-collapse:collapse;margin-top:15px;font-size:11px}th{background:#2980b9;color:#fff;padding:8px;text-align:left}tr:nth-child(even){background:#f8f9fa}.footer{text-align:center;font-size:10px;color:#999;margin-top:20px}@media print{body{margin:0;padding:15px}@page{size:landscape;margin:10mm}}</style></head><body><h1>PLAN DE CUENTAS CONTABLE</h1><p class="subtitle">Fecha: ' + today + ' | Registros: ' + data.length + '</p><table><thead><tr><th>Agrupación</th><th>Cuenta Contable</th><th>Cuenta</th><th>EEFF</th><th>Tipo</th><th>Tipo Cuenta</th><th>Grupo Balance</th></tr></thead><tbody>' + rows + '</tbody></table><p class="footer">Generado por Sistema GPro | ' + today + '</p></body></html>'; var printWin = window.open('', '_blank', 'width=1200,height=700'); if (!printWin) { showToast('Permita ventanas emergentes', 'warning'); return; } printWin.document.write(printContent); printWin.document.close(); setTimeout(function() { printWin.print(); }, 500); showToast('Ventana de impresión abierta', 'info'); } };
+
+// ==================== 24. ASIGNAR MÓDULO A WINDOW ====================
+window.PlanCuentasModule = module;
+
+// ==================== 25. INICIALIZAR PLAN CUENTAS ====================
+window.initPlanCuentas = function() { console.log('✅ initPlanCuentas() ejecutado'); var emailModal = document.getElementById('planCuentasEmailModal'); if (emailModal && !isInitialized) { emailModal.addEventListener('click', function(e) { if (e.target === emailModal) module.closeEmail(); }); document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { var modal = document.getElementById('planCuentasEmailModal'); if (modal && modal.classList.contains('active')) module.closeEmail(); } }); isInitialized = true; } module.loadData(); };
+
+// ==================== 26. LOG DE MÓDULO LISTO ====================
+console.log('✅ Módulo Plan de Cuentas listo');
+})();
+</script>

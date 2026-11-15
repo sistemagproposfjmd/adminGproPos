@@ -1,0 +1,1152 @@
+<!-- ==================== PROVEEDORES - ESTILO APPSHEET ==================== -->
+<style>
+:root{
+  --primary:#008080;--primary-dark:#8e44ad;--primary-light:#d7bde2;--primary-soft:rgba(155,89,182,0.12);
+  --bg-body:#0b111e;--bg-card:rgba(255,255,255,0.04);--text-main:#f8fafc;--text-light:#94a3b8;
+  --glass-border:rgba(255,255,255,0.08);--glass-blur:blur(16px);
+  --danger:#f43f5e;--success:#10b981;--warning:#f59e0b;
+  --shadow:0 8px 32px rgba(0,0,0,0.35);
+  --appbar-h:60px;--bottomnav-h:60px;
+  --brand-grad:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg-body);color:var(--text-main);font-size:14px;min-height:100vh;color-scheme:dark}
+
+/* ==================== APP BAR (nueva, mismos colores) ==================== */
+.appbar{position:sticky;top:0;z-index:700;height:var(--appbar-h);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 16px;background:var(--brand-grad);box-shadow:0 4px 18px rgba(142,68,173,.35)}
+.appbar-left{display:flex;align-items:center;gap:12px;min-width:0}
+.appbar-logo{width:38px;height:38px;border-radius:12px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0}
+.appbar-titulo{font-size:17px;font-weight:700;color:#fff;margin:0;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appbar-sub{font-size:10.5px;color:rgba(255,255,255,.85);letter-spacing:.5px;text-transform:uppercase}
+.appbar-right{display:flex;align-items:center;gap:6px}
+.appbar-icon-btn{width:40px;height:40px;border-radius:50%;border:none;background:transparent;color:#fff;font-size:15px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;flex-shrink:0}
+.appbar-icon-btn:hover{background:rgba(255,255,255,.18)}
+.appbar-pill{height:38px;padding:0 18px;border-radius:19px;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.22);color:#fff;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:all .2s;flex-shrink:0}
+.appbar-pill:hover{background:rgba(255,255,255,.2)}
+
+/* ==================== BOTTOM NAV (solo móvil) ==================== */
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:650;display:none;padding-bottom:env(safe-area-inset-bottom,0px);background:rgba(11,17,30,.96);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border-top:1px solid var(--glass-border)}
+.bottom-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:9px 0 7px;color:var(--text-light);text-decoration:none;font-size:10px;font-weight:600;position:relative;transition:color .2s;background:none;border:none;cursor:pointer}
+.bottom-nav-item i{font-size:17px}
+.bottom-nav-item.active{color:var(--primary-light)}
+.bottom-nav-item.active::before{content:'';position:absolute;top:0;left:26%;right:26%;height:3px;background:var(--primary-light);border-radius:0 0 4px 4px}
+@media(min-width:769px){.bottom-nav,.fab{display:none!important}}
+
+/* ==================== FAB (nuevo proveedor, móvil) ==================== */
+.fab{position:fixed;right:18px;bottom:calc(var(--bottomnav-h) + env(safe-area-inset-bottom,0px) + 18px);z-index:640;height:54px;padding:0 24px;border-radius:28px;background:var(--brand-grad);color:#fff;border:none;box-shadow:0 6px 22px rgba(142,68,173,.55);font-weight:700;font-size:14px;display:none;align-items:center;gap:10px;cursor:pointer;transition:transform .2s}
+.fab:active{transform:scale(.95)}
+
+/* ==================== VISTAS ==================== */
+.vista{display:none;animation:fadeIn .35s ease;padding:20px;max-width:1440px;margin:0 auto;padding-bottom:32px}
+.vista.activa{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.glass-card{background:var(--bg-card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:20px;box-shadow:var(--shadow)}
+
+/* ==================== HEADER DE SUB-VISTAS (Agregar/Editar/Ver) ==================== */
+.section-header-bar{background:linear-gradient(135deg,rgba(155,89,182,.25) 0%,rgba(142,68,173,.35) 100%);color:#fff;padding:16px 20px;border-radius:16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--glass-border);flex-wrap:wrap}
+.section-header-bar h2{margin:0;font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px}
+.section-header-bar h2 i{opacity:.9}
+.section-header-bar p{margin:4px 0 0 0;opacity:.85;font-size:12.5px}
+.btn-volver{background:rgba(255,255,255,0.08);border:1px solid var(--glass-border);color:#fff;padding:10px 18px;border-radius:12px;font-weight:600;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:8px;min-height:44px}
+.btn-volver:hover{background:rgba(255,255,255,0.18);transform:translateX(-3px)}
+
+/* ==================== BOTONES ==================== */
+.btn-primary-custom{background:var(--brand-grad);color:#fff;border:none;padding:10px 22px;border-radius:12px;font-weight:700;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary-custom:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(155,89,182,0.4)}
+.btn-outline-custom{background:transparent;border:1.5px solid var(--glass-border);color:var(--text-main);padding:8px 14px;border-radius:10px;font-weight:500;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;min-width:38px}
+.btn-outline-custom:hover{background:rgba(155,89,182,0.15);border-color:var(--primary);color:var(--primary-light)}
+.btn-saas{padding:11px 24px;border-radius:12px;font-weight:600;font-size:14px;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px}
+.btn-saas-secondary{background:rgba(255,255,255,.06);color:var(--text-main);border:1px solid var(--glass-border)}
+.btn-saas-primary{background:var(--brand-grad);color:#fff;font-weight:700}
+
+/* ==================== FILTROS (buscador + chips) ==================== */
+.filters-section{padding:14px 16px;margin-bottom:18px;display:flex;flex-direction:column;gap:12px;background:var(--bg-card);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:16px}
+.filters-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.filters-label{color:var(--text-light);font-weight:600;font-size:13px;flex-shrink:0}
+.filter-chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.filter-chips::-webkit-scrollbar{display:none}
+.btn-filter{background:transparent;border:1.5px solid var(--glass-border);color:var(--text-light);padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;transition:all .3s;white-space:nowrap;flex-shrink:0;min-height:38px}
+.btn-filter:hover{border-color:var(--primary);color:var(--text-main)}
+.btn-filter.active{background:var(--brand-grad);color:#fff;border-color:var(--primary);font-weight:700}
+.view-toggle-group{display:inline-flex;background:rgba(0,0,0,0.25);padding:3px;border-radius:12px;border:1px solid var(--glass-border)}
+.btn-toggle-view{background:transparent;border:none;color:var(--text-light);padding:8px 14px;border-radius:9px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;transition:all .2s}
+.btn-toggle-view.active{background:var(--primary);color:#fff}
+.search-box{position:relative;width:100%;max-width:360px}
+.search-box input{width:100%;height:44px;padding:9px 16px 9px 42px;border:1.5px solid var(--glass-border);border-radius:22px;background:rgba(255,255,255,.05);color:var(--text-main);outline:none;transition:all .3s;font-size:14px}
+.search-box input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(155,89,182,0.12)}
+.search-box i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--text-light)}
+
+/* ==================== TABLA ==================== */
+.data-section{padding:16px;border-radius:20px;background:var(--bg-card);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border)}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
+.proveedores-table{width:100%;border-collapse:collapse;min-width:780px}
+.proveedores-table th{background:rgba(155,89,182,0.08);color:var(--primary-light);padding:12px 14px;font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.06em;text-align:left;white-space:nowrap}
+.proveedores-table td{padding:12px 14px;border-bottom:1px solid var(--glass-border);color:var(--text-main);vertical-align:middle}
+.proveedores-table tr:hover td{background:rgba(155,89,182,.03)}
+
+/* ==================== CARDS PROVEEDOR ==================== */
+.cards-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.proveedor-card{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:16px;padding:18px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .2s,border-color .2s}
+.proveedor-card:hover{transform:translateY(-3px);border-color:rgba(155,89,182,0.35)}
+.balance-box-container{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:rgba(0,0,0,0.25);padding:10px;border-radius:10px;margin:12px 0;border:1px solid rgba(255,255,255,0.03)}
+.balance-label{font-size:10px;color:var(--text-light);text-transform:uppercase;font-weight:700}
+.balance-val{font-size:14px;font-weight:700}
+.balance-val.pending-usd{color:#34d399}
+.balance-val.pending-bs{color:var(--primary-light)}
+.balance-zero{color:var(--text-light);opacity:0.5}
+.badge-custom{display:inline-block;padding:3px 10px;border-radius:14px;font-size:11px;font-weight:600}
+.badge-formal{background:rgba(155,89,182,0.15);color:var(--primary-light);border:1px solid rgba(155,89,182,0.3)}
+.badge-spe{background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3)}
+
+/* ==================== FORMULARIOS ==================== */
+.form-container{padding:24px;background:var(--bg-card);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:20px}
+.form-section-saas{margin-bottom:26px}
+.form-section-title{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--primary-light);font-weight:700;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--glass-border);display:flex;align-items:center;gap:8px}
+.form-group-saas{margin-bottom:18px}
+.form-label-saas{display:block;font-size:13px;font-weight:600;color:var(--text-main);margin-bottom:6px}
+.form-label-saas .required{color:var(--danger);margin-left:2px}
+.input-saas{width:100%;min-height:44px;padding:10px 14px;background:rgba(255,255,255,.04);border:1.5px solid var(--glass-border);border-radius:12px;color:var(--text-main);font-size:14px;outline:none;transition:all .3s}
+.input-saas:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(155,89,182,0.12)}
+textarea.input-saas{min-height:90px;resize:vertical}
+select.input-saas{cursor:pointer}
+select.input-saas option{background:#0f172a;color:#fff}
+.retencion-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(50px,1fr));gap:6px;margin-bottom:8px}
+.btn-retencion{padding:8px 4px;border:1.5px solid var(--glass-border);background:rgba(255,255,255,.03);border-radius:10px;font-weight:600;font-size:12px;cursor:pointer;text-align:center;color:var(--text-light);transition:all .2s}
+.btn-retencion:hover{border-color:var(--primary);color:#fff}
+.btn-retencion.activo{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:700}
+.form-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:26px;padding-top:20px;border-top:1px solid var(--glass-border)}
+
+/* ==================== DETALLE (Ver) ==================== */
+.detail-card{padding:24px;background:var(--bg-card);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:20px;max-width:800px;margin:0 auto}
+.detail-row{display:flex;padding:12px 0;border-bottom:1px solid var(--glass-border)}
+.detail-row:last-child{border-bottom:none}
+.detail-label{width:200px;flex-shrink:0;font-weight:600;color:var(--text-light);font-size:13px}
+.detail-value{flex:1;color:var(--text-main);font-size:14px}
+
+/* ==================== PAGINACIÓN ==================== */
+.pagination{gap:6px;flex-wrap:wrap}
+.pagination .page-link{background:rgba(255,255,255,.04);border:1px solid var(--glass-border);color:var(--text-main);border-radius:10px;min-width:36px;text-align:center}
+.pagination .page-item.active .page-link{background:var(--primary);border-color:var(--primary);color:#fff;font-weight:700}
+
+/* ==================== SIDEBAR FACTURAS ==================== */
+.loading{display:inline-block;width:20px;height:20px;border:3px solid rgba(155,89,182,0.3);border-radius:50%;border-top-color:var(--primary);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);display:none;z-index:998;backdrop-filter:blur(4px)}
+.sidebar-overlay.activo{display:block}
+.sidebar-facturas{position:fixed;top:0;right:-420px;width:420px;height:100vh;background:var(--bg-body);border-left:1px solid var(--glass-border);box-shadow:var(--shadow);transition:right .3s ease;z-index:1000;overflow-y:auto}
+.sidebar-facturas.activo{right:0}
+.sidebar-header{padding:18px 20px;border-bottom:1px solid var(--glass-border);display:flex;justify-content:space-between;align-items:center;background:var(--brand-grad);position:sticky;top:0;z-index:5}
+.sidebar-header h3{margin:0;font-size:17px;font-weight:700;color:#fff}
+.sidebar-close{background:none;border:none;color:#fff;font-size:22px;cursor:pointer;width:40px;height:40px;border-radius:50%}
+.sidebar-close:hover{background:rgba(255,255,255,.15)}
+.sidebar-content{padding:20px}
+.factura-item{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:12px;padding:14px;margin-bottom:12px}
+.factura-item-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:8px}
+.factura-nro{font-weight:700;color:var(--primary-light);font-size:14px}
+.factura-estado{font-size:11px;padding:2px 8px;border-radius:8px;background:rgba(245,158,11,0.2);color:var(--warning);text-transform:uppercase}
+.factura-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text-light);margin-bottom:4px}
+.factura-saldo{background:rgba(155,89,182,0.1);padding:8px;border-radius:8px;margin-top:8px}
+.factura-saldo-item{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:4px}
+.factura-saldo-item:last-child{margin-bottom:0}
+.factura-saldo-bs{color:var(--primary-light)}
+.factura-saldo-usd{color:#34d399}
+.proveedor-info-sidebar{background:rgba(155,89,182,0.1);border:1px solid var(--glass-border);border-radius:12px;padding:14px;margin-bottom:20px}
+.proveedor-info-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+.proveedor-info-row:last-child{margin-bottom:0}
+.proveedor-info-label{color:var(--text-light);font-weight:600}
+.proveedor-info-value{color:var(--text-main);font-weight:700}
+
+/* ============================================================
+   RESPONSIVE MÓVIL (≤768px): modo app AppSheet
+   ============================================================ */
+@media(max-width:768px){
+  :root{--appbar-h:56px}
+  body{padding-bottom:calc(var(--bottomnav-h) + env(safe-area-inset-bottom,0px))}
+  .bottom-nav{display:flex}
+  .appbar-sub{display:none}
+  .hide-mobile{display:none!important}
+  .vista{padding:12px 12px 20px}
+  .search-box{max-width:100%}
+  /* Evita zoom automático iOS en inputs */
+  .input-saas,.search-box input{font-size:16px!important}
+  .input-saas{min-height:46px}
+  .search-box input{height:46px}
+  /* Botones de la tabla más grandes para el dedo */
+  .proveedores-table .btn-outline-custom{padding:8px 11px!important;margin:2px!important;min-height:40px}
+  .proveedores-table th,.proveedores-table td{padding:10px;font-size:12.5px}
+  .data-section{padding:12px}
+  .cards-container{grid-template-columns:1fr}
+  .form-container{padding:16px 14px}
+  .section-header-bar{padding:14px}
+  /* Acciones del formulario → barra inferior fija (estilo AppSheet) */
+  .form-actions{position:fixed;left:0;right:0;bottom:0;z-index:660;margin:0;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(11,17,30,.97);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border-top:1px solid var(--glass-border);border-radius:0;justify-content:space-between}
+  .form-actions .btn-saas{flex:1}
+  .vista{padding-bottom:100px}
+  /* Detalle apilado */
+  .detail-card{padding:18px 14px}
+  .detail-row{flex-direction:column;gap:2px;padding:10px 0}
+  .detail-label{width:100%;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+  .sidebar-facturas{width:100%;right:-100%}
+  .sidebar-content{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+}
+@media(max-width:480px){
+  .form-container .col-6{flex:0 0 100%;max-width:100%}
+  .fab{right:14px;padding:0 20px}
+  .section-header-bar h2{font-size:16px}
+}
+</style>
+
+<!-- APP BAR ESTILO APPSHEET (mismos colores) -->
+<header class="appbar">
+  <div class="appbar-left">
+    <span class="appbar-logo"><i class="fas fa-truck"></i></span>
+    <div>
+      <h2 class="appbar-titulo">Proveedores</h2>
+      <div class="appbar-sub">Gestión y Saldos</div>
+    </div>
+  </div>
+  <div class="appbar-right">
+    <button class="appbar-icon-btn" onclick="window.refrescarTablaManual()" title="Actualizar"><i class="fas fa-sync-alt"></i></button>
+    <button class="appbar-pill hide-mobile" onclick="window.mostrarVistaAgregar()"><i class="fas fa-plus"></i> Nuevo Proveedor</button>
+  </div>
+</header>
+
+<!-- BOTTOM NAV (solo móvil) -->
+<nav class="bottom-nav" id="bottomNavProveedores">
+  <button class="bottom-nav-item active" onclick="window.volverAPrincipal()"><i class="fas fa-list"></i><span>Lista</span></button>
+  <button class="bottom-nav-item" onclick="window.cambiarModoVisualizacion('tabla')"><i class="fas fa-table"></i><span>Tabla</span></button>
+  <button class="bottom-nav-item" onclick="window.cambiarModoVisualizacion('cards')"><i class="fas fa-th-large"></i><span>Tarjetas</span></button>
+  <button class="bottom-nav-item" onclick="window.refrescarTablaManual()"><i class="fas fa-sync-alt"></i><span>Actualizar</span></button>
+</nav>
+
+<!-- FAB NUEVO PROVEEDOR (solo móvil) -->
+<button class="fab" id="fabNuevoProveedor" onclick="window.mostrarVistaAgregar()"><i class="fas fa-plus"></i><span>Nuevo</span></button>
+
+<!-- OVERLAY SIDEBAR -->
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="window.cerrarSidebar()"></div>
+
+<!-- SIDEBAR FACTURAS (mismos IDs) -->
+<div id="sidebarFacturas" class="sidebar-facturas">
+  <div class="sidebar-header">
+    <h3><i class="fas fa-file-invoice me-2"></i> Facturas Pendientes</h3>
+    <button class="sidebar-close" onclick="window.cerrarSidebar()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="sidebar-content">
+    <div class="proveedor-info-sidebar">
+      <div class="proveedor-info-row"><span class="proveedor-info-label">Proveedor:</span><span class="proveedor-info-value" id="sidebarProveedorNombre">-</span></div>
+      <div class="proveedor-info-row"><span class="proveedor-info-label">RIF:</span><span class="proveedor-info-value" id="sidebarProveedorRif">-</span></div>
+      <div class="proveedor-info-row"><span class="proveedor-info-label">Saldo Total Bs:</span><span class="proveedor-info-value" id="sidebarSaldoTotalBs" style="color: var(--primary-light);">-</span></div>
+      <div class="proveedor-info-row"><span class="proveedor-info-label">Saldo Total USD:</span><span class="proveedor-info-value" id="sidebarSaldoTotalUsd" style="color: #34d399;">-</span></div>
+    </div>
+    <div id="sidebarFacturasList"></div>
+  </div>
+</div>
+
+<!-- ==================== VISTA PRINCIPAL ==================== -->
+<div id="vistaPrincipal" class="vista activa">
+  <div id="alertServidorError" style="display:none; padding:12px 18px; margin-bottom:15px; border-radius:10px; background:rgba(244,63,94,0.15); border:1px solid var(--danger); color:#fca5a5;"></div>
+
+  <div class="filters-section">
+
+    <div class="filters-row">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInputProveedor" placeholder="Buscar proveedor o RIF..." onkeyup="window.buscarProveedores()">
+      </div>
+
+      <div class="filter-chips">
+          <span class="filters-label"></span>
+          <button type="button" class="btn-filter active" onclick="window.restablecerFiltro(this)">Todos</button>
+          <button type="button" class="btn-filter" onclick="window.filtrarFormales(this)">Formales</button>
+          <button type="button" class="btn-filter" onclick="window.filtrarSPE(this)">SPE</button>
+      </div>
+
+      <div class="view-toggle-group hide-mobile">
+        <button id="btnToggleTabla" class="btn-toggle-view active" onclick="window.cambiarModoVisualizacion('tabla')"><i class="fas fa-table"></i> Tabla</button>
+        <button id="btnToggleCards" class="btn-toggle-view" onclick="window.cambiarModoVisualizacion('cards')"><i class="fas fa-th-large"></i> Tarjetas</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="data-section">
+    <div id="resultadosBusqueda" style="display: none; padding: 10px 14px; margin-bottom: 14px; background: var(--primary-soft); border: 1px solid rgba(155,89,182,0.3); border-radius: 8px; color: var(--primary-light);"></div>
+
+    <div id="contenedorTabla" class="table-wrap" style="display: block;">
+      <table class="proveedores-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre / Contacto</th>
+            <th>RIF</th>
+            <th>Tipo</th>
+            <th>Saldo USD</th>
+            <th>Saldo Bs</th>
+            <th>Facturas</th>
+            <th style="text-align: center;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaProveedoresBody">
+          <tr><td colspan="8" style="text-align: center; padding: 24px; color: var(--text-light);"><div class="loading"></div> Cargando proveedores...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="contenedorCards" class="cards-container" style="display: none;"></div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; flex-wrap: wrap; gap: 12px;">
+      <span style="color: var(--text-light); font-size: 13px;">Mostrando <strong id="totalRegistros" style="color: var(--primary-light);">0</strong> de <strong id="totalProveedores">0</strong> proveedores</span>
+      <nav><ul class="pagination mb-0" id="pagination"></ul></nav>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== VISTA AGREGAR ==================== -->
+<div id="vistaAgregar" class="vista">
+  <div class="section-header-bar">
+    <div>
+      <h2><i class="fas fa-truck"></i> Nuevo Proveedor</h2>
+      <p>Complete la información para registrar un nuevo proveedor</p>
+    </div>
+    <button type="button" class="btn-volver" onclick="window.volverAPrincipal()"><i class="fas fa-arrow-left"></i> Volver</button>
+  </div>
+
+  <div class="form-container">
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="form-section-saas">
+          <div class="form-section-title"><i class="fas fa-building"></i> Información del Negocio</div>
+          <div class="form-group-saas">
+            <label class="form-label-saas">ID Proveedor <span class="required">*</span></label>
+            <input type="text" class="input-saas" id="idProveedorAgregar" placeholder="PROV000001">
+          </div>
+          <div class="form-group-saas">
+            <label class="form-label-saas">Nombre del Proveedor <span class="required">*</span></label>
+            <input type="text" class="input-saas" id="nombreProveedorAgregar" placeholder="Ej: Distribuidora XYZ, C.A.">
+          </div>
+          <div class="form-group-saas">
+            <label class="form-label-saas">RIF <span class="required">*</span></label>
+            <input type="text" class="input-saas" id="rifProveedorAgregar" placeholder="J-123456789">
+          </div>
+          <div class="form-group-saas">
+            <label class="form-label-saas">Dirección Fiscal <span class="required">*</span></label>
+            <textarea class="input-saas" id="direccionProveedorAgregar" rows="3" placeholder="Calle, número, ciudad..."></textarea>
+          </div>
+          <div class="form-group-saas mb-0">
+            <label class="form-label-saas">Tipo de Contribuyente <span class="required">*</span></label>
+            <select class="input-saas" id="tipoContribuyenteAgregar">
+              <option value="" disabled selected>Seleccione tipo...</option>
+              <option value="Formal">Formal (IVA General)</option>
+              <option value="SPE">SPE (Sujeto Pasivo Especial)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="form-section-saas">
+          <div class="form-section-title"><i class="fas fa-address-book"></i> Información de Contacto</div>
+          <div class="form-group-saas">
+            <label class="form-label-saas">Correo Electrónico <span class="required">*</span></label>
+            <input type="email" class="input-saas" id="correoProveedorAgregar" placeholder="proveedor@empresa.com">
+          </div>
+          <div class="form-group-saas mb-0">
+            <label class="form-label-saas">Teléfono <span class="required">*</span></label>
+            <input type="text" class="input-saas" id="telefonoProveedorAgregar" placeholder="0412-1234567">
+          </div>
+        </div>
+
+        <div class="form-section-saas mb-0">
+          <div class="form-section-title"><i class="fas fa-percentage"></i> Configuración Fiscal</div>
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="form-label-saas" style="font-size: 12px;">Retención IVA (%)</label>
+              <div class="retencion-grid">
+                <div class="btn-retencion activo" onclick="window.setRetencion('iva', 0)">0%</div>
+                <div class="btn-retencion" onclick="window.setRetencion('iva', 75)">75%</div>
+                <div class="btn-retencion" onclick="window.setRetencion('iva', 100)">100%</div>
+              </div>
+              <input type="number" class="input-saas" id="retIVAProveedorAgregar" value="0" min="0" max="100">
+            </div>
+            <div class="col-6">
+              <label class="form-label-saas" style="font-size: 12px;">Retención ISLR (%)</label>
+              <div class="retencion-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="btn-retencion activo" onclick="window.setRetencion('islr', 0)">0%</div>
+                <div class="btn-retencion" onclick="window.setRetencion('islr', 1)">1%</div>
+                <div class="btn-retencion" onclick="window.setRetencion('islr', 2)">2%</div>
+              </div>
+              <input type="number" class="input-saas" id="retISLRProveedorAgregar" value="0" min="0" max="100">
+            </div>
+          </div>
+          <div class="form-group-saas" style="margin-top: 18px;">
+            <label class="form-label-saas">Status</label>
+            <select class="input-saas" id="statusAgregar">
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-saas btn-saas-secondary" onclick="window.volverAPrincipal()"><i class="fas fa-times"></i> Cancelar</button>
+      <button type="button" class="btn-saas btn-saas-primary" onclick="window.guardarDatosProveedor(this)"><i class="fas fa-check"></i> Guardar Proveedor</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== VISTA EDITAR ==================== -->
+<div id="vistaEditar" class="vista">
+  <div class="section-header-bar" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.35) 100%);">
+    <div>
+      <h2><i class="fas fa-edit"></i> Editar Proveedor</h2>
+      <p>Modifique la información del proveedor</p>
+    </div>
+    <button type="button" class="btn-volver" onclick="window.volverAPrincipal()"><i class="fas fa-arrow-left"></i> Volver</button>
+  </div>
+
+  <div class="form-container">
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="form-section-saas">
+          <div class="form-section-title"><i class="fas fa-building"></i> Información del Negocio</div>
+          <input type="hidden" id="idProveedorEditar">
+          <div class="form-group-saas">
+            <label class="form-label-saas">Nombre del Proveedor <span class="required">*</span></label>
+            <input type="text" class="input-saas" id="nombreProveedorEditar">
+          </div>
+          <div class="form-group-saas">
+            <label class="form-label-saas">RIF <span class="required">*</span></label>
+            <input type="text" class="input-saas" id="rifProveedorEditar">
+          </div>
+          <div class="form-group-saas">
+            <label class="form-label-saas">Dirección <span class="required">*</span></label>
+            <textarea class="input-saas" id="direccionProveedorEditar" rows="3"></textarea>
+          </div>
+          <div class="form-group-saas mb-0">
+            <label class="form-label-saas">Tipo de Contribuyente <span class="required">*</span></label>
+            <select class="input-saas" id="tipoContribuyenteEditar">
+              <option value="Formal">Formal (IVA General)</option>
+              <option value="SPE">SPE (Sujeto Pasivo Especial)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="form-section-saas">
+          <div class="form-section-title"><i class="fas fa-address-book"></i> Información de Contacto</div>
+          <div class="form-group-saas">
+            <label class="form-label-saas">Correo Electrónico <span class="required">*</span></label>
+            <input type="email" class="input-saas" id="correoProveedorEditar">
+          </div>
+          <div class="form-group-saas mb-0">
+            <label class="form-label-saas">Teléfono <span class="required">*</span></label>
+            <input type="text" class="input-saas" id="telefonoProveedorEditar">
+          </div>
+        </div>
+
+        <div class="form-section-saas mb-0">
+          <div class="form-section-title"><i class="fas fa-percentage"></i> Configuración Fiscal</div>
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="form-label-saas">Retención IVA (%)</label>
+              <input type="number" class="input-saas" id="retIVAProveedorEditar" min="0" max="100">
+            </div>
+            <div class="col-6">
+              <label class="form-label-saas">Retención ISLR (%)</label>
+              <input type="number" class="input-saas" id="retISLRProveedorEditar" min="0" max="100">
+            </div>
+          </div>
+          <div class="form-group-saas" style="margin-top: 18px;">
+            <label class="form-label-saas">Status</label>
+            <select class="input-saas" id="statusEditar">
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-saas btn-saas-secondary" onclick="window.volverAPrincipal()"><i class="fas fa-times"></i> Cancelar</button>
+      <button type="button" class="btn-saas btn-saas-primary" onclick="window.actualizarProveedor(this)"><i class="fas fa-save"></i> Actualizar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== VISTA VER ==================== -->
+<div id="vistaVer" class="vista">
+  <div class="section-header-bar" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.35) 100%);">
+    <div>
+      <h2><i class="fas fa-eye"></i> Detalles del Proveedor</h2>
+      <p>Información completa del proveedor</p>
+    </div>
+    <button type="button" class="btn-volver" onclick="window.volverAPrincipal()"><i class="fas fa-arrow-left"></i> Volver</button>
+  </div>
+
+  <div class="detail-card">
+    <div class="detail-row"><div class="detail-label">ID Proveedor</div><div class="detail-value" id="verIdProveedor">-</div></div>
+    <div class="detail-row"><div class="detail-label">Nombre</div><div class="detail-value" id="verNombreProveedor" style="font-size: 16px; font-weight: 700;">-</div></div>
+    <div class="detail-row"><div class="detail-label">RIF</div><div class="detail-value" id="verRifProveedor">-</div></div>
+    <div class="detail-row"><div class="detail-label">Dirección</div><div class="detail-value" id="verDireccionProveedor">-</div></div>
+    <div class="detail-row"><div class="detail-label">Correo</div><div class="detail-value" id="verCorreoProveedor">-</div></div>
+    <div class="detail-row"><div class="detail-label">Teléfono</div><div class="detail-value" id="verTelefonoProveedor">-</div></div>
+    <div class="detail-row"><div class="detail-label">Tipo</div><div class="detail-value"><span id="verTipoContribuyente" class="badge-custom badge-formal">-</span></div></div>
+    <div class="detail-row"><div class="detail-label">Saldo USD</div><div class="detail-value" id="verSaldoUSD" style="color: #34d399; font-weight: 700;">-</div></div>
+    <div class="detail-row"><div class="detail-label">Saldo Bs</div><div class="detail-value" id="verSaldoBs" style="color: var(--primary-light); font-weight: 700;">-</div></div>
+    <div class="detail-row"><div class="detail-label">Facturas Pendientes</div><div class="detail-value" id="verFacturasPendientes">-</div></div>
+    <div class="detail-row"><div class="detail-label">Status</div><div class="detail-value" id="verStatus">-</div></div>
+    <div class="detail-row"><div class="detail-label">Retención IVA</div><div class="detail-value" id="verRetIVA">-</div></div>
+    <div class="detail-row"><div class="detail-label">Retención ISLR</div><div class="detail-value" id="verRetISLR">-</div></div>
+
+    <div class="form-actions" style="margin-top: 24px;">
+      <button type="button" class="btn-saas btn-saas-secondary" onclick="window.volverAPrincipal()"><i class="fas fa-arrow-left"></i> Volver</button>
+      <button type="button" class="btn-saas btn-saas-primary" onclick="window.editarDesdeVer()"><i class="fas fa-edit"></i> Editar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================
+// VARIABLES GLOBALES DEL MÓDULO
+// ============================================
+window.proveedoresData = window.proveedoresData || [];
+window.filteredDataProveedor = window.filteredDataProveedor || [];
+window.modoVisualizacionActual = 'tabla';
+window.currentPage = 1;
+window.itemsPerPageProveedor = 10;
+window.proveedorActualVer = null;
+window.facturasPendientes = [];
+
+// ============================================================
+// FUNCIÓN FALTANTE: GUARDAR NUEVO PROVEEDOR
+// ============================================================
+window.guardarDatosProveedor = function(button) {
+  var id = document.getElementById('idProveedorAgregar').value.trim();
+  var nombre = document.getElementById('nombreProveedorAgregar').value.trim();
+  var rif = document.getElementById('rifProveedorAgregar').value.trim();
+  var direccion = document.getElementById('direccionProveedorAgregar').value.trim();
+  var correo = document.getElementById('correoProveedorAgregar').value.trim();
+  var telefono = document.getElementById('telefonoProveedorAgregar').value.trim();
+  var tipo = document.getElementById('tipoContribuyenteAgregar').value;
+  var retIva = document.getElementById('retIVAProveedorAgregar').value || 0;
+  var retIslr = document.getElementById('retISLRProveedorAgregar').value || 0;
+  var status = document.getElementById('statusAgregar').value || 'Activo';
+
+  if (!id || !nombre || !rif || !direccion || !correo || !telefono || !tipo) {
+    window.showToast('error', 'Por favor complete todos los campos obligatorios');
+    return;
+  }
+
+  var proveedorData = {
+    id: id,
+    nombre: nombre,
+    rif: rif,
+    direccion: direccion,
+    correo: correo,
+    telefono: telefono,
+    tipoContribuyente: tipo,
+    retIVA: retIva,
+    retISLR: retIslr,
+    status: status
+  };
+
+  var txtOriginal = button ? button.innerHTML : '';
+  if (button) {
+    button.disabled = true;
+    button.innerHTML = '<div class="loading" style="width:14px;height:14px;border-width:2px;"></div> Guardando...';
+  }
+
+  if (typeof google !== 'undefined' && google.script && google.script.run) {
+    google.script.run
+      .withSuccessHandler(function(res) {
+        window.showToast('success', (res && res.message) || 'Proveedor guardado');
+        window.limpiarFormularioAgregar();
+        window.volverAPrincipal();
+        window.cargarProveedores(false);
+        if (button) { button.disabled = false; button.innerHTML = txtOriginal; }
+      })
+      .withFailureHandler(function(err) {
+        window.showToast('error', err.message || 'Error al guardar');
+        if (button) { button.disabled = false; button.innerHTML = txtOriginal; }
+      })
+      .guardarProveedor(proveedorData);
+  }
+};
+
+// ============================================================
+// PROTOCOLO DE CICLO DE VIDA SPA (MÓDULO PROVEEDORES)
+// ============================================================
+function resetearDOMProveedores() {
+  window.volverAPrincipal();
+  window.cerrarSidebar();
+  window.limpiarFormularioAgregar();
+  
+  // Limpiar campos de edición
+  var idEdit = document.getElementById('idProveedorEditar');
+  if (idEdit) idEdit.value = '';
+  var nomEdit = document.getElementById('nombreProveedorEditar');
+  if (nomEdit) nomEdit.value = '';
+  var rifEdit = document.getElementById('rifProveedorEditar');
+  if (rifEdit) rifEdit.value = '';
+
+  // Resetear filtros
+  var searchInput = document.getElementById('searchInputProveedor');
+  if (searchInput) searchInput.value = '';
+  var alertBox = document.getElementById('resultadosBusqueda');
+  if (alertBox) alertBox.style.display = 'none';
+
+  // Chip "Todos" activo
+  var btnTodos = document.querySelector('#pProveedoresLista .btn-filter');
+  if (btnTodos) window.actualizarBotonFiltro(btnTodos);
+}
+
+window.ModuloProveedores = {
+  mount: function() {
+    resetearDOMProveedores();
+    window.cargarProveedores(false);
+  },
+  unmount: function() {
+    resetearDOMProveedores();
+    document.body.style.overflow = '';
+  }
+};
+
+window.initProveedoresLista = function(transaccion, rol) {
+  window.ModuloProveedores.mount();
+};
+
+// Alias de compatibilidad por si aún se llama inicializarPagina
+window.inicializarPagina = window.initProveedoresLista;
+
+window.showToast = function(icon, title) {
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: icon,
+      title: title,
+      showConfirmButton: false,
+      timer: 3000,
+      background: '#0b111e',
+      color: '#f8fafc'
+    });
+  } else {
+    alert(title);
+  }
+};
+
+// ============================================
+// CARGA Y COMUNICACIÓN CON APPS SCRIPT
+// ============================================
+window.cargarProveedores = function(silencioso) {
+  const tbody = document.getElementById('tablaProveedoresBody');
+  if (!silencioso && tbody) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:24px; color:var(--text-light);"><div class="loading"></div> Cargando proveedores...</td></tr>';
+  }
+
+  if (typeof google !== 'undefined' && google.script && google.script.run) {
+    google.script.run
+      .withSuccessHandler(function(data) {
+        window.proveedoresData = Array.isArray(data) ? data : [];
+        window.filteredDataProveedor = [...window.proveedoresData];
+        window.currentPage = 1;
+        window.renderizarVista();
+        if (silencioso) window.showToast('success', 'Actualizado correctamente');
+      })
+      .withFailureHandler(function(err) {
+        if (tbody) {
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--danger); font-weight:bold;">Error al obtener datos: ' + (err.message || err) + '</td></tr>';
+        }
+      })
+      .obtenerProveedoresConSaldos();
+  } else {
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--danger);">Entorno de Google Apps Script no detectado.</td></tr>';
+    }
+  }
+};
+
+window.refrescarTablaManual = function() {
+  window.cargarProveedores(true);
+};
+
+// ============================================
+// CONTROL DE SUB-VISTAS
+// ============================================
+window.cambiarVista = function(vistaId) {
+  // Se acota la búsqueda al contenedor de esta página para no colisionar con otras del index
+  const root = document.getElementById('pProveedoresLista') || document;
+  root.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
+  const target = root.querySelector('#' + vistaId);
+  if (target) target.classList.add('activa');
+};
+
+window.volverAPrincipal = function() {
+  window.cambiarVista('vistaPrincipal');
+};
+
+window.mostrarVistaAgregar = function() {
+  window.limpiarFormularioAgregar();
+  window.cambiarVista('vistaAgregar');
+};
+
+window.cambiarModoVisualizacion = function(modo) {
+  window.modoVisualizacionActual = modo;
+  const btnTabla = document.getElementById('btnToggleTabla');
+  const btnCards = document.getElementById('btnToggleCards');
+  const conTabla = document.getElementById('contenedorTabla');
+  const conCards = document.getElementById('contenedorCards');
+  
+  if (btnTabla) btnTabla.classList.toggle('active', modo === 'tabla');
+  if (btnCards) btnCards.classList.toggle('active', modo === 'cards');
+  if (conTabla) conTabla.style.display = (modo === 'tabla') ? 'block' : 'none';
+  if (conCards) conCards.style.display = (modo === 'cards') ? 'grid' : 'none';
+  
+  window.renderizarVista();
+};
+
+// ============================================
+// RENDERIZADO DE TABLA Y TARJETAS
+// ============================================
+window.renderizarVista = function() {
+  const start = (window.currentPage - 1) * window.itemsPerPageProveedor;
+  const paginatedData = window.filteredDataProveedor.slice(start, start + window.itemsPerPageProveedor);
+
+  if (window.modoVisualizacionActual === 'tabla') {
+    window.renderTablaProveedores(paginatedData);
+  } else {
+    window.renderCardsProveedores(paginatedData);
+  }
+
+  window.renderPagination();
+  
+  const spanRegistros = document.getElementById('totalRegistros');
+  const spanTotal = document.getElementById('totalProveedores');
+  if (spanRegistros) spanRegistros.textContent = window.filteredDataProveedor.length;
+  if (spanTotal) spanTotal.textContent = window.proveedoresData.length;
+};
+
+window.renderTablaProveedores = function(data) {
+  const tbody = document.getElementById('tablaProveedoresBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:24px; color:var(--text-light);">No hay registros para mostrar</td></tr>';
+    return;
+  }
+
+  data.forEach(p => {
+    const badgeClass = (p.TipoContribuyente === 'SPE') ? 'badge-spe' : 'badge-formal';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span style="opacity:0.7; font-size:12px;">${p.IdProveedor || '-'}</span></td>
+      <td>
+        <div style="font-weight:600;">${p.NombreProveedor || '-'}</div>
+        <div style="font-size:12px; color:var(--text-light);">${p.CorreoProveedor || '-'}</div>
+      </td>
+      <td><code>${p.RifProveedor || '-'}</code></td>
+      <td><span class="badge-custom ${badgeClass}">${p.TipoContribuyente || 'Formal'}</span></td>
+      <td><strong style="color: ${p.saldoPendienteUSD > 0 ? '#34d399' : 'inherit'};">$${Number(p.saldoPendienteUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></td>
+      <td><span style="color: ${p.saldoPendienteBs > 0 ? 'var(--primary-light)' : 'inherit'}; font-weight:600;">Bs. ${Number(p.saldoPendienteBs || 0).toLocaleString('es-VE', { minimumFractionDigits: 2 })}</span></td>
+      <td style="font-weight:700;">${p.facturasPendientes || 0}</td>
+      <td style="text-align:center; white-space:nowrap;">
+        <button class="btn-outline-custom" onclick="window.verProveedor('${p.IdProveedor}')" style="padding:4px 8px;" title="Ver Detalle"><i class="fas fa-eye"></i></button>
+        <button class="btn-outline-custom" onclick="window.abrirFacturas('${p.RifProveedor}', '${encodeURIComponent(p.NombreProveedor)}', ${p.saldoPendienteBs || 0}, ${p.saldoPendienteUSD || 0})" style="padding:4px 8px; margin-left:4px;" title="Facturas Pendientes"><i class="fas fa-file-invoice"></i></button>
+        <button class="btn-outline-custom" onclick="window.editarProveedor('${p.IdProveedor}')" style="padding:4px 8px; margin-left:4px;" title="Editar"><i class="fas fa-edit"></i></button>
+        <button class="btn-outline-custom" onclick="window.confirmarEliminarProveedor('${p.IdProveedor}')" style="padding:4px 8px; margin-left:4px;" title="Eliminar"><i class="fas fa-trash"></i></button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+};
+
+window.renderCardsProveedores = function(data) {
+  const container = document.getElementById('contenedorCards');
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (data.length === 0) {
+    container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:24px; color:var(--text-light);">No hay registros</div>';
+    return;
+  }
+
+  data.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'proveedor-card';
+    const badgeClass = (p.TipoContribuyente === 'SPE') ? 'badge-spe' : 'badge-formal';
+    card.innerHTML = `
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:8px;">
+          <div>
+            <div style="font-size:15px; font-weight:700; color:#fff;">${p.NombreProveedor}</div>
+            <div style="font-size:12px; color:var(--text-light);"><i class="fas fa-id-card me-1"></i> ${p.RifProveedor || '-'}</div>
+          </div>
+          <span class="badge-custom ${badgeClass}">${p.TipoContribuyente || 'Formal'}</span>
+        </div>
+
+        <div class="balance-box-container">
+          <div>
+            <div class="balance-label">Saldo USD</div>
+            <div class="balance-val ${p.saldoPendienteUSD > 0 ? 'pending-usd' : 'balance-zero'}">
+              $${Number(p.saldoPendienteUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            </div>
+          </div>
+          <div>
+            <div class="balance-label">Saldo Bs</div>
+            <div class="balance-val ${p.saldoPendienteBs > 0 ? 'pending-bs' : 'balance-zero'}">
+              Bs. ${Number(p.saldoPendienteBs || 0).toLocaleString('es-VE', { minimumFractionDigits: 2 })}
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:12px; color:var(--text-light); margin-bottom:6px;">
+          <i class="fas fa-file-invoice-dollar me-1"></i> Facturas Pendientes: <strong>${p.facturasPendientes || 0}</strong>
+        </div>
+        <div style="font-size:12px; color:var(--text-light);">
+          <i class="fas fa-envelope me-1"></i> ${p.CorreoProveedor || 'Sin correo'}
+        </div>
+      </div>
+
+      <div style="margin-top:14px; padding-top:10px; border-top:1px solid var(--glass-border); display:flex; justify-content:flex-end; gap:6px;">
+        <button class="btn-outline-custom" onclick="window.verProveedor('${p.IdProveedor}')"><i class="fas fa-eye"></i></button>
+        <button class="btn-outline-custom" onclick="window.abrirFacturas('${p.RifProveedor}', '${encodeURIComponent(p.NombreProveedor)}', ${p.saldoPendienteBs || 0}, ${p.saldoPendienteUSD || 0})"><i class="fas fa-file-invoice"></i></button>
+        <button class="btn-outline-custom" onclick="window.editarProveedor('${p.IdProveedor}')"><i class="fas fa-edit"></i></button>
+        <button class="btn-outline-custom" onclick="window.confirmarEliminarProveedor('${p.IdProveedor}')"><i class="fas fa-trash"></i></button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+};
+
+window.renderPagination = function() {
+  const totalPages = Math.ceil(window.filteredDataProveedor.length / window.itemsPerPageProveedor);
+  const ul = document.getElementById('pagination');
+  if (!ul) return;
+  
+  if (totalPages <= 1) {
+    ul.innerHTML = '';
+    return;
+  }
+  let html = `<li class="page-item ${window.currentPage === 1 ? 'disabled' : ''}"><a class="page-link" href="javascript:void(0)" onclick="window.cambiarPagina(${window.currentPage - 1})"><i class="fas fa-chevron-left"></i></a></li>`;
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= window.currentPage - 1 && i <= window.currentPage + 1)) {
+      html += `<li class="page-item ${i === window.currentPage ? 'active' : ''}"><a class="page-link" href="javascript:void(0)" onclick="window.cambiarPagina(${i})">${i}</a></li>`;
+    }
+  }
+  html += `<li class="page-item ${window.currentPage === totalPages ? 'disabled' : ''}"><a class="page-link" href="javascript:void(0)" onclick="window.cambiarPagina(${window.currentPage + 1})"><i class="fas fa-chevron-right"></i></a></li>`;
+  ul.innerHTML = html;
+};
+
+window.cambiarPagina = function(p) {
+  const total = Math.ceil(window.filteredDataProveedor.length / window.itemsPerPageProveedor);
+  if (p < 1 || p > total) return;
+  window.currentPage = p;
+  window.renderizarVista();
+};
+
+// ============================================
+// FILTROS Y BÚSQUEDA
+// ============================================
+window.actualizarBotonFiltro = function(btn) {
+  document.querySelectorAll('#pProveedoresLista .btn-filter').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+};
+
+window.filtrarFormales = function(btn) {
+  window.actualizarBotonFiltro(btn);
+  window.filteredDataProveedor = window.proveedoresData.filter(p => p.TipoContribuyente === 'Formal');
+  window.currentPage = 1;
+  window.renderizarVista();
+};
+
+window.filtrarSPE = function(btn) {
+  window.actualizarBotonFiltro(btn);
+  window.filteredDataProveedor = window.proveedoresData.filter(p => p.TipoContribuyente === 'SPE');
+  window.currentPage = 1;
+  window.renderizarVista();
+};
+
+window.restablecerFiltro = function(btn) {
+  window.actualizarBotonFiltro(btn);
+  const searchInput = document.getElementById('searchInputProveedor');
+  if (searchInput) searchInput.value = '';
+  const alertBox = document.getElementById('resultadosBusqueda');
+  if (alertBox) alertBox.style.display = 'none';
+  window.filteredDataProveedor = [...window.proveedoresData];
+  window.currentPage = 1;
+  window.renderizarVista();
+};
+
+window.buscarProveedores = function() {
+  const term = (document.getElementById('searchInputProveedor').value || '').toLowerCase().trim();
+  const alertBox = document.getElementById('resultadosBusqueda');
+  if (!term) {
+    window.filteredDataProveedor = [...window.proveedoresData];
+    if (alertBox) alertBox.style.display = 'none';
+    window.currentPage = 1;
+    window.renderizarVista();
+    return;
+  }
+  window.filteredDataProveedor = window.proveedoresData.filter(p =>
+    (p.NombreProveedor || '').toLowerCase().includes(term) ||
+    (p.RifProveedor || '').toLowerCase().includes(term) ||
+    (p.CorreoProveedor || '').toLowerCase().includes(term)
+  );
+  window.currentPage = 1;
+  window.renderizarVista();
+  if (alertBox) {
+    alertBox.style.display = 'block';
+    alertBox.innerHTML = `<i class="fas fa-search me-2"></i> ${window.filteredDataProveedor.length} resultado(s) para "<strong>${term}</strong>"`;
+  }
+};
+
+// ============================================
+// MODAL / SIDEBAR FACTURAS
+// ============================================
+window.abrirFacturas = function(rif, nombreEncoded, saldoBs, saldoUSD) {
+  const nombre = decodeURIComponent(nombreEncoded);
+  document.getElementById('sidebarProveedorNombre').textContent = nombre;
+  document.getElementById('sidebarProveedorRif').textContent = rif || 'Sin RIF';
+  document.getElementById('sidebarSaldoTotalBs').textContent = `Bs. ${Number(saldoBs || 0).toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+  document.getElementById('sidebarSaldoTotalUsd').textContent = `$${Number(saldoUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+
+  const facturasList = document.getElementById('sidebarFacturasList');
+  facturasList.innerHTML = '<div style="text-align:center; padding:20px;"><div class="loading"></div> Cargando facturas...</div>';
+
+  document.getElementById('sidebarOverlay').classList.add('activo');
+  document.getElementById('sidebarFacturas').classList.add('activo');
+
+  if (typeof google !== 'undefined' && google.script && google.script.run) {
+    google.script.run
+      .withSuccessHandler(function(facturas) {
+        window.facturasPendientes = facturas || [];
+        window.renderFacturasSidebar();
+      })
+      .withFailureHandler(function(err) {
+        facturasList.innerHTML = `<div style="color:var(--danger); padding:20px; text-align:center;">Error: ${err.message || err}</div>`;
+      })
+      .obtenerFacturasPendientesPorProveedor(rif);
+  }
+};
+
+window.renderFacturasSidebar = function() {
+  const facturasList = document.getElementById('sidebarFacturasList');
+  if (!facturasList) return;
+  
+  if (window.facturasPendientes.length === 0) {
+    facturasList.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-light);">No hay facturas pendientes</div>';
+    return;
+  }
+  let html = '';
+  window.facturasPendientes.forEach(f => {
+    html += `
+      <div class="factura-item">
+        <div class="factura-item-header">
+          <span class="factura-nro">#${f.nroFactura || '-'}</span>
+          <span class="factura-estado">${f.estado || 'Pendiente'}</span>
+        </div>
+        <div class="factura-row">
+          <span>Fecha:</span>
+          <span>${f.fechaFactura || '-'}</span>
+        </div>
+        <div class="factura-saldo">
+          <div class="factura-saldo-item">
+            <span>Total:</span>
+            <span>$${Number(f.totalFactura || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+          </div>
+          <div class="factura-saldo-item">
+            <span>Saldo Bs:</span>
+            <span class="factura-saldo-bs">Bs. ${Number(f.saldoBs || 0).toLocaleString('es-VE', { minimumFractionDigits: 2 })}</span>
+          </div>
+          <div class="factura-saldo-item">
+            <span>Saldo USD:</span>
+            <span class="factura-saldo-usd">$${Number(f.saldoUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  facturasList.innerHTML = html;
+};
+
+window.cerrarSidebar = function() {
+  const overlay = document.getElementById('sidebarOverlay');
+  const sidebar = document.getElementById('sidebarFacturas');
+  if (overlay) overlay.classList.remove('activo');
+  if (sidebar) sidebar.classList.remove('activo');
+};
+
+// ============================================
+// ACCIONES (DETALLE, EDITAR, ELIMINAR, GUARDAR)
+// ============================================
+window.verProveedor = function(id) {
+  const p = window.proveedoresData.find(prov => String(prov.IdProveedor) === String(id));
+  if (!p) return;
+  window.proveedorActualVer = p;
+  
+  document.getElementById('verIdProveedor').textContent = p.IdProveedor || '-';
+  document.getElementById('verNombreProveedor').textContent = p.NombreProveedor || '-';
+  document.getElementById('verRifProveedor').textContent = p.RifProveedor || '-';
+  document.getElementById('verDireccionProveedor').textContent = p.DireccionProveedor || '-';
+  document.getElementById('verCorreoProveedor').textContent = p.CorreoProveedor || '-';
+  document.getElementById('verTelefonoProveedor').textContent = p.TelefonoProveedor || '-';
+  document.getElementById('verSaldoUSD').textContent = `$${Number(p.saldoPendienteUSD || 0).toFixed(2)}`;
+  document.getElementById('verSaldoBs').textContent = `Bs. ${Number(p.saldoPendienteBs || 0).toFixed(2)}`;
+  document.getElementById('verFacturasPendientes').textContent = p.facturasPendientes || 0;
+  document.getElementById('verStatus').textContent = p.Status || 'Activo';
+  document.getElementById('verRetIVA').textContent = (p.RetIVAProveedor || '0') + '%';
+  document.getElementById('verRetISLR').textContent = (p.RetISLRProveedor || '0') + '%';
+  
+  const badge = document.getElementById('verTipoContribuyente');
+  badge.textContent = p.TipoContribuyente || 'Formal';
+  badge.className = 'badge-custom ' + (p.TipoContribuyente === 'SPE' ? 'badge-spe' : 'badge-formal');
+  
+  window.cambiarVista('vistaVer');
+};
+
+window.editarProveedor = function(id) {
+  const p = window.proveedoresData.find(prov => String(prov.IdProveedor) === String(id));
+  if (!p) return;
+  document.getElementById('idProveedorEditar').value = p.IdProveedor || '';
+  document.getElementById('nombreProveedorEditar').value = p.NombreProveedor || '';
+  document.getElementById('rifProveedorEditar').value = p.RifProveedor || '';
+  document.getElementById('direccionProveedorEditar').value = p.DireccionProveedor || '';
+  document.getElementById('correoProveedorEditar').value = p.CorreoProveedor || '';
+  document.getElementById('telefonoProveedorEditar').value = p.TelefonoProveedor || '';
+  document.getElementById('tipoContribuyenteEditar').value = p.TipoContribuyente || 'Formal';
+  document.getElementById('retIVAProveedorEditar').value = p.RetIVAProveedor || 0;
+  document.getElementById('retISLRProveedorEditar').value = p.RetISLRProveedor || 0;
+  document.getElementById('statusEditar').value = p.Status || 'Activo';
+  window.cambiarVista('vistaEditar');
+};
+
+window.editarDesdeVer = function() {
+  if (window.proveedorActualVer && window.proveedorActualVer.IdProveedor) {
+    window.editarProveedor(window.proveedorActualVer.IdProveedor);
+  }
+};
+
+window.actualizarProveedor = function(button) {
+  const proveedorData = {
+    id: document.getElementById('idProveedorEditar').value.trim(),
+    nombre: document.getElementById('nombreProveedorEditar').value.trim(),
+    rif: document.getElementById('rifProveedorEditar').value.trim(),
+    direccion: document.getElementById('direccionProveedorEditar').value.trim(),
+    correo: document.getElementById('correoProveedorEditar').value.trim(),
+    telefono: document.getElementById('telefonoProveedorEditar').value.trim(),
+    tipoContribuyente: document.getElementById('tipoContribuyenteEditar').value,
+    retIVA: document.getElementById('retIVAProveedorEditar').value || 0,
+    retISLR: document.getElementById('retISLRProveedorEditar').value || 0,
+    status: document.getElementById('statusEditar').value || 'Activo'
+  };
+
+  if (!proveedorData.id || !proveedorData.nombre || !proveedorData.rif) {
+    window.showToast('error', 'El ID, Nombre y RIF son obligatorios');
+    return;
+  }
+
+  const textoOriginal = button ? button.innerHTML : '';
+  if (button) {
+    button.disabled = true;
+    button.innerHTML = '<div class="loading" style="width:14px; height:14px; border-width:2px;"></div> Guardando...';
+  }
+
+  if (typeof google !== 'undefined' && google.script && google.script.run) {
+    google.script.run
+      .withSuccessHandler(function(res) {
+        window.showToast('success', (res && res.message) || 'Proveedor actualizado exitosamente');
+        window.cargarProveedores(true);
+        window.volverAPrincipal();
+        if (button) { button.disabled = false; button.innerHTML = textoOriginal; }
+      })
+      .withFailureHandler(function(err) {
+        window.showToast('error', err.message || 'Error al actualizar');
+        if (button) { button.disabled = false; button.innerHTML = textoOriginal; }
+      })
+      .actualizarProveedor(proveedorData);
+  }
+};
+
+window.confirmarEliminarProveedor = function(id) {
+  if (confirm("¿Está seguro de que desea eliminar este proveedor?")) {
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(function() {
+          window.showToast('success', 'Proveedor eliminado');
+          window.cargarProveedores(false);
+        })
+        .withFailureHandler(function(err) {
+          window.showToast('error', err.message || 'Error al eliminar');
+        })
+        .eliminarProveedor(String(id));
+    }
+  }
+};
+
+window.setRetencion = function(tipo, valor) {
+  if (tipo === 'iva') {
+    document.getElementById('retIVAProveedorAgregar').value = valor;
+  } else {
+    document.getElementById('retISLRProveedorAgregar').value = valor;
+  }
+};
+
+window.limpiarFormularioAgregar = function() {
+  document.getElementById('idProveedorAgregar').value = '';
+  document.getElementById('nombreProveedorAgregar').value = '';
+  document.getElementById('rifProveedorAgregar').value = '';
+  document.getElementById('direccionProveedorAgregar').value = '';
+  document.getElementById('correoProveedorAgregar').value = '';
+  document.getElementById('telefonoProveedorAgregar').value = '';
+  document.getElementById('tipoContribuyenteAgregar').selectedIndex = 0;
+  document.getElementById('retIVAProveedorAgregar').value = 0;
+  document.getElementById('retISLRProveedorAgregar').value = 0;
+  document.getElementById('statusAgregar').value = 'Activo';
+};
+</script>
+
+<script>
+/* ===== Helper de adaptación móvil (NO modifica tu lógica, solo la complementa) ===== */
+(function(){
+  function esMovil(){ return window.innerWidth <= 768; }
+
+  // Muestra/oculta bottom-nav y FAB según la vista activa y el tamaño de pantalla
+  function actualizarBarras(){
+    var root = document.getElementById('pProveedoresLista') || document;
+    var nav = document.getElementById('bottomNavProveedores');
+    var fab = document.getElementById('fabNuevoProveedor');
+    if(!nav || !fab) return;
+    var enPrincipal = !!root.querySelector('#vistaPrincipal.activa');
+    nav.style.display = (esMovil() && enPrincipal) ? 'flex' : 'none';
+    fab.style.display = (esMovil() && enPrincipal) ? 'inline-flex' : 'none';
+  }
+  window.addEventListener('resize', actualizarBarras);
+  setTimeout(actualizarBarras, 200);
+
+  // Observa cuándo tu JS cambia de vista (.activa) para ajustar las barras
+  function iniciarObservador(){
+    var root = document.getElementById('pProveedoresLista') || document;
+    root.querySelectorAll('.vista').forEach(function(v){
+      new MutationObserver(actualizarBarras).observe(v, {attributes:true, attributeFilter:['class']});
+    });
+    actualizarBarras();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciarObservador);
+  else iniciarObservador();
+
+  // En móvil, abre la lista automáticamente en modo Tarjetas (más legible que la tabla)
+  var _initOriginal = window.initProveedoresLista;
+  if (typeof _initOriginal === 'function') {
+    window.initProveedoresLista = function(transaccion, rol){
+      _initOriginal(transaccion, rol);
+      if (esMovil()) window.cambiarModoVisualizacion('cards');
+    };
+  }
+})();
+</script>

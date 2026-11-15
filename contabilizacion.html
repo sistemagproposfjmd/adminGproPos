@@ -1,0 +1,1246 @@
+<!-- ============================================================
+     MÓDULO: ESTADO FINANCIERO (contabilizacion.html)
+     100% Adaptado al ciclo SPA, recarga limpia y temas Dark/Light
+============================================================ -->
+<div class="container-fluid px-2 py-3" id="contenedorContabilizacion">
+
+  <!-- Header de impresión -->
+  <div class="print-header" id="print-header" style="display:none;">
+    <img id="print-logo" class="print-logo" style="display:none;max-height:80px;margin-bottom:10px;" alt="Logo">
+    <h2 id="print-empresa-nombre">Translogistica Transporte y Logistica de Venezuela, C.A.</h2>
+    <p id="print-empresa-rif">RIF: J-30667902-7</p>
+    <p id="print-empresa-direccion"></p>
+    <p id="print-fecha"></p>
+  </div>
+
+  <!-- Header principal (no-print) -->
+  <div class="glass-panel header-container no-print mb-4 p-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
+    <div class="header-left d-flex align-items-center">
+      <img id="logo-empresa" class="header-logo" style="display:none;max-height:60px;margin-right:15px;border-radius:8px;" alt="Logo">
+      <div class="company-info">
+        <div class="company-name" id="empresa-nombre" style="font-size:1.3rem;font-weight:700;">Cargando empresa...</div>
+        <div class="company-rif text-muted" id="empresa-rif" style="font-size:.85rem;"></div>
+        <div class="company-address text-muted" id="empresa-direccion" style="font-size:.8rem;"></div>
+      </div>
+    </div>
+    <div class="header-right d-flex align-items-center gap-2 flex-wrap">
+      <span class="badge-info-custom" id="tasa-badge">
+        <i class="bi bi-calculator"></i> Tasa: <span id="tasa-valor">0.00</span> Bs/$
+      </span>
+      <span class="badge-info-custom" id="registros-info">
+        <i class="bi bi-database"></i> 0 registros
+      </span>
+      <button class="btn btn-outline-primary btn-sm" id="btn-refrescar-top" title="Recargar datos">
+        <i class="bi bi-arrow-clockwise"></i> Actualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- Barra de Filtros -->
+  <div class="filtro-card no-print glass-panel p-3 mb-4">
+    <div class="row align-items-center g-3">
+      <div class="col-md-3">
+        <label class="form-label fw-bold mb-1 small"><i class="bi bi-funnel"></i> Estado Financiero</label>
+        <select class="form-select form-select-sm" id="filtro-eeff">
+          <option value="">Todos los Estados</option>
+          <option value="ES">📊 Estado de Situación</option>
+          <option value="ER">📈 Estado de Resultado</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label fw-bold mb-1 small"><i class="bi bi-calendar"></i> Período / Mes</label>
+        <select class="form-select form-select-sm" id="filtro-mes">
+          <option value="todos">Todo el año</option>
+          <option value="1">Enero</option><option value="2">Febrero</option>
+          <option value="3">Marzo</option><option value="4">Abril</option>
+          <option value="5">Mayo</option><option value="6">Junio</option>
+          <option value="7">Julio</option><option value="8">Agosto</option>
+          <option value="9">Septiembre</option><option value="10">Octubre</option>
+          <option value="11">Noviembre</option><option value="12">Diciembre</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label fw-bold mb-1 small"><i class="bi bi-currency-dollar"></i> Moneda Visualizada</label>
+        <div class="form-check form-switch mt-1">
+          <input class="form-check-input" type="checkbox" id="toggle-moneda">
+          <label class="form-check-label fw-bold small" for="toggle-moneda" id="moneda-label">🇻🇪 Bolívares (Bs)</label>
+        </div>
+      </div>
+      <div class="col-md-3 text-md-end">
+        <button class="btn btn-success btn-sm w-100" id="btn-exportar-excel">
+          <i class="bi bi-file-earmark-excel"></i> Exportar a Excel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarjetas resumen de rendimiento -->
+  <div class="row mb-4 no-print g-3">
+    <div class="col-6 col-md-3">
+      <div class="stats-card card-ingresos">
+        <div class="stats-label"><i class="bi bi-graph-up"></i> INGRESOS</div>
+        <div class="stats-value" id="res-ingresos">0,00 Bs</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stats-card card-costos">
+        <div class="stats-label"><i class="bi bi-receipt"></i> COSTOS</div>
+        <div class="stats-value" id="res-costos">0,00 Bs</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stats-card card-gastos">
+        <div class="stats-label"><i class="bi bi-calculator"></i> GASTOS</div>
+        <div class="stats-value" id="res-gastos">0,00 Bs</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stats-card card-utilidad" id="card-utilidad">
+        <div class="stats-label"><i class="bi bi-piggy-bank"></i> UTILIDAD NETA</div>
+        <div class="stats-value" id="res-utilidad">0,00 Bs</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección Estado de Situación (Balance General) -->
+  <div id="seccion-situacion" style="display:none;">
+    <div class="section-divider"><i class="bi bi-journal-bookmark-fill"></i> ESTADO DE SITUACIÓN FINANCIERA (BALANCE GENERAL)</div>
+    <div class="table-container shadow-sm mb-4">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th style="width:80%">Cuenta Contable</th>
+            <th style="width:20%" class="text-end">Saldo</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-situacion"></tbody>
+        <tfoot class="totales-footer">
+          <tr id="footer-situacion">
+            <td class="text-end fw-bold fs-6"><i class="bi bi-calculator-fill"></i> DIFERENCIA PATRIMONIAL = </td>
+            <td class="text-end fw-bold fs-6" id="total-situacion">0,00 Bs</td>
+          </tr>
+          <tr id="footer-verificacion" style="display:none;">
+            <td colspan="2" class="text-center small py-2" id="mensaje-verificacion"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Sección Estado de Resultado -->
+  <div id="seccion-resultado" style="display:none;">
+    <div class="section-divider"><i class="bi bi-graph-up"></i> ESTADO DE RESULTADO DEL EJERCICIO</div>
+    <div class="table-container shadow-sm mb-4">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th style="width:80%">Cuenta Contable</th>
+            <th style="width:20%" class="text-end">Saldo</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-resultado"></tbody>
+        <tfoot class="totales-footer">
+          <tr>
+            <td class="text-end fw-bold fs-6">RESULTADO DEL EJERCICIO: </td>
+            <td class="text-end fw-bold fs-6" id="total-resultado">0,00 Bs</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAB - Menú Flotante de Acciones -->
+  <div class="fab-menu-container no-print">
+    <button class="btn btn-primary fab-main-btn" id="btn-fab-principal" title="Menú de acciones">
+      <i class="bi bi-grid-3x3-gap-fill" id="fab-icon"></i>
+    </button>
+    <div class="fab-options" id="fab-options" style="display:none;position:absolute;top:50%;right:70px;transform:translateY(-50%);flex-direction:row;gap:10px;">
+      <div class="fab-option-item" style="flex-direction:row-reverse;display:flex;align-items:center;">
+        <span class="fab-label">Imprimir / PDF</span>
+        <button class="btn btn-secondary fab-option-btn" id="btn-fab-imprimir"><i class="bi bi-printer-fill"></i></button>
+      </div>
+      <div class="fab-option-item" style="flex-direction:row-reverse;display:flex;align-items:center;">
+        <span class="fab-label">Actualizar datos</span>
+        <button class="btn btn-primary fab-option-btn" id="btn-fab-recargar"><i class="bi bi-arrow-clockwise"></i></button>
+      </div>
+      <div class="fab-option-item" style="flex-direction:row-reverse;display:flex;align-items:center;">
+        <span class="fab-label">Enviar por correo</span>
+        <button class="btn btn-success fab-option-btn" id="btn-fab-correo"><i class="bi bi-envelope-fill"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="fab-overlay no-print" id="fab-overlay"></div>
+
+  <!-- Modal Imprimir / PDF -->
+  <div class="modal fade no-print" id="modalImprimir" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-panel" style="background:var(--bg-panel-modal, #1e2438);border:1px solid rgba(255,255,255,.1);">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-printer-fill"></i> Imprimir Estado Financiero</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-bold small">Estado Financiero a Imprimir</label>
+            <select class="form-select" id="imprimir-tipo-eeff">
+              <option value="ES">📊 Estado de Situación</option>
+              <option value="ER">📈 Estado de Resultado</option>
+              <option value="AMBOS">📑 Ambos Estados Financieros</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold small">Moneda</label>
+            <select class="form-select" id="imprimir-moneda">
+              <option value="BS">🇻🇪 Bolívares (Bs)</option>
+              <option value="USD">💵 Dólares (USD)</option>
+            </select>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="imprimir-expandir" checked>
+            <label class="form-check-label small" for="imprimir-expandir">Expandir automáticamente todos los grupos contables</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-ejecutar-print"><i class="bi bi-printer"></i> Imprimir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Enviar por Correo -->
+  <div class="modal fade no-print" id="modalEnvioCorreo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-panel" style="background:var(--bg-panel-modal, #1e2438);border:1px solid rgba(255,255,255,.1);">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-envelope-fill"></i> Enviar Estado Financiero por Correo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label fw-bold small">Estado Financiero</label>
+            <select class="form-select" id="correo-tipo-eeff">
+              <option value="ES">📊 Estado de Situación</option>
+              <option value="ER">📈 Estado de Resultado</option>
+              <option value="AMBOS">📑 Ambos Estados</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold small">Destinatario (Email)</label>
+            <input type="email" class="form-control" id="correo-destinatario" placeholder="gerencia@empresa.com">
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold small">Moneda del Reporte</label>
+            <select class="form-select" id="correo-moneda">
+              <option value="BS">🇻🇪 Bolívares (Bs)</option>
+              <option value="USD">💵 Dólares (USD)</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold small">Comentarios u Observaciones (Opcional)</label>
+            <textarea class="form-control" id="correo-comentarios" rows="2" placeholder="Nota adicional..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success btn-sm" id="btn-ejecutar-correo"><i class="bi bi-send-fill"></i> Enviar Reporte</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     ESTILOS DEL MÓDULO (Compatibles con Dark y Light)
+============================================================ -->
+<style>
+/* Contenedor y Glassmorphism */
+#pContabilizacion .glass-panel,
+#pImpuestos .glass-panel {
+  background: var(--bg-panel, rgba(255,255,255,.04));
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-panel, rgba(255,255,255,.08));
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.35);
+}
+
+#pContabilizacion .badge-info-custom,
+#pImpuestos .badge-info-custom {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: .85rem;
+}
+
+#pContabilizacion .table-container,
+#pImpuestos .table-container {
+  background: var(--bg-table-container, rgba(255,255,255,.02));
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-table, rgba(255,255,255,.06));
+  border-radius: 14px;
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+#pContabilizacion .table,
+#pImpuestos .table {
+  width: 100%;
+  margin-bottom: 0;
+  color: var(--text-body, #f8f9fa);
+  background: transparent !important;
+}
+
+#pContabilizacion .table th,
+#pImpuestos .table th {
+  background: var(--bg-table-th, rgba(20,24,40,.95)) !important;
+  color: var(--text-body, #f8f9fa);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  font-weight: 600;
+  border-bottom: 2px solid var(--border-table-th, rgba(255,255,255,.15));
+}
+
+#pContabilizacion .table td,
+#pImpuestos .table td {
+  border-color: var(--border-table-td, rgba(255,255,255,.05));
+  background: transparent !important;
+  word-wrap: break-word;
+}
+
+/* Niveles Contables */
+#pContabilizacion .cuenta-header td,
+#pImpuestos .cuenta-header td {
+  background: var(--bg-cuenta-header, rgba(255,255,255,.08)) !important;
+  color: var(--text-primary, #fff) !important;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+#pContabilizacion .tipo-header td,
+#pImpuestos .tipo-header td {
+  background: var(--bg-tipo-header, rgba(255,255,255,.04)) !important;
+  color: var(--text-secondary, #e0e0e0) !important;
+  font-weight: 600;
+}
+
+#pContabilizacion .grupo-header td,
+#pImpuestos .grupo-header td {
+  background: var(--bg-grupo-header, rgba(255,255,255,.02)) !important;
+  color: var(--text-muted, #b0b3b8) !important;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: background .2s ease;
+}
+
+#pContabilizacion .grupo-header td:hover,
+#pImpuestos .grupo-header td:hover {
+  background: rgba(255,255,255,.06) !important;
+}
+
+#pContabilizacion .grupo-header .collapse-icon,
+#pImpuestos .grupo-header .collapse-icon {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 11px;
+  transition: transform .2s ease;
+}
+
+#pContabilizacion .cuenta-total-row td,
+#pImpuestos .cuenta-total-row td {
+  background: var(--bg-cuenta-total, rgba(100,110,140,.15)) !important;
+  font-weight: 700;
+  border-top: 2px solid var(--border-cuenta-total, rgba(255,255,255,.2));
+  color: var(--text-primary, #fff) !important;
+}
+
+#pContabilizacion .tipo-total-row td,
+#pImpuestos .tipo-total-row td {
+  background: var(--bg-tipo-total, rgba(100,110,140,.1)) !important;
+  font-weight: 700;
+  border-top: 1px solid rgba(255,255,255,.15);
+}
+
+#pContabilizacion .grupo-total-row td,
+#pImpuestos .grupo-total-row td {
+  background: rgba(255,255,255,.01) !important;
+  font-weight: 700;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+#pContabilizacion .cuenta-row td,
+#pImpuestos .cuenta-row td {
+  padding-left: 55px !important;
+  color: var(--text-cuenta-row, #e2e8f0);
+}
+
+#pContabilizacion .cuenta-row:hover td,
+#pImpuestos .cuenta-row:hover td {
+  background: rgba(255,255,255,.05) !important;
+}
+
+/* Indicadores de Monto */
+#pContabilizacion .text-danger-negative,
+#pImpuestos .text-danger-negative {
+  color: #ff6b6b !important;
+  font-weight: 600;
+}
+
+#pContabilizacion .text-positive,
+#pImpuestos .text-positive {
+  color: #51cf66 !important;
+  font-weight: 600;
+}
+
+/* Tarjetas Estadísticas */
+#pContabilizacion .stats-card,
+#pImpuestos .stats-card {
+  background: var(--bg-panel, rgba(255,255,255,.03));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  color: var(--text-primary, #fff);
+  transition: transform .2s, box-shadow .2s;
+  position: relative;
+  overflow: hidden;
+}
+
+#pContabilizacion .stats-card:hover,
+#pImpuestos .stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+}
+
+#pContabilizacion .stats-card::before,
+#pImpuestos .stats-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+}
+
+#pContabilizacion .card-ingresos::before, #pImpuestos .card-ingresos::before { background: linear-gradient(90deg,#12b886,#20c997); }
+#pContabilizacion .card-costos::before,   #pImpuestos .card-costos::before   { background: linear-gradient(90deg,#ff6b6b,#fa5252); }
+#pContabilizacion .card-gastos::before,   #pImpuestos .card-gastos::before   { background: linear-gradient(90deg,#fcc419,#ff922b); }
+#pContabilizacion .card-utilidad::before, #pImpuestos .card-utilidad::before { background: linear-gradient(90deg,#339af0,#22b8cf); }
+
+#pContabilizacion .stats-value,
+#pImpuestos .stats-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+#pContabilizacion .stats-label,
+#pImpuestos .stats-label {
+  font-size: 11px;
+  opacity: .85;
+  letter-spacing: .5px;
+  font-weight: 600;
+}
+
+#pContabilizacion .section-divider,
+#pImpuestos .section-divider {
+  background: rgba(255,255,255,.04);
+  padding: 10px 16px;
+  margin: 20px 0 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text-primary, #fff);
+  border-left: 4px solid #339af0;
+}
+
+#pContabilizacion .totales-footer td,
+#pImpuestos .totales-footer td {
+  background: rgba(20,24,40,.9) !important;
+  color: var(--text-primary, #fff);
+  border-top: 2px solid rgba(255,255,255,.2);
+}
+
+/* FAB */
+#pContabilizacion .fab-menu-container,
+#pImpuestos .fab-menu-container {
+  position: fixed;
+  top: 50%;
+  right: 25px;
+  transform: translateY(-50%);
+  z-index: 1000;
+}
+
+#pContabilizacion .fab-main-btn,
+#pImpuestos .fab-main-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-size: 22px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+  transition: transform .3s;
+}
+
+#pContabilizacion .fab-main-btn:hover,
+#pImpuestos .fab-main-btn:hover {
+  transform: scale(1.05);
+}
+
+#pContabilizacion .fab-main-btn.active,
+#pImpuestos .fab-main-btn.active {
+  transform: rotate(45deg);
+}
+
+#pContabilizacion .fab-option-btn,
+#pImpuestos .fab-option-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+#pContabilizacion .fab-label,
+#pImpuestos .fab-label {
+  background: rgba(20,24,40,.9);
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .2s;
+  margin-right: 8px;
+}
+
+#pContabilizacion .fab-option-item:hover .fab-label,
+#pImpuestos .fab-option-item:hover .fab-label {
+  opacity: 1 !important;
+}
+
+#pContabilizacion .fab-overlay,
+#pImpuestos .fab-overlay {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 999;
+  display: none;
+}
+
+#pContabilizacion .fab-overlay.active,
+#pImpuestos .fab-overlay.active {
+  display: block;
+}
+
+#pContabilizacion .collapsed-row,
+#pImpuestos .collapsed-row {
+  display: none;
+}
+
+/* Adaptación a Modo Claro (Light Theme) */
+[data-bs-theme="light"] #pContabilizacion .glass-panel,
+[data-bs-theme="light"] #pImpuestos .glass-panel {
+  background: rgba(255,255,255,.9);
+  border-color: rgba(0,0,0,.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+}
+
+[data-bs-theme="light"] #pContabilizacion .table,
+[data-bs-theme="light"] #pImpuestos .table {
+  color: #212529;
+}
+
+[data-bs-theme="light"] #pContabilizacion .table th,
+[data-bs-theme="light"] #pImpuestos .table th {
+  background: #f1f3f5 !important;
+  color: #1a1d29;
+  border-bottom: 2px solid rgba(0,0,0,.15);
+}
+
+[data-bs-theme="light"] #pContabilizacion .cuenta-header td,
+[data-bs-theme="light"] #pImpuestos .cuenta-header td {
+  background: rgba(0,0,0,.04) !important;
+  color: #1a1d29 !important;
+}
+
+[data-bs-theme="light"] #pContabilizacion .tipo-header td,
+[data-bs-theme="light"] #pImpuestos .tipo-header td {
+  background: rgba(0,0,0,.02) !important;
+  color: #495057 !important;
+}
+
+[data-bs-theme="light"] #pContabilizacion .grupo-header td,
+[data-bs-theme="light"] #pImpuestos .grupo-header td {
+  background: rgba(0,0,0,.01) !important;
+  color: #6c757d !important;
+}
+
+[data-bs-theme="light"] #pContabilizacion .cuenta-total-row td,
+[data-bs-theme="light"] #pImpuestos .cuenta-total-row td {
+  background: rgba(100,110,140,.08) !important;
+  color: #1a1d29 !important;
+}
+
+[data-bs-theme="light"] #pContabilizacion .cuenta-row td,
+[data-bs-theme="light"] #pImpuestos .cuenta-row td {
+  color: #343a40;
+}
+
+[data-bs-theme="light"] #pContabilizacion .totales-footer td,
+[data-bs-theme="light"] #pImpuestos .totales-footer td {
+  background: #f8f9fa !important;
+  color: #1a1d29;
+}
+
+[data-bs-theme="light"] #pContabilizacion .stats-card,
+[data-bs-theme="light"] #pImpuestos .stats-card {
+  background: #ffffff;
+  border-color: rgba(0,0,0,.08);
+  color: #1a1d29;
+}
+
+[data-bs-theme="light"] #pContabilizacion .section-divider,
+[data-bs-theme="light"] #pImpuestos .section-divider {
+  background: rgba(0,0,0,.03);
+  color: #1a1d29;
+  border-left-color: #0d6efd;
+}
+
+[data-bs-theme="light"] #pContabilizacion .text-danger-negative,
+[data-bs-theme="light"] #pImpuestos .text-danger-negative {
+  color: #dc3545 !important;
+}
+
+[data-bs-theme="light"] #pContabilizacion .text-positive,
+[data-bs-theme="light"] #pImpuestos .text-positive {
+  color: #198754 !important;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  .print-header { display: block !important; text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #dee2e6; }
+  #pContabilizacion .table-container, #pImpuestos .table-container { overflow: visible; box-shadow: none; border: 1px solid #dee2e6; background: #fff !important; }
+  #pContabilizacion .table, #pImpuestos .table { color: #000 !important; }
+  #pContabilizacion .table th, #pImpuestos .table th { background: #f1f3f5 !important; color: #000 !important; }
+}
+</style>
+
+<!-- ============================================================
+     SCRIPT DEL MÓDULO (Limpio, escalable y preparado para SPA)
+============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  // ---------- Estado local del módulo ----------
+  let datosRaw = [];
+  let datosProcesados = [];
+  let tasaCambio = 43.00;
+  let mostrarUSD = false;
+  let modalCorreoInstance = null;
+  let modalImprimirInstance = null;
+  let fabMenuAbierto = false;
+  let eventosAsignados = false;
+
+  // ---------- Integración Unificada con index.html (GProUI y notificar) ----------
+  function toastSeguro(msg, tipo) {
+    if (window.notificar && typeof window.notificar[tipo] === 'function') {
+      window.notificar[tipo](msg);
+    } else if (window.GProUI && window.GProUI.toast && typeof window.GProUI.toast[tipo] === 'function') {
+      window.GProUI.toast[tipo](msg);
+    } else {
+      console.log('[' + (tipo || 'info') + ']', msg);
+    }
+  }
+
+  function mostrarLoading(t, s, p) {
+    if (window.GProUI && typeof window.GProUI.mostrarLoading === 'function') {
+      window.GProUI.mostrarLoading(t, s, p);
+    }
+  }
+
+  function ocultarLoading() {
+    if (window.GProUI && typeof window.GProUI.ocultarLoading === 'function') {
+      window.GProUI.ocultarLoading();
+    }
+  }
+
+  const $ = id => document.getElementById(id);
+
+  function parseMonto(valor) {
+    if (valor === null || valor === undefined || valor === '') return 0;
+    if (typeof valor === 'number') return isNaN(valor) ? 0 : valor;
+    let str = String(valor).trim();
+    if (str === '') return 0;
+    let esNeg = (str.startsWith('(') && str.endsWith(')'));
+    if (esNeg) str = str.slice(1, -1);
+    let signo = str.startsWith('-');
+    if (signo) str = str.slice(1);
+    str = str.replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
+    const n = parseFloat(str);
+    if (isNaN(n)) return 0;
+    return (esNeg || signo) ? -n : n;
+  }
+
+  function formatoNumero(num) {
+    let valor = typeof num === 'number' ? num : parseMonto(num);
+    if (mostrarUSD && tasaCambio > 0) valor = valor / tasaCambio;
+    return valor.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ' + (mostrarUSD ? '$' : 'Bs');
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // ---------- Modales con limpieza ----------
+  function inicializarModales() {
+    if (typeof bootstrap === 'undefined') return;
+    const elC = $('modalEnvioCorreo');
+    const elI = $('modalImprimir');
+    if (elC) modalCorreoInstance = bootstrap.Modal.getInstance(elC) || new bootstrap.Modal(elC);
+    if (elI) modalImprimirInstance = bootstrap.Modal.getInstance(elI) || new bootstrap.Modal(elI);
+  }
+
+  // ---------- Asignación Segura de Eventos (Idempotente) ----------
+  function agregarEvento(id, ev, fn) {
+    const el = $(id);
+    if (el) el.addEventListener(ev, fn);
+  }
+
+  function asignarEventos() {
+    if (eventosAsignados) return;
+    eventosAsignados = true;
+
+    agregarEvento('filtro-eeff', 'change', renderizarTabla);
+    agregarEvento('filtro-mes', 'change', filtrarPorMes);
+    agregarEvento('toggle-moneda', 'change', cambiarMoneda);
+    agregarEvento('btn-exportar-excel', 'click', exportarExcel);
+    agregarEvento('btn-refrescar-top', 'click', cargarDatos);
+    agregarEvento('btn-fab-principal', 'click', toggleFabMenu);
+    agregarEvento('fab-overlay', 'click', closeFabMenu);
+    agregarEvento('btn-fab-imprimir', 'click', abrirModalImprimir);
+    agregarEvento('btn-fab-recargar', 'click', function() { cargarDatos(); closeFabMenu(); });
+    agregarEvento('btn-fab-correo', 'click', abrirModalCorreo);
+    agregarEvento('btn-ejecutar-print', 'click', imprimirEstadoFinanciero);
+    agregarEvento('btn-ejecutar-correo', 'click', enviarCorreo);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && fabMenuAbierto) closeFabMenu();
+    });
+  }
+
+  // ---------- Menú Flotante (FAB) ----------
+  function toggleFabMenu() {
+    fabMenuAbierto = !fabMenuAbierto;
+    const opt = $('fab-options'), ico = $('fab-icon'), btn = $('btn-fab-principal'), ov = $('fab-overlay');
+    if (!opt || !ico || !btn || !ov) return;
+    if (fabMenuAbierto) {
+      opt.style.display = 'flex';
+      ico.className = 'bi bi-x-lg';
+      btn.classList.add('active');
+      ov.classList.add('active');
+      document.querySelectorAll('#pContabilizacion .fab-label, #pImpuestos .fab-label').forEach(function(l, i) {
+        setTimeout(function() { if (fabMenuAbierto) l.style.opacity = '1'; }, 80 + i * 40);
+      });
+    } else {
+      closeFabMenu();
+    }
+  }
+
+  function closeFabMenu() {
+    fabMenuAbierto = false;
+    const opt = $('fab-options'), ico = $('fab-icon'), btn = $('btn-fab-principal'), ov = $('fab-overlay');
+    if (opt) opt.style.display = 'none';
+    if (ico) ico.className = 'bi bi-grid-3x3-gap-fill';
+    if (btn) btn.classList.remove('active');
+    if (ov) ov.classList.remove('active');
+    document.querySelectorAll('#pContabilizacion .fab-label, #pImpuestos .fab-label').forEach(function(l) { l.style.opacity = '0'; });
+  }
+
+  // ---------- Carga de Datos desde Google Sheets ----------
+  function cargarDatos() {
+    mostrarLoading('Cargando Estados Financieros', 'Consultando asientos contables y tasas...', 25);
+
+    // Limpieza de datos en pantalla para garantizar recarga limpia
+    datosRaw = [];
+    datosProcesados = [];
+    if ($('res-ingresos')) $('res-ingresos').textContent = '...';
+    if ($('res-costos')) $('res-costos').textContent = '...';
+    if ($('res-gastos')) $('res-gastos').textContent = '...';
+    if ($('res-utilidad')) $('res-utilidad').textContent = '...';
+
+    if (typeof google === 'undefined' || !google.script || !google.script.run) {
+      ocultarLoading();
+      toastSeguro('Modo offline / Entorno Google Apps Script no detectado', 'warning');
+      return;
+    }
+
+    // 1. Obtener Datos de la Empresa (si existe en Code.gs)
+    if (typeof google.script.run.getDatosEmpresa === 'function') {
+      google.script.run
+        .withSuccessHandler(function(emp) {
+          if (!emp) return;
+          if ($('empresa-nombre')) $('empresa-nombre').textContent = emp.nombre || 'Translogistica C.A.';
+          if ($('empresa-rif')) $('empresa-rif').textContent = emp.rif ? ('RIF: ' + emp.rif) : '';
+          if ($('empresa-direccion')) $('empresa-direccion').textContent = emp.direccion || '';
+          if (emp.logo && $('logo-empresa')) { $('logo-empresa').src = emp.logo; $('logo-empresa').style.display = 'block'; }
+          if (emp.logo && $('print-logo')) { $('print-logo').src = emp.logo; $('print-logo').style.display = 'block'; }
+          if ($('print-empresa-nombre') && emp.nombre) $('print-empresa-nombre').textContent = emp.nombre;
+          if ($('print-empresa-rif') && emp.rif) $('print-empresa-rif').textContent = 'RIF: ' + emp.rif;
+          if ($('print-empresa-direccion') && emp.direccion) $('print-empresa-direccion').textContent = emp.direccion;
+        })
+        .withFailureHandler(function() {})
+        .getDatosEmpresa();
+    }
+
+    // 2. Obtener Tasa de Cambio
+    if (typeof google.script.run.getTasa === 'function') {
+      google.script.run
+        .withSuccessHandler(function(t) {
+          if (t && !isNaN(t) && t > 0) {
+            tasaCambio = parseFloat(t);
+            if ($('tasa-valor')) $('tasa-valor').textContent = tasaCambio.toFixed(2);
+            if (datosProcesados.length > 0) { renderizarTabla(); calcularResumen(); }
+          }
+        })
+        .withFailureHandler(function() {})
+        .getTasa();
+    }
+
+    // 3. Obtener Asientos Contables
+    if (typeof google.script.run.getDatosAsientos === 'function') {
+      google.script.run
+        .withSuccessHandler(function(respuesta) {
+          ocultarLoading();
+          if (!respuesta || !Array.isArray(respuesta) || respuesta.length === 0) {
+            toastSeguro('No se encontraron registros en la hoja de Asientos.', 'warning');
+            const msg = '<tr><td colspan="2" class="text-center text-muted py-4">No hay asientos contables registrados.</td></tr>';
+            if ($('tbody-situacion')) $('tbody-situacion').innerHTML = msg;
+            if ($('tbody-resultado')) $('tbody-resultado').innerHTML = msg;
+            calcularResumen();
+            return;
+          }
+          datosRaw = respuesta;
+          if ($('registros-info')) $('registros-info').innerHTML = '<i class="bi bi-database"></i> ' + respuesta.length + ' asientos';
+          procesarDatos();
+          toastSeguro('Estados financieros actualizados (' + respuesta.length + ' registros)', 'exito');
+        })
+        .withFailureHandler(function(err) {
+          ocultarLoading();
+          toastSeguro('Error al consultar asientos: ' + (err && err.message ? err.message : 'Desconocido'), 'error');
+        })
+        .getDatosAsientos();
+    } else {
+      ocultarLoading();
+      toastSeguro('Función getDatosAsientos no definida en Code.gs', 'error');
+    }
+  }
+
+  // ---------- Procesamiento y Agrupación ----------
+  function procesarDatos() {
+    const mesFiltro = $('filtro-mes') ? $('filtro-mes').value : 'todos';
+    const cuentas = {};
+
+    datosRaw.forEach(function(row) {
+      try {
+        if (mesFiltro !== 'todos' && row['FechaAsiento']) {
+          const fecha = String(row['FechaAsiento']).trim();
+          let mes = '';
+          if (/^\d{4}-\d{2}-\d{2}/.test(fecha)) mes = fecha.split('-')[1];
+          else if (/^\d{1,2}\/\d{1,2}\/\d{4}/.test(fecha)) mes = fecha.split('/')[1];
+          else if (/^\d{1,2}-\d{1,2}-\d{4}/.test(fecha)) mes = fecha.split('-')[1];
+          if (mes && parseInt(mes, 10) !== parseInt(mesFiltro, 10)) return;
+        }
+
+        const codigo = String(row['CodigoCuenta'] || 'SIN_CODIGO').trim();
+        const nombre = String(row['CuentaContable'] || 'Sin nombre').trim();
+        const monto = parseMonto(row['MontoTransaccion']);
+        const cuenta = String(row['CUENTA'] || '').trim();
+        const tipoCuenta = String(row['TipoCuenta'] || '').trim();
+        const grupoBalance = String(row['GrupoBalance'] || '').trim();
+        const eeff = String(row['EEFF'] || '').trim().toUpperCase();
+
+        const key = codigo + '|' + cuenta + '|' + tipoCuenta + '|' + grupoBalance + '|' + eeff;
+        if (!cuentas[key]) {
+          cuentas[key] = { codigo, nombre, cuenta, tipoCuenta, grupoBalance, eeff, saldo: 0 };
+        }
+        cuentas[key].saldo += monto;
+      } catch (e) {
+        console.error('Error procesando asiento:', e);
+      }
+    });
+
+    datosProcesados = Object.values(cuentas);
+    renderizarTabla();
+    calcularResumen();
+  }
+
+  // ---------- Toggle Grupos Contables ----------
+  function toggleGrupo(el) {
+    const targetId = el.getAttribute('data-target');
+    const content = document.getElementById(targetId);
+    if (!content) return;
+    const icon = el.querySelector('.collapse-icon');
+    if (content.classList.contains('collapsed-row')) {
+      content.classList.remove('collapsed-row');
+      if (icon) icon.innerHTML = '▼';
+    } else {
+      content.classList.add('collapsed-row');
+      if (icon) icon.innerHTML = '▶';
+    }
+  }
+
+  // ---------- Render de Tablas ----------
+  function renderizarTabla() {
+    if (!datosProcesados || datosProcesados.length === 0) {
+      const msg = '<tr><td colspan="2" class="text-center text-muted py-4">No hay datos disponibles para mostrar</td></tr>';
+      if ($('tbody-situacion')) $('tbody-situacion').innerHTML = msg;
+      if ($('tbody-resultado')) $('tbody-resultado').innerHTML = msg;
+      return;
+    }
+
+    const filtroEEFF = $('filtro-eeff') ? $('filtro-eeff').value : '';
+    let datos = datosProcesados;
+    if (filtroEEFF) datos = datos.filter(d => d.eeff === filtroEEFF);
+
+    const dSit = datos.filter(d => d.eeff === 'ES');
+    const dRes = datos.filter(d => d.eeff === 'ER');
+
+    renderizarSeccion(dSit, 'tbody-situacion', 'total-situacion', 'situacion');
+    renderizarSeccion(dRes, 'tbody-resultado', 'total-resultado', 'resultado');
+
+    if ($('seccion-situacion')) $('seccion-situacion').style.display = (!filtroEEFF || filtroEEFF === 'ES') ? 'block' : 'none';
+    if ($('seccion-resultado')) $('seccion-resultado').style.display = (!filtroEEFF || filtroEEFF === 'ER') ? 'block' : 'none';
+  }
+
+  function renderizarSeccion(datos, tbodyId, totalId, tipo) {
+    const tbody = $(tbodyId);
+    if (!tbody) return;
+
+    if (!datos || datos.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="2" class="text-center text-muted py-3">No hay movimientos contables en este estado.</td></tr>';
+      const t = $(totalId); if (t) t.textContent = formatoNumero(0);
+      return;
+    }
+
+    const estructura = {};
+    datos.forEach(function(d) {
+      const cuenta = d.cuenta || 'SIN CLASIFICAR';
+      const tipoC = d.tipoCuenta || 'SIN TIPO';
+      const grupo = d.grupoBalance || 'SIN GRUPO';
+      if (!estructura[cuenta]) estructura[cuenta] = {};
+      if (!estructura[cuenta][tipoC]) estructura[cuenta][tipoC] = {};
+      if (!estructura[cuenta][tipoC][grupo]) estructura[cuenta][tipoC][grupo] = [];
+      estructura[cuenta][tipoC][grupo].push(d);
+    });
+
+    let html = '';
+    let activoTotal = 0, pasivoTotal = 0, patrimonioTotal = 0, totalGeneral = 0;
+    const ordenCuentas = ['Activo', 'Pasivo', 'Patrimonio', 'Ingresos', 'Costos', 'Gastos', 'SIN CLASIFICAR'];
+
+    ordenCuentas.forEach(function(cuenta) {
+      if (!estructura[cuenta]) return;
+      let totalCuenta = 0;
+      html += '<tr class="cuenta-header"><td colspan="2"><strong>' + escapeHtml(cuenta) + '</strong></td></tr>';
+
+      Object.keys(estructura[cuenta]).sort().forEach(function(tipoC) {
+        let totalTipo = 0;
+        html += '<tr class="tipo-header"><td colspan="2" class="ps-4"><strong>' + escapeHtml(tipoC) + '</strong></td></tr>';
+
+        Object.keys(estructura[cuenta][tipoC]).sort().forEach(function(grupo) {
+          let totalGrupo = 0;
+          const grupoId = 'grp_' + Math.random().toString(36).slice(2, 10);
+          html += '<tr class="grupo-header" data-target="' + grupoId + '">' +
+                    '<td colspan="2" class="ps-5"><span class="collapse-icon">▼</span> <strong>' + escapeHtml(grupo) + '</strong></td>' +
+                  '</tr>' +
+                  '<tr class="grupo-collapse-content" id="' + grupoId + '">' +
+                    '<td colspan="2" style="padding:0;border:none;">' +
+                      '<table style="width:100%;margin:0;background:transparent;border:none;table-layout:fixed;">' +
+                        '<colgroup><col style="width:80%"><col style="width:20%"></colgroup>';
+
+          estructura[cuenta][tipoC][grupo].sort((a, b) => a.nombre.localeCompare(b.nombre)).forEach(function(c) {
+            totalGrupo += c.saldo;
+            const clase = c.saldo < 0 ? 'text-danger-negative' : '';
+            html += '<tr class="cuenta-row">' +
+                      '<td class="ps-5" style="width:80%">' + escapeHtml(c.nombre) + '</td>' +
+                      '<td class="text-end ' + clase + '" style="width:20%">' + formatoNumero(c.saldo) + '</td>' +
+                    '</tr>';
+          });
+
+          totalTipo += totalGrupo;
+          const claseG = totalGrupo < 0 ? 'text-danger-negative' : 'text-positive';
+          html += '</table></td></tr>' +
+                  '<tr class="grupo-total-row">' +
+                    '<td class="text-end fw-bold ps-5" style="width:80%">TOTAL ' + escapeHtml(grupo) + ':</td>' +
+                    '<td class="text-end fw-bold ' + claseG + '" style="width:20%">' + formatoNumero(totalGrupo) + '</td>' +
+                  '</tr>';
+        });
+
+        totalCuenta += totalTipo;
+        const claseT = totalTipo < 0 ? 'text-danger-negative' : 'text-positive';
+        html += '<tr class="tipo-total-row">' +
+                  '<td class="text-end fw-bold ps-4" style="width:80%">TOTAL ' + escapeHtml(tipoC) + ':</td>' +
+                  '<td class="text-end fw-bold ' + claseT + '" style="width:20%">' + formatoNumero(totalTipo) + '</td>' +
+                '</tr>';
+      });
+
+      if (cuenta === 'Activo') activoTotal = totalCuenta;
+      if (cuenta === 'Pasivo') pasivoTotal = totalCuenta;
+      if (cuenta === 'Patrimonio') patrimonioTotal = totalCuenta;
+      totalGeneral += totalCuenta;
+
+      const claseC = totalCuenta < 0 ? 'text-danger-negative' : 'text-positive';
+      html += '<tr class="cuenta-total-row">' +
+                '<td class="text-end fw-bold" style="width:80%">TOTAL ' + escapeHtml(cuenta) + ':</td>' +
+                '<td class="text-end fw-bold ' + claseC + '" style="width:20%">' + formatoNumero(totalCuenta) + '</td>' +
+              '</tr>';
+    });
+
+    tbody.innerHTML = html;
+    tbody.querySelectorAll('.grupo-header').forEach(function(el) {
+      el.addEventListener('click', function() { toggleGrupo(this); });
+    });
+
+    if (tipo === 'situacion') {
+      const activo = activoTotal, pasivo = pasivoTotal, patrimonio = patrimonioTotal;
+      const diferencia = activo - (pasivo + patrimonio);
+      const tEl = $(totalId);
+      if (tEl) tEl.textContent = formatoNumero(diferencia);
+
+      const fVer = $('footer-verificacion'), mVer = $('mensaje-verificacion');
+      if (fVer) fVer.style.display = 'table-row';
+      if (Math.abs(diferencia) < 0.01) {
+        if (mVer) { mVer.innerHTML = '✓ ECUACIÓN CONTABLE CUMPLIDA: Activo = Pasivo + Patrimonio'; mVer.className = 'text-center small text-success fw-bold'; }
+        if (tEl) tEl.className = 'text-end fw-bold fs-6 text-success';
+      } else {
+        if (mVer) { mVer.innerHTML = '⚠ Diferencia no cuadrada: ' + formatoNumero(diferencia); mVer.className = 'text-center small text-danger fw-bold'; }
+        if (tEl) tEl.className = 'text-end fw-bold fs-6 text-danger';
+      }
+    } else {
+      const tEl = $(totalId);
+      if (tEl) {
+        tEl.textContent = formatoNumero(totalGeneral);
+        tEl.className = 'text-end fw-bold fs-6 ' + (totalGeneral < 0 ? 'text-danger' : 'text-positive');
+      }
+    }
+  }
+
+  // ---------- Cálculo de Tarjetas Resumen ----------
+  function calcularResumen() {
+    let ingresos = 0, costos = 0, gastos = 0;
+    datosProcesados.forEach(function(d) {
+      const saldo = d.saldo;
+      const tipo = (d.cuenta || '').toLowerCase();
+      if (tipo === 'ingresos') ingresos += saldo;
+      else if (tipo === 'costos') costos += saldo;
+      else if (tipo === 'gastos') gastos += saldo;
+    });
+
+    const utilidad = ingresos - Math.abs(costos) - Math.abs(gastos);
+    if ($('res-ingresos')) $('res-ingresos').textContent = formatoNumero(ingresos);
+    if ($('res-costos')) $('res-costos').textContent = formatoNumero(costos);
+    if ($('res-gastos')) $('res-gastos').textContent = formatoNumero(gastos);
+    if ($('res-utilidad')) $('res-utilidad').textContent = formatoNumero(utilidad);
+    const card = $('card-utilidad');
+    if (card) {
+      card.style.borderColor = utilidad >= 0 ? 'rgba(81,207,102,.5)' : 'rgba(255,107,107,.5)';
+    }
+  }
+
+  // ---------- Filtros ----------
+  function filtrarPorMes() { if (datosRaw.length > 0) procesarDatos(); }
+  function cambiarMoneda() {
+    mostrarUSD = $('toggle-moneda') ? $('toggle-moneda').checked : false;
+    if ($('moneda-label')) $('moneda-label').innerHTML = mostrarUSD ? '💵 Dólares (USD)' : '🇻🇪 Bolívares (Bs)';
+    renderizarTabla();
+    calcularResumen();
+  }
+
+  // ---------- Exportar Excel con Carga Asíncrona de Librería ----------
+  function exportarExcel() {
+    if (!datosProcesados || datosProcesados.length === 0) {
+      toastSeguro('No hay datos contables cargados para exportar.', 'warning');
+      return;
+    }
+
+    const ejecutarDescarga = function() {
+      const data = datosProcesados.map(function(d) {
+        return {
+          'Cuenta Contable': d.nombre,
+          'Clasificación': d.cuenta,
+          'Tipo de Cuenta': d.tipoCuenta,
+          'Grupo de Balance': d.grupoBalance,
+          'Estado Financiero': d.eeff,
+          'Saldo (Bs)': d.saldo,
+          'Saldo (USD)': tasaCambio > 0 ? (d.saldo / tasaCambio) : 0
+        };
+      });
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Estado Financiero');
+      XLSX.writeFile(wb, 'Estado_Financiero_' + new Date().toISOString().slice(0, 10) + '.xlsx');
+      toastSeguro('Archivo Excel generado exitosamente.', 'exito');
+    };
+
+    if (typeof XLSX !== 'undefined') {
+      ejecutarDescarga();
+    } else {
+      mostrarLoading('Cargando exportador', 'Descargando librería SheetJS...', 50);
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      script.onload = function() {
+        ocultarLoading();
+        ejecutarDescarga();
+      };
+      script.onerror = function() {
+        ocultarLoading();
+        toastSeguro('Error al cargar la librería XLSX.', 'error');
+      };
+      document.head.appendChild(script);
+    }
+  }
+
+  // ---------- Impresión / PDF ----------
+  function abrirModalImprimir() {
+    closeFabMenu();
+    inicializarModales();
+    const f = $('filtro-eeff'), t = $('imprimir-tipo-eeff'), m = $('imprimir-moneda'), tm = $('toggle-moneda');
+    if (f && t && f.value) t.value = f.value;
+    if (m && tm) m.value = tm.checked ? 'USD' : 'BS';
+    if (modalImprimirInstance) modalImprimirInstance.show();
+  }
+
+  function imprimirEstadoFinanciero() {
+    const t = $('imprimir-tipo-eeff'), m = $('imprimir-moneda'), e = $('imprimir-expandir');
+    if (!t || !m || !e) return;
+
+    const tipoEEFF = t.value, moneda = m.value, expandir = e.checked;
+    const prev = mostrarUSD;
+    mostrarUSD = (moneda === 'USD');
+
+    if ($('moneda-label')) $('moneda-label').textContent = mostrarUSD ? '💵 Dólares (USD)' : '🇻🇪 Bolívares (Bs)';
+    renderizarTabla();
+    calcularResumen();
+
+    const dispSit = $('seccion-situacion') ? $('seccion-situacion').style.display : 'none';
+    const dispRes = $('seccion-resultado') ? $('seccion-resultado').style.display : 'none';
+    if ($('seccion-situacion')) $('seccion-situacion').style.display = (tipoEEFF === 'ES' || tipoEEFF === 'AMBOS') ? 'block' : 'none';
+    if ($('seccion-resultado')) $('seccion-resultado').style.display = (tipoEEFF === 'ER' || tipoEEFF === 'AMBOS') ? 'block' : 'none';
+
+    if (expandir) {
+      document.querySelectorAll('#pContabilizacion .grupo-collapse-content, #pImpuestos .grupo-collapse-content').forEach(function(el) {
+        el.classList.remove('collapsed-row');
+      });
+      document.querySelectorAll('#pContabilizacion .collapse-icon, #pImpuestos .collapse-icon').forEach(function(el) {
+        el.innerHTML = '▼';
+      });
+    }
+
+    const ph = $('print-header');
+    if (ph) ph.style.display = 'block';
+    if ($('print-fecha')) $('print-fecha').textContent = 'Generado: ' + new Date().toLocaleDateString('es-VE', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    if (modalImprimirInstance) modalImprimirInstance.hide();
+
+    window.addEventListener('afterprint', function handler() {
+      window.removeEventListener('afterprint', handler);
+      mostrarUSD = prev;
+      if ($('moneda-label')) $('moneda-label').textContent = mostrarUSD ? '💵 Dólares (USD)' : '🇻🇪 Bolívares (Bs)';
+      if ($('seccion-situacion')) $('seccion-situacion').style.display = dispSit;
+      if ($('seccion-resultado')) $('seccion-resultado').style.display = dispRes;
+      if (ph) ph.style.display = 'none';
+      renderizarTabla();
+      calcularResumen();
+    }, { once: true });
+
+    setTimeout(function() { window.print(); }, 300);
+  }
+
+  // ---------- Envío por Correo ----------
+  function abrirModalCorreo() {
+    closeFabMenu();
+    inicializarModales();
+    const f = $('filtro-eeff'), t = $('correo-tipo-eeff'), m = $('correo-moneda'), tm = $('toggle-moneda');
+    if (f && t && f.value) t.value = f.value;
+    if (m && tm) m.value = tm.checked ? 'USD' : 'BS';
+    if (modalCorreoInstance) modalCorreoInstance.show();
+  }
+
+  function enviarCorreo() {
+    const d = $('correo-destinatario'), t = $('correo-tipo-eeff'), m = $('correo-moneda'), c = $('correo-comentarios'), mes = $('filtro-mes'), btn = $('btn-ejecutar-correo');
+    if (!d || !t || !m || !btn) return;
+    const destinatario = d.value.trim();
+    if (!destinatario || destinatario.indexOf('@') === -1) {
+      toastSeguro('Ingresa un correo electrónico válido.', 'warning');
+      return;
+    }
+
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Enviando...';
+    mostrarLoading('Enviando correo', 'Generando reporte y despachando email...', 45);
+
+    if (typeof google === 'undefined' || !google.script || !google.script.run || !google.script.run.enviarEstadoFinancieroPorCorreo) {
+      ocultarLoading();
+      btn.disabled = false;
+      btn.innerHTML = orig;
+      toastSeguro('Servicio de correo de Google Apps Script no disponible.', 'error');
+      return;
+    }
+
+    google.script.run
+      .withSuccessHandler(function(res) {
+        ocultarLoading();
+        btn.disabled = false;
+        btn.innerHTML = orig;
+        if (res && res.success) {
+          toastSeguro(res.message || 'Reporte financiero enviado exitosamente.', 'exito');
+          if (modalCorreoInstance) modalCorreoInstance.hide();
+          d.value = '';
+          if (c) c.value = '';
+        } else {
+          toastSeguro(res && res.message ? res.message : 'Error al enviar reporte.', 'error');
+        }
+      })
+      .withFailureHandler(function(err) {
+        ocultarLoading();
+        btn.disabled = false;
+        btn.innerHTML = orig;
+        toastSeguro('Error: ' + (err && err.message ? err.message : 'Error al contactar servidor'), 'error');
+      })
+      .enviarEstadoFinancieroPorCorreo(destinatario, t.value, m.value, c ? c.value.trim() : '', mes ? mes.value : 'todos', tasaCambio);
+  }
+
+  // ---------- Ciclo de Vida SPA: Inicialización y Desmontaje ----------
+  function mount() {
+    inicializarModales();
+    asignarEventos();
+    cargarDatos();
+  }
+
+  function unmount() {
+    closeFabMenu();
+    if (modalCorreoInstance) { try { modalCorreoInstance.hide(); } catch(e){} }
+    if (modalImprimirInstance) { try { modalImprimirInstance.hide(); } catch(e){} }
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    document.body.classList.remove('modal-open');
+    document.body.style.removeProperty('padding-right');
+  }
+
+  // Exposición Global para el Router de index.html
+  window.initContabilizacion = mount;
+  window.initImpuestos = mount;
+  window.ModuloContabilizacion = { mount: mount, unmount: unmount };
+  window.renderizarTablaContab = renderizarTabla;
+
+  // Auto-inicio seguro al cargar el componente
+  setTimeout(function() {
+    mount();
+  }, 100);
+
+})();
+</script>

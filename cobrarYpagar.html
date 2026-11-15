@@ -1,0 +1,1740 @@
+<style>
+:root {
+  --glass-bg: rgba(15, 23, 42, 0.65);
+  --glass-bg-hover: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --accent-success: #10b981;
+  --accent-danger: #f43f5e;
+  --accent-info: #3b82f6;
+  --accent-warning: #fbbf24;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+/* CARDS */
+.modern-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-glass);
+  margin-bottom: 1.5rem;
+}
+
+.card-header-modern {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+.card-header-modern.success { border-bottom: 2px solid var(--accent-success); }
+.card-header-modern.danger  { border-bottom: 2px solid var(--accent-danger); }
+.card-header-modern.warning { border-bottom: 2px solid var(--accent-warning); }
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-body-modern { padding: 20px; }
+
+/* TABS */
+.mode-switch-container {
+  background: rgba(15, 23, 42, 0.85);
+  border-radius: 50px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--glass-border);
+}
+.mode-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 8px 18px;
+  border-radius: 25px;
+  transition: all .25s ease;
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mode-label.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-success) 0%, #059669 100%);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, .35);
+}
+.mode-label#lblPagos.active {
+  background: linear-gradient(135deg, var(--accent-danger) 0%, #e11d48 100%);
+  box-shadow: 0 4px 15px rgba(244, 63, 94, .35);
+}
+.mode-label#lblHistorial.active {
+  background: linear-gradient(135deg, var(--accent-info) 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, .35);
+}
+
+/* INPUTS & SELECTS */
+.form-control-modern, .form-select-modern {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary) !important;
+  padding: 8px 14px;
+  font-size: 0.875rem;
+  width: 100%;
+}
+.form-control-modern:focus, .form-select-modern:focus {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: var(--accent-info);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+.input-group-text-modern {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--glass-border);
+  border-right: none;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+}
+
+/* TABLAS */
+.table-modern-container {
+  background: rgba(10, 15, 29, 0.5);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  overflow-x: auto;
+  overflow-y: auto;
+  width: 100%;
+}
+.table-modern {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+.table-modern thead th {
+  background: #0f172a !important;
+  color: var(--text-secondary);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--glass-border);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.table-modern tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.table-modern tbody tr:hover {
+  background-color: var(--glass-bg-hover);
+}
+
+/* ========================================================= */
+/* BOTONES DE RETENCIÓN (VERDE: POR HACER / ROJO: HECHA)     */
+/* ========================================================= */
+.btn-ret-action {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 2px;
+  cursor: pointer;
+  transition: all .2s ease;
+  text-decoration: none;
+}
+.btn-ret-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* 1. NO TIENE RETENCIÓN (DISPONIBLE): VERDE */
+.btn-ret-action.pending {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.45);
+}
+.btn-ret-action.pending:hover {
+  background: rgba(16, 185, 129, 0.35);
+  color: #ffffff;
+}
+
+/* 2. YA TIENE RETENCIÓN (APLICADA): ROJO */
+.btn-ret-action.ok {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.45);
+}
+.btn-ret-action.ok:hover {
+  background: rgba(244, 63, 94, 0.35);
+  color: #ffffff;
+}
+
+.step-badge {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .8rem;
+  font-weight: 700;
+}
+.step-badge.success { background: rgba(16, 185, 129, .2); color: var(--accent-success); }
+.step-badge.danger  { background: rgba(244, 63, 94, .2); color: var(--accent-danger); }
+.step-badge.warning { background: rgba(251, 191, 36, .2); color: var(--accent-warning); }
+
+.btn-modern {
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  transition: all .2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-modern-outline { background: rgba(255,255,255,.05); border-color: var(--glass-border); color: var(--text-secondary); }
+.btn-modern-outline:hover { background: rgba(255,255,255,.1); color: #fff; }
+.btn-modern-success { background: var(--accent-success); color: #fff; }
+.btn-modern-danger { background: var(--accent-danger); color: #fff; }
+.btn-main-action { width: 100%; padding: 14px; font-weight: 700; border-radius: var(--radius-sm); border: none; }
+
+.form-card { background: rgba(15, 23, 42, 0.45); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 16px; }
+.form-card-title { font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.summary-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; }
+.card-footer-modern { background: rgba(10, 15, 29, 0.6); padding: 14px 20px; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; border-bottom-left-radius: var(--radius); border-bottom-right-radius: var(--radius); }
+.pago-distribucion, .pagos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+.cursor-pointer { cursor: pointer; }
+
+/* ANIMACIÓN GIRO */
+.rotating { animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* MODAL FISCAL */
+.fiscal-dialog { background: #0f172a !important; color: #f8fafc !important; border: 1px solid rgba(255,255,255,0.15) !important; border-radius: 16px !important; }
+.fiscal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; margin-top: 15px; font-size: 0.85rem; }
+.fiscal-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 10px; border-radius: 8px; }
+</style>
+
+<div class="container-fluid py-2">
+  <!-- Selector de Módulo -->
+  <div class="modern-card mb-3">
+    <div class="card-body-modern p-2">
+      <div class="mode-switch-container">
+        <span class="mode-label active" id="lblCobranzas" onclick="switchMainTab('cobranzas')">
+          <i class="bi bi-arrow-down-left-circle-fill"></i> COBRANZAS (Ventas)
+        </span>
+        <span class="mode-label" id="lblPagos" onclick="switchMainTab('pagos')">
+          PAGOS (Compras) <i class="bi bi-arrow-up-right-circle-fill"></i>
+        </span>
+        <span class="mode-label" id="lblHistorial" onclick="switchMainTab('historial')">
+          HISTORIAL TRANSACCIONES <i class="bi bi-journal-text"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1: COBRANZAS (VENTAS) -->
+  <div id="sectionCobranzas">
+    <div class="modern-card">
+      <div class="card-header-modern">
+        <h6 class="card-title"><span class="step-badge">1</span> Facturas por Cobrar</h6>
+        <button class="btn-modern btn-modern-outline" id="c_btnRecargar" onclick="c_limpiarYRecargar()" title="Actualizar Datos">
+          <i class="bi bi-arrow-clockwise" id="c_iconRecargar"></i> Actualizar
+        </button>
+      </div>
+      <div class="card-body-modern">
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label text-xs mb-1 text-muted"><i class="bi bi-calendar3"></i> Fecha de Cobro</label>
+            <input type="date" class="form-control-modern" id="fechaCobro">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-xs mb-1 text-muted"><i class="bi bi-currency-exchange"></i> Tasa Referencial (Bs)</label>
+            <input type="number" class="form-control-modern" id="tasaCobro" step="0.01" oninput="c_recalcularTodo()">
+          </div>
+        </div>
+
+        <div class="row g-2 mb-3">
+          <div class="col-md-8 col-12">
+            <div class="input-group">
+              <span class="input-group-text-modern"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control-modern" id="searchCliente" oninput="c_filtrarTabla(this.value)" placeholder="Buscar cliente o nro factura...">
+            </div>
+          </div>
+          <div class="col-md-4 col-12">
+            <select id="c_filtroFecha" class="form-select-modern" onchange="c_cambiarFiltroFecha(this.value)">
+              <option value="meses_actual_anterior">Mes actual y anterior</option>
+              <option value="todos">Mostrar todas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-modern-container" style="max-height: 280px;">
+          <table id="ventasLista" class="table-modern">
+            <thead class="sticky-top">
+              <tr>
+                <th style="width: 45px;" class="text-center">Sel</th>
+                <th>Cliente</th>
+                <th style="width: 120px;">Factura</th>
+                <th style="width: 120px;" class="text-end">Saldo USD</th>
+                <th style="width: 130px;" class="text-end">Saldo Bs</th>
+                <th style="width: 190px;" class="text-center">Retenciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="6" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-success"></div> Cargando cuentas por cobrar...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Facturas Seleccionadas para Cobro -->
+    <div class="modern-card">
+      <div class="card-header-modern success">
+        <h6 class="card-title"><span class="step-badge success">2</span> Facturas Seleccionadas para Cobro</h6>
+      </div>
+      <div class="table-modern-container" style="max-height: 220px;">
+        <table id="cobranzaLista" class="table-modern">
+          <thead class="sticky-top">
+            <tr>
+              <th>Cliente / Factura</th>
+              <th class="text-end" style="width: 110px;">Saldo USD</th>
+              <th class="text-end" style="width: 120px;">Saldo Bs</th>
+              <th class="text-end" style="width: 130px;">A Cobrar USD</th>
+              <th class="text-end" style="width: 130px;">A Cobrar Bs</th>
+              <th class="text-center" style="width: 60px;">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="6" class="text-center py-3 text-muted">No has seleccionado ninguna factura</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer-modern">
+        <span class="text-secondary fw-semibold">Totales Consolidados:</span>
+        <div class="d-flex gap-3">
+          <span id="c_totalFacturasUSD" class="fw-bold text-success">0.00 USD</span>
+          <span id="c_totalFacturasBS" class="fw-bold text-warning">0.00 Bs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Métodos de Pago -->
+    <div class="modern-card">
+      <div class="card-header-modern success">
+        <h6 class="card-title"><span class="step-badge success">3</span> Distribución de Métodos de Pago</h6>
+      </div>
+      <div class="card-body-modern">
+        <div class="pago-distribucion">
+          <div class="form-card">
+            <h6 class="form-card-title"><i class="bi bi-plus-circle-fill text-success"></i> Agregar Línea de Pago</h6>
+            <div class="row g-2">
+              <div class="col-6">
+                <select id="c_lineaMoneda" class="form-select-modern">
+                  <option value="USD">Dólares (USD)</option>
+                  <option value="BS">Bolívares (BS)</option>
+                  <option value="EUR">Euros (EUR)</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <input type="number" id="c_lineaMonto" class="form-control-modern" placeholder="Monto">
+              </div>
+              <div class="col-12">
+                <select id="c_lineaModalidad" class="form-select-modern">
+                  <option value="">Método de Pago...</option>
+                  <option value="PagoMovil">Pago Móvil</option>
+                  <option value="Transferencia">Transferencia Bancaria</option>
+                  <option value="Efectivo">Efectivo</option>
+                  <option value="Zelle">Zelle</option>
+                </select>
+              </div>
+              <div class="col-12" id="c_refContainer">
+                <input type="text" id="c_lineaRef" class="form-control-modern" placeholder="Referencia / Aprobación">
+              </div>
+              <div class="col-12">
+                <select id="c_lineaCuenta" class="form-select-modern"><option value="">Caja / Banco de Destino...</option></select>
+              </div>
+              <div class="col-12 mt-2">
+                <button class="btn-modern btn-modern-success w-100 justify-content-center" onclick="c_agregarPago()"><i class="bi bi-plus-lg"></i> Agregar Pago</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <h6 class="form-card-title"><i class="bi bi-list-check"></i> Pagos Registrados</h6>
+            <div class="table-modern-container" style="max-height: 180px;">
+              <table class="table-modern">
+                <thead class="sticky-top">
+                  <tr>
+                    <th>Método</th>
+                    <th class="text-end">Monto</th>
+                    <th class="text-end">USD Eq.</th>
+                    <th class="text-center" style="width: 40px;"></th>
+                  </tr>
+                </thead>
+                <tbody id="c_tablaPagosBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="pagos-grid">
+          <div class="form-card">
+            <h6 class="form-card-title"><i class="bi bi-pie-chart-fill"></i> Conciliación</h6>
+            <div class="summary-row">
+              <span class="text-muted">Total Facturas:</span>
+              <span id="c_resumenFacturasUSD" class="fw-bold text-success">0.00 USD</span>
+            </div>
+            <div class="summary-row">
+              <span class="text-muted">Total Pagos:</span>
+              <span id="c_resumenPagosUSD" class="fw-bold text-info">0.00 USD</span>
+            </div>
+            <div class="summary-row border-0">
+              <span class="text-muted">Diferencia:</span>
+              <span id="c_resumenDiferenciaUSD" class="fw-bold">0.00 USD</span>
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn-modern btn-modern-success btn-main-action" id="btnGuardarCobranza" onclick="c_guardarTodo()">
+              <i class="bi bi-check2-circle fs-5"></i> Registrar Cobranza Completa
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2: PAGOS (COMPRAS) -->
+  <div id="sectionPagos" class="d-none">
+    <div class="modern-card">
+      <div class="card-header-modern danger">
+        <h6 class="card-title"><span class="step-badge danger">1</span> Facturas por Pagar a Proveedores</h6>
+        <button class="btn-modern btn-modern-outline" id="p_btnRecargar" onclick="p_limpiarYRecargar()" title="Actualizar Datos">
+          <i class="bi bi-arrow-clockwise" id="p_iconRecargar"></i> Actualizar
+        </button>
+      </div>
+      <div class="card-body-modern">
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label text-xs mb-1 text-muted"><i class="bi bi-calendar3"></i> Fecha de Pago</label>
+            <input type="date" class="form-control-modern" id="fechaPago">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-xs mb-1 text-muted"><i class="bi bi-currency-exchange"></i> Tasa Referencial (Bs)</label>
+            <input type="number" class="form-control-modern" id="tasaPago" step="0.01" oninput="p_recalcularTodo()">
+          </div>
+        </div>
+
+        <div class="row g-2 mb-3">
+          <div class="col-md-8 col-12">
+            <div class="input-group">
+              <span class="input-group-text-modern"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control-modern" id="searchProveedor" oninput="p_filtrarTabla(this.value)" placeholder="Buscar proveedor o nro factura...">
+            </div>
+          </div>
+          <div class="col-md-4 col-12">
+            <select id="p_filtroFecha" class="form-select-modern" onchange="p_cambiarFiltroFecha(this.value)">
+              <option value="meses_actual_anterior">Mes actual y anterior</option>
+              <option value="todos">Mostrar todas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-modern-container" style="max-height: 280px;">
+          <table id="comprasLista" class="table-modern">
+            <thead class="sticky-top">
+              <tr>
+                <th style="width: 45px;" class="text-center">Sel</th>
+                <th>Proveedor</th>
+                <th style="width: 120px;">Factura</th>
+                <th style="width: 120px;" class="text-end">Saldo USD</th>
+                <th style="width: 130px;" class="text-end">Saldo Bs</th>
+                <th style="width: 190px;" class="text-center">Retenciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="6" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-danger"></div> Cargando cuentas por pagar...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagos Seleccionados -->
+    <div class="modern-card">
+      <div class="card-header-modern warning">
+        <h6 class="card-title"><span class="step-badge warning">2</span> Facturas Seleccionadas para Pago</h6>
+      </div>
+      <div class="table-modern-container" style="max-height: 220px;">
+        <table id="pagosLista" class="table-modern">
+          <thead class="sticky-top">
+            <tr>
+              <th>Proveedor / Factura</th>
+              <th class="text-end" style="width: 110px;">Saldo USD</th>
+              <th class="text-end" style="width: 120px;">Saldo Bs</th>
+              <th class="text-end" style="width: 130px;">A Pagar USD</th>
+              <th class="text-end" style="width: 130px;">A Pagar Bs</th>
+              <th class="text-center" style="width: 60px;">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="6" class="text-center py-3 text-muted">No has seleccionado ninguna factura</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer-modern">
+        <span class="text-secondary fw-semibold">Totales Consolidados:</span>
+        <div class="d-flex gap-3">
+          <span id="p_totalFacturasUSD" class="fw-bold text-success">0.00 USD</span>
+          <span id="p_totalFacturasBS" class="fw-bold text-warning">0.00 Bs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Métodos de Egreso -->
+    <div class="modern-card">
+      <div class="card-header-modern danger">
+        <h6 class="card-title"><span class="step-badge danger">3</span> Distribución de Métodos de Egreso</h6>
+      </div>
+      <div class="card-body-modern">
+        <div class="pago-distribucion">
+          <div class="form-card">
+            <h6 class="form-card-title"><i class="bi bi-dash-circle-fill text-danger"></i> Registrar Línea de Egreso</h6>
+            <div class="row g-2">
+              <div class="col-6">
+                <select id="p_lineaMoneda" class="form-select-modern">
+                  <option value="USD">Dólares (USD)</option>
+                  <option value="BS">Bolívares (BS)</option>
+                  <option value="EUR">Euros (EUR)</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <input type="number" id="p_lineaMonto" class="form-control-modern" placeholder="Monto">
+              </div>
+              <div class="col-12">
+                <select id="p_lineaModalidad" class="form-select-modern">
+                  <option value="">Método de Egreso...</option>
+                  <option value="PagoMovil">Pago Móvil</option>
+                  <option value="Transferencia">Transferencia Bancaria</option>
+                  <option value="Efectivo">Efectivo</option>
+                  <option value="Zelle">Zelle</option>
+                </select>
+              </div>
+              <div class="col-12" id="p_refContainer">
+                <input type="text" id="p_lineaRef" class="form-control-modern" placeholder="Referencia / Transferencia">
+              </div>
+              <div class="col-12">
+                <select id="p_lineaCuenta" class="form-select-modern"><option value="">Caja / Banco de Origen...</option></select>
+              </div>
+              <div class="col-12 mt-2">
+                <button class="btn-modern btn-modern-danger w-100 justify-content-center" onclick="p_agregarPago()"><i class="bi bi-plus-lg"></i> Agregar Egreso</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <h6 class="form-card-title"><i class="bi bi-list-check"></i> Egresos Registrados</h6>
+            <div class="table-modern-container" style="max-height: 180px;">
+              <table class="table-modern">
+                <thead class="sticky-top">
+                  <tr>
+                    <th>Método</th>
+                    <th class="text-end">Monto</th>
+                    <th class="text-end">USD Eq.</th>
+                    <th class="text-center" style="width: 40px;"></th>
+                  </tr>
+                </thead>
+                <tbody id="p_tablaPagosBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="pagos-grid">
+          <div class="form-card">
+            <h6 class="form-card-title"><i class="bi bi-pie-chart-fill"></i> Conciliación</h6>
+            <div class="summary-row">
+              <span class="text-muted">Total Facturas:</span>
+              <span id="p_resumenFacturasUSD" class="fw-bold text-success">0.00 USD</span>
+            </div>
+            <div class="summary-row">
+              <span class="text-muted">Total Egresos:</span>
+              <span id="p_resumenPagosUSD" class="fw-bold text-info">0.00 USD</span>
+            </div>
+            <div class="summary-row border-0">
+              <span class="text-muted">Diferencia:</span>
+              <span id="p_resumenDiferenciaUSD" class="fw-bold">0.00 USD</span>
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn-modern btn-modern-danger btn-main-action" id="btnGuardarPago" onclick="p_guardarTodo()">
+              <i class="bi bi-check2-circle fs-5"></i> Registrar Pago Completo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3: HISTORIAL -->
+  <div id="sectionHistorial" class="d-none">
+    <div class="modern-card">
+      <div class="card-header-modern success" style="border-bottom-color: var(--accent-info);">
+        <h6 class="card-title"><i class="bi bi-journal-text text-info"></i> Historial y Consultas de Transacciones</h6>
+        <button class="btn-modern btn-modern-outline" onclick="h_cargarDatos()" title="Sincronizar"><i class="bi bi-arrow-clockwise"></i> Actualizar</button>
+      </div>
+      <div class="card-body-modern">
+        <div class="row g-2 mb-3">
+          <div class="col-md-3 col-12">
+            <label class="form-label text-xs mb-1 text-muted">Buscar</label>
+            <input type="text" id="h_filtroTexto" class="form-control-modern" placeholder="Tercero o Factura..." oninput="h_filtrarYRenderizar()">
+          </div>
+          <div class="col-md-3 col-12">
+            <label class="form-label text-xs mb-1 text-muted">Tipo Historial</label>
+            <select id="h_filtroTipo" class="form-select-modern" onchange="h_filtrarYRenderizar()">
+              <option value="COBROS">Cobros de Clientes</option>
+              <option value="PAGOS">Pagos a Proveedores</option>
+            </select>
+          </div>
+          <div class="col-md-2 col-6">
+            <label class="form-label text-xs mb-1 text-muted">Desde</label>
+            <input type="date" id="h_filtroDesde" class="form-control-modern" onchange="h_filtrarYRenderizar()">
+          </div>
+          <div class="col-md-2 col-6">
+            <label class="form-label text-xs mb-1 text-muted">Hasta</label>
+            <input type="date" id="h_filtroHasta" class="form-control-modern" onchange="h_filtrarYRenderizar()">
+          </div>
+          <div class="col-md-2 col-12">
+            <label class="form-label text-xs mb-1 text-muted">Estado</label>
+            <select id="h_filtroEstado" class="form-select-modern" onchange="h_filtrarYRenderizar()">
+              <option value="TODOS">Todos</option>
+              <option value="PAGADO">Pagados</option>
+              <option value="ABONO PARCIAL">Abonos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-modern-container" style="max-height: 380px;">
+          <table class="table-modern">
+            <thead class="sticky-top"><tr id="h_columnasHeader"></tr></thead>
+            <tbody id="h_tablaBody">
+              <tr><td colspan="7" class="text-center py-4 text-muted">Cargando historial...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+window.initCobrarYPagar = function(transaccion, rol) {
+    let retencionesExistentes = { ventas: { iva: new Set(), islr: new Set() }, compras: { iva: new Set(), islr: new Set() } };
+    let c_todasVentas = [], c_pendientes = [], c_enCobro = [], c_pagosList = [];
+    let c_ultimoTerminoBusqueda = '';
+    let c_filtroFechaSeleccionado = 'meses_actual_anterior';
+    let p_todasCompras = [], p_pendientes = [], p_enPago = [], p_pagosList = [];
+    let p_ultimoTerminoBusqueda = '';
+    let p_filtroFechaSeleccionado = 'meses_actual_anterior';
+    let h_historicoGlobal = { cobros: [], pagos: [] };
+
+    const formatUSD = (val) => { const num = parseNumber(val); return num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); };
+    const formatBS = (val) => { const num = parseNumber(val); return num.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2}); };
+    const parseNumber = (val) => { 
+        if (typeof val === 'number') return isNaN(val) ? 0 : val; 
+        if (!val) return 0; 
+        let str = String(val).trim(); 
+        const lastComma = str.lastIndexOf(','); 
+        const lastDot = str.lastIndexOf('.'); 
+        if (lastComma !== -1 && lastDot !== -1) { 
+            str = lastComma > lastDot ? str.replace(/\./g, '').replace(',', '.') : str.replace(/,/g, ''); 
+        } else if (lastComma !== -1) { 
+            const parts = str.split(','); 
+            str = (parts.length === 2 && parts[1].length <= 2) ? str.replace(',', '.') : str.replace(/,/g, ''); 
+        } 
+        const res = parseFloat(str); 
+        return isNaN(res) ? 0 : res; 
+    };
+
+    function escapeHTML(str) { 
+        if (str === null || str === undefined) return ''; 
+        return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]); 
+    }
+
+    function esFechaMesActualOAnterior(fechaStr) {
+        if (!fechaStr) return false;
+        let fecha = (fechaStr instanceof Date) ? fechaStr : new Date(fechaStr);
+        if (isNaN(fecha.getTime())) {
+            const parts = String(fechaStr).split('/');
+            if (parts.length === 3) fecha = new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+        if (isNaN(fecha.getTime())) return true;
+        const hoy = new Date();
+        const anioHoy = hoy.getFullYear(), mesHoy = hoy.getMonth();
+        const anioF = fecha.getFullYear(), mesF = fecha.getMonth();
+        if (anioF === anioHoy && mesF === mesHoy) return true;
+        let mesAnt = mesHoy - 1, anioAnt = anioHoy;
+        if (mesAnt < 0) { mesAnt = 11; anioAnt--; }
+        return (anioF === anioAnt && mesF === mesAnt);
+    }
+
+    function switchMainTab(tab) { 
+        document.getElementById('sectionCobranzas').classList.toggle('d-none', tab !== 'cobranzas'); 
+        document.getElementById('sectionPagos').classList.toggle('d-none', tab !== 'pagos'); 
+        document.getElementById('sectionHistorial').classList.toggle('d-none', tab !== 'historial'); 
+        document.getElementById('lblCobranzas').classList.toggle('active', tab === 'cobranzas'); 
+        document.getElementById('lblPagos').classList.toggle('active', tab === 'pagos'); 
+        document.getElementById('lblHistorial').classList.toggle('active', tab === 'historial'); 
+        if (tab === 'cobranzas' && c_todasVentas.length === 0) c_cargarVentas(); 
+        if (tab === 'pagos' && p_todasCompras.length === 0) p_cargarCompras(); 
+        if (tab === 'historial') h_cargarDatos(); 
+    }
+
+    // =========================================================================
+    // MODALES Y ACCIÓN DE RETENCIONES CON VALIDACIÓN ANTIEXCEDENTES
+    // =========================================================================
+    function gestionarRetencionIVA(facturaNro, tipo) {
+        const esVenta = (tipo === 'ventas');
+        const lista = esVenta ? c_todasVentas : p_todasCompras;
+        const f = lista.find(item => (esVenta ? item.NroFacturaCliente : item.NroFacturaProveedor) === facturaNro);
+        if (!f) return;
+
+        const yaAplicada = retencionesExistentes[tipo].iva.has(facturaNro);
+        if (yaAplicada) {
+            Swal.fire({
+                title: 'Retención de IVA Ya Procesada',
+                html: `<div class="text-start small p-2">
+                        <p>Factura: <b>${escapeHTML(facturaNro)}</b></p>
+                        <p class="text-danger mb-0"><i class="bi bi-info-circle-fill"></i> El comprobante de IVA ya fue emitido y deducido del saldo de esta factura.</p>
+                       </div>`,
+                icon: 'info',
+                customClass: { popup: 'fiscal-dialog' }
+            });
+            return;
+        }
+
+        const tasa = parseNumber(f.TasaCliente || f.TasaProveedor || document.getElementById(esVenta ? 'tasaCobro' : 'tasaPago').value || 1);
+        const ivaBs = parseNumber(f.IvaCliente || f.IvaProveedor || 0);
+        const subtotalBs = parseNumber(f.SubTotalCliente || f.SubTotalProveedor || 0);
+        const saldoActualBs = parseNumber(esVenta ? f.SaldoCliente : f.SaldoProveedor);
+        const saldoActualUSD = parseNumber(esVenta ? f.SaldoClienteUSD : f.SaldoProveedorDivisa);
+        const fechaHoy = new Date().toISOString().split('T')[0];
+
+        // VALIDACIÓN PREVIA DE SALDO
+        if (saldoActualBs <= 0.01 && saldoActualUSD <= 0.01) {
+            Swal.fire('Factura Sin Saldo', 'Esta factura ya se encuentra totalmente saldada o en 0. No se pueden aplicar más retenciones.', 'warning');
+            return;
+        }
+
+        Swal.fire({
+            title: `<i class="bi bi-receipt text-success"></i> Aplicar Retención de IVA`,
+            html: `
+                <div class="text-start small">
+                    <p class="mb-2">Factura: <b class="text-info">${escapeHTML(facturaNro)}</b> - ${(escapeHTML(f.NombreCliente || f.NombreProveedor))}</p>
+                    <div class="fiscal-grid">
+                        <div class="fiscal-box">Base Imponible: <br><b class="text-warning">Bs. ${formatBS(subtotalBs)}</b></div>
+                        <div class="fiscal-box">IVA Facturado: <br><b class="text-warning">Bs. ${formatBS(ivaBs)}</b></div>
+                    </div>
+                    <div class="fiscal-box mt-2 text-center" style="background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.3);">
+                        <span class="text-muted">Saldo Disponible Factura:</span> 
+                        <b class="text-white">Bs. ${formatBS(saldoActualBs)}</b> <span class="text-muted">($${formatUSD(saldoActualUSD)})</span>
+                    </div>
+                    
+                    <div class="row g-2 mt-3">
+                        <div class="col-6">
+                            <label class="form-label text-muted text-xs">Porcentaje a Retener</label>
+                            <select id="modal_ret_porcentaje" class="form-select-modern" onchange="window.recalcRetIVA(${ivaBs}, ${tasa})">
+                                <option value="75">75% (General)</option>
+                                <option value="100">100% (Especial)</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label text-muted text-xs">Fecha Comprobante</label>
+                            <input type="date" id="modal_ret_fecha" class="form-control-modern" value="${fechaHoy}">
+                        </div>
+                        <div class="col-12 mt-2">
+                            <label class="form-label text-muted text-xs">Nro. de Comprobante</label>
+                            <input type="text" id="modal_ret_comprobante" class="form-control-modern" placeholder="Ej: 20260200000001">
+                        </div>
+                    </div>
+
+                    <div class="fiscal-box mt-3 text-center" style="background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3);">
+                        <span class="text-muted">Total a Retener de IVA:</span><br>
+                        <span id="modal_ret_total_bs" class="fs-5 fw-bold text-success">Bs. ${formatBS(ivaBs * 0.75)}</span> 
+                        <span id="modal_ret_total_usd" class="text-muted small">(${formatUSD((ivaBs * 0.75) / tasa)} USD)</span>
+                    </div>
+                </div>`,
+            showCancelButton: true,
+            confirmButtonText: '<i class="bi bi-save"></i> Aplicar Retención',
+            cancelButtonText: 'Cancelar',
+            customClass: { popup: 'fiscal-dialog' },
+            preConfirm: () => {
+                const comp = document.getElementById('modal_ret_comprobante').value.trim();
+                const porc = parseFloat(document.getElementById('modal_ret_porcentaje').value);
+                const fecha = document.getElementById('modal_ret_fecha').value;
+                if (!comp) {
+                    Swal.showValidationMessage('Debe ingresar el número de comprobante');
+                    return false;
+                }
+                const montoRetenidoBs = ivaBs * (porc / 100);
+                const montoRetenidoUSD = montoRetenidoBs / tasa;
+
+                // VALIDACIÓN: NO PERMITIR RETENER MÁS DEL SALDO
+                if (montoRetenidoBs > (saldoActualBs + 0.05)) {
+                    Swal.showValidationMessage(`El monto a retener (Bs. ${formatBS(montoRetenidoBs)}) supera el saldo de la factura (Bs. ${formatBS(saldoActualBs)}).`);
+                    return false;
+                }
+
+                const nuevoSaldoBs = Math.max(0, saldoActualBs - montoRetenidoBs);
+                const nuevoSaldoUSD = Math.max(0, saldoActualUSD - montoRetenidoUSD);
+
+                return {
+                    tipo: esVenta ? 'VENTA' : 'COMPRA',
+                    tipoRetencion: 'IVA',
+                    nroFactura: facturaNro,
+                    montoRetenido: montoRetenidoBs,
+                    montoRetenidoBs: montoRetenidoBs,
+                    montoRetenidoUSD: montoRetenidoUSD,
+                    nuevoSaldoBs: nuevoSaldoBs,
+                    nuevoSaldoUSD: nuevoSaldoUSD,
+                    fecha: fecha,
+                    nroComprobante: comp,
+                    nombreEntidad: esVenta ? f.NombreCliente : f.NombreProveedor,
+                    rifEntidad: esVenta ? f.RifCliente : f.RifProveedor,
+                    tasa: tasa,
+                    porcentaje: porc,
+                    tipoOperacion: tipo
+                };
+            }
+        }).then(result => {
+            if (result.isConfirmed) {
+                guardarRetencionBackend(result.value);
+            }
+        });
+    }
+
+    function gestionarRetencionISLR(facturaNro, tipo) {
+        const esVenta = (tipo === 'ventas');
+        const lista = esVenta ? c_todasVentas : p_todasCompras;
+        const f = lista.find(item => (esVenta ? item.NroFacturaCliente : item.NroFacturaProveedor) === facturaNro);
+        if (!f) return;
+
+        const yaAplicada = retencionesExistentes[tipo].islr.has(facturaNro);
+        if (yaAplicada) {
+            Swal.fire({
+                title: 'Retención ISLR Ya Procesada',
+                html: `<div class="text-start small p-2">
+                        <p>Factura: <b>${escapeHTML(facturaNro)}</b></p>
+                        <p class="text-danger mb-0"><i class="bi bi-info-circle-fill"></i> El comprobante de ISLR ya fue emitido y deducido del saldo de esta factura.</p>
+                       </div>`,
+                icon: 'info',
+                customClass: { popup: 'fiscal-dialog' }
+            });
+            return;
+        }
+
+        const tasa = parseNumber(f.TasaCliente || f.TasaProveedor || document.getElementById(esVenta ? 'tasaCobro' : 'tasaPago').value || 1);
+        const subtotalBs = parseNumber(f.SubTotalCliente || f.SubTotalProveedor || f.SaldoCliente || f.SaldoProveedor || 0);
+        const saldoActualBs = parseNumber(esVenta ? f.SaldoCliente : f.SaldoProveedor);
+        const saldoActualUSD = parseNumber(esVenta ? f.SaldoClienteUSD : f.SaldoProveedorDivisa);
+        const fechaHoy = new Date().toISOString().split('T')[0];
+
+        // VALIDACIÓN PREVIA DE SALDO
+        if (saldoActualBs <= 0.01 && saldoActualUSD <= 0.01) {
+            Swal.fire('Factura Sin Saldo', 'Esta factura no posee saldo pendiente disponible para retener.', 'warning');
+            return;
+        }
+
+        Swal.fire({
+            title: `<i class="bi bi-percent text-warning"></i> Aplicar Retención de ISLR`,
+            html: `
+                <div class="text-start small">
+                    <p class="mb-2">Factura: <b class="text-info">${escapeHTML(facturaNro)}</b> - ${(escapeHTML(f.NombreCliente || f.NombreProveedor))}</p>
+                    <div class="fiscal-grid">
+                        <div class="fiscal-box">Base Imponible: <br><b class="text-warning">Bs. ${formatBS(subtotalBs)}</b></div>
+                        <div class="fiscal-box">Tasa Aplicada: <br><b class="text-white">${tasa.toFixed(2)} Bs/$</b></div>
+                    </div>
+                    <div class="fiscal-box mt-2 text-center" style="background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.3);">
+                        <span class="text-muted">Saldo Disponible Factura:</span> 
+                        <b class="text-white">Bs. ${formatBS(saldoActualBs)}</b> <span class="text-muted">($${formatUSD(saldoActualUSD)})</span>
+                    </div>
+                    
+                    <div class="row g-2 mt-3">
+                        <div class="col-6">
+                            <label class="form-label text-muted text-xs">Concepto / % ISLR</label>
+                            <select id="modal_islr_porcentaje" class="form-select-modern" onchange="window.recalcRetISLR(${subtotalBs}, ${tasa})">
+                                <option value="1">1% (Servicios / Obras)</option>
+                                <option value="2">2% (Honorarios PJ)</option>
+                                <option value="3">3% (Honorarios PN)</option>
+                                <option value="5">5% (Arrendamiento)</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label text-muted text-xs">Fecha Comprobante</label>
+                            <input type="date" id="modal_islr_fecha" class="form-control-modern" value="${fechaHoy}">
+                        </div>
+                        <div class="col-12 mt-2">
+                            <label class="form-label text-muted text-xs">Nro. de Comprobante</label>
+                            <input type="text" id="modal_islr_comprobante" class="form-control-modern" placeholder="Ej: ISLR-2026-0001">
+                        </div>
+                    </div>
+
+                    <div class="fiscal-box mt-3 text-center" style="background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3);">
+                        <span class="text-muted">Total a Retener de ISLR:</span><br>
+                        <span id="modal_islr_total_bs" class="fs-5 fw-bold text-warning">Bs. ${formatBS(subtotalBs * 0.01)}</span> 
+                        <span id="modal_islr_total_usd" class="text-muted small">(${formatUSD((subtotalBs * 0.01) / tasa)} USD)</span>
+                    </div>
+                </div>`,
+            showCancelButton: true,
+            confirmButtonText: '<i class="bi bi-save"></i> Aplicar ISLR',
+            cancelButtonText: 'Cancelar',
+            customClass: { popup: 'fiscal-dialog' },
+            preConfirm: () => {
+                const comp = document.getElementById('modal_islr_comprobante').value.trim();
+                const porc = parseFloat(document.getElementById('modal_islr_porcentaje').value);
+                const fecha = document.getElementById('modal_islr_fecha').value;
+                if (!comp) {
+                    Swal.showValidationMessage('Debe ingresar el número de comprobante');
+                    return false;
+                }
+                const montoRetenidoBs = subtotalBs * (porc / 100);
+                const montoRetenidoUSD = montoRetenidoBs / tasa;
+
+                // VALIDACIÓN: NO PERMITIR RETENER MÁS DEL SALDO
+                if (montoRetenidoBs > (saldoActualBs + 0.05)) {
+                    Swal.showValidationMessage(`El monto de retención (Bs. ${formatBS(montoRetenidoBs)}) supera el saldo de la factura (Bs. ${formatBS(saldoActualBs)}).`);
+                    return false;
+                }
+
+                const nuevoSaldoBs = Math.max(0, saldoActualBs - montoRetenidoBs);
+                const nuevoSaldoUSD = Math.max(0, saldoActualUSD - montoRetenidoUSD);
+
+                return {
+                    tipo: esVenta ? 'VENTA' : 'COMPRA',
+                    tipoRetencion: 'ISLR',
+                    nroFactura: facturaNro,
+                    montoRetenido: montoRetenidoBs,
+                    montoRetenidoBs: montoRetenidoBs,
+                    montoRetenidoUSD: montoRetenidoUSD,
+                    nuevoSaldoBs: nuevoSaldoBs,
+                    nuevoSaldoUSD: nuevoSaldoUSD,
+                    fecha: fecha,
+                    nroComprobante: comp,
+                    nombreEntidad: esVenta ? f.NombreCliente : f.NombreProveedor,
+                    rifEntidad: esVenta ? f.RifCliente : f.RifProveedor,
+                    tasa: tasa,
+                    porcentaje: porc,
+                    tipoOperacion: tipo
+                };
+            }
+        }).then(result => {
+            if (result.isConfirmed) {
+                guardarRetencionBackend(result.value);
+            }
+        });
+    }
+
+    // =========================================================================
+    // GUARDADO Y ACTUALIZACIÓN INMEDIATA DEL COLOR DE BOTONES (VERDE -> ROJO)
+    // =========================================================================
+    function guardarRetencionBackend(payload) {
+        Swal.fire({
+            title: 'Registrando Retención...',
+            text: 'Actualizando saldos y asiento contable...',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        // ACTUALIZACIÓN INMEDIATA EN MEMORIA LOCAL (PARA QUE CAMBIE DE VERDE A ROJO AL INSTANTE)
+        const tipoOp = payload.tipoOperacion; // 'ventas' o 'compras'
+        if (payload.tipoRetencion === 'IVA') retencionesExistentes[tipoOp].iva.add(String(payload.nroFactura));
+        if (payload.tipoRetencion === 'ISLR') retencionesExistentes[tipoOp].islr.add(String(payload.nroFactura));
+
+        const lista = (tipoOp === 'ventas') ? c_todasVentas : p_todasCompras;
+        const itemFactura = lista.find(f => (tipoOp === 'ventas' ? f.NroFacturaCliente : f.NroFacturaProveedor) === payload.nroFactura);
+        if (itemFactura) {
+            if (tipoOp === 'ventas') {
+                itemFactura.SaldoCliente = payload.nuevoSaldoBs;
+                itemFactura.SaldoClienteUSD = payload.nuevoSaldoUSD;
+                if (payload.tipoRetencion === 'IVA') itemFactura.tieneRetencionIva = true;
+                if (payload.tipoRetencion === 'ISLR') itemFactura.tieneRetencionIslr = true;
+            } else {
+                itemFactura.SaldoProveedor = payload.nuevoSaldoBs;
+                itemFactura.SaldoProveedorDivisa = payload.nuevoSaldoUSD;
+                if (payload.tipoRetencion === 'IVA') itemFactura.tieneRetencionIva = true;
+                if (payload.tipoRetencion === 'ISLR') itemFactura.tieneRetencionIslr = true;
+            }
+        }
+
+        // Re-renderizado de la tabla con el nuevo color y saldo
+        if (tipoOp === 'ventas') c_filtrarTabla(c_ultimoTerminoBusqueda);
+        else p_filtrarTabla(p_ultimoTerminoBusqueda);
+
+        if (typeof google === 'undefined' || !google.script || !google.script.run) {
+            setTimeout(() => {
+                Swal.fire('Éxito (Offline)', 'Retención aplicada correctamente.', 'success');
+            }, 600);
+            return;
+        }
+
+        google.script.run
+            .withSuccessHandler(res => {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Retención Registrada!',
+                    text: (res && res.message) ? res.message : 'Retención guardada y saldo actualizado con éxito.',
+                    timer: 2500,
+                    showConfirmButton: false
+                });
+                // Sincronizar hoja de cálculo completa
+                if (tipoOp === 'ventas') c_cargarVentas();
+                else p_cargarCompras();
+            })
+            .withFailureHandler(e => {
+                console.error("Error al registrar retención:", e);
+                Swal.fire('Error al Registrar', e.message, 'error');
+                // En caso de fallo, recargar para restaurar estado real
+                if (tipoOp === 'ventas') c_cargarVentas();
+                else p_cargarCompras();
+            })
+            .registrarRetencion(payload);
+    }
+
+    window.recalcRetIVA = function(ivaBs, tasa) {
+        const porc = parseFloat(document.getElementById('modal_ret_porcentaje').value) || 75;
+        const retBs = ivaBs * (porc / 100);
+        document.getElementById('modal_ret_total_bs').textContent = 'Bs. ' + formatBS(retBs);
+        document.getElementById('modal_ret_total_usd').textContent = `(${formatUSD(retBs / tasa)} USD)`;
+    };
+
+    window.recalcRetISLR = function(subBs, tasa) {
+        const porc = parseFloat(document.getElementById('modal_islr_porcentaje').value) || 1;
+        const retBs = subBs * (porc / 100);
+        document.getElementById('modal_islr_total_bs').textContent = 'Bs. ' + formatBS(retBs);
+        document.getElementById('modal_islr_total_usd').textContent = `(${formatUSD(retBs / tasa)} USD)`;
+    };
+
+    // =========================================================================
+    // COBRANZAS (VENTAS)
+    // =========================================================================
+    function c_cargarVentas() { 
+        const icon = document.getElementById('c_iconRecargar');
+        if (icon) icon.classList.add('rotating');
+        
+        if (typeof google === 'undefined' || !google.script || !google.script.run) {
+            if (icon) icon.classList.remove('rotating');
+            return;
+        }
+        
+        google.script.run.withSuccessHandler(data => { 
+            if (icon) icon.classList.remove('rotating');
+            c_todasVentas = (data || []).map(venta => ({
+                ...venta,
+                COD: venta.COD || venta.cod || venta.Id || venta.ID || venta.NroFacturaCliente || '',
+                NroFacturaCliente: String(venta.NroFacturaCliente || venta.NroFactura || '').trim(),
+                NombreCliente: String(venta.NombreCliente || venta.Cliente || 'Cliente General').trim(),
+                RifCliente: String(venta.RifCliente || venta.Rif || '').trim(),
+                SaldoCliente: parseNumber(venta.SaldoCliente || venta.saldo || 0),
+                SaldoClienteUSD: parseNumber(venta.SaldoClienteUSD || venta.saldoUSD || 0),
+                SubTotalCliente: parseNumber(venta.SubTotalCliente || venta.SubTotal || 0),
+                IvaCliente: parseNumber(venta.IvaCliente || venta.Iva || 0),
+                TotalCliente: parseNumber(venta.TotalCliente || venta.Total || 0),
+                TasaCliente: parseNumber(venta.TasaCliente || venta.Tasa || 1),
+                FechaFacturaCliente: venta.FechaFacturaCliente || venta.Fecha || '',
+                tieneRetencionIva: venta.tieneRetencionIva || false,
+                tieneRetencionIslr: venta.tieneRetencionIslr || false
+            }));
+            actualizarCacheRetenciones(c_todasVentas, 'ventas');
+            c_filtrarTabla(c_ultimoTerminoBusqueda);
+        }).withFailureHandler(e => {
+            if (icon) icon.classList.remove('rotating');
+            Swal.fire('Error al cargar ventas', e.message, 'error');
+        }).getVentas(); 
+    }
+
+    function c_limpiarYRecargar() {
+        c_enCobro = []; c_pagosList = []; c_ultimoTerminoBusqueda = '';
+        const s = document.getElementById('searchCliente'); if (s) s.value = '';
+        document.querySelector("#cobranzaLista tbody").innerHTML = '<tr><td colspan="6" class="text-center py-3 text-muted">No has seleccionado ninguna factura</td></tr>';
+        document.getElementById("c_tablaPagosBody").innerHTML = "";
+        document.querySelector("#ventasLista tbody").innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-success"></div> Sincronizando datos...</td></tr>';
+        c_recalcularTodo();
+        c_cargarVentas();
+    }
+
+    function c_cambiarFiltroFecha(val) { c_filtroFechaSeleccionado = val; c_filtrarTabla(c_ultimoTerminoBusqueda); }
+
+    function c_filtrarTabla(term) {
+        c_ultimoTerminoBusqueda = term || '';
+        const lower = c_ultimoTerminoBusqueda.toLowerCase();
+        const selectedIds = new Set(c_enCobro.map(f => f.NroFacturaCliente));
+        c_pendientes = c_todasVentas.filter(v => {
+            if (selectedIds.has(v.NroFacturaCliente)) return false;
+            const matchesText = ((v.NombreCliente || '').toLowerCase().includes(lower) || (v.NroFacturaCliente || '').toLowerCase().includes(lower));
+            const matchesDate = c_filtroFechaSeleccionado === 'meses_actual_anterior' ? esFechaMesActualOAnterior(v.FechaFacturaCliente) : true;
+            return matchesText && matchesDate;
+        });
+        c_renderTablaVentas();
+    }
+
+    function c_renderTablaVentas() {
+        const tbody = document.querySelector("#ventasLista tbody");
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        if (c_pendientes.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No se encontraron facturas pendientes</td></tr>';
+            return;
+        }
+        c_pendientes.forEach(v => {
+            const nro = String(v.NroFacturaCliente || '');
+            const hasIva = retencionesExistentes.ventas.iva.has(nro);
+            const hasIslr = retencionesExistentes.ventas.islr.has(nro);
+            const saldoUSD = parseNumber(v.SaldoClienteUSD);
+            const saldoBs = parseNumber(v.SaldoCliente);
+            const active = saldoUSD > 0.01;
+            const nroEscapado = nro.replace(/'/g, "\\'");
+
+            // VERDE (pending) = NO hecha / ROJO (ok) = YA hecha
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="text-center"><input type="checkbox" class="form-check-input" onchange="c_moverAFacturas('${nroEscapado}')" ${!active ? 'disabled' : ''}></td>
+                <td><div class="fw-bold">${escapeHTML(v.NombreCliente)}</div></td>
+                <td><span class="badge bg-dark border border-secondary">${escapeHTML(nro)}</span></td>
+                <td class="text-end fw-bold ${active ? 'text-success' : 'text-muted'}">${formatUSD(saldoUSD)}</td>
+                <td class="text-end text-muted">${formatBS(saldoBs)}</td>
+                <td class="text-center">
+                    <button type="button" class="btn-ret-action ${hasIva ? 'ok' : 'pending'}" onclick="gestionarRetencionIVA('${nroEscapado}', 'ventas')" title="${hasIva ? 'Retención de IVA aplicada' : 'Hacer Retención de IVA'}">
+                        <i class="bi ${hasIva ? 'bi-check2-circle' : 'bi-plus-lg'}"></i> ${hasIva ? 'IVA OK' : '+ IVA'}
+                    </button>
+                    <button type="button" class="btn-ret-action ${hasIslr ? 'ok' : 'pending'}" onclick="gestionarRetencionISLR('${nroEscapado}', 'ventas')" title="${hasIslr ? 'Retención de ISLR aplicada' : 'Hacer Retención de ISLR'}">
+                        <i class="bi ${hasIslr ? 'bi-check2-circle' : 'bi-plus-lg'}"></i> ${hasIslr ? 'ISLR OK' : '+ ISLR'}
+                    </button>
+                </td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function c_moverAFacturas(nro) {
+        const idx = c_pendientes.findIndex(v => v.NroFacturaCliente === nro);
+        if (idx > -1) {
+            const item = c_pendientes[idx];
+            if (c_enCobro.length > 0) {
+                const primerCliente = c_enCobro[0].RifCliente || c_enCobro[0].NombreCliente;
+                const nuevoCliente = item.RifCliente || item.NombreCliente;
+                if (primerCliente !== nuevoCliente) {
+                    Swal.fire({ icon: 'warning', title: 'Cliente Diferente', text: 'Solo puedes agrupar facturas del mismo cliente.' });
+                    c_renderTablaVentas();
+                    return;
+                }
+            }
+            c_pendientes.splice(idx, 1);
+            item.montoACobrarUSD = parseNumber(item.SaldoClienteUSD);
+            c_enCobro.push(item);
+            c_filtrarTabla(c_ultimoTerminoBusqueda);
+            c_renderTablaCobro();
+        }
+    }
+
+    function c_renderTablaCobro() {
+        const tbody = document.querySelector("#cobranzaLista tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        if (c_enCobro.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-3 text-muted">No has seleccionado ninguna factura</td></tr>';
+            document.getElementById('c_totalFacturasUSD').textContent = "0.00 USD";
+            document.getElementById('c_totalFacturasBS').textContent = "0.00 Bs";
+            c_recalcularTodo();
+            return;
+        }
+        let totalUSD = 0, totalBS = 0;
+        const tasa = parseFloat(document.getElementById('tasaCobro').value) || 1;
+        c_enCobro.forEach(v => {
+            const payUsd = parseFloat(v.montoACobrarUSD || 0);
+            const payBs = payUsd * tasa;
+            totalUSD += payUsd;
+            totalBS += payBs;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><div class="fw-bold">${escapeHTML(v.NombreCliente)}</div><small class="text-muted">Fact: ${escapeHTML(v.NroFacturaCliente)}</small></td>
+                <td class="text-end text-muted">${formatUSD(v.SaldoClienteUSD)}</td>
+                <td class="text-end text-muted">${formatBS(v.SaldoCliente)}</td>
+                <td><input type="number" class="form-control-modern py-1 text-end" value="${payUsd.toFixed(2)}" onchange="c_updateMonto('${v.NroFacturaCliente}', this.value)" step="0.01" style="max-width:110px; margin-left:auto;"></td>
+                <td class="text-end text-warning fw-semibold">${formatBS(payBs)}</td>
+                <td class="text-center"><i class="bi bi-trash text-danger cursor-pointer fs-5" onclick="c_devolver('${v.NroFacturaCliente}')"></i></td>`;
+            tbody.appendChild(tr);
+        });
+        document.getElementById('c_totalFacturasUSD').textContent = formatUSD(totalUSD) + ' USD';
+        document.getElementById('c_totalFacturasBS').textContent = formatBS(totalBS) + ' Bs';
+        c_recalcularTodo();
+    }
+
+    function c_updateMonto(nro, val) {
+        const item = c_enCobro.find(f => f.NroFacturaCliente === nro);
+        if (item) { item.montoACobrarUSD = parseFloat(val) || 0; c_renderTablaCobro(); }
+    }
+    function c_devolver(nro) {
+        const idx = c_enCobro.findIndex(f => f.NroFacturaCliente === nro);
+        if (idx > -1) {
+            c_pendientes.push(c_enCobro.splice(idx, 1)[0]);
+            c_filtrarTabla(c_ultimoTerminoBusqueda);
+            c_renderTablaCobro();
+        }
+    }
+
+    function c_agregarPago() {
+        const moneda = document.getElementById('c_lineaMoneda').value;
+        const monto = parseFloat(document.getElementById('c_lineaMonto').value);
+        const modalidad = document.getElementById('c_lineaModalidad').value;
+        const referencia = modalidad === 'Efectivo' ? '' : document.getElementById('c_lineaRef').value;
+        const cuenta = document.getElementById('c_lineaCuenta').value;
+        const tasa = parseFloat(document.getElementById('tasaCobro').value) || 1;
+        if (!monto || monto <= 0) return Swal.fire('Atención', 'Monto inválido', 'warning');
+        if (!modalidad) return Swal.fire('Atención', 'Selecciona método de pago', 'warning');
+
+        c_pagosList.push({
+            moneda, monto, modalidad, referencia, cuenta,
+            eqUsd: moneda === 'USD' ? monto : (moneda === 'BS' ? monto / tasa : monto),
+            eqBs: moneda === 'BS' ? monto : (moneda === 'USD' ? monto * tasa : monto)
+        });
+        c_recalcularTodo();
+        document.getElementById('c_lineaMonto').value = '';
+        document.getElementById('c_lineaRef').value = '';
+    }
+
+    function c_recalcularTodo() {
+        const tasa = parseFloat(document.getElementById('tasaCobro').value) || 1;
+        const totalFacturasUSD = c_enCobro.reduce((acc, v) => acc + parseFloat(v.montoACobrarUSD || 0), 0);
+        let totalPagosUSD = 0;
+        c_pagosList.forEach(p => {
+            p.eqUsd = p.moneda === 'USD' ? p.monto : (p.moneda === 'BS' ? p.monto / tasa : p.monto);
+            p.eqBs = p.moneda === 'BS' ? p.monto : (p.moneda === 'USD' ? p.monto * tasa : p.monto);
+            totalPagosUSD += p.eqUsd;
+        });
+        document.getElementById('c_resumenFacturasUSD').textContent = formatUSD(totalFacturasUSD) + " USD";
+        document.getElementById('c_resumenPagosUSD').textContent = formatUSD(totalPagosUSD) + " USD";
+        const diffUSD = totalFacturasUSD - totalPagosUSD;
+        const diffElemUSD = document.getElementById('c_resumenDiferenciaUSD');
+        if (diffElemUSD) {
+            diffElemUSD.textContent = formatUSD(diffUSD) + " USD";
+            diffElemUSD.className = "fw-bold " + (Math.abs(diffUSD) < 0.1 ? 'text-success' : 'text-danger');
+        }
+        actualizarTablaPagosCobranza();
+    }
+
+    function actualizarTablaPagosCobranza() {
+        const tbody = document.getElementById('c_tablaPagosBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        c_pagosList.forEach((p, index) => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td><small class="fw-semibold">${escapeHTML(p.modalidad)}</small></td>
+                <td class="text-end">${p.moneda} ${formatBS(p.monto)}</td>
+                <td class="text-end text-success fw-bold">${formatUSD(p.eqUsd)}</td>
+                <td class="text-center"><i class="bi bi-x-circle text-danger cursor-pointer" onclick="c_eliminarPago(${index})"></i></td>`;
+        });
+    }
+    function c_eliminarPago(idx) { c_pagosList.splice(idx, 1); c_recalcularTodo(); }
+
+    function c_guardarTodo() {
+        const totalFacturas = c_enCobro.reduce((acc, v) => acc + parseFloat(v.montoACobrarUSD || 0), 0);
+        const totalPagos = c_pagosList.reduce((acc, p) => acc + p.eqUsd, 0);
+        if (c_enCobro.length === 0) return Swal.fire('Error', 'Seleccione facturas para cobrar.', 'warning');
+        if (c_pagosList.length === 0) return Swal.fire('Error', 'Agregue formas de pago.', 'warning');
+        if (Math.abs(totalFacturas - totalPagos) > 0.10) return Swal.fire('Descuadrado', 'Existe diferencia entre facturas y pagos.', 'warning');
+
+        let esAnticipo = c_enCobro.some(f => parseFloat(f.montoACobrarUSD) < parseFloat(f.SaldoClienteUSD) - 0.01);
+        const payload = {
+            infoPago: {
+                fecha: document.getElementById('fechaCobro').value,
+                tasa: document.getElementById('tasaCobro').value,
+                modalidad: "Múltiple",
+                referencia: "Ver Detalle",
+                resumenPago: c_pagosList.map(p => `${p.modalidad}(${p.moneda} ${p.monto})`).join(' | '),
+                detallesPago: c_pagosList,
+                esAnticipoParcial: esAnticipo
+            },
+            facturas: c_enCobro
+        };
+
+        const proceder = () => {
+            Swal.fire({ title: 'Registrando Cobro...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            google.script.run.withSuccessHandler(() => {
+                Swal.fire('Éxito', 'Cobranza guardada satisfactoriamente', 'success');
+                c_limpiarYRecargar();
+            }).withFailureHandler(e => Swal.fire('Error', e.message, 'error')).registrarCobranza(payload);
+        };
+
+        if (esAnticipo) {
+            Swal.fire({
+                title: '¿Confirmar cobro parcial?',
+                text: 'El monto es menor al saldo total. Quedará saldo pendiente.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, registrar'
+            }).then(r => { if (r.isConfirmed) proceder(); });
+        } else {
+            proceder();
+        }
+    }
+
+    // =========================================================================
+    // PAGOS (COMPRAS)
+    // =========================================================================
+    function p_cargarCompras() {
+        const icon = document.getElementById('p_iconRecargar');
+        if (icon) icon.classList.add('rotating');
+
+        if (typeof google === 'undefined' || !google.script || !google.script.run) {
+            if (icon) icon.classList.remove('rotating');
+            return;
+        }
+
+        google.script.run.withSuccessHandler(data => {
+            if (icon) icon.classList.remove('rotating');
+            p_todasCompras = (data || []).map(c => ({
+                ...c,
+                COD: c.COD || c.cod || c.Id || c.ID || c.NroFacturaProveedor || '',
+                NroFacturaProveedor: String(c.NroFacturaProveedor || c.NroFactura || '').trim(),
+                NombreProveedor: String(c.NombreProveedor || c.Proveedor || 'Proveedor General').trim(),
+                RifProveedor: String(c.RifProveedor || c.Rif || '').trim(),
+                SaldoProveedor: parseNumber(c.SaldoProveedor || c.saldo || 0),
+                SaldoProveedorDivisa: parseNumber(c.SaldoProveedorDivisa || c.saldoUSD || 0),
+                SubTotalProveedor: parseNumber(c.SubTotalProveedor || c.SubTotal || 0),
+                IvaProveedor: parseNumber(c.IvaProveedor || c.Iva || 0),
+                TotalProveedor: parseNumber(c.TotalProveedor || c.Total || 0),
+                TasaProveedor: parseNumber(c.TasaProveedor || c.Tasa || 1),
+                FechaFacturaProveedor: c.FechaFacturaProveedor || c.Fecha || '',
+                tieneRetencionIva: c.tieneRetencionIva || false,
+                tieneRetencionIslr: c.tieneRetencionIslr || false
+            }));
+            actualizarCacheRetenciones(p_todasCompras, 'compras');
+            p_filtrarTabla('');
+        }).withFailureHandler(e => {
+            if (icon) icon.classList.remove('rotating');
+            Swal.fire('Error al cargar compras', e.message, 'error');
+        }).getCompras();
+    }
+
+    function p_limpiarYRecargar() {
+        p_todasCompras = []; p_pendientes = []; p_enPago = []; p_pagosList = []; p_ultimoTerminoBusqueda = '';
+        const s = document.getElementById('searchProveedor'); if (s) s.value = '';
+        document.querySelector("#pagosLista tbody").innerHTML = '<tr><td colspan="6" class="text-center py-3 text-muted">No has seleccionado ninguna factura</td></tr>';
+        document.getElementById("p_tablaPagosBody").innerHTML = "";
+        document.querySelector("#comprasLista tbody").innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-danger"></div> Sincronizando datos...</td></tr>';
+        p_recalcularTodo();
+        p_cargarCompras();
+    }
+
+    function p_cambiarFiltroFecha(val) { p_filtroFechaSeleccionado = val; p_filtrarTabla(p_ultimoTerminoBusqueda); }
+
+    function p_filtrarTabla(term) {
+        p_ultimoTerminoBusqueda = term || '';
+        const lower = p_ultimoTerminoBusqueda.toLowerCase();
+        const selectedIds = new Set(p_enPago.map(f => String(f.Id)));
+        p_pendientes = p_todasCompras.filter(v => {
+            if (selectedIds.has(String(v.Id))) return false;
+            const matchesText = ((v.NombreProveedor || '').toLowerCase().includes(lower) || (v.NroFacturaProveedor || '').toLowerCase().includes(lower));
+            const matchesDate = p_filtroFechaSeleccionado === 'meses_actual_anterior' ? esFechaMesActualOAnterior(v.FechaFacturaProveedor) : true;
+            return matchesText && matchesDate;
+        });
+        p_renderTablaCompras();
+    }
+
+    function p_renderTablaCompras() {
+        const tbody = document.querySelector("#comprasLista tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        const comprasAMostrar = p_pendientes.filter(v => (parseFloat(v.SaldoProveedorDivisa) > 0.01 || parseFloat(v.SaldoProveedor) > 0.01));
+        if (comprasAMostrar.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">No se encontraron facturas pendientes</td></tr>`;
+            return;
+        }
+        comprasAMostrar.forEach(v => {
+            const usd = parseFloat(v.SaldoProveedorDivisa) || 0;
+            const bs = parseFloat(v.SaldoProveedor) || 0;
+            const hasIva = retencionesExistentes.compras.iva.has(v.NroFacturaProveedor);
+            const hasIslr = retencionesExistentes.compras.islr.has(v.NroFacturaProveedor);
+            const nroEscapado = String(v.NroFacturaProveedor || '').replace(/'/g, "\\'");
+
+            // VERDE (pending) = NO hecha / ROJO (ok) = YA hecha
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="text-center"><input type="checkbox" class="form-check-input" onchange="p_moverAPagos('${escapeHTML(v.Id)}')"></td>
+                <td><div class="fw-bold">${escapeHTML(v.NombreProveedor)}</div><small class="text-muted">${escapeHTML(v.RifProveedor)}</small></td>
+                <td><span class="badge bg-dark border border-secondary">${escapeHTML(v.NroFacturaProveedor)}</span></td>
+                <td class="text-end text-success fw-bold">${formatUSD(usd)}</td>
+                <td class="text-end text-warning fw-bold">${formatBS(bs)}</td>
+                <td class="text-center">
+                    <button type="button" class="btn-ret-action ${hasIva ? 'ok' : 'pending'}" onclick="gestionarRetencionIVA('${nroEscapado}', 'compras')" title="${hasIva ? 'Retención de IVA aplicada' : 'Hacer Retención de IVA'}">
+                        <i class="bi ${hasIva ? 'bi-check2-circle' : 'bi-plus-lg'}"></i> ${hasIva ? 'IVA OK' : '+ IVA'}
+                    </button>
+                    <button type="button" class="btn-ret-action ${hasIslr ? 'ok' : 'pending'}" onclick="gestionarRetencionISLR('${nroEscapado}', 'compras')" title="${hasIslr ? 'Retención de ISLR aplicada' : 'Hacer Retención de ISLR'}">
+                        <i class="bi ${hasIslr ? 'bi-check2-circle' : 'bi-plus-lg'}"></i> ${hasIslr ? 'ISLR OK' : '+ ISLR'}
+                    </button>
+                </td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function p_moverAPagos(id) {
+        const idx = p_pendientes.findIndex(v => String(v.Id) === String(id));
+        if (idx > -1) {
+            const item = p_pendientes[idx];
+            if (p_enPago.length > 0) {
+                const primerProv = p_enPago[0].RifProveedor || p_enPago[0].NombreProveedor;
+                const nuevoProv = item.RifProveedor || item.NombreProveedor;
+                if (primerProv !== nuevoProv) {
+                    Swal.fire({ icon: 'warning', title: 'Proveedor Diferente', text: 'Solo puedes procesar facturas del mismo proveedor.' });
+                    p_renderTablaCompras();
+                    return;
+                }
+            }
+            p_pendientes.splice(idx, 1);
+            item.montoAPagarUSD = parseNumber(item.SaldoProveedorDivisa);
+            p_enPago.push(item);
+            p_renderTablaCompras();
+            p_renderTablaPago();
+        }
+    }
+
+    function p_renderTablaPago() {
+        const tbody = document.querySelector("#pagosLista tbody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        if (p_enPago.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-3 text-muted">No has seleccionado ninguna factura</td></tr>';
+            document.getElementById('p_totalFacturasUSD').textContent = "0.00 USD";
+            document.getElementById('p_totalFacturasBS').textContent = "0.00 Bs";
+            p_recalcularTodo();
+            return;
+        }
+        let totalUSD = 0, totalBS = 0;
+        const tasa = parseFloat(document.getElementById('tasaPago').value) || 1;
+        p_enPago.forEach(v => {
+            const payUsd = parseFloat(v.montoAPagarUSD || 0);
+            const payBs = payUsd * tasa;
+            totalUSD += payUsd; totalBS += payBs;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><div class="fw-bold">${escapeHTML(v.NombreProveedor)}</div><small class="text-muted">Fact: ${escapeHTML(v.NroFacturaProveedor)}</small></td>
+                <td class="text-end text-muted">${formatUSD(v.SaldoProveedorDivisa)}</td>
+                <td class="text-end text-muted">${formatBS(v.SaldoProveedor)}</td>
+                <td><input type="number" class="form-control-modern py-1 text-end" value="${payUsd.toFixed(2)}" onchange="p_updateMonto('${v.Id}', this.value)" step="0.01" style="max-width:110px; margin-left:auto;"></td>
+                <td class="text-end text-warning fw-semibold">${formatBS(payBs)}</td>
+                <td class="text-center"><i class="bi bi-x-circle text-danger cursor-pointer fs-5" onclick="p_devolver('${v.Id}')"></i></td>`;
+            tbody.appendChild(tr);
+        });
+        document.getElementById('p_totalFacturasUSD').textContent = formatUSD(totalUSD) + ' USD';
+        document.getElementById('p_totalFacturasBS').textContent = formatBS(totalBS) + ' Bs';
+        p_recalcularTodo();
+    }
+
+    function p_updateMonto(id, val) {
+        const item = p_enPago.find(f => String(f.Id) === String(id));
+        if (item) { item.montoAPagarUSD = parseFloat(val) || 0; p_renderTablaPago(); }
+    }
+    function p_devolver(id) {
+        const idx = p_enPago.findIndex(f => String(f.Id) === String(id));
+        if (idx > -1) {
+            p_pendientes.push(p_enPago.splice(idx, 1)[0]);
+            p_filtrarTabla(document.getElementById('searchProveedor').value);
+            p_renderTablaPago();
+        }
+    }
+
+    function p_agregarPago() {
+        const moneda = document.getElementById('p_lineaMoneda').value;
+        const monto = parseFloat(document.getElementById('p_lineaMonto').value);
+        const modalidad = document.getElementById('p_lineaModalidad').value;
+        const referencia = modalidad === 'Efectivo' ? '' : document.getElementById('p_lineaRef').value;
+        const cuenta = document.getElementById('p_lineaCuenta').value;
+        const tasa = parseFloat(document.getElementById('tasaPago').value) || 1;
+        if (!monto || monto <= 0) return Swal.fire('Atención', 'Monto inválido', 'warning');
+        if (!modalidad) return Swal.fire('Atención', 'Selecciona método de egreso', 'warning');
+
+        p_pagosList.push({
+            moneda, monto, modalidad, referencia, cuenta,
+            eqUsd: moneda === 'USD' ? monto : (moneda === 'BS' ? monto / tasa : monto),
+            eqBs: moneda === 'BS' ? monto : (moneda === 'USD' ? monto * tasa : monto)
+        });
+        p_recalcularTodo();
+        document.getElementById('p_lineaMonto').value = '';
+        document.getElementById('p_lineaRef').value = '';
+    }
+
+    function p_recalcularTodo() {
+        const tasa = parseFloat(document.getElementById('tasaPago').value) || 1;
+        const totalFacturasUSD = p_enPago.reduce((acc, v) => acc + parseFloat(v.montoAPagarUSD || 0), 0);
+        let totalPagosUSD = 0;
+        p_pagosList.forEach(p => {
+            p.eqUsd = p.moneda === 'USD' ? p.monto : (p.moneda === 'BS' ? p.monto / tasa : p.monto);
+            p.eqBs = p.moneda === 'BS' ? p.monto : (p.moneda === 'USD' ? p.monto * tasa : p.monto);
+            totalPagosUSD += p.eqUsd;
+        });
+        document.getElementById('p_resumenFacturasUSD').textContent = formatUSD(totalFacturasUSD) + " USD";
+        document.getElementById('p_resumenPagosUSD').textContent = formatUSD(totalPagosUSD) + " USD";
+        const diffUSD = totalFacturasUSD - totalPagosUSD;
+        const diffElemUSD = document.getElementById('p_resumenDiferenciaUSD');
+        if (diffElemUSD) {
+            diffElemUSD.textContent = formatUSD(diffUSD) + " USD";
+            diffElemUSD.className = "fw-bold " + (Math.abs(diffUSD) < 0.1 ? 'text-success' : 'text-danger');
+        }
+        actualizarTablaPagosPago();
+    }
+
+    function actualizarTablaPagosPago() {
+        const tbody = document.getElementById('p_tablaPagosBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        p_pagosList.forEach((p, index) => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td><small class="fw-semibold">${escapeHTML(p.modalidad)}</small></td>
+                <td class="text-end">${p.moneda} ${formatBS(p.monto)}</td>
+                <td class="text-end text-success fw-bold">${formatUSD(p.eqUsd)}</td>
+                <td class="text-center"><i class="bi bi-x-circle text-danger cursor-pointer" onclick="p_eliminarPago(${index})"></i></td>`;
+        });
+    }
+    function p_eliminarPago(idx) { p_pagosList.splice(idx, 1); p_recalcularTodo(); }
+
+    function p_guardarTodo() {
+        const totalFacturas = p_enPago.reduce((acc, v) => acc + parseFloat(v.montoAPagarUSD || 0), 0);
+        const totalPagos = p_pagosList.reduce((acc, p) => acc + p.eqUsd, 0);
+        if (p_enPago.length === 0) return Swal.fire('Error', 'Seleccione facturas para pagar.', 'warning');
+        if (p_pagosList.length === 0) return Swal.fire('Error', 'Agregue formas de pago.', 'warning');
+        if (Math.abs(totalFacturas - totalPagos) > 0.10) return Swal.fire('Descuadrado', 'Existe diferencia entre facturas y egresos.', 'warning');
+
+        let esAnticipo = p_enPago.some(f => parseFloat(f.montoAPagarUSD) < parseFloat(f.SaldoProveedorDivisa) - 0.01);
+        const primerPago = p_pagosList[0];
+        const [tipoCuenta, nombreCuenta] = (primerPago.cuenta || 'Banco|').split('|');
+        const payload = {
+            infoPago: {
+                fecha: document.getElementById('fechaPago').value,
+                tasa: document.getElementById('tasaPago').value,
+                moneda: primerPago.moneda,
+                modalidad: primerPago.modalidad,
+                referencia: primerPago.referencia,
+                resumenPago: p_pagosList.map(p => `${p.modalidad}(${p.moneda} ${p.monto})`).join(' | '),
+                detallesPago: p_pagosList,
+                cuentaOrigen: nombreCuenta || primerPago.cuenta,
+                bancoOrigen: tipoCuenta || "Caja/Banco",
+                esAnticipoParcial: esAnticipo
+            },
+            facturas: p_enPago.map(f => ({
+                Id: f.Id || f.NroFacturaProveedor,
+                NroFacturaProveedor: f.NroFacturaProveedor,
+                NombreProveedor: f.NombreProveedor || "",
+                RifProveedor: f.RifProveedor || "",
+                montoAPagarUSD: parseFloat(f.montoAPagarUSD) || 0
+            }))
+        };
+
+        const proceder = () => {
+            Swal.fire({ title: 'Registrando Pago...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            google.script.run.withSuccessHandler(() => {
+                Swal.fire('Éxito', 'Pago registrado correctamente', 'success');
+                p_limpiarYRecargar();
+            }).withFailureHandler(e => Swal.fire('Error', e.message, 'error')).registrarPagoCompra(payload);
+        };
+
+        if (esAnticipo) {
+            Swal.fire({
+                title: '¿Confirmar abono parcial?',
+                text: 'El monto es menor al saldo total. Quedará saldo pendiente.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, registrar'
+            }).then(r => { if (r.isConfirmed) proceder(); });
+        } else {
+            proceder();
+        }
+    }
+
+    // =========================================================================
+    // HISTORIAL
+    // =========================================================================
+    function h_cargarDatos() {
+        if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+        document.getElementById('h_tablaBody').innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-info"></div> Cargando transacciones...</td></tr>`;
+        google.script.run.withSuccessHandler(data => {
+            h_historicoGlobal = data || { cobros: [], pagos: [] };
+            h_filtrarYRenderizar();
+        }).withFailureHandler(e => {
+            document.getElementById('h_tablaBody').innerHTML = `<tr><td colspan="7" class="text-center py-4 text-danger">${escapeHTML(e.message)}</td></tr>`;
+        }).getHistoricoData();
+    }
+
+    function h_filtrarYRenderizar() {
+        const texto = document.getElementById('h_filtroTexto').value.toLowerCase().trim();
+        const tipo = document.getElementById('h_filtroTipo').value;
+        const desdeStr = document.getElementById('h_filtroDesde').value;
+        const hastaStr = document.getElementById('h_filtroHasta').value;
+        const estado = document.getElementById('h_filtroEstado').value;
+        const desde = desdeStr ? new Date(desdeStr + "T00:00:00") : null;
+        const hasta = hastaStr ? new Date(hastaStr + "T23:59:59") : null;
+
+        const listaBase = tipo === 'COBROS' ? h_historicoGlobal.cobros : h_historicoGlobal.pagos;
+        const filtrados = (listaBase || []).filter(item => {
+            const nombre = (tipo === 'COBROS' ? item.cliente : item.proveedor) || '';
+            const matchesText = nombre.toLowerCase().includes(texto) || (item.factura || '').toLowerCase().includes(texto);
+            if (!matchesText) return false;
+            if (item.fecha) {
+                const fItem = new Date(item.fecha + "T00:00:00");
+                if (desde && fItem < desde) return false;
+                if (hasta && fItem > hasta) return false;
+            }
+            if (estado !== 'TODOS' && item.estado !== estado) return false;
+            return true;
+        });
+        h_renderTabla(filtrados, tipo);
+    }
+
+    function h_renderTabla(datos, tipo) {
+        const header = document.getElementById('h_columnasHeader');
+        const body = document.getElementById('h_tablaBody');
+        header.innerHTML = `
+            <th>${tipo === 'COBROS' ? 'Cliente' : 'Proveedor'}</th>
+            <th style="width: 120px;">Factura</th>
+            <th style="width: 110px;">Fecha</th>
+            <th style="width: 120px;" class="text-end">Total Factura</th>
+            <th style="width: 120px;" class="text-end">${tipo === 'COBROS' ? 'Cobrado' : 'Pagado'}</th>
+            <th style="width: 120px;" class="text-end">Saldo</th>
+            <th style="width: 130px;" class="text-center">Estado</th>`;
+        body.innerHTML = '';
+        if (datos.length === 0) {
+            body.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No se encontraron registros</td></tr>`;
+            return;
+        }
+
+        datos.forEach(row => {
+            const nombre = tipo === 'COBROS' ? row.cliente : row.proveedor;
+            const subTexto = row.rif || 'Registrado en Libro';
+            const pagadoCobrado = tipo === 'COBROS' ? row.montoCobradoUSD : row.montoPagadoUSD;
+            let badgeClass = 'badge bg-secondary';
+            if (row.estado === 'PAGADO') badgeClass = 'badge bg-success';
+            if (row.estado === 'ABONO PARCIAL') badgeClass = 'badge bg-warning text-dark';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><div class="fw-bold">${escapeHTML(nombre)}</div><small class="text-muted">${escapeHTML(subTexto)}</small></td>
+                <td><span class="badge bg-dark border border-secondary">${escapeHTML(row.factura)}</span></td>
+                <td>${row.fecha || '-'}</td>
+                <td class="text-end fw-semibold">$${formatUSD(row.montoTotalUSD)}</td>
+                <td class="text-end text-success fw-bold">$${formatUSD(pagadoCobrado)}</td>
+                <td class="text-end text-warning fw-semibold">$${formatUSD(row.saldoUSD)}</td>
+                <td class="text-center"><span class="${badgeClass}">${row.estado}</span></td>`;
+            body.appendChild(tr);
+        });
+    }
+
+    function actualizarCacheRetenciones(facturas, tipo) {
+        retencionesExistentes[tipo].iva.clear();
+        retencionesExistentes[tipo].islr.clear();
+        facturas.forEach(f => {
+            const nro = String(tipo === 'compras' ? (f.NroFacturaProveedor || f.Id) : (f.NroFacturaCliente || f.NroFactura) || '').trim();
+            if (!nro) return;
+            
+            const hasIva = Boolean(f.tieneRetencionIva || f.TieneRetencionIva || parseNumber(f.RetencionIva || f.retencionIva || 0) > 0);
+            const hasIslr = Boolean(f.tieneRetencionIslr || f.TieneRetencionIslr || parseNumber(f.RetencionISLR || f.RetencionIslr || f.retencionIslr || 0) > 0);
+            
+            if (hasIva) retencionesExistentes[tipo].iva.add(nro);
+            if (hasIslr) retencionesExistentes[tipo].islr.add(nro);
+        });
+    }
+
+    function inicializarUI() {
+        const hoy = new Date().toISOString().split('T')[0];
+        const fCobro = document.getElementById('fechaCobro');
+        const fPago = document.getElementById('fechaPago');
+        if (fCobro) fCobro.value = hoy;
+        if (fPago) fPago.value = hoy;
+
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+            google.script.run.withSuccessHandler(res => {
+                const t = res.tasaDolar ? parseFloat(res.tasaDolar.toString().replace(',','.')) : (window.tasaUSDGlobal || 36.50);
+                const tCob = document.getElementById('tasaCobro');
+                const tPag = document.getElementById('tasaPago');
+                if (tCob) tCob.value = t.toFixed(2);
+                if (tPag) tPag.value = t.toFixed(2);
+                c_recalcularTodo();
+                p_recalcularTodo();
+            }).getTasasDeCambio();
+
+            google.script.run.withSuccessHandler(data => {
+                const rellenar = (id) => {
+                    const sel = document.getElementById(id);
+                    if (!sel) return;
+                    sel.innerHTML = '<option value="">Seleccione cuenta...</option>';
+                    (data || []).forEach(item => {
+                        let opt = document.createElement('option');
+                        opt.value = `${item.tipo}|${item.nombre}`;
+                        opt.text = `${item.tipo}: ${item.nombre}`;
+                        sel.appendChild(opt);
+                    });
+                };
+                rellenar('c_lineaCuenta');
+                rellenar('p_lineaCuenta');
+            }).getDatosBancarios();
+        }
+        c_cargarVentas();
+    }
+
+    // Exponer funciones globales al objeto window para interactividad SPA
+    window.switchMainTab = switchMainTab;
+    window.gestionarRetencionIVA = gestionarRetencionIVA;
+    window.gestionarRetencionISLR = gestionarRetencionISLR;
+    window.c_limpiarYRecargar = c_limpiarYRecargar;
+    window.c_filtrarTabla = c_filtrarTabla;
+    window.c_cambiarFiltroFecha = c_cambiarFiltroFecha;
+    window.c_moverAFacturas = c_moverAFacturas;
+    window.c_updateMonto = c_updateMonto;
+    window.c_devolver = c_devolver;
+    window.c_agregarPago = c_agregarPago;
+    window.c_eliminarPago = c_eliminarPago;
+    window.c_guardarTodo = c_guardarTodo;
+    window.c_recalcularTodo = c_recalcularTodo;
+    window.p_limpiarYRecargar = p_limpiarYRecargar;
+    window.p_filtrarTabla = p_filtrarTabla;
+    window.p_cambiarFiltroFecha = p_cambiarFiltroFecha;
+    window.p_moverAPagos = p_moverAPagos;
+    window.p_updateMonto = p_updateMonto;
+    window.p_devolver = p_devolver;
+    window.p_agregarPago = p_agregarPago;
+    window.p_eliminarPago = p_eliminarPago;
+    window.p_guardarTodo = p_guardarTodo;
+    window.p_recalcularTodo = p_recalcularTodo;
+    window.h_cargarDatos = h_cargarDatos;
+    window.h_filtrarYRenderizar = h_filtrarYRenderizar;
+
+    inicializarUI();
+};
+</script>

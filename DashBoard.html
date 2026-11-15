@@ -1,0 +1,1162 @@
+<!-- ═══════════ DASHBOARD ANALÍTICO · GproPos v8.2 · GFI BLUE EDITION (DARK+LIGHT) ═══════════ -->
+
+<!-- TOOLTIP DOM NODE -->
+<div id="chartTooltip" role="tooltip" aria-hidden="true">
+  <div class="tt-title"></div>
+  <div class="tt-body"></div>
+  <div class="tt-caret"></div>
+</div>
+
+<div class="dash-wrapper" id="dashboardContainer">
+
+  <!-- HEADER -->
+  <div class="dash-head">
+    <div class="dash-title-group">
+      <h2><span class="ico-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span>Dashboard Analítico</h2>
+      <p>Vista consolidada de ventas, compras, cartera y flujo de caja</p>
+    </div>
+
+  <!-- ═══ BARRA DE TABS ═══ -->
+  <nav class="tabs-bar" id="tabsBar" role="tablist" aria-label="Secciones del dashboard">
+    <span class="tab-ind" id="tabInd" aria-hidden="true"></span>
+
+    <button class="tab-btn active" data-tab="resumen" role="tab" aria-selected="true" tabindex="0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+      <span>Resumen</span>
+      <i class="dot-top" aria-hidden="true"></i>
+      <span class="tab-badge" data-badge="resumen" hidden></span>
+    </button>
+
+    <button class="tab-btn" data-tab="productos" role="tab" aria-selected="false" tabindex="-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <span>Productos</span>
+      <i class="dot-top" aria-hidden="true"></i>
+      <span class="tab-badge" data-badge="productos" hidden></span>
+    </button>
+
+    <button class="tab-btn" data-tab="clientes" role="tab" aria-selected="false" tabindex="-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Clientes</span>
+      <i class="dot-top" aria-hidden="true"></i>
+      <span class="tab-badge" data-badge="clientes" hidden></span>
+    </button>
+
+    <button class="tab-btn" data-tab="proveedores" role="tab" aria-selected="false" tabindex="-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      <span>Proveedores</span>
+      <i class="dot-top" aria-hidden="true"></i>
+      <span class="tab-badge" data-badge="proveedores" hidden></span>
+    </button>
+
+    <button class="tab-btn" data-tab="finanzas" role="tab" aria-selected="false" tabindex="-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span>Finanzas</span>
+      <i class="dot-top" aria-hidden="true"></i>
+      <span class="tab-badge" data-badge="finanzas" hidden></span>
+    </button>
+  </nav>
+
+    <button class="btn-sync" id="btnSync" aria-label="Sincronizar datos" onclick="window.ModuloDashboard.recargar()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+      <span></span>
+    </button>
+  </div>
+
+  <!-- ═══ TAB: RESUMEN ═══ -->
+  <section class="tab-panel activa" data-panel="resumen" role="tabpanel" aria-labelledby="tab-resumen">
+    <div class="panel-kpis" data-tab="resumen"></div>
+  
+    <div class="panel-grid cols-2">
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Ventas vs Compras</h4>
+          <span class="card-tag">Histórico 6M · USD</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartVentasCompras"></canvas></div>
+      </div>
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Margen Comercial</h4>
+          <span class="card-tag emerald">Margen Neto · USD</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartUtilidad"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Fila 2: Ventas por Mes (ancho completo) -->
+    <div class="panel-grid" style="margin-top:16px">
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l4-4 3 3 5-7"/></svg>Ventas por Mes</h4>
+          <span class="card-tag azul">Histórico 12M · USD</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartVentasMes"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TAB: PRODUCTOS ═══ -->
+  <section class="tab-panel" data-panel="productos" role="tabpanel" aria-labelledby="tab-productos" hidden>
+    <div class="panel-kpis" data-tab="productos"></div>
+    <div class="panel-head"><h3>Productos</h3><p>Ranking de lo más vendido por ingresos y por unidades</p></div>
+    <div class="panel-grid cols-2">
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Top 5 · por Monto</h4>
+          <span class="card-tag">Ingresos · USD</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartProdVendMonto"></canvas></div>
+      </div>
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Top 5 · por Unidades</h4>
+          <span class="card-tag purple">Unidades vendidas</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartProdVend"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TAB: CLIENTES ═══ -->
+  <section class="tab-panel" data-panel="clientes" role="tabpanel" aria-labelledby="tab-clientes" hidden>
+    <div class="panel-kpis" data-tab="clientes"></div>
+    <div class="panel-head"><h3>Clientes</h3><p>Quiénes deben y el estado de la cartera por cobrar</p></div>
+    <div class="panel-grid cols-a">
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Top 5 Clientes</h4>
+          <span class="card-tag azul">Saldo CxC</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartTopClientes"></canvas></div>
+      </div>
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>Cartera CxC</h4>
+          <span class="card-tag azul">Al día vs Vencido</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartCxC"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TAB: PROVEEDORES ═══ -->
+  <section class="tab-panel" data-panel="proveedores" role="tabpanel" aria-labelledby="tab-proveedores" hidden>
+    <div class="panel-kpis" data-tab="proveedores"></div>
+    <div class="panel-head"><h3>Proveedores</h3><p>A quién se le debe y el estado de la cartera por pagar</p></div>
+    <div class="panel-grid cols-a">
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Top 5 Proveedores</h4>
+          <span class="card-tag">Saldo CxP</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartTopProveedores"></canvas></div>
+      </div>
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>Cartera CxP</h4>
+          <span class="card-tag">Al día vs Vencido</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartCxP"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TAB: FINANZAS ═══ -->
+  <section class="tab-panel" data-panel="finanzas" role="tabpanel" aria-labelledby="tab-finanzas" hidden>
+    <div class="panel-kpis" data-tab="finanzas"></div>
+    <div class="panel-head"><h3>Finanzas</h3><p>Flujo de caja real y balance anual del negocio</p></div>
+    <div class="panel-grid cols-2">
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Flujo del Mes</h4>
+          <span class="card-tag emerald">Caja real</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartFlujo"></canvas></div>
+      </div>
+      <div class="dash-card">
+        <div class="card-head">
+          <h4><svg viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M5 9l7-7 7 7"/><path d="M5 15l7 7 7-7"/></svg>Balance Anual</h4>
+          <span class="card-tag purple">Ventas vs Compras</span>
+        </div>
+        <div class="chart-wrap chart-h-xl"><div class="chart-spinner"><div class="ring"></div></div><canvas id="chartBalance"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+// ============================================================================
+// MÓDULO DASHBOARD ANALÍTICO v8 · DESIGN REFINED
+// ============================================================================
+(function() {
+  'use strict';
+
+  // ─── helpers DOM ───
+  function byId(id){ return document.getElementById(id); }
+  function qsa(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+  function nvl(v, fb){ return (v === null || v === undefined) ? fb : v; }
+  function num(v){ var n = Number(v); return isNaN(n) ? 0 : n; }
+
+  // ─── iconos SVG inline ───
+  const ICONOS = {
+    'trending':'<path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',
+    'truck':'<path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',
+    'wallet':'<path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h15a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5"/><path d="M16 12h.01"/>',
+    'clock':'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+    'file':'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/>',
+    'box':'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>',
+    'users':'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    'up':'<path d="m18 15-6-6-6 6"/>',
+    'down':'<path d="m6 9 6 6 6-6"/>'
+  };
+  const ic = n => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + (ICONOS[n]||'') + '</svg>';
+
+  // ─── estado ───
+  let charts = {};
+  let datosCache = null;
+  let tabActual = 'resumen';
+
+  // ─── formato ───
+  const fmt = n => '$' + Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const fmtShort = n => {
+    const v = Number(n||0);
+    if (Math.abs(v) >= 1000000) return '$' + (v/1000000).toFixed(1) + 'M';
+    if (Math.abs(v) >= 1000)    return '$' + (v/1000).toFixed(1) + 'k';
+    return '$' + v.toFixed(0);
+  };
+  const trunc = (l, n) => { l = l || ''; return l.length > n ? l.substring(0, n-1) + '…' : l; };
+  function esMovil(){ return window.matchMedia('(max-width: 768px)').matches; }
+
+  // ─── helpers color/tema ───
+  function cssVar(name, fb){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fb;
+  }
+  function hexA(color, a){
+    const s = String(color||'').trim();
+    let m = s.match(/^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/i);
+    if(m) return 'rgba(' + m[1] + ',' + m[2] + ',' + m[3] + ',' + a + ')';
+    m = /^#?([0-9a-f]{6}|[0-9a-f]{3})$/i.exec(s);
+    if(!m) return s;
+    let h = m[1];
+    if(h.length === 3) h = h.split('').map(c=>c+c).join('');
+    const n = parseInt(h,16);
+    return 'rgba(' + ((n>>16)&255) + ',' + ((n>>8)&255) + ',' + (n&255) + ',' + a + ')';
+  }
+
+  function getTheme(){
+    return {
+      text:     cssVar('--d-text-sub','#a1a8b3'),
+      textSub:  cssVar('--d-text-mute','#6c7280'),
+      line:     cssVar('--d-line','rgba(255,255,255,0.05)'),
+      lineStrong: cssVar('--d-line-strong','rgba(255,255,255,0.10)'),
+      cardBg:   cssVar('--d-card','#161b22'),
+      cardBorder: cssVar('--d-card-border','rgba(255,255,255,0.07)'),
+      orange:   cssVar('--d-orange','#ff7a3d'),
+      orange2:  cssVar('--d-orange-2','#F97316'),
+      orange3:  cssVar('--d-orange-3','#FB923C'),
+      blue2:    cssVar('--d-blue-2','#60A5FA'),
+      emerald:  cssVar('--d-emerald','#10b981'),
+      emerald2: cssVar('--d-emerald-2','#34D399'),
+      rose:     cssVar('--d-rose','#f43f5e'),
+      rose2:    cssVar('--d-rose-2','#fb7185'),
+      purple:   cssVar('--d-purple','#a78bfa'),
+      purple2:  cssVar('--d-purple-2','#c4b5fd')
+    };
+  }
+
+  // Gradiente vertical sutil
+  function gradV(ctx, area, hex, a1, a2){
+    const g = ctx.createLinearGradient(0, area.top, 0, area.bottom);
+    g.addColorStop(0, hexA(hex, a1));
+    g.addColorStop(1, hexA(hex, a2));
+    return g;
+  }
+
+  // ─── TOOLTIP PERSONALIZADO (glassmorphism) ───
+  const tooltipEl = (function(){
+    const el = byId('chartTooltip');
+    return el;
+  })();
+
+  // ✅ FIX: Cálculo de posición corregido (relativo al .chart-wrap)
+  function externalTooltipHandler(context){
+    const {chart, tooltip} = context;
+    if(!tooltipEl) return;
+    if(tooltip.opacity === 0){
+      tooltipEl.classList.remove('show');
+      tooltipEl.setAttribute('aria-hidden','true');
+      return;
+    }
+    // título
+    const title = tooltip.dataPoints[0].label || '';
+    tooltipEl.querySelector('.tt-title').textContent = title;
+
+    // filas
+    const rows = tooltip.dataPoints.map(dp => {
+      const val = dp.dataset.label
+        ? fmt(dp.raw)
+        : (dp.dataset.tooltipUnit === 'uds' ? dp.raw + ' uds' : fmt(dp.raw));
+      const swatch = dp.dataset.borderColor || dp.dataset.backgroundColor || '#999';
+      const label = dp.dataset.label || dp.label || '';
+      return '<div class="tt-row">'
+        + '<span class="tt-swatch" style="background:' + swatch + ';color:' + swatch + '"></span>'
+        + '<span class="tt-label">' + label + '</span>'
+        + '<span class="tt-val">' + val + '</span>'
+        + '</div>';
+    }).join('');
+    tooltipEl.querySelector('.tt-body').innerHTML = rows;
+
+    // ✅ FIX: posición relativa al contenedor .chart-wrap
+    const wrap = chart.canvas.closest('.chart-wrap');
+    const wrapRect = wrap.getBoundingClientRect();
+    const canvasRect = chart.canvas.getBoundingClientRect();
+    const ttRect = tooltipEl.getBoundingClientRect();
+    
+    let left = (canvasRect.left - wrapRect.left) + tooltip.caretX - (ttRect.width / 2);
+    let top  = (canvasRect.top - wrapRect.top) + tooltip.caretY - ttRect.height - 12;
+    
+    left = Math.max(8, Math.min(left, wrapRect.width - ttRect.width - 8));
+    top  = Math.max(8, top);
+    
+    tooltipEl.style.left = left + 'px';
+    tooltipEl.style.top = top + 'px';
+    tooltipEl.classList.add('show');
+    tooltipEl.setAttribute('aria-hidden','false');
+  }
+
+  // ─── opciones base compartidas para todos los charts ───
+  function baseChartOptions(t, extra){
+    const base = {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 700, easing: 'easeOutQuart' },
+      interaction: { mode: 'index', intersect: false },
+      layout: { padding: { top: 4, right: 8, bottom: 4, left: 0 } },
+      plugins: {
+        legend: {
+          display: false,
+          labels: {
+            color: t.text,
+            usePointStyle: true,
+            pointStyle: 'circle',
+            padding: 14,
+            font: { family: 'Inter Tight', size: 12, weight: '600' }
+          }
+        },
+        tooltip: {
+          enabled: false,
+          external: externalTooltipHandler,
+          mode: 'index',
+          intersect: false
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false, drawBorder: false },
+          border: { display: false },
+          ticks: {
+            color: t.text,
+            font: { family: 'Inter', size: 11, weight: '500' },
+            padding: 6
+          }
+        },
+        y: {
+          beginAtZero: true,
+          grace: '12%',
+          grid: {
+            color: t.line,
+            drawBorder: false,
+            borderDash: [3, 4],
+            tickColor: 'transparent'
+          },
+          border: { display: false },
+          ticks: {
+            color: t.text,
+            font: { family: 'Inter', size: 11, weight: '500' },
+            padding: 8,
+            callback: v => fmtShort(v)
+          }
+        }
+      }
+    };
+    return Object.assign({}, base, extra || {});
+  }
+
+  // ─── helpers de spinner/vacío ───
+  function wrapDe(id){
+    const c = byId(id);
+    return c ? c.closest('.chart-wrap') : null;
+  }
+  function ocultarSpinner(id){
+    const w = wrapDe(id);
+    if(!w) return;
+    const sp = w.querySelector('.chart-spinner');
+    if(sp) sp.classList.add('oculto');
+  }
+  function vacio(id){
+    const w = wrapDe(id);
+    if(!w) return;
+    let d = w.querySelector('.sin-datos');
+    if(!d){
+      d = document.createElement('div');
+      d.className = 'sin-datos';
+      d.innerHTML = '<b>📭</b><span>Sin datos disponibles</span>';
+      w.appendChild(d);
+    }
+    ocultarSpinner(id);
+  }
+  function setSpinners(tabId, mostrar){
+    const sel = tabId ? ('[data-panel="' + tabId + '"] .chart-spinner') : '.chart-spinner';
+    qsa(sel).forEach(s => s.classList.toggle('oculto', !mostrar));
+  }
+
+  // ✅ robusto: destruye por referencia Y por registro global de Chart.js
+  function destruirGraficos(){
+    Object.keys(charts).forEach(k => {
+      try { if (charts[k] && typeof charts[k].destroy === 'function') charts[k].destroy(); } catch(e){}
+      delete charts[k];
+    });
+    charts = {};
+
+    if (typeof Chart !== 'undefined' && typeof Chart.getChart === 'function') {
+      qsa('canvas').forEach(function(cv){
+        try {
+          var inst = Chart.getChart(cv);
+          if (inst) inst.destroy();
+        } catch(e){}
+      });
+    }
+
+    if (tooltipEl) tooltipEl.classList.remove('show');
+  }
+
+  // ─── RENDER KPIs ───
+  const MAPA_KPI = [
+    {tab:'productos', kw:['producto','vendido','unidades','stock','inventario']},
+    {tab:'clientes', kw:['cliente','cobrar','cxc']},
+    {tab:'proveedores', kw:['proveedor','pagar','cxp']},
+    {tab:'finanzas', kw:['flujo','caja','utilidad','margen','balance','ingreso','egreso']}
+  ];
+  function tabDeKPI(etiqueta){
+    const e = String(etiqueta||'').toLowerCase();
+    for(let i = 0; i < MAPA_KPI.length; i++){
+      for(let j = 0; j < MAPA_KPI[i].kw.length; j++){
+        if(e.indexOf(MAPA_KPI[i].kw[j]) !== -1) return MAPA_KPI[i].tab;
+      }
+    }
+    return 'resumen';
+  }
+
+  function renderKPIs(tarjetas){
+    const grupos = {resumen:[], productos:[], clientes:[], proveedores:[], finanzas:[]};
+    (tarjetas||[]).forEach(t => { grupos[tabDeKPI(t.etiqueta)].push(t); });
+    Object.keys(grupos).forEach(tab => {
+      const cont = document.querySelector('.panel-kpis[data-tab="' + tab + '"]');
+      if(!cont) return;
+      cont.innerHTML = grupos[tab].map(t => {
+        const tono = t.tono || 'naranja';
+        const delta = (t.delta != null && !isNaN(t.delta))
+          ? '<span class="kpi-delta ' + (t.delta >= 0 ? 'up' : 'down') + '">' + ic(t.delta >= 0 ? 'up' : 'down') + (t.delta >= 0 ? '+' : '') + Number(t.delta).toFixed(1) + '%</span>'
+          : '';
+        const pill = t.pill ? '<span class="kpi-pill">' + t.pill + '</span>' : '';
+        let barrasHTML = '';
+        if (t.barras){
+          const nums = String(t.barras).split(',').map(seg => num(seg.split(':')[1])).filter(n => !isNaN(n));
+          if (nums.length > 1){
+            const max = Math.max.apply(null, nums.map(Math.abs).concat([1]));
+            barrasHTML = '<div class="kpi-bars">' + nums.map((n,i) =>
+              '<i style="height:' + Math.max(14, Math.abs(n)/max*100) + '%;opacity:' + (0.45 + i*(0.55/(nums.length-1))).toFixed(2) + '"></i>').join('') + '</div>';
+          }
+        }
+        const col = tono === 'azul' ? 'var(--d-blue-2)'
+                  : (tono === 'emerald' ? 'var(--d-emerald)' : 'var(--d-orange-2)');
+        const glow = tono === 'azul' ? 'var(--d-blue-100)'
+                   : (tono === 'emerald' ? 'var(--d-emerald-100)' : 'var(--d-orange-50)');
+        return '<article class="kpi-card ' + tono + '" style="--kpi-col:' + col + ';--kpi-glow:' + glow + '">' +
+          '<div class="kpi-head"><span class="kpi-ico ' + tono + '">' + ic(t.icono || 'trending') + '</span><span class="kpi-label">' + t.etiqueta + '</span>' + pill + '</div>' +
+          '<div class="kpi-val">' + t.valor + '</div>' +
+          '<div class="kpi-sub"><span>' + (t.sub || '') + '</span>' + delta + '</div>' +
+          barrasHTML +
+          '<div class="kpi-foot"><span class="sq"></span><span>' + (t.meta || '') + '</span></div>' +
+        '</article>';
+      }).join('');
+    });
+  }
+
+  // ─══════════════════════════════════════════════════════
+  //   GRÁFICOS
+  // ─═════════════════════════════════════════════════════
+
+  function pVentasCompras(g, t){
+    const id = 'chartVentasCompras', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+
+    let d = g.ventasVsCompras;
+    if(!d || !Array.isArray(d.ventas) || !Array.isArray(d.labels)){ vacio(id); return; }
+    const totalV = d.ventas.reduce((s,v)=>s+Math.abs(Number(v)||0),0);
+    const totalC = (d.compras||[]).reduce((s,v)=>s+Math.abs(Number(v)||0),0);
+    if(totalV === 0 && totalC === 0){ vacio(id); return; }
+
+    charts[id] = new Chart(c, {
+      type:'line',
+      data:{ labels:d.labels, datasets:[
+        {
+          label:'Ventas', data:d.ventas,
+          borderColor:t.orange2, borderWidth: 2.5,
+          fill:true, tension:.4,
+          pointRadius:0, pointHoverRadius:6,
+          pointBackgroundColor:t.orange2, pointBorderColor:'#fff', pointBorderWidth:2,
+          backgroundColor: cc => cc.chart.chartArea
+            ? gradV(cc.chart.ctx, cc.chart.chartArea, t.orange2, .25, 0)
+            : 'transparent'
+        },
+        {
+          label:'Compras', data:d.compras,
+          borderColor:t.blue2, borderWidth: 2.5,
+          fill:true, tension:.4,
+          pointRadius:0, pointHoverRadius:6,
+          pointBackgroundColor:t.blue2, pointBorderColor:'#fff', pointBorderWidth:2,
+          backgroundColor: cc => cc.chart.chartArea
+            ? gradV(cc.chart.ctx, cc.chart.chartArea, t.blue2, .18, 0)
+            : 'transparent'
+        }
+      ]},
+      options: baseChartOptions(t, {
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            align: 'end',
+            labels: {
+              color: t.text, usePointStyle: true, pointStyle: 'circle',
+              padding: 14, boxWidth: 8, boxHeight: 8,
+              font: { family: 'Inter Tight', size: 12, weight: '600' }
+            }
+          },
+          tooltip: { enabled:false, external: externalTooltipHandler, mode:'index', intersect:false }
+        }
+      })
+    });
+    ocultarSpinner(id);
+  }
+
+  function pUtilidad(g, t){
+    const id = 'chartUtilidad', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+    let d = g.utilidadMensual;
+    if(!d || !Array.isArray(d.data) || !d.data.length){ vacio(id); return; }
+    const total = d.data.reduce((s,v)=>s+Math.abs(Number(v)||0),0);
+    if(total === 0){ vacio(id); return; }
+
+    charts[id] = new Chart(c, {
+      type:'bar',
+      data:{ labels:d.labels, datasets:[{
+        data:d.data,
+        borderRadius: { topLeft:6, topRight:6, bottomLeft:0, bottomRight:0 },
+        borderSkipped: false,
+        maxBarThickness: 42,
+        backgroundColor: cc => {
+          const a = cc.chart.chartArea;
+          if(!a) return t.emerald;
+          const v = Number(cc.raw||0);
+          const hex = v >= 0 ? t.emerald : t.rose;
+          const gg = cc.chart.ctx.createLinearGradient(0, a.top, 0, a.bottom);
+          gg.addColorStop(0, hexA(hex, .9));
+          gg.addColorStop(1, hexA(hex, .35));
+          return gg;
+        },
+        borderColor: cc => Number(cc.raw||0) >= 0 ? t.emerald : t.rose,
+        borderWidth: 1.2,
+        hoverBackgroundColor: cc => hexA(Number(cc.raw||0) >= 0 ? t.emerald2 : t.rose2, .95)
+      }]},
+      options: baseChartOptions(t)
+    });
+    ocultarSpinner(id);
+  }
+
+  function pProductosMonto(g, t){
+    const id = 'chartProdVendMonto', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+    const d = g.topProductosVendidosMonto;
+    if(!d || !d.labels || !d.labels.length){ vacio(id); return; }
+
+    charts[id] = new Chart(c, {
+      type:'bar',
+      data:{
+        labels: d.labels.map(l => trunc(l, 18)),
+        datasets: [{
+          data: d.data,
+          backgroundColor: cc => {
+            const a = cc.chart.chartArea;
+            if(!a) return hexA(t.orange2, .75);
+            const gg = cc.chart.ctx.createLinearGradient(a.left, 0, a.right, 0);
+            gg.addColorStop(0, hexA(t.orange2, .85));
+            gg.addColorStop(1, hexA(t.orange3, .55));
+            return gg;
+          },
+          borderColor: t.orange2,
+          borderWidth: 1.2,
+          borderRadius: { topLeft:6, topRight:6, bottomLeft:0, bottomRight:0 },
+          borderSkipped: false,
+          maxBarThickness: 36
+        }]
+      },
+      options: baseChartOptions(t, {
+        indexAxis:'y',
+        plugins: {
+          legend:{display:false},
+          tooltip:{
+            enabled:false, external: externalTooltipHandler,
+            callbacks: { label: ctx => fmtShort(ctx.raw) }
+          }
+        },
+        scales:{
+          x:{
+            grid:{ color:t.line, drawBorder:false, borderDash:[3,4], tickColor:'transparent' },
+            border:{display:false},
+            ticks:{ color:t.text, font:{family:'Inter',size:11,weight:'500'}, padding:6, callback: v => fmtShort(v) }
+          },
+          y:{
+            grid:{display:false}, border:{display:false},
+            ticks:{ color:t.text, font:{family:'Inter',size:11.5,weight:'500'}, padding:8 }
+          }
+        }
+      })
+    });
+    ocultarSpinner(id);
+  }
+
+  function pProductosUnidades(g, t){
+    const id = 'chartProdVend', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+    const d = g.topProductosVendidos;
+    if(!d || !d.labels || !d.labels.length){ vacio(id); return; }
+
+    charts[id] = new Chart(c, {
+      type:'bar',
+      data:{
+        labels: d.labels.map(l => trunc(l, 18)),
+        datasets: [{
+          data: d.data,
+          tooltipUnit: 'uds',
+          backgroundColor: cc => {
+            const a = cc.chart.chartArea;
+            if(!a) return hexA(t.purple, .75);
+            const gg = cc.chart.ctx.createLinearGradient(a.left, 0, a.right, 0);
+            gg.addColorStop(0, hexA(t.purple, .85));
+            gg.addColorStop(1, hexA(t.purple2, .55));
+            return gg;
+          },
+          borderColor: t.purple,
+          borderWidth: 1.2,
+          borderRadius: { topLeft:6, topRight:6, bottomLeft:0, bottomRight:0 },
+          borderSkipped: false,
+          maxBarThickness: 36
+        }]
+      },
+      options: baseChartOptions(t, {
+        indexAxis:'y',
+        plugins:{
+          legend:{display:false},
+          tooltip:{
+            enabled:false, external: externalTooltipHandler,
+            callbacks: { label: ctx => ctx.raw + ' uds' }
+          }
+        },
+        scales:{
+          x:{
+            grid:{ color:t.line, drawBorder:false, borderDash:[3,4], tickColor:'transparent' },
+            border:{display:false},
+            ticks:{ color:t.text, font:{family:'Inter',size:11,weight:'500'}, padding:6, precision:0 }
+          },
+          y:{
+            grid:{display:false}, border:{display:false},
+            ticks:{ color:t.text, font:{family:'Inter',size:11.5,weight:'500'}, padding:8 }
+          }
+        }
+      })
+    });
+    ocultarSpinner(id);
+  }
+
+  function pTopClientes(g, t){
+    const id = 'chartTopClientes', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+    const d = g.topClientes;
+    if(!d || !d.labels || !d.labels.length){ vacio(id); return; }
+
+    charts[id] = new Chart(c, {
+      type:'bar',
+      data:{
+        labels: d.labels.map(l => trunc(l, 18)),
+        datasets: [{
+          data: d.data,
+          backgroundColor: cc => {
+            const a = cc.chart.chartArea;
+            if(!a) return hexA(t.blue2, .75);
+            const gg = cc.chart.ctx.createLinearGradient(a.left, 0, a.right, 0);
+            gg.addColorStop(0, hexA(t.blue2, .85));
+            gg.addColorStop(1, hexA('#93c5fd', .55));
+            return gg;
+          },
+          borderColor: t.blue2,
+          borderWidth: 1.2,
+          borderRadius: { topLeft:6, topRight:6, bottomLeft:0, bottomRight:0 },
+          borderSkipped: false,
+          maxBarThickness: 36
+        }]
+      },
+      options: baseChartOptions(t, {
+        indexAxis:'y',
+        plugins:{
+          legend:{display:false},
+          tooltip:{ enabled:false, external: externalTooltipHandler }
+        },
+        scales:{
+          x:{
+            grid:{ color:t.line, drawBorder:false, borderDash:[3,4], tickColor:'transparent' },
+            border:{display:false},
+            ticks:{ color:t.text, font:{family:'Inter',size:11,weight:'500'}, padding:6, callback: v => fmtShort(v) }
+          },
+          y:{ grid:{display:false}, border:{display:false},
+              ticks:{ color:t.text, font:{family:'Inter',size:11.5,weight:'500'}, padding:8 } }
+        }
+      })
+    });
+    ocultarSpinner(id);
+  }
+
+  function pCarteraCxC(g, t){
+    const id = 'chartCxC', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+    const d = g.carteraCxC;
+    if(!d){ vacio(id); return; }
+    const total = (d.alDia||0) + (d.vencida||0);
+    if(total <= 0){ vacio(id); return; }
+
+    charts[id] = new Chart(c, {
+      type:'doughnut',
+      data:{
+        labels:['Al día','Vencida'],
+        datasets:[{
+          data:[Math.round(d.alDia||0), Math.round(d.vencida||0)],
+          backgroundColor:[hexA(t.emerald,0.85), hexA(t.rose,0.85)],
+          borderColor:[t.emerald, t.rose],
+          borderWidth:2,
+          hoverOffset:10,
+          hoverBackgroundColor:[t.emerald2, t.rose2]
+        }]
+      },
+      options: baseChartOptions(t, {
+        cutout:'68%',
+        plugins:{
+          legend:{
+            display:true, position:'bottom',
+            labels:{
+              color:t.text, padding:16,
+              usePointStyle:true, pointStyle:'circle',
+              boxWidth:8, boxHeight:8,
+              font:{family:'Inter Tight', size:12, weight:'600'}
+            }
+          },
+          tooltip:{
+            enabled:false, external: externalTooltipHandler,
+            callbacks:{ label: ctx => ctx.label + ': ' + fmt(ctx.raw) + ' (' + ((ctx.raw/total)*100).toFixed(1) + '%)' }
+          }
+        }
+      })
+    });
+    ocultarSpinner(id);
+  }
+
+  function pTopProveedores(g, t){
+    const id = 'chartTopProveedores', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+    const d = g.topProveedores;
+    if(!d || !d.labels || !d.labels.length){ vacio(id); return; }
+
+    charts[id] = new Chart(c, {
+      type:'bar',
+      data:{
+        labels: d.labels.map(l => trunc(l, 18)),
+        datasets: [{
+          data: d.data,
+          backgroundColor: cc => {
+            const a = cc.chart.chartArea;
+            if(!a) return hexA(t.rose, .75);
+            const gg = cc.chart.ctx.createLinearGradient(a.left, 0, a.right, 0);
+            gg.addColorStop(0, hexA(t.rose, .85));
+            gg.addColorStop(1, hexA(t.rose2, .55));
+            return gg;
+          },
+          borderColor: t.rose,
+          borderWidth: 1.2,
+          borderRadius: { topLeft:6, topRight:6, bottomLeft:0, bottomRight:0 },
+          borderSkipped: false,
+          maxBarThickness: 36
+        }]
+      },
+      options: baseChartOptions(t, {
+        indexAxis:'y',
+        plugins:{
+          legend:{display:false},
+          tooltip:{ enabled:false, external: externalTooltipHandler }
+        },
+        scales:{
+          x:{
+            grid:{ color:t.line, drawBorder:false, borderDash:[3,4], tickColor:'transparent' },
+            border:{display:false},
+            ticks:{ color:t.text, font:{family:'Inter',size:11,weight:'500'}, padding:6, callback: v => fmtShort(v) }
+          },
+          y:{ grid:{display:false}, border:{display:false},
+              ticks:{ color:t.text, font:{family:'Inter',size:11.5,weight:'500'}, padding:8 } }
+        }
+      })
+    });
+    ocultarSpinner(id);
+  }
+
+  function pCarteraCxP(g, t){
+    const id = 'chartCxP', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+    const d = g.carteraCxP;
+    if(!d){ vacio(id); return; }
+    const total = (d.alDia||0) + (d.vencida||0);
+    if(total <= 0){ vacio(id); return; }
+
+    charts[id] = new Chart(c, {
+      type:'doughnut',
+      data:{
+        labels:['Al día','Vencida'],
+        datasets:[{
+          data:[Math.round(d.alDia||0), Math.round(d.vencida||0)],
+          backgroundColor:[hexA(t.emerald,0.85), hexA(t.rose,0.85)],
+          borderColor:[t.emerald, t.rose],
+          borderWidth:2,
+          hoverOffset:10,
+          hoverBackgroundColor:[t.emerald2, t.rose2]
+        }]
+      },
+      options: baseChartOptions(t, {
+        cutout:'68%',
+        plugins:{
+          legend:{
+            display:true, position:'bottom',
+            labels:{
+              color:t.text, padding:16,
+              usePointStyle:true, pointStyle:'circle',
+              boxWidth:8, boxHeight:8,
+              font:{family:'Inter Tight', size:12, weight:'600'}
+            }
+          },
+          tooltip:{
+            enabled:false, external: externalTooltipHandler,
+            callbacks:{ label: ctx => ctx.label + ': ' + fmt(ctx.raw) + ' (' + ((ctx.raw/total)*100).toFixed(1) + '%)' }
+          }
+        }
+      })
+    });
+    ocultarSpinner(id);
+  }
+
+  function pFlujoMes(g, t){
+    const id = 'chartFlujo', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+    const d = g.flujoCaja;
+    if(!d || !d.labels || !d.labels.length){ vacio(id); return; }
+
+    const paleta = [t.emerald, t.rose, t.purple];
+    charts[id] = new Chart(c, {
+      type:'bar',
+      data:{
+        labels: d.labels,
+        datasets:[{
+          data: d.data,
+          backgroundColor: d.data.map((v, i) => {
+            const hex = paleta[i] || t.orange2;
+            return hexA(hex, 0.85);
+          }),
+          borderColor: d.data.map((v, i) => paleta[i] || t.orange2),
+          borderWidth: 1.2,
+          borderRadius: 10,
+          borderSkipped: false,
+          maxBarThickness: 64
+        }]
+      },
+      options: baseChartOptions(t)
+    });
+    ocultarSpinner(id);
+  }
+
+  function pBalanceAnual(g, t){
+    const id = 'chartBalance', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+    const d = g.balanceAnual;
+    if(!d){ vacio(id); return; }
+    const total = (d.ventas||0) + (d.compras||0);
+    if(total <= 0){ vacio(id); return; }
+
+    charts[id] = new Chart(c, {
+      type:'bar',
+      data:{
+        labels:['Ventas','Compras','Utilidad'],
+        datasets:[{
+          data:[
+            Math.round(d.ventas||0),
+            Math.round(d.compras||0),
+            Math.round((d.ventas||0) - (d.compras||0))
+          ],
+          backgroundColor:[ hexA(t.orange2,0.85), hexA(t.blue2,0.85), hexA(t.emerald,0.85) ],
+          borderColor:[ t.orange2, t.blue2, t.emerald ],
+          borderWidth: 1.2,
+          borderRadius: 10,
+          borderSkipped: false,
+          maxBarThickness: 64
+        }]
+      },
+      options: baseChartOptions(t)
+    });
+    ocultarSpinner(id);
+  }
+
+  function pVentasMes(g, t){
+    const id = 'chartVentasMes', c = byId(id);
+    if(!c || typeof Chart === 'undefined'){ vacio(id); return; }
+
+    let d = g.ventasMensuales;
+    if(!d || !Array.isArray(d.labels) || !d.labels.length || !Array.isArray(d.data)){
+      const v = g.ventasVsCompras;
+      if(v && Array.isArray(v.labels) && Array.isArray(v.ventas) && v.labels.length){
+        d = { labels: v.labels, data: v.ventas.slice() };
+      }
+    }
+    if(!d || !d.labels || !d.labels.length){ vacio(id); return; }
+
+    const total = d.data.reduce((s,v)=>s+Math.abs(Number(v)||0),0);
+    if(total === 0){ vacio(id); return; }
+
+    charts[id] = new Chart(c, {
+      type:'bar',
+      data:{
+        labels: d.labels,
+        datasets:[{
+          label:'Ventas',
+          data: d.data,
+          backgroundColor: cc => {
+            const a = cc.chart.chartArea;
+            if(!a) return hexA(t.blue2, .75);
+            const gg = cc.chart.ctx.createLinearGradient(0, a.top, 0, a.bottom);
+            gg.addColorStop(0, hexA(t.blue2, .95));
+            gg.addColorStop(1, hexA(t.blue2, .25));
+            return gg;
+          },
+          borderColor: t.blue2,
+          borderWidth: 1.2,
+          borderRadius: { topLeft:8, topRight:8, bottomLeft:0, bottomRight:0 },
+          borderSkipped: false,
+          maxBarThickness: 56,
+          hoverBackgroundColor: hexA('#93c5fd', .95)
+        }]
+      },
+      options: baseChartOptions(t, {
+        plugins: {
+          legend: { display:false },
+          tooltip: { enabled:false, external: externalTooltipHandler }
+        }
+      })
+    });
+    ocultarSpinner(id);
+  }
+
+  let _pintando = false;
+  function pintarTabActual(){
+    if (_pintando) return;
+    _pintando = true;
+    try {
+      destruirGraficos();
+      setSpinners(null, false);
+
+      if(!datosCache || !datosCache.graficos){
+        setSpinners(tabActual, true);
+        return;
+      }
+      const g = datosCache.graficos, t = getTheme();
+
+      switch(tabActual){
+        case 'resumen': pVentasCompras(g, t); pUtilidad(g, t); pVentasMes(g, t); break;
+        case 'productos': pProductosMonto(g, t); pProductosUnidades(g, t); break;
+        case 'clientes': pTopClientes(g, t); pCarteraCxC(g, t); break;
+        case 'proveedores': pTopProveedores(g, t); pCarteraCxP(g, t); break;
+        case 'finanzas': pFlujoMes(g, t); pBalanceAnual(g, t); break;
+      }
+    } finally {
+      _pintando = false;
+    }
+  }
+
+  function moverIndicador(){
+    const bar = byId('tabsBar');
+    const ind = byId('tabInd');
+    if(!bar || !ind || esMovil()){
+      if(ind) ind.style.width = '0px';
+      return;
+    }
+    const btn = bar.querySelector('.tab-btn.active');
+    if(!btn) return;
+    ind.style.width  = btn.offsetWidth + 'px';
+    ind.style.height = btn.offsetHeight + 'px';
+    ind.style.transform = 'translate(' + btn.offsetLeft + 'px, ' + btn.offsetTop + 'px)';
+  }
+
+  window.activarTabDashboard = function(tabId){
+    if(!tabId) return;
+    tabActual = tabId;
+    qsa('.tab-btn').forEach(b => {
+      const on = b.getAttribute('data-tab') === tabId;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+      b.setAttribute('tabindex', on ? '0' : '-1');
+    });
+    qsa('.tab-panel').forEach(p => {
+      const on = p.getAttribute('data-panel') === tabId;
+      p.classList.toggle('activa', on);
+      if(on) p.removeAttribute('hidden');
+      else p.setAttribute('hidden','');
+    });
+    moverIndicador();
+    pintarTabActual();
+  };
+
+  function setupTabs(){
+    const bar = byId('tabsBar');
+    if(!bar) return;
+
+    bar.addEventListener('click', function(e){
+      const btn = e.target.closest ? e.target.closest('.tab-btn') : null;
+      if(btn) window.activarTabDashboard(btn.getAttribute('data-tab'));
+    });
+
+    bar.addEventListener('keydown', function(e){
+      const btns = qsa('.tab-btn');
+      const idx = btns.findIndex(b => b === document.activeElement);
+      if(idx < 0) return;
+      let next = -1;
+      if(e.key === 'ArrowRight') next = (idx + 1) % btns.length;
+      else if(e.key === 'ArrowLeft') next = (idx - 1 + btns.length) % btns.length;
+      else if(e.key === 'Home') next = 0;
+      else if(e.key === 'End') next = btns.length - 1;
+      if(next >= 0){
+        e.preventDefault();
+        btns[next].focus();
+        window.activarTabDashboard(btns[next].getAttribute('data-tab'));
+      }
+    });
+  }
+
+  function setupBtnSyncHover(){
+    const btn = byId('btnSync');
+    if(!btn) return;
+    btn.addEventListener('mousemove', function(e){
+      const r = btn.getBoundingClientRect();
+      btn.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      btn.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  }
+
+  function cargarDatos(){
+    const btn = byId('btnSync');
+    if(btn) btn.classList.add('girando');
+    setSpinners(null, true);
+
+    if (typeof google === 'undefined' || !google.script || !google.script.run){
+      if(btn) btn.classList.remove('girando');
+      setSpinners(null, false);
+      return;
+    }
+
+    // Obtener el ID de la empresa activa
+    var idEmpresa = '';
+    try {
+      var empActiva = JSON.parse(sessionStorage.getItem('empresaActiva') || '{}');
+      idEmpresa = empActiva.idSpreadsheet || empActiva.idEmpresa || '';
+    } catch(e) {}
+
+    // ✅ FIX: Validar idEmpresa vacío antes de llamar al backend
+    if (!idEmpresa) {
+      if (window.notificar) window.notificar.error('Empresa no seleccionada');
+      if(btn) btn.classList.remove('girando');
+      setSpinners(null, false);
+      return;
+    }
+
+    // ✅ FIX: Pasamos NULL en lugar del token. El backend usará solo el idEmpresa.
+    google.script.run
+      .withSuccessHandler(function(res){
+        if(btn) btn.classList.remove('girando');
+        if (!res || !res.success){
+          console.warn('Respuesta sin éxito:', res);
+          setSpinners(null, false);
+          if (window.notificar) window.notificar.error(res && res.error ? res.error : 'Error al cargar datos');
+          return;
+        }
+        datosCache = res;
+        try { renderKPIs(res.tarjetas); } catch(e){ console.error(e); }
+        requestAnimationFrame(() => pintarTabActual());
+      })
+      .withFailureHandler(function(err){
+        if(btn) btn.classList.remove('girando');
+        console.error('Fallo en obtenerTarjetasDashboard:', err);
+        setSpinners(null, false);
+        if (window.notificar) window.notificar.error('Error de conexión al cargar dashboard');
+      })
+      .obtenerTarjetasDashboard(null, idEmpresa, 'dashboard');
+  }
+
+  let _themeObserver = null;
+
+  window.ModuloDashboard = {
+    _mounted: false,
+    mount: function() {
+      if (this._mounted) return;
+      this._mounted = true;
+
+      setupTabs();
+      setupBtnSyncHover();
+      moverIndicador();
+      window.addEventListener('resize', moverIndicador);
+
+      try {
+        _themeObserver = new MutationObserver(moverIndicador);
+        _themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+      } catch(e) {}
+
+      cargarDatos();
+    },
+    unmount: function() {
+      this._mounted = false;
+      destruirGraficos();
+      window.removeEventListener('resize', moverIndicador);
+      if (_themeObserver) {
+        try { _themeObserver.disconnect(); } catch(e) {}
+        _themeObserver = null;
+      }
+      // ✅ FIX: Limpiar canvas para evitar bug de tamaño al volver
+      document.querySelectorAll('#dashboardContainer canvas').forEach(cv => {
+        cv.width = 0; cv.height = 0;
+        cv.style.width = ''; cv.style.height = '';
+      });
+    },
+    recargar: function() {
+      if (!this._mounted) return;
+      cargarDatos();
+    }
+  };
+
+  window.initDashboard = function() {
+    window.ModuloDashboard.mount();
+  };
+
+})();
+
+</script>

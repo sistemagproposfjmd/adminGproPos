@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0A1B2E">
+<meta name="description" content="GproPos: facturación, pedidos, gastos y nómina con IA. Crea facturas PDF, concilia bancos y automatiza tus cobros.">
+<meta property="og:title" content="GproPos — Facturación que trabaja sola">
+<meta property="og:description" content="V-4 Crea facturas, pedidos y libros de compra/venta. Deja que la IA lea recibos y resuma tus ingresos.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%23EA580C'/><path d='M13 4 5 13h5l-1 7 8-9h-5l1-7z' fill='white'/></svg>">
+
+<title>GproPos — Facturación que trabaja sola</title>
+
+<base target="_top" href="<?= urlApp ?>">
+
+    <!-- TODAS LAS FUENTES Y CSS CONSOLIDADOS -->
+    <?!= HtmlService.createHtmlOutputFromFile('head_assets').getContent() ?>
+
+    <!-- TU CSS PERSONALIZADO -->
+    <?!= HtmlService.createHtmlOutputFromFile('css').getContent() ?>
+
+<style>
+/* ═══════════════ 1. VARIABLES Y BASE — DARK NAVY / ORANGE / AZUL (contraste) ═══════════════ */
+:root{
+  --navy-950:#0A1B2E;--navy-900:#0F2A47;--navy-800:#153B60;
+  --ink:#E2E8F0;--ink-2:#94A3B8;--ink-3:#64748B;
+  --nar-600:#EA580C;--nar-500:#F97316;--nar-400:#FB923C;--nar-100:rgba(234,88,12,.16);--nar-50:rgba(234,88,12,.08);
+  --az-700:#1D4ED8;--az-600:#2563EB;--az-500:#3B82F6;--az-400:#60A5FA;--az-100:rgba(59,130,246,.18);--az-50:rgba(59,130,246,.08);
+  --bg:#0A1B2E;--blanco:#FFFFFF;--linea:rgba(255,255,255,.08);
+  --glass:rgba(255,255,255,.04);
+  --glass-strong:rgba(255,255,255,.08);
+  --glass-border:rgba(255,255,255,.1);
+  --sombra-card:0 1px 2px rgba(0,0,0,.25),0 14px 34px -16px rgba(0,0,0,.55);
+  --sombra-pop:0 4px 8px rgba(0,0,0,.3),0 22px 44px -18px rgba(0,0,0,.65),0 0 40px -10px rgba(59,130,246,.35);
+  --contenedor:1200px;
+  --pad-lateral:clamp(16px,3.5vw,28px);
+  --trans:.32s cubic-bezier(.2,.7,.3,1);
+  --trans-bouncy:.42s cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;background:
+  radial-gradient(800px 500px at 8% -8%,rgba(249,115,22,.18),transparent 60%),
+  radial-gradient(900px 600px at 108% 30%,rgba(59,130,246,.16),transparent 65%),
+  radial-gradient(600px 400px at 50% 110%,rgba(96,165,250,.12),transparent 70%)}
+body::after{content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;opacity:.4;mix-blend-mode:screen;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/%3E/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+::selection{background:rgba(249,115,22,.3);color:var(--blanco)}
+:focus-visible{outline:2px solid var(--az-400);outline-offset:2px;border-radius:8px}
+
+.saltar{position:absolute;left:-9999px;top:0;z-index:100;background:var(--nar-500);color:#fff;padding:10px 18px;border-radius:0 0 10px 0;font-weight:600}
+.saltar:focus{left:0}
+
+/* ═══════════════ 2. BOTONES — GLOW + GRADIENTE ═══════════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:12px;font-weight:600;font-size:14px;transition:var(--trans);white-space:nowrap;min-height:46px;border:1px solid transparent;position:relative;overflow:hidden}
+.btn svg{width:16px;height:16px;flex:none;transition:transform .25s var(--trans)}
+.btn:active{transform:scale(.98)}
+.btn.grande{padding:14px 26px;font-size:15px;border-radius:14px;min-height:50px}
+.btn-primario{background:linear-gradient(135deg,var(--nar-500),var(--nar-600));color:#fff;box-shadow:0 1px 2px rgba(234,88,12,.35),0 8px 24px -10px rgba(234,88,12,.65)}
+.btn-primario::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--az-500),var(--nar-500));opacity:0;transition:opacity .35s}
+.btn-primario:hover::before{opacity:1}
+.btn-primario>*{position:relative;z-index:1}
+.btn-primario:hover{transform:translateY(-3px);box-shadow:0 14px 32px -8px rgba(234,88,12,.7),0 8px 24px -10px rgba(59,130,246,.55)}
+.btn-primario:hover svg{transform:translateX(4px)}
+.btn-borde{background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--linea);color:var(--ink)}
+.btn-borde:hover{border-color:var(--az-400);transform:translateY(-2px);box-shadow:var(--sombra-card),0 0 24px -8px rgba(59,130,246,.35)}
+
+/* ═══════════════ 3. NAVBAR — GLASS TRANSLÚCIDO OSCURO ═══════════════ */
+.navbar{position:sticky;top:0;z-index:40;background:rgba(10,27,46,.65);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid transparent;transition:all .3s ease}
+.navbar.con-borde{border-bottom-color:var(--linea);background:rgba(10,27,46,.88);box-shadow:0 8px 32px -18px rgba(0,0,0,.6)}
+.nav-inner{max-width:var(--contenedor);margin:0 auto;padding:0 var(--pad-lateral);height:68px;display:flex;align-items:center;gap:28px}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Inter Tight',sans-serif;font-weight:800;font-size:19px;letter-spacing:-.02em;flex:none;text-decoration:none;color:var(--blanco)}
+.logo-img{width:42px;height:42px;object-fit:contain;display:block;border-radius:11px;box-shadow:0 4px 14px -4px rgba(234,88,12,.5);transition:transform .35s var(--trans)}
+.logo:hover .logo-img{transform:scale(1.08) rotate(-3deg)}
+.nav-links{display:flex;gap:28px;margin:0 auto}
+.nav-links a{position:relative;font-size:14px;font-weight:500;color:var(--ink-2);transition:color .15s;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;left:0;bottom:-2px;width:100%;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--nar-500),var(--az-500));transform:scaleX(0);transform-origin:left;transition:transform .3s var(--trans)}
+.nav-links a:hover{color:var(--blanco)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-acciones{display:flex;align-items:center;gap:10px;margin-left:auto}
+
+.btn-menu-movil{display:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--linea);background:var(--glass);backdrop-filter:blur(10px);place-items:center;transition:var(--trans)}
+.btn-menu-movil:hover{border-color:var(--az-400)}
+.hamburger{position:relative;width:18px;height:2px;border-radius:2px;background:var(--ink);transition:background .2s}
+.hamburger::before,.hamburger::after{content:'';position:absolute;left:0;width:18px;height:2px;border-radius:2px;background:var(--ink);transition:transform .25s,top .25s}
+.hamburger::before{top:-6px}
+.hamburger::after{top:6px}
+.btn-menu-movil[aria-expanded="true"] .hamburger{background:transparent}
+.btn-menu-movil[aria-expanded="true"] .hamburger::before{top:0;transform:rotate(45deg)}
+.btn-menu-movil[aria-expanded="true"] .hamburger::after{top:0;transform:rotate(-45deg)}
+
+.nav-movil{visibility:hidden;overflow:hidden;max-height:0;background:var(--glass-strong);backdrop-filter:blur(20px);border-top:1px solid transparent;transition:max-height .35s var(--trans),visibility .35s,border-color .35s}
+.nav-movil.abierto{visibility:visible;max-height:440px;border-top-color:var(--linea)}
+.nav-movil nav{display:flex;flex-direction:column;gap:2px;padding:12px var(--pad-lateral) 18px}
+.nav-movil a{padding:13px 8px;font-weight:600;border-radius:10px;font-size:15px;transition:background .15s}
+.nav-movil a:hover{background:var(--az-50)}
+.nav-movil .btn{margin-top:10px;width:100%}
+
+/* ═══════════════ 4. HERO — BADGE GRADIENTE ANIMADO ═══════════════ */
+.hero{max-width:var(--contenedor);margin:0 auto;padding:clamp(44px,6vw,76px) var(--pad-lateral) 36px}
+.hero-grid{display:grid;grid-template-columns:1.04fr 1fr;gap:clamp(36px,5vw,60px);align-items:center}
+.hero-copy>*{opacity:0;transform:translateY(20px);transition:opacity .8s var(--trans),transform .8s var(--trans)}
+.hero-copy>*:nth-child(2){transition-delay:.1s}
+.hero-copy>*:nth-child(3){transition-delay:.2s}
+.hero-copy>*:nth-child(4){transition-delay:.3s}
+.hero-copy>*:nth-child(5){transition-delay:.4s}
+.hero-copy.animada>*{opacity:1;transform:none}
+
+.badge{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(110deg,var(--nar-500),var(--az-500),var(--nar-500));background-size:200% auto;border:none;border-radius:999px;padding:7px 16px 7px 12px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 4px 14px -3px rgba(59,130,246,.45);animation:badgeShimmer 4s linear infinite;position:relative;overflow:hidden}
+.badge::before{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);background-size:200% auto;animation:badgeShine 3s linear infinite}
+.badge>*{position:relative;z-index:1}
+.badge svg{width:14px;height:14px;color:#fff;filter:drop-shadow(0 0 4px rgba(255,255,255,.5))}
+
+h1{font-family:'Inter Tight',sans-serif;font-weight:800;letter-spacing:-.035em;font-size:clamp(30px,4.6vw + 8px,60px);line-height:1.05;color:var(--blanco);margin:20px 0 18px;text-wrap:balance}
+h1 .acento{background:linear-gradient(135deg,var(--nar-500),var(--az-400));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.hero-sub{font-size:clamp(15px,1vw + 9px,17px);line-height:1.65;color:var(--ink-2);max-width:52ch}
+.hero-botones{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 24px}
+.hero-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px;max-width:460px}
+.hero-checks li{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.hero-checks svg{width:15px;height:15px;color:var(--az-400);flex:none}
+
+.hero-cols{position:relative;height:560px;opacity:0;transition:opacity 1s ease .15s}
+.hero-cols.animada{opacity:1}
+.cols-glow{position:absolute;inset:-12% -18%;pointer-events:none;background:radial-gradient(46% 38% at 72% 36%,rgba(59,130,246,.28),transparent 70%),radial-gradient(38% 32% at 24% 72%,rgba(249,115,22,.22),transparent 70%);filter:blur(20px)}
+.cols-mascara{position:relative;height:100%;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 88%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 9%,#000 88%,transparent 100%)}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;height:100%;perspective:1200px}
+.col{height:100%;overflow:hidden}
+.col-track{will-change:transform;transform:translate3d(0,0,0)}
+.col-grupo{display:flex;flex-direction:column;gap:14px;padding-bottom:14px}
+
+/* ═══════════════ 5. MINI CARDS — GLASS OSCURO + TILT + SHIMMER ═══════════════ */
+.mini-card{background:var(--glass);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);border:1px solid var(--glass-border);border-radius:18px;padding:15px 16px;box-shadow:var(--sombra-card);transition:transform .35s var(--trans),box-shadow .35s,background .3s;cursor:pointer;position:relative;overflow:hidden;transform-style:preserve-3d;color:var(--ink)}
+.mini-card::before{content:'';position:absolute;inset:0;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.08),transparent 50%);pointer-events:none;opacity:.7}
+.mini-card::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transition:left .7s var(--trans);pointer-events:none}
+.mini-card:hover{transform:translateY(-6px) scale(1.015);box-shadow:var(--sombra-pop);background:var(--glass-strong)}
+.mini-card:hover::after{left:120%}
+.mini-card>*{position:relative;z-index:1}
+
+.mc-head{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.mc-ico{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;flex:none;transition:transform .3s var(--trans)}
+.mini-card:hover .mc-ico{transform:scale(1.1) rotate(-5deg)}
+.mc-ico svg{width:13px;height:13px}
+.t-naranja .mc-ico{background:var(--nar-100);color:var(--nar-500);box-shadow:0 4px 12px -4px rgba(234,88,12,.5)}
+.t-azul .mc-ico{background:var(--az-100);color:var(--az-400);box-shadow:0 4px 12px -4px rgba(59,130,246,.5)}
+.mc-label{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.pill{margin-left:auto;font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pill.azul{background:var(--az-100);color:var(--az-400)}
+.pill.naranja{background:var(--nar-100);color:var(--nar-400)}
+.mc-value-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mc-value{font-family:'Inter Tight',sans-serif;font-weight:700;font-size:24px;letter-spacing:-.02em;color:var(--blanco);font-variant-numeric:tabular-nums;line-height:1.1}
+.mc-value.sm{font-size:17px}
+.mc-meta{font-size:11.5px;color:var(--ink-3);font-weight:500;margin-top:3px}
+.mc-foot{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:500;color:var(--ink-3);margin-top:11px}
+.mc-foot .sq{width:9px;height:9px;border-radius:3px;background:var(--nar-500);flex:none;box-shadow:0 0 8px var(--nar-500)}
+.t-azul .mc-foot .sq{background:var(--az-500);box-shadow:0 0 8px var(--az-500)}
+.mc-foot.accion{color:var(--ink-2)}
+.mc-foot.accion svg{width:13px;height:13px;color:var(--az-400)}
+.mc-bars{display:flex;align-items:flex-end;gap:5px;height:56px;margin:13px 0 4px}
+.mc-bars i{flex:1;border-radius:5px 5px 3px 3px;background:linear-gradient(180deg,var(--nar-500),var(--nar-400));transition:transform .3s var(--trans)}
+.t-azul .mc-bars i{background:linear-gradient(180deg,var(--az-500),var(--az-400))}
+.mini-card:hover .mc-bars i{transform:translateY(-2px)}
+.mc-segs{display:flex;gap:4px;margin:12px 0 4px}
+.mc-segs i{height:8px;flex:1;border-radius:99px;background:rgba(255,255,255,.1);transition:background .3s}
+.mc-segs i.on{background:linear-gradient(90deg,var(--az-500),var(--az-400));box-shadow:0 0 8px rgba(59,130,246,.6)}
+.factura-ref{font-family:'Inter Tight',sans-serif;font-weight:700;font-size:16px;letter-spacing:-.01em;margin-bottom:7px;color:var(--blanco)}
+.factura-fila{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--ink-2);padding:2.5px 0}
+.factura-fila b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.factura-total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--linea);margin-top:8px;padding-top:9px}
+.factura-total span{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.factura-total b{font-family:'Inter Tight',sans-serif;font-size:16px;color:var(--nar-500);font-variant-numeric:tabular-nums}
+.mc-quote{font-size:12.5px;line-height:1.55;color:var(--ink-2);background:linear-gradient(135deg,var(--az-50),var(--nar-50));border-radius:11px;padding:10px 12px;border:1px solid rgba(59,130,246,.15)}
+.recibo-fila{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-2)}
+.recibo-fila b{font-family:'Inter Tight',sans-serif;font-size:15px;color:var(--blanco);font-variant-numeric:tabular-nums}
+.gasto-fila{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.gasto-fila b{font-size:13.5px;font-weight:600;color:var(--ink)}
+.cli-cab{display:flex;gap:10px;align-items:center}
+.cli-av{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--az-500),var(--navy-800));color:#fff;font-family:'Inter Tight',sans-serif;font-weight:700;font-size:12px;display:grid;place-items:center;flex:none;box-shadow:0 4px 12px -4px rgba(59,130,246,.6)}
+.cli-cab b{display:block;font-size:13.5px;font-weight:600;line-height:1.25;color:var(--blanco)}
+.cli-cab span{display:block;font-size:11.5px;color:var(--ink-3)}
+.cli-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.cli-par span{display:block;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.cli-par b{font-family:'Inter Tight',sans-serif;font-size:14.5px;color:var(--blanco);font-variant-numeric:tabular-nums}
+.cli-par.naranja b{color:var(--nar-500)}
+
+/* ═══════════════ 6. MODAL — GLASS PREMIUM OSCURO ═══════════════ */
+.modal-overlay{position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .32s ease,visibility 0s linear .32s}
+.modal-overlay.active{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .32s ease}
+.modal-content{background:rgba(15,42,71,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glass-border);border-radius:22px;padding:clamp(20px,3vw,30px);max-width:520px;width:100%;box-shadow:var(--sombra-pop);transform:translateY(20px) scale(.96);transition:transform .35s var(--trans-bouncy);position:relative;max-height:88vh;max-height:88dvh;overflow-y:auto}
+.modal-overlay.active .modal-content{transform:none}
+.modal-close-btn{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;background:var(--nar-50);color:var(--nar-500);display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .25s var(--trans-bouncy);border:1px solid rgba(234,88,12,.2)}
+.modal-close-btn:hover{background:var(--nar-100);transform:rotate(90deg) scale(1.05);box-shadow:0 4px 12px -4px rgba(234,88,12,.5)}
+.modal-title{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:20px;color:var(--blanco);margin-bottom:5px;padding-right:40px}
+.modal-subtitle{font-size:13px;color:var(--ink-3);margin-bottom:20px}
+.modal-value{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:36px;background:linear-gradient(135deg,var(--nar-500),var(--az-400));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:15px}
+.modal-bars-large{display:flex;align-items:flex-end;gap:8px;height:140px;margin:18px 0 8px;padding:26px 12px 12px;background:rgba(255,255,255,.04);border-radius:14px;border:1px solid var(--linea)}
+.modal-bars-large i{flex:1;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,var(--nar-500),var(--nar-400));position:relative;min-height:10px;transition:opacity .2s,transform .3s}
+.modal-bars-large i:hover{opacity:.85;transform:translateY(-2px)}
+.modal-bar-label{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:var(--ink-2);white-space:nowrap}
+.modal-meta{font-size:13px;color:var(--ink-2);margin-top:10px;padding-top:15px;border-top:1px solid var(--linea)}
+
+/* ═══════════════ 7. CINTA / CTA / PIE ═══════════════ */
+.cinta{border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:14px 0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%)}
+.cinta-track{display:flex;gap:12px;width:max-content;will-change:transform}
+.cinta-set{display:flex;gap:12px}
+.cinta-item{display:flex;align-items:center;gap:9px;white-space:nowrap;border:1px solid var(--linea);border-radius:999px;padding:9px 17px;font-size:13px;font-weight:500;color:var(--ink-2);background:var(--glass-strong);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:transform .3s var(--trans),box-shadow .3s,border-color .3s}
+.cinta-item:hover{transform:translateY(-2px);box-shadow:0 8px 20px -8px rgba(0,0,0,.5);border-color:var(--az-400)}
+.cinta-item .dot{width:6px;height:6px;border-radius:50%;background:var(--nar-500);flex:none;box-shadow:0 0 8px var(--nar-500)}
+.cinta-item .dot.azul{background:var(--az-500);box-shadow:0 0 8px var(--az-500)}
+
+.cta-banda{max-width:var(--contenedor);margin:clamp(48px,7vw,80px) auto 0;padding:0 var(--pad-lateral)}
+.cta-panel{position:relative;overflow:hidden;background:linear-gradient(160deg,var(--navy-900),var(--navy-950) 55%);color:#fff;border-radius:clamp(20px,3vw,28px);padding:clamp(44px,6vw,68px) clamp(22px,5vw,60px);text-align:center;box-shadow:0 30px 60px -30px rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.1)}
+.cta-panel::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(52% 90% at 50% 118%,rgba(249,115,22,.45),transparent 70%)}
+.cta-panel::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(40% 55% at 85% 8%,rgba(59,130,246,.45),transparent 70%)}
+.cta-panel h2{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:clamp(24px,3.2vw,38px);letter-spacing:-.03em;position:relative;z-index:1;text-wrap:balance}
+.cta-panel p{color:#9FB3C8;margin:12px auto 28px;max-width:460px;position:relative;z-index:1}
+.cta-panel .btn{position:relative;z-index:1}
+
+.pie{max-width:var(--contenedor);margin:0 auto;padding:26px var(--pad-lateral) calc(26px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink-3)}
+.pie nav{display:flex;gap:20px;flex-wrap:wrap}
+.pie a{transition:color .15s}
+.pie a:hover{color:var(--az-400)}
+
+/* ═══════════════ 8. ANIMACIONES ═══════════════ */
+@keyframes spinClockwise{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes spinCounterClockwise{from{transform:rotate(360deg)}to{transform:rotate(0deg)}}
+@keyframes pulseIcon{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+@keyframes floatParticle{0%{transform:translateY(0) translateX(0) rotate(0deg);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100vh) translateX(40px) rotate(360deg);opacity:0}}
+@keyframes badgeShimmer{to{background-position:-200% center}}
+@keyframes badgeShine{to{background-position:200% center}}
+
+/* ═══════════════ 9. NUEVAS SECCIONES — REDISTRIBUCIÓN ═══════════════ */
+
+/* Logo con badge IA */
+.logo-text{display:flex;align-items:center;gap:8px}
+.logo-badge{display:inline-grid;place-items:center;font-size:9px;font-weight:800;letter-spacing:.05em;padding:2px 6px;border-radius:6px;background:linear-gradient(135deg,var(--az-500),var(--az-600));color:#fff;box-shadow:0 2px 8px -2px rgba(59,130,246,.6);text-transform:uppercase}
+
+/* Hero eyebrow (badge + rating lado a lado) */
+.hero-eyebrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.hero-rating{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-3);font-weight:500}
+.hero-rating .stars{color:var(--nar-500);letter-spacing:1px;font-size:14px;filter:drop-shadow(0 1px 4px rgba(249,115,22,.4))}
+.hero-rating .rating-text b{color:var(--blanco);font-weight:700}
+.hero-rating b{font-weight:700;color:var(--blanco)}
+
+/* Hero social proof */
+.hero-social{display:flex;align-items:center;gap:12px;margin-top:24px;padding-top:20px;border-top:1px dashed var(--linea)}
+.hero-avatars{display:flex}
+.hero-avatars span{width:34px;height:34px;border-radius:50%;border:2px solid var(--bg);margin-left:-10px;color:#fff;font-family:'Inter Tight',sans-serif;font-weight:700;font-size:11px;display:grid;place-items:center;box-shadow:0 4px 10px -4px rgba(0,0,0,.5)}
+.hero-avatars span:first-child{margin-left:0}
+.hero-social-text{font-size:12.5px;color:var(--ink-3);font-weight:500;line-height:1.4;max-width:240px}
+
+/* Stats bar — 4 KPIs */
+.stats-bar{max-width:var(--contenedor);margin:0 auto;padding:clamp(28px,4vw,44px) var(--pad-lateral) 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--glass);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--glass-border);border-radius:20px;box-shadow:var(--sombra-card);overflow:hidden}
+.stat{padding:24px 22px;border-right:1px solid var(--linea);position:relative;transition:background .3s}
+.stat:last-child{border-right:none}
+.stat:hover{background:rgba(59,130,246,.06)}
+.stat-num{font-family:'Inter Tight',sans-serif;font-weight:800;font-size:clamp(28px,3.2vw,38px);letter-spacing:-.03em;color:var(--blanco);line-height:1;display:flex;align-items:baseline;gap:2px}
+.stat-num span{background:linear-gradient(135deg,var(--nar-500),var(--az-400));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:13px;font-weight:600;color:var(--ink-2);margin-top:8px;letter-spacing:-.01em}
+.stat-spark{display:flex;align-items:flex-end;gap:3px;height:24px;margin-top:12px}
+.stat-spark i{flex:1;border-radius:3px;background:linear-gradient(180deg,var(--az-400),var(--az-500));opacity:.7;transition:opacity .3s,transform .3s}
+.stat:nth-child(2) .stat-spark i{background:linear-gradient(180deg,var(--nar-400),var(--nar-500))}
+.stat:nth-child(3) .stat-spark i{background:linear-gradient(180deg,var(--nar-400),var(--az-500))}
+.stat:hover .stat-spark i{opacity:1;transform:translateY(-2px)}
+
+/* Section heading común */
+.section-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--az-400);background:var(--az-50);padding:6px 12px;border-radius:999px;border:1px solid rgba(59,130,246,.2)}
+.section-eyebrow svg{width:13px;height:13px}
+.section-title{font-family:'Inter Tight',sans-serif;font-weight:800;letter-spacing:-.035em;font-size:clamp(26px,3.6vw,42px);line-height:1.1;color:var(--blanco);margin:14px auto 12px;max-width:18ch;text-wrap:balance}
+.section-title .acento{background:linear-gradient(135deg,var(--nar-500),var(--az-400));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.section-sub{font-size:clamp(15px,1vw + 9px,17px);color:var(--ink-2);max-width:54ch;margin:0 auto;line-height:1.55}
+
+/* Features grid */
+.features{max-width:var(--contenedor);margin:clamp(48px,7vw,76px) auto 0;padding:0 var(--pad-lateral)}
+.features-head{text-align:center;margin-bottom:40px}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.feature-card{background:var(--glass);backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);border:1px solid var(--glass-border);border-radius:18px;padding:24px 22px;box-shadow:var(--sombra-card);transition:transform .35s var(--trans),box-shadow .35s,border-color .35s;position:relative;overflow:hidden}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--nar-500),var(--az-500));opacity:0;transition:opacity .3s}
+.feature-card:hover{transform:translateY(-6px);box-shadow:var(--sombra-pop);border-color:rgba(59,130,246,.35)}
+.feature-card:hover::before{opacity:1}
+.feature-ico{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;flex:none;margin-bottom:16px;transition:transform .35s var(--trans)}
+.feature-ico svg{width:22px;height:22px}
+.feature-card:hover .feature-ico{transform:scale(1.1) rotate(-5deg)}
+.feature-ico.t-naranja{background:var(--nar-100);color:var(--nar-500);box-shadow:0 6px 16px -6px rgba(234,88,12,.6)}
+.feature-ico.t-azul{background:var(--az-100);color:var(--az-400);box-shadow:0 6px 16px -6px rgba(59,130,246,.6)}
+.feature-card h3{font-family:'Inter Tight',sans-serif;font-weight:700;font-size:18px;letter-spacing:-.02em;color:var(--blanco);margin-bottom:10px}
+.feature-card p{font-size:13.5px;line-height:1.6;color:var(--ink-2);margin-bottom:14px}
+.feature-mini{display:flex;flex-wrap:wrap;gap:6px}
+.feature-mini li{font-size:11px;font-weight:600;color:var(--az-400);background:var(--az-50);padding:4px 10px;border-radius:999px;border:1px solid rgba(59,130,246,.2)}
+
+/* CTA reformulado */
+.cta-panel .cta-badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,rgba(249,115,22,.3),rgba(59,130,246,.3));border:1px solid rgba(255,255,255,.2);padding:6px 14px;border-radius:999px;margin-bottom:18px;backdrop-filter:blur(8px)}
+.cta-panel .cta-badge svg{width:13px;height:13px;color:var(--nar-400)}
+.cta-panel h2{margin-bottom:14px}
+.cta-panel h2 .acento{background:linear-gradient(135deg,var(--nar-500),var(--az-400));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.cta-acciones{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;position:relative;z-index:1}
+.btn.claro{background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border-color:rgba(255,255,255,.2);color:#fff}
+.btn.claro:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35);transform:translateY(-2px);box-shadow:0 12px 28px -10px rgba(59,130,246,.5)}
+.cta-trust{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.cta-trust li{display:flex;align-items:center;gap:6px;font-size:13px;color:#9FB3C8;font-weight:500}
+.cta-trust svg{width:14px;height:14px;color:var(--nar-500)}
+.cta-deco{position:absolute;border-radius:50%;filter:blur(60px);opacity:.6;pointer-events:none}
+.cta-deco-1{top:-40px;left:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(249,115,22,.6),transparent 70%)}
+.cta-deco-2{bottom:-50px;right:-30px;width:240px;height:240px;background:radial-gradient(circle,rgba(59,130,246,.6),transparent 70%)}
+
+/* Footer ampliado */
+.pie{padding:clamp(40px,5vw,56px) var(--pad-lateral) calc(28px + env(safe-area-inset-bottom,0px));max-width:var(--contenedor);margin:clamp(48px,7vw,76px) auto 0}
+.pie-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;padding-bottom:32px;border-bottom:1px solid var(--linea)}
+.pie-marca .logo{margin-bottom:14px}
+.pie-tag{font-size:13px;line-height:1.6;color:var(--ink-3);max-width:36ch;margin-bottom:18px}
+.pie-social{display:flex;gap:10px}
+.pie-social a{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--linea);color:var(--ink-2);transition:all .3s var(--trans)}
+.pie-social a:hover{color:var(--az-400);border-color:var(--az-400);transform:translateY(-2px);box-shadow:0 8px 16px -8px rgba(59,130,246,.5)}
+.pie-social svg{width:16px;height:16px}
+.pie-col h4{font-family:'Inter Tight',sans-serif;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--blanco);margin-bottom:14px}
+.pie-col nav{display:flex;flex-direction:column;gap:9px}
+.pie-col a{font-size:13.5px;color:var(--ink-2);transition:color .15s,padding .15s}
+.pie-col a:hover{color:var(--az-400);padding-left:4px}
+.pie-base{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-top:20px;font-size:13px;color:var(--ink-3)}
+.pie-legal{display:flex;gap:18px;flex-wrap:wrap}
+.pie-legal a{transition:color .15s}
+.pie-legal a:hover{color:var(--az-400)}
+
+/* ═══════════════ 10. RESPONSIVE ═══════════════ */
+@media (max-width:1020px){
+  .hero{padding-top:44px}
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-copy,.hero-cols{max-width:640px}
+  .hero-cols{height:470px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:none}
+  .stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--linea)}
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .pie-grid{grid-template-columns:1fr 1fr;gap:28px}
+  .pie-marca{grid-column:1 / -1}
+}
+@media (max-width:880px){
+  .nav-links{display:none}
+  .btn-menu-movil{display:grid}
+  .nav-inner{gap:16px;height:62px}
+  .nav-acciones .btn-borde:not(.grande){display:none}
+}
+@media (max-width:640px){
+  .hero{padding-top:32px;padding-bottom:22px}
+  .hero-cols{height:400px}
+  .cols{grid-template-columns:repeat(2,1fr)}
+  .col:nth-child(3){display:none}
+  .hero-botones{flex-direction:column}
+  .hero-botones .btn{width:100%}
+  .hero-checks{gap:8px 12px}
+  .hero-checks li{font-size:12.5px}
+  .hero-eyebrow{gap:10px}
+  .hero-rating .rating-text{display:none}
+  .badge{font-size:12px;padding:6px 12px 6px 9px}
+  .cinta-item{font-size:12px;padding:8px 14px}
+  .cta-panel{padding:40px 20px}
+  .cta-acciones{flex-direction:column;width:100%}
+  .cta-acciones .btn{width:100%}
+  .cta-trust{gap:14px}
+  .cta-trust li{font-size:12px}
+  .modal-value{font-size:28px}
+  .modal-bars-large{height:110px}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:0}
+  .stat{padding:18px 16px}
+  .features-grid{grid-template-columns:1fr}
+  .pie{padding:36px var(--pad-lateral)}
+  .pie-grid{grid-template-columns:1fr;gap:24px;text-align:left}
+  .pie-marca{grid-column:1}
+  .pie-base{flex-direction:column;text-align:center;justify-content:center}
+  .pie-legal{justify-content:center}
+}
+@media (max-width:420px){
+  .hero-cols{height:360px}
+  .mini-card{padding:12px 13px;border-radius:14px}
+  .mc-value{font-size:21px}
+  .mc-value.sm{font-size:15px}
+  .cli-cols{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr}
+  .stat{border-right:none;border-bottom:1px solid var(--linea)}
+  .stat:last-child{border-bottom:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .hero-copy>*{opacity:1;transform:none}
+  .hero-cols{opacity:1}
+  .badge{animation:none}
+}
+</style>
+
+</head>
+
+<body>
+
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="logo" href="#">
+      <img src="<?!= LOGO_EMPRESA ?>" alt="GproPos Logo" class="logo-img">
+      <span class="logo-text">GproPos<span class="logo-badge">IA</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Principal">
+      <a href="#producto">Producto</a>
+      <a href="#funciones">Funciones</a>
+      <a href="#stats">Métricas</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-acciones">
+      <a class="btn btn-borde" href="#" id="btnDemo">Ver demo</a>
+      <a class="btn btn-primario" href="#">Manual</a>
+      <button class="btn-menu-movil" id="btnMenuMovil" aria-label="Abrir menú" aria-expanded="false" aria-controls="navMovil"><span class="hamburger"></span></button>
+    </div>
+  </div>
+  <div class="nav-movil" id="navMovil"><nav aria-label="Menú móvil"><a href="#producto">Producto</a><a href="#funciones">Funciones</a><a href="#stats">Métricas</a><a href="#faq">FAQ</a><a class="btn btn-primario" href="#">Vendedores</a></nav></div>
+</header>
+
+<main id="contenido">
+
+<!-- ═══════════ MODAL DE GRÁFICO AMPLIADO ═══════════ -->
+<div class="modal-overlay" id="chartModal" role="dialog" aria-modal="true" aria-label="Detalle del gráfico">
+  <div class="modal-content"><button class="modal-close-btn" onclick="closeChartModal()" aria-label="Cerrar">×</button><div id="modalBody"></div></div>
+</div>
+
+<!-- ═══════════ HERO — REORGANIZADO ═══════════ -->
+<section class="hero" id="producto">
+  <div class="hero-grid">
+    <div class="hero-copy" id="heroCopy">
+      <div class="hero-eyebrow">
+        <span class="badge"><i data-ic="sparkles"></i>Impulsado por IA</span>
+        <span class="hero-rating" title="Valoración de usuarios">
+          <span class="stars">★★★★★</span>
+          <span class="rating-text">4.9 · <b>2.300+</b> negocios</span>
+        </span>
+      </div>
+      <h1>Un Sistema que<br><span class="acento">trabaja para ti.</span></h1>
+      <p class="hero-sub">Crea facturas, Pedidos, Libros de Compra y Venta, tus Pagos, Cobros y deja que la IA lea recibos, redacte recordatorios y resuma tus ingresos — para que te dediques al trabajo que sí paga.</p>
+      
+      <div class="hero-botones">
+        <a class="btn btn-primario grande" href="#" id="btnLoginHero"><i data-ic="zap"></i>Administrativo</a>
+        <a class="btn btn-borde grande" href="https://script.google.com/macros/s/AKfycbwkQ6pYLdrSNKlV_O3HEsvbLmu6-r-bEYIVSsffNP5d7urbe2IeQ3CppW_oZCS6Z-UX/exec" target="_blank" rel="noopener"><i data-ic="users"></i>Módulo Nómina</a>
+      </div>
+      
+      <ul class="hero-checks">
+        <li><i data-ic="check"></i>CRM de clientes</li>
+        <li><i data-ic="check"></i>Facturas PDF</li>
+        <li><i data-ic="check"></i>Pagos y gastos</li>
+        <li><i data-ic="check"></i>Multi-divisa</li>
+        <li><i data-ic="check"></i>Pedidos</li>
+        <li><i data-ic="check"></i>Bancos</li>
+        <li><i data-ic="check"></i>Nómina</li>
+        <li><i data-ic="check"></i>Asientos</li>
+      </ul>
+      <div class="hero-social">
+        <div class="hero-avatars">
+          <span style="background:linear-gradient(135deg,#EA580C,#F97316)">JM</span>
+          <span style="background:linear-gradient(135deg,#2563EB,#3B82F6)">AL</span>
+          <span style="background:linear-gradient(135deg,#0F2A47,#153B60)">CR</span>
+          <span style="background:linear-gradient(135deg,#2563EB,#EA580C)">+2k</span>
+        </div>
+        <span class="hero-social-text">Confían en GproPos para facturar cada día</span>
+      </div>
+    </div>
+    <div class="hero-cols" id="heroCols" aria-label="Vista previa del producto"><div class="cols-glow"></div><div class="cols-mascara"><div class="cols" id="cols"></div></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ CINTA DE PASTILLAS (REUBICADA TRAS STATS) ═══════════ -->
+<div class="cinta" aria-hidden="true"><div class="cinta-track" id="cintaTrack"></div></div>
+
+<!-- ═══════════ STATS BAR — 4 KPIs ═══════════ -->
+<section class="stats-bar" id="stats" aria-label="Métricas del producto">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-num"><span data-count="2.3">2.3</span>K+</div>
+      <div class="stat-label">Negocios activos</div>
+      <div class="stat-spark"><i style="height:30%"></i><i style="height:55%"></i><i style="height:40%"></i><i style="height:70%"></i><i style="height:60%"></i><i style="height:85%"></i></div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><span data-count="180">180</span>K+</div>
+      <div class="stat-label">Facturas emitidas</div>
+      <div class="stat-spark"><i style="height:25%"></i><i style="height:45%"></i><i style="height:60%"></i><i style="height:50%"></i><i style="height:75%"></i><i style="height:95%"></i></div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><span data-count="4.9">4.9</span>★</div>
+      <div class="stat-label">Valoración media</div>
+      <div class="stat-spark"><i style="height:80%"></i><i style="height:85%"></i><i style="height:90%"></i><i style="height:85%"></i><i style="height:92%"></i><i style="height:95%"></i></div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><span data-count="40">40</span>+</div>
+      <div class="stat-label">Integraciones</div>
+      <div class="stat-spark"><i style="height:20%"></i><i style="height:35%"></i><i style="height:50%"></i><i style="height:65%"></i><i style="height:78%"></i><i style="height:88%"></i></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FEATURES GRID — 6 FUNCIONES ═══════════ -->
+<section class="features" id="funciones" aria-label="Funcionalidades principales">
+  <div class="features-head">
+    <span class="section-eyebrow"><i data-ic="sparkles"></i>Funcionalidades</span>
+    <h2 class="section-title">Todo en un solo <span class="acento">panel de control</span></h2>
+    <p class="section-sub">Desde la factura hasta el cobro, GproPos cubre cada paso del ciclo financiero de tu negocio.</p>
+  </div>
+  <div class="features-grid">
+    <article class="feature-card">
+      <div class="feature-ico t-naranja"><i data-ic="file"></i></div>
+      <h3>Facturación inteligente</h3>
+      <p>Genera facturas PDF con tu logo, número automático, multi-divisa y envío por email en un clic. Cumple normativa fiscal sin esfuerzo.</p>
+      <ul class="feature-mini">
+        <li>PDF profesionales</li>
+        <li>Numeración automática</li>
+        <li>Envío por correo</li>
+      </ul>
+    </article>
+    <article class="feature-card">
+      <div class="feature-ico t-azul"><i data-ic="scan"></i></div>
+      <h3>Escaneo de recibos con IA</h3>
+      <p>Foto a un recibo y la IA extrae proveedor, monto, fecha y categoría. Sin teclear. Cada gasto queda registrado, clasificado y listo para tu contabilidad.</p>
+      <ul class="feature-mini">
+        <li>OCR automático</li>
+        <li>Categorización IA</li>
+        <li>Conciliación bancaria</li>
+      </ul>
+    </article>
+    <article class="feature-card">
+      <div class="feature-ico t-naranja"><i data-ic="bell"></i></div>
+      <h3>Recordatorios automáticos</h3>
+      <p>La IA redacta recordatorios de cobro amables pero efectivos, con el tono correcto para cada cliente. Tú solo apruebas y envías. Recupera hasta 30% más de facturas vencidas.</p>
+      <ul class="feature-mini">
+        <li>Plantillas IA</li>
+        <li>Multi-canal</li>
+        <li>Seguimiento auto</li>
+      </ul>
+    </article>
+    <article class="feature-card">
+      <div class="feature-ico t-azul"><i data-ic="wallet"></i></div>
+      <h3>Cobros y pagos</h3>
+      <p>Lleva control de cuentas por cobrar y por pagar. Programación de pagos, alertas de vencimiento y conciliación con tus bancos en tiempo real.</p>
+      <ul class="feature-mini">
+        <li>Conciliación auto</li>
+        <li>Alertas proactivas</li>
+        <li>Multi-divisa</li>
+      </ul>
+    </article>
+    <article class="feature-card">
+      <div class="feature-ico t-naranja"><i data-ic="users"></i></div>
+      <h3>CRM de clientes</h3>
+      <p>Ficha completa de cada cliente: facturación histórica, saldos pendientes, notas, contacto. Segmenta y envía campañas personalizadas desde un mismo lugar.</p>
+      <ul class="feature-mini">
+        <li>Historial 360°</li>
+        <li>Segmentación</li>
+        <li>Notas y recordatorios</li>
+      </ul>
+    </article>
+    <article class="feature-card">
+      <div class="feature-ico t-azul"><i data-ic="trending"></i></div>
+      <h3>Analítica con IA</h3>
+      <p>Pregunta en lenguaje natural y obtén respuestas: "¿cuánto cobré este mes?", "¿mi mejor cliente?", "¿qué gasto subió?". La IA resume tus números cada semana.</p>
+      <ul class="feature-mini">
+        <li>Chat con tus datos</li>
+        <li>Resúmenes semanales</li>
+        <li>Predicciones de caja</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<!-- ═══════════ CTA FINAL — REUBICADO Y REFORMULADO ═══════════ -->
+<section class="cta-banda" id="faq">
+  <div class="cta-panel">
+    <div class="cta-deco cta-deco-1"></div>
+    <div class="cta-deco cta-deco-2"></div>
+    <span class="cta-badge"><i data-ic="sparkles"></i>Empieza gratis hoy</span>
+    <h2>Todo lo que tu negocio necesita,<br><span class="acento">en un solo lugar.</span></h2>
+    <p>Sin tarjeta de crédito. Sin comisiones ocultas. Solo crea tu cuenta y empieza a facturar en 60 segundos.</p>
+    <div class="cta-acciones">
+      <a class="btn btn-primario grande" href="#">Crear cuenta gratis <i data-ic="arrow-right"></i></a>
+      <a class="btn btn-borde grande claro" href="#">Agendar demo <i data-ic="users"></i></a>
+    </div>
+    <ul class="cta-trust">
+      <li><i data-ic="circle-check"></i>Sin tarjeta</li>
+      <li><i data-ic="circle-check"></i>Cancela cuando quieras</li>
+      <li><i data-ic="circle-check"></i>Soporte en español</li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<!-- ═══════════ FOOTER AMPLIADO ═══════════ -->
+<footer class="pie">
+  <div class="pie-grid">
+    <div class="pie-col pie-marca">
+      <a class="logo" href="#">
+        <img src="<?!= LOGO_EMPRESA ?>" alt="GproPos Logo" class="logo-img">
+        <span class="logo-text">GproPos<span class="logo-badge">IA</span></span>
+      </a>
+      <p class="pie-tag">Facturación, pedidos y nómina con IA. Hecho con Google Apps Script para negocios que valoran su tiempo.</p>
+      <div class="pie-social">
+        <a href="#" aria-label="Telegram"><i data-ic="send"></i></a>
+        <a href="#" aria-label="Email"><i data-ic="bell"></i></a>
+        <a href="#" aria-label="Web"><i data-ic="users"></i></a>
+      </div>
+    </div>
+    <div class="pie-col">
+      <h4>Producto</h4>
+      <nav><a href="#">Facturación</a><a href="#">Pedidos</a><a href="#">Nómina</a><a href="#">Bancos</a><a href="#">CRM</a></nav>
+    </div>
+    <div class="pie-col">
+      <h4>Empresa</h4>
+      <nav><a href="#">Sobre nosotros</a><a href="#">Blog</a><a href="#">Casos de éxito</a><a href="#">Demo</a><a href="#">Precios</a></nav>
+    </div>
+    <div class="pie-col">
+      <h4>Soporte</h4>
+      <nav><a href="#">Manual</a><a href="#">FAQ</a><a href="#">Telegram</a><a href="#">Contacto</a><a href="#">Estado</a></nav>
+    </div>
+  </div>
+  <div class="pie-base">
+    <span>© 2025 GproPos · Hecho con Google Apps Script</span>
+    <nav class="pie-legal" aria-label="Legal"><a href="#">Privacidad</a><a href="#">Términos</a><a href="#">Cookies</a></nav>
+  </div>
+</footer>
+
+<!-- ═══════════ OVERLAY DE TRANSICIÓN AL LOGIN ═══════════ -->
+<div id="loginTransition" style="position:fixed;inset:0;z-index:99999;background:#0A1B2E;display:none;align-items:center;justify-content:center;flex-direction:column;opacity:0;transition:opacity .3s ease;padding:16px;">
+  <div id="particlesContainer" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;"></div>
+  <div style="position:relative;z-index:1;text-align:center;padding:20px;width:100%;max-width:400px;">
+    <div style="width:70px;height:70px;margin:0 auto 24px;position:relative;">
+      <div style="position:absolute;inset:0;border:3px solid transparent;border-top-color:#F97316;border-right-color:#F97316;border-radius:50%;animation:spinClockwise 1.5s linear infinite;"></div>
+      <div style="position:absolute;inset:10px;border:3px solid transparent;border-bottom-color:#2563EB;border-left-color:#2563EB;border-radius:50%;animation:spinCounterClockwise 2s linear infinite;"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#F97316;font-size:22px;animation:pulseIcon 2s ease-in-out infinite;"><i class="fas fa-lock"></i></div>
+    </div>
+    <h2 style="color:#fff;font-family:'Inter Tight',sans-serif;font-weight:800;font-size:clamp(20px,5vw,28px);margin-bottom:10px;">Preparando tu acceso</h2>
+    <p id="loadingMessage" style="color:#9FB3C8;font-size:clamp(12px,3.5vw,14px);margin-bottom:30px;">Conectando con el sistema seguro...</p>
+    <div style="width:100%;max-width:280px;height:6px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden;margin:0 auto 20px;">
+      <div id="progressBar" style="width:0%;height:100%;background:linear-gradient(90deg,#F97316,#EA580C);border-radius:10px;transition:width .25s ease;"></div>
+    </div>
+    <div id="percentageText" style="color:#F97316;font-weight:700;font-size:16px;">0%</div>
+  </div>
+</div>
+
+<script>window.URL_APP = '<?= urlApp ?>';</script>
+
+<script>
+/* ═══════════════ 1. CONFIGURACIÓN GLOBAL ═══════════════ */
+const TIMEOUT_DATOS_MS = 12000;
+const PREFIJO_LOG      = '[GproPos]';
+const REINTENTO_DELAY  = 2000;
+let   reintentoHecho   = false;
+
+/* ═══════════════ 2. ICONOS SVG ═══════════════ */
+const ICONOS = {
+  'zap':'<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
+  'sparkles':'<path d="M9.9 15.5a2 2 0 0 0-1.4-1.4L2.4 12.5a.5.5 0 0 1 0-1L8.5 9.9a2 2 0 0 0 1.4-1.4l1.6-6.1a.5.5 0 0 1 1 0l1.6 6.1a2 2 0 0 0 1.4 1.4l6.1 1.6a.5.5 0 0 1 0 1l-6.1 1.6a2 2 0 0 0-1.4 1.4l-1.6 6.1a.5.5 0 0 1-1 0z"/>',
+  'arrow-right':'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  'check':'<path d="M20 6 9 17l-5-5"/>',
+  'trending':'<path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',
+  'circle-check':'<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+  'file':'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+  'bell':'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+  'scan':'<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/>',
+  'card':'<rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/>',
+  'wallet':'<path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h15a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5"/><path d="M16 12h.01"/>',
+  'send':'<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+  'users':'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'
+};
+
+/* ═══════════════ 3. HELPER DE ICONOS ═══════════════ */
+const ic = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONOS[n]||''}</svg>`;
+document.querySelectorAll('[data-ic]').forEach(el => el.innerHTML = ic(el.dataset.ic));
+
+/* ═══════════════ 4. CARGA DE DATOS REALES (TIMEOUT + REINTENTO ÚNICO) ═══════════════ */
+function cargarTarjetas(permitirReintento){
+  return new Promise(resolve => {
+    let resuelto = false;
+
+    const timeout = setTimeout(() => {
+      if (resuelto) return;
+      resuelto = true;
+      console.warn(PREFIJO_LOG, 'Timeout tras', TIMEOUT_DATOS_MS, 'ms esperando obtenerTarjetas()');
+      resolve(null);
+    }, TIMEOUT_DATOS_MS);
+
+    if (typeof google === 'undefined' || !google.script || !google.script.run){
+      clearTimeout(timeout);
+      resuelto = true;
+      console.warn(PREFIJO_LOG, 'google.script.run no disponible. ¿Estás fuera del iframe de Apps Script?');
+      return resolve(null);
+    }
+
+    console.log(PREFIJO_LOG, 'Solicitando tarjetas al backend...');
+
+    google.script.run
+      .withSuccessHandler(datos => {
+        if (resuelto) return;
+        clearTimeout(timeout);
+        resuelto = true;
+        if (Array.isArray(datos) && datos.length){
+          console.log(PREFIJO_LOG, 'Tarjetas recibidas:', datos.length);
+          resolve(datos);
+        } else {
+          console.warn(PREFIJO_LOG, 'Respuesta vacía o inválida del backend:', datos);
+          resolve(null);
+        }
+      })
+      .withFailureHandler(err => {
+        if (resuelto) return;
+        clearTimeout(timeout);
+        resuelto = true;
+        console.error(PREFIJO_LOG, 'Error al obtener tarjetas:', err);
+        if (permitirReintento && !reintentoHecho){
+          reintentoHecho = true;
+          console.log(PREFIJO_LOG, 'Reintentando 1 vez en', REINTENTO_DELAY, 'ms...');
+          setTimeout(() => resolve(cargarTarjetas(false)), REINTENTO_DELAY);
+        } else {
+          resolve(null);
+        }
+      })
+      .obtenerTarjetas();
+  });
+}
+
+/* ═══════════════ 5. HELPERS DE ESCAPE Y PARSEO ═══════════════ */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const PILL_AZUL = new Set(['Enviada','Procesado','Al día']);
+const TONO_AZUL = new Set(['recordatorio','recibo','cliente']);
+const par = (txt, tono) => { const [etiq, val] = String(txt || '').split('|'); return `<div class="cli-par ${tono}"><span>${esc(etiq||'')}</span><b>${esc(val||'')}</b></div>`; };
+const filaFactura = txt => { const [nombre, monto] = String(txt || '').split('|'); if (!nombre) return ''; return `<div class="factura-fila"><span>${esc(nombre)}</span><b>${esc(monto||'')}</b></div>`; };
+
+/* ═══════════════ 6. RENDER DE UNA TARJETA ═══════════════ */
+function tarjetaHTML(t, index){
+  const tono = t.tono || (TONO_AZUL.has(t.tipo) ? 'azul' : 'naranja');
+  const pillTono = t.pill ? (PILL_AZUL.has(t.pill) ? 'azul' : 'naranja') : '';
+  const pill = t.pill ? `<span class="pill ${pillTono}">${esc(t.pill)}</span>` : '';
+  const head = icono => `<div class="mc-head"><span class="mc-ico">${ic(icono)}</span><span class="mc-label">${esc(t.etiqueta)}</span>${pill}</div>`;
+  const foot = txt => txt ? `<div class="mc-foot"><span class="sq"></span>${esc(txt)}</div>` : '';
+  let cuerpo = '';
+
+  switch (t.tipo) {
+    case 'stat': {
+      const nums = String(t.barras||'').split(',').map(Number).filter(n => !isNaN(n) && n > 0);
+      let barras = '';
+      if (nums.length > 1) {
+        const max = Math.max(...nums);
+        barras = `<div class="mc-bars">${nums.map((n,i)=>`<i style="height:${Math.max(14,n/max*100)}%;opacity:${(0.38+i*(0.62/(nums.length-1))).toFixed(2)}"></i>`).join('')}</div>`;
+      }
+      cuerpo = head('trending') +
+        `<div class="mc-value-row"><span class="mc-value">${esc(t.valor)}</span>${t.delta?`<span class="pill azul" style="margin-left:0">${esc(t.delta)}</span>`:''}</div>` +
+        barras + foot(t.meta);
+      break;
+    }
+    case 'pago':
+      cuerpo = head('circle-check') + `<div class="mc-value-row"><span class="mc-value">${esc(t.valor)}</span></div>` +
+        `<div class="mc-meta">${esc(t.meta)}</div>` + foot(t.nota);
+      break;
+    case 'factura':
+      cuerpo = head('file') + `<div class="factura-ref">${esc(t.valor)}</div>` +
+        filaFactura(t.linea1) + filaFactura(t.linea2) +
+        `<div class="factura-total"><span>Total</span><b>${esc(t.delta)}</b></div>` + foot(t.nota);
+      break;
+    case 'recordatorio':
+      cuerpo = head('bell') + `<p class="mc-quote">${esc(t.nota)}</p>` +
+        `<div class="mc-foot accion">${ic('send')}${esc(t.meta)}</div>`;
+      break;
+    case 'progreso': {
+      const [llenos, total] = String(t.barras||'0/8').split('/').map(Number);
+      const segs = Array.from({length: total||8}, (_,i)=>`<i class="${i<llenos?'on':''}"></i>`).join('');
+      cuerpo = head('wallet') + `<div class="mc-value-row"><span class="mc-value">${esc(t.valor)}</span></div>` +
+        `<div class="mc-segs">${segs}</div>` + foot(t.meta);
+      break;
+    }
+    case 'recibo':
+      cuerpo = head('scan') + `<div class="recibo-fila"><span>${esc(t.nota)}</span><b>${esc(t.delta)}</b></div>` + foot(t.meta);
+      break;
+    case 'gasto':
+      cuerpo = head('card') + `<div class="gasto-fila"><b>${esc(t.nota)}</b><span class="mc-value sm">${esc(t.valor)}</span></div>` +
+        `<div class="mc-meta">${esc(t.meta)}</div>`;
+      break;
+    case 'cliente': {
+      const nombre = String(t.nota||'—');
+      cuerpo = `<div class="cli-cab"><span class="cli-av">${esc(nombre.trim()[0]||'·').toUpperCase()}</span>
+        <div><b>${esc(nombre)}</b><span>${esc(t.meta)}</span></div></div>` +
+        `<div class="cli-cols">${par(t.linea1,'')}${par(t.linea2,'naranja')}</div>`;
+      break;
+    }
+    default:
+      cuerpo = head('circle-check') + `<div class="mc-value">${esc(t.valor)}</div>` + foot(t.meta);
+  }
+  return `<article class="mini-card t-${tono}" data-index="${index}" role="button" tabindex="0" aria-label="${esc(t.etiqueta||'Ver detalle')}" onclick="showChartModal(${index})">${cuerpo}</article>`;
+}
+
+/* ═══════════════ 7. MODAL DE GRÁFICO AMPLIADO ═══════════════ */
+let datosActuales = [], ultimoFoco = null;
+const chartModal = document.getElementById('chartModal');
+
+function showChartModal(index){
+  const t = datosActuales[index];
+  if (!t) return;
+  const modalBody = document.getElementById('modalBody');
+  let c = `
+    <div class="modal-title">${esc(t.etiqueta)}</div>
+    <div class="modal-subtitle">Vista detallada del gráfico</div>
+    <div class="modal-value">${esc(t.valor)}</div>`;
+  if (t.tipo === 'stat' && t.barras) {
+    const nums = String(t.barras).split(',').map(Number).filter(n => !isNaN(n) && n > 0);
+    if (nums.length > 1) {
+      const max = Math.max(...nums), labels = ['Ene','Feb','Mar','Abr','May','Jun'];
+      c += `<div class="modal-bars-large">` + nums.map((n,i)=>
+        `<i style="height:${Math.max(10,n/max*100)}%"><span class="modal-bar-label">${labels[i]||i+1}</span></i>`).join('') + `</div>`;
+    }
+  } else if (t.tipo === 'progreso' && t.barras) {
+    const [llenos,total] = String(t.barras).split('/').map(Number);
+    const pct = Math.round((llenos/(total||1))*100);
+    c += `<div style="text-align:center;padding:20px;">
+      <div style="font-size:48px;font-weight:800;color:${pct>70?'#EA580C':'#2563EB'};">${pct}%</div>
+      <div style="font-size:14px;color:var(--ink-2);margin-top:10px;">${llenos} de ${total} completados</div>
+      <div style="width:100%;height:10px;background:#E7ECF3;border-radius:99px;margin-top:20px;">
+        <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,#F97316,#EA580C);border-radius:99px;"></div>
+      </div></div>`;
+  } else if (t.tipo === 'factura') {
+    c += `<div style="background:var(--bg);border-radius:12px;padding:20px;margin:15px 0;">
+      ${filaFactura(t.linea1)}${filaFactura(t.linea2)}
+      <div class="factura-total"><span>Total</span><b>${esc(t.delta)}</b></div></div>`;
+  } else if (t.tipo === 'cliente') {
+    c += `<div class="cli-cols" style="margin-top:20px;">${par(t.linea1,'')}${par(t.linea2,'naranja')}</div>`;
+  }
+  if (t.meta) c += `<div class="modal-meta">${esc(t.meta)}</div>`;
+
+  modalBody.innerHTML = c;
+  ultimoFoco = document.activeElement;
+  chartModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  chartModal.querySelector('.modal-close-btn').focus();
+}
+
+function closeChartModal(){
+  chartModal.classList.remove('active');
+  document.body.style.overflow = '';
+  if (ultimoFoco) ultimoFoco.focus();
+}
+
+document.addEventListener('click', e => { if (e.target.id === 'chartModal') closeChartModal(); });
+
+chartModal.addEventListener('keydown', e => {
+  if (e.key !== 'Tab') return;
+  const f = chartModal.querySelectorAll('button,[href],[tabindex]:not([tabindex="-1"])');
+  if (!f.length) return;
+  const first = f[0], last = f[f.length-1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
+
+/* ═══════════════ 8. MOTOR DE MOVIMIENTO (REQUESTANIMATIONFRAME) ═══════════════ */
+const ITEMS_MOV = [], MEDIDAS = [];
+let tAntes = performance.now(), rafId = null;
+
+function bucle(t){
+  const dt = Math.min(50, t - tAntes);
+  tAntes = t;
+  for (let i = 0; i < ITEMS_MOV.length; i++){
+    const it = ITEMS_MOV[i];
+    if (!it.periodo || it.pausa) continue;
+    it.offset += it.vel * dt / 1000;
+    if (it.offset >= it.periodo) it.offset -= it.periodo;
+    const d = it.dir < 0 ? it.offset : it.periodo - it.offset;
+    it.el.style.transform = it.eje === 'y' ? `translate3d(0,${-d}px,0)` : `translate3d(${-d}px,0,0)`;
+  }
+  rafId = requestAnimationFrame(bucle);
+}
+
+function iniciarBucle(){
+  if (rafId !== null) return;
+  tAntes = performance.now();
+  rafId = requestAnimationFrame(bucle);
+}
+
+function detenerBucle(){
+  if (rafId !== null){
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+}
+
+document.addEventListener('visibilitychange', () => document.hidden ? detenerBucle() : iniciarBucle());
+
+/* ═══════════════ 9. RENDER DE COLUMNAS EN BUCLE (VELOCIDADES MÁS FLUIDAS) ═══════════════ */
+function renderColumnas(datos){
+  datosActuales = datos;
+  const porCol = [[],[],[]];
+  datos.forEach(t => {
+    const i = (parseInt(t.columna, 10) || 1) - 1;
+    if (porCol[i]) porCol[i].push(t);
+  });
+  // Velocidades reducidas (24/18/21) para movimiento más fluido y suave
+  const conf = [{sube:true,vel:24},{sube:false,vel:18},{sube:true,vel:21}];
+  const cont = document.getElementById('cols');
+  if (!cont) return;
+
+  cont.innerHTML = porCol.map(cards => `
+    <div class="col"><div class="col-track"><div class="col-grupo">${cards.map(card => tarjetaHTML(card, datos.indexOf(card))).join('')}</div></div></div>`).join('');
+
+  cont.querySelectorAll('.col').forEach((col, i) => {
+    if (!porCol[i].length){ col.remove(); return; }
+    const track = col.querySelector('.col-track');
+    const grupo = track.querySelector('.col-grupo');
+    const item = {
+      el: track,
+      eje: 'y',
+      periodo: 0,
+      offset: 0,
+      frac: Math.random(),
+      vel: conf[i].vel,
+      dir: conf[i].sube ? -1 : 1,
+      pausa: false
+    };
+
+    const medir = () => {
+      while (track.children.length > 1) {
+        track.removeChild(track.lastChild);
+      }
+      const altoCol = col.clientHeight || 560;
+      const altoGrupo = grupo.offsetHeight;
+      if (!altoGrupo){
+        item.periodo = 0;
+        return;
+      }
+      const copias = Math.max(2, Math.ceil((altoCol + altoGrupo) / altoGrupo));
+      for (let k = 1; k < copias; k++){
+        const c = grupo.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        c.querySelectorAll('.mini-card').forEach(m => {
+          m.removeAttribute('tabindex');
+          m.removeAttribute('role');
+        });
+        track.appendChild(c);
+      }
+      item.periodo = altoGrupo;
+      item.offset = item.frac * altoGrupo;
+    };
+
+    medir();
+    MEDIDAS.push(medir);
+    ITEMS_MOV.push(item);
+
+    col.addEventListener('mouseenter', () => item.pausa = true);
+    col.addEventListener('mouseleave', () => item.pausa = false);
+  });
+
+  cont.addEventListener('keydown', e => {
+    const card = e.target.closest('.mini-card');
+    if (card && (e.key === 'Enter' || e.key === ' ')){
+      e.preventDefault();
+      showChartModal(+card.dataset.index);
+    }
+  });
+}
+
+/* ═══════════════ 10. CINTA DE PASTILLAS (VELOCIDAD MÁS FLUIDA) ═══════════════ */
+const FRASES = [
+  'Analítica de ingresos','Multi-divisa','Facturas PDF','Pedidos','Vendedores','Escaneo de recibos con IA',
+  'Seguimiento de pagos','Control de gastos','Recordatorios automáticos','CRM de clientes',
+  'Cobros recurrentes','Exportación contable','Nomina','Asiento Contable'
+];
+
+function montarCinta(){
+  const track = document.getElementById('cintaTrack');
+  const cont  = document.querySelector('.cinta');
+  if (!track || !cont) return;
+
+  track.innerHTML = `<div class="cinta-set">${FRASES.map((f,i)=>
+    `<span class="cinta-item"><i class="dot ${i%3===2?'azul':''}"></i>${esc(f)}</span>`).join('')}</div>`;
+  const set = track.firstElementChild;
+  const item = {
+    el: track,
+    eje: 'x',
+    periodo: 0,
+    offset: 0,
+    vel: 38,  // velocidad reducida de 50 → 38 para movimiento más fluido
+    dir: -1,
+    pausa: false
+  };
+
+  const medir = () => {
+    while (track.children.length > 1) {
+      track.removeChild(track.lastChild);
+    }
+    const anchoSet = set.offsetWidth || 1400;
+    const periodo = anchoSet + 12;
+    const anchoCont = cont.clientWidth || window.innerWidth;
+    const copias = Math.max(2, Math.ceil((anchoCont + periodo) / periodo));
+    for (let k = 1; k < copias; k++){
+      const c = set.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      track.appendChild(c);
+    }
+    item.periodo = periodo;
+  };
+
+  medir();
+  MEDIDAS.push(medir);
+  ITEMS_MOV.push(item);
+
+  cont.addEventListener('mouseenter', () => item.pausa = true);
+  cont.addEventListener('mouseleave', () => item.pausa = false);
+}
+
+/* ═══════════════ 11. RECÁLCULO EN RESIZE / LOAD / FUENTES ═══════════════ */
+let rzTimer;
+function recalcularTodo(){
+  for (let i = 0; i < MEDIDAS.length; i++){
+    MEDIDAS[i]();
+  }
+}
+addEventListener('resize', () => {
+  clearTimeout(rzTimer);
+  rzTimer = setTimeout(recalcularTodo, 150);
+});
+addEventListener('load', recalcularTodo);
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(recalcularTodo);
+}
+
+/* ═══════════════ 12. NAVBAR (SCROLL + MENÚ MÓVIL) ═══════════════ */
+const navbar = document.getElementById('navbar');
+addEventListener('scroll', () => navbar && navbar.classList.toggle('con-borde', scrollY > 8), { passive: true });
+
+const navMovil = document.getElementById('navMovil');
+const btnMenuMovil = document.getElementById('btnMenuMovil');
+function cerrarMenu(){
+  if (!navMovil || !btnMenuMovil) return;
+  navMovil.classList.remove('abierto');
+  btnMenuMovil.setAttribute('aria-expanded','false');
+}
+if (btnMenuMovil && navMovil){
+  btnMenuMovil.addEventListener('click', () => {
+    const abierto = navMovil.classList.toggle('abierto');
+    btnMenuMovil.setAttribute('aria-expanded', String(abierto));
+  });
+  navMovil.addEventListener('click', e => { if (e.target.closest('a')) cerrarMenu(); });
+  addEventListener('resize', () => { if (innerWidth > 880) cerrarMenu(); });
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (chartModal.classList.contains('active')) closeChartModal();
+  else cerrarMenu();
+});
+
+/* ═══════════════ 13. NAVEGACIÓN AL LOGIN (OVERLAY + PARTÍCULAS AZUL) ═══════════════ */
+function crearParticulas(){
+  const container = document.getElementById('particlesContainer');
+  if (!container) return;
+  container.innerHTML = '';
+  for (let i = 0; i < 25; i++){
+    const p = document.createElement('div');
+    const size = Math.random() * 4 + 2;
+    // Color azul (#2563EB / #3B82F6) en lugar del violeta
+    p.style.cssText = `position:absolute;width:${size}px;height:${size}px;background:${Math.random()>0.5?'#F97316':'#3B82F6'};border-radius:50%;top:100vh;left:${Math.random()*100}vw;opacity:${Math.random()*0.7+0.3};animation:floatParticle ${Math.random()*3+2}s linear infinite;animation-delay:${Math.random()*2}s;`;
+    container.appendChild(p);
+  }
+}
+
+function irAlLogin(e){
+  if (e && e.preventDefault) e.preventDefault();
+  const overlay = document.getElementById('loginTransition');
+  const progressBar = document.getElementById('progressBar');
+  const percentageText = document.getElementById('percentageText');
+  const loadingMessage = document.getElementById('loadingMessage');
+
+  if (overlay){
+    crearParticulas();
+    overlay.style.display = 'flex';
+    setTimeout(() => overlay.style.opacity = '1', 10);
+  }
+  const actualizarProgreso = (pct, msg) => {
+    if (progressBar) progressBar.style.width = pct + '%';
+    if (percentageText) percentageText.textContent = pct + '%';
+    if (loadingMessage && msg) loadingMessage.textContent = msg;
+  };
+
+  actualizarProgreso(30, 'Estableciendo canal cifrado...');
+
+  setTimeout(() => {
+    actualizarProgreso(75, 'Abriendo portal de acceso...');
+    setTimeout(() => {
+      actualizarProgreso(100, '¡Listo!');
+      var destino = (window.URL_APP || window.location.href.split('?')[0]) + '?page=login';
+      try {
+        window.top.location.href = destino;
+      } catch (err) {
+        window.location.href = destino;
+      }
+    }, 300);
+  }, 300);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  ['#btnLoginNav','#btnLoginHero','#btnLoginMobile','#btnLoginCta',
+   '.nav-acciones .btn-primario','.nav-movil .btn-primario','.cta-panel .btn-primario']
+  .forEach(sel => document.querySelectorAll(sel).forEach(btn => btn.addEventListener('click', irAlLogin)));
+});
+
+/* ═══════════════ 14. ARRANQUE (IIFE ASÍNCRONO) ═══════════════ */
+(async function iniciar(){
+  const copy = document.getElementById('heroCopy');
+  const cols = document.getElementById('heroCols');
+  requestAnimationFrame(() => {
+    if (copy) copy.classList.add('animada');
+    if (cols) cols.classList.add('animada');
+  });
+
+  montarCinta();
+
+  const datos = await cargarTarjetas(true);
+
+  if (Array.isArray(datos) && datos.length){
+    renderColumnas(datos);
+    iniciarBucle();
+    setTimeout(recalcularTodo, 50);
+    setTimeout(recalcularTodo, 250);
+  } else {
+    console.warn(PREFIJO_LOG, 'Sin datos para renderizar. Contenedor de columnas queda vacío.');
+  }
+})();
+
+</script>
+
+</body>
+</html>

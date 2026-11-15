@@ -1,0 +1,2378 @@
+<!-- ============================================================
+     HOJA DE ESTILOS: MÓDULO CARGAR FACTURA DE COMPRAS
+     Estilo: Glassmorphism Dark / Modern Enterprise - UNIFICADO SPA
+     Scope: #pFacturasCompras
+     ============================================================ -->
+<style>
+#pFacturasCompras{--primary:var(--brand-orange,#f97316);--primary-dark:var(--brand-orange-dark,#ea580c);--primary-light:var(--brand-orange-light,#fb923c);--bg-card:rgba(255,255,255,0.05);--bg-card-hover:rgba(255,255,255,0.08);--text-main:var(--text-main,#f8fafc);--text-light:var(--text-light,#94a3b8);--glass-border:rgba(255,255,255,0.12);--glass-blur:blur(16px);--danger:#ef4444;--success:#10b981;--warning:#f59e0b;--info:#0ea5e9;--purple:#a855f7;--shadow:0 12px 35px rgba(0,0,0,0.45);--dropdown-bg:#16162a}[data-bs-theme="light"] #pFacturasCompras{--bg-card:rgba(255,255,255,0.9);--bg-card-hover:#ffffff;--text-main:#0f172a;--text-light:#64748b;--glass-border:rgba(0,0,0,0.08);--shadow:0 10px 25px -5px rgba(0,0,0,0.08);--dropdown-bg:#ffffff}#pFacturasCompras *{box-sizing:border-box}#pFacturasCompras .nav-chips{display:flex;gap:10px;padding:8px 0 14px 0;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:1030;background:rgba(15,15,26,0.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--glass-border);box-shadow:0 4px 20px rgba(0,0,0,0.35);padding-left:4px;padding-right:4px}#pFacturasCompras .nav-chips::-webkit-scrollbar{display:none}#pFacturasCompras .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:20px;border:1.5px solid var(--glass-border);background:var(--bg-card);color:var(--text-light);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.25s ease;white-space:nowrap;flex-shrink:0}#pFacturasCompras .chip i{color:var(--primary);transition:color 0.2s ease}#pFacturasCompras .chip:hover{border-color:var(--primary);color:var(--text-main);background:rgba(249,115,22,0.12);transform:translateY(-1px)}#pFacturasCompras .chip.active{background:var(--primary);border-color:var(--primary);color:#ffffff;box-shadow:0 4px 14px rgba(249,115,22,0.35)}#pFacturasCompras .chip.active i{color:#ffffff}#pFacturasCompras .glass-card,#pFacturasCompras .card{background:var(--bg-card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:16px;box-shadow:var(--shadow);margin-bottom:16px;overflow:visible}#pFacturasCompras .card-header{background:rgba(255,255,255,0.02);border-bottom:1px solid var(--glass-border);padding:14px 18px;border-radius:16px 16px 0 0}#pFacturasCompras .card-header h5{font-weight:600;font-size:14px;color:var(--text-main);display:flex;align-items:center;gap:8px;margin:0}#pFacturasCompras .card-body{padding:16px 18px}#pFacturasCompras .divider-glass{border:0;border-top:1px solid var(--glass-border);margin:10px 0;opacity:0.8}#pFacturasCompras .form-label{color:var(--text-light);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;display:block}#pFacturasCompras .form-control,#pFacturasCompras .form-select{background:rgba(255,255,255,0.07);border:1.5px solid var(--glass-border);border-radius:12px;color:var(--text-main);padding:8px 14px;font-size:13.5px;height:44px;transition:all 0.25s ease}#pFacturasCompras .form-control:focus,#pFacturasCompras .form-select:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(249,115,22,0.18);background:rgba(255,255,255,0.12);color:var(--text-main)}#pFacturasCompras .form-control:disabled,#pFacturasCompras .form-control[readonly]{background:rgba(255,255,255,0.03);color:var(--text-light);border-color:rgba(255,255,255,0.08);cursor:not-allowed;opacity:0.85}#pFacturasCompras .input-group-text{background:rgba(255,255,255,0.07);border:1.5px solid var(--glass-border);border-right:none;color:var(--text-light);border-radius:12px 0 0 12px;padding:0 14px;font-size:13px}#pFacturasCompras .input-group .form-control{border-left:none;border-radius:0 12px 12px 0}#pFacturasCompras .border-warning{border-color:rgba(245,158,11,0.6)!important}#pFacturasCompras .dropdown-container{position:relative;z-index:500}#pFacturasCompras .custom-dropdown{position:absolute;top:calc(100% + 5px);left:0;right:0;background:var(--dropdown-bg);background-image:linear-gradient(180deg,#1b1b33 0%,#131324 100%);border:1px solid rgba(249,115,22,0.4);border-radius:12px;max-height:280px;overflow-y:auto;overflow-x:hidden;z-index:2500;box-shadow:0 20px 50px rgba(0,0,0,0.85);display:none;padding:6px 0;color:var(--text-main)}#pFacturasCompras .custom-dropdown.show{display:block;animation:dropdownIn 0.18s ease-out forwards}@keyframes dropdownIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}#pFacturasCompras .dropdown-option{padding:10px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px;transition:all 0.15s ease}#pFacturasCompras .dropdown-option:hover{background:rgba(249,115,22,0.22);color:#ffffff;padding-left:18px}#pFacturasCompras .proveedor-nombre,#pFacturasCompras .producto-nombre{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}#pFacturasCompras .proveedor-rif{font-size:11px;color:#cbd5e1;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:10px;font-weight:600}#pFacturasCompras .producto-codigo{font-weight:700;color:var(--primary);font-size:11px;background:rgba(249,115,22,0.15);padding:2px 6px;border-radius:6px;font-family:monospace}#pFacturasCompras .btn{border-radius:12px;font-weight:600;font-size:13px;padding:10px 18px;border:none;transition:all 0.25s ease;min-height:44px}#pFacturasCompras .btn-success{background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#ffffff;box-shadow:0 4px 12px rgba(16,185,129,0.25)}#pFacturasCompras .btn-primary{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#ffffff;box-shadow:0 4px 12px rgba(249,115,22,0.25)}#pFacturasCompras .btn-ghost{background:rgba(255,255,255,0.05);border:1.5px solid var(--glass-border);color:var(--text-light)}#pFacturasCompras .btn-dynamic{background:rgba(255,255,255,0.05);border:1.5px solid var(--glass-border);color:var(--text-light);display:inline-flex;align-items:center;gap:8px}#pFacturasCompras .btn-icon{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--glass-border);background:rgba(255,255,255,0.05);color:var(--text-light);display:inline-flex;align-items:center;justify-content:center;padding:0;min-height:auto;transition:all 0.2s ease}#pFacturasCompras .btn-icon:hover{border-color:var(--primary);color:var(--primary);background:rgba(249,115,22,0.12)}#pFacturasCompras .btn-icon.danger:hover{border-color:var(--danger);color:var(--danger);background:rgba(239,68,68,0.15)}#pFacturasCompras .resumen-badge{background:var(--bg-card);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:16px;padding:12px 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;margin-bottom:16px;box-shadow:var(--shadow)}#pFacturasCompras .resumen-item{text-align:center;position:relative}#pFacturasCompras .resumen-item:not(:last-child)::after{content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);height:28px;width:1px;background:var(--glass-border)}#pFacturasCompras .resumen-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-light);margin-bottom:2px}#pFacturasCompras .resumen-valor{font-size:16px;font-weight:800;color:var(--text-main)}#pFacturasCompras .ticket-container{background:linear-gradient(180deg,#18182b 0%,#11111c 100%);border:1px solid var(--glass-border);border-radius:16px;padding:18px 20px;font-family:'Courier New',monospace;min-height:280px;display:flex;flex-direction:column;box-shadow:inset 0 0 50px rgba(0,0,0,0.4);margin-bottom:16px}#pFacturasCompras .ticket-header{text-align:center;border-bottom:1px dashed rgba(255,255,255,0.15);padding-bottom:10px;margin-bottom:10px}#pFacturasCompras .ticket-header h4{font-size:15px;font-weight:700;color:var(--primary);margin:0;letter-spacing:1.5px}#pFacturasCompras .ticket-header .ticket-sub{font-size:11px;color:var(--text-light)}#pFacturasCompras .ticket-row{display:flex;justify-content:space-between;padding:3px 0;font-size:12px;color:var(--text-light)}#pFacturasCompras .ticket-row .value{color:var(--text-main);font-weight:600}#pFacturasCompras .ticket-row.total{border-top:2px solid var(--primary);margin-top:8px;padding-top:8px;font-size:15px}#pFacturasCompras .ticket-row.total .value{color:var(--success);font-size:17px;font-weight:800}#pFacturasCompras .ticket-footer{text-align:center;border-top:1px dashed rgba(255,255,255,0.12);padding-top:10px;margin-top:12px;font-size:10px;color:var(--text-light)}#pFacturasCompras .ticket-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:240px;color:var(--text-light);opacity:0.65;text-align:center}#pFacturasCompras .ticket-empty i{font-size:44px;margin-bottom:12px;color:var(--primary)}#pFacturasCompras .table-scrollable{max-height:380px;overflow:auto;-webkit-overflow-scrolling:touch}#pFacturasCompras .table{color:var(--text-main);margin-bottom:0;font-size:12.5px}#pFacturasCompras .table thead th{background:rgba(22,22,38,0.96);border:none;color:var(--text-light);font-weight:600;font-size:11px;text-transform:uppercase;padding:10px 12px;position:sticky;top:0;z-index:5;white-space:nowrap}#pFacturasCompras .table tbody tr{border-bottom:1px solid var(--glass-border);transition:background 0.15s ease}#pFacturasCompras .table tbody tr:hover{background:rgba(249,115,22,0.05)}#pFacturasCompras .table td{padding:8px 12px;vertical-align:middle;border:none;white-space:nowrap}#pFacturasCompras .totales-section{display:grid;grid-template-columns:1fr 1fr;gap:16px}#pFacturasCompras .totales-card{background:var(--bg-card);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:16px;padding:16px;position:relative;overflow:hidden}#pFacturasCompras .totales-card.bs::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--warning),#d97706)}#pFacturasCompras .totales-card.divisa::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--primary-dark))}#pFacturasCompras .totales-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--glass-border)}#pFacturasCompras .totales-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(249,115,22,0.12);color:var(--primary);font-size:14px}#pFacturasCompras .totales-title{font-weight:700;font-size:13.5px;color:var(--text-main)}#pFacturasCompras .totales-subtitle{font-size:11px;color:var(--text-light)}#pFacturasCompras .linea-total{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12.5px;border-bottom:1px solid rgba(255,255,255,0.04)}#pFacturasCompras .linea-total.linea-exento{background:rgba(168,85,247,0.06);border-radius:6px;padding:5px 8px;margin:3px 0}#pFacturasCompras .linea-total.grand-total{background:rgba(249,115,22,0.07);margin:8px -16px -16px -16px;padding:12px 16px;border-top:2px solid var(--success);border-radius:0 0 16px 16px}#pFacturasCompras .linea-total.grand-total .linea-valor{font-size:17px;font-weight:800;color:var(--success)}#pFacturasCompras .botonera-flotante{position:fixed;right:18px;bottom:18px;top:auto;transform:none;display:flex;flex-direction:column;gap:10px;z-index:1050;background:var(--bg-card);backdrop-filter:var(--glass-blur);padding:12px 10px;border-radius:16px;border:1px solid var(--glass-border);box-shadow:var(--shadow)}#pFacturasCompras .botonera-flotante .btn{width:120px;height:42px;font-size:12px;padding:0 12px;display:inline-flex;align-items:center;justify-content:flex-start;gap:8px}#pFacturasCompras .botonera-flotante .btn span{white-space:nowrap}@media (max-width:1024px){#pFacturasCompras .modulo-compras-wrapper .container-fluid{padding-bottom:110px!important}#pFacturasCompras .nav-chips{padding:8px 6px 12px 6px}#pFacturasCompras .nav-chips .chip{padding:7px 14px;font-size:12px}#pFacturasCompras .botonera-flotante{left:12px;right:12px;bottom:14px;top:auto!important;transform:none!important;flex-direction:row;justify-content:space-around;padding:8px 10px;border-radius:18px;gap:6px;box-shadow:0 -6px 24px rgba(0,0,0,0.45),var(--shadow);display:flex;z-index:1050}#pFacturasCompras .botonera-flotante .btn{flex:1 1 0;width:auto;min-width:0;height:46px;justify-content:center;font-size:11.5px;padding:0 8px;gap:6px}}@media (max-width:768px){#pFacturasCompras .totales-section{grid-template-columns:1fr}}@media (max-width:380px){#pFacturasCompras .botonera-flotante .btn span{display:none}#pFacturasCompras .botonera-flotante .btn{padding:0}}
+
+/* ============================================================
+   CORRECCIONES Y CONTRASTE PARA MODO CLARO (FACTURAS COMPRAS)
+   ============================================================ */
+
+/* 1. BARRA DE NAVEGACIÓN (CHIPS) - De azul oscuro a blanco limpio */
+[data-bs-theme="light"] #pFacturasCompras .nav-chips {
+  background: #ffffff;
+  border-bottom: 1px solid #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+[data-bs-theme="light"] #pFacturasCompras .chip {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+[data-bs-theme="light"] #pFacturasCompras .chip:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+[data-bs-theme="light"] #pFacturasCompras .chip.active {
+  background: var(--primary); /* Naranja */
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+/* 2. TARJETAS (Bordes de contraste gris azulado) */
+[data-bs-theme="light"] #pFacturasCompras .glass-card,
+[data-bs-theme="light"] #pFacturasCompras .card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1; /* Borde que pediste para delimitar */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+[data-bs-theme="light"] #pFacturasCompras .card-header {
+  background: #f8fafc; /* Cabecera ligeramente gris para separar */
+  border-bottom: 1px solid #e2e8f0;
+}
+[data-bs-theme="light"] #pFacturasCompras .card-header h5 {
+  color: #0f172a;
+}
+
+/* 3. EL TICKET CENTRAL (El bloque oscuro "Esperando datos") */
+[data-bs-theme="light"] #pFacturasCompras .ticket-container {
+  background: #f8fafc; /* Fondo gris muy claro */
+  border: 2px dashed #cbd5e1; /* Borde punteado para indicar que está vacío */
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.02);
+}
+[data-bs-theme="light"] #pFacturasCompras .ticket-empty {
+  color: #64748b;
+}
+[data-bs-theme="light"] #pFacturasCompras .ticket-empty h5 {
+  color: #334155;
+  font-weight: 600;
+}
+/* Cuando el ticket tiene datos (fondo blanco con sombra) */
+[data-bs-theme="light"] #pFacturasCompras .ticket-container:has(#ticketData[style*="display: block"]) {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+[data-bs-theme="light"] #pFacturasCompras .ticket-header {
+  border-bottom-color: #e2e8f0;
+}
+[data-bs-theme="light"] #pFacturasCompras .ticket-header h4 {
+  color: var(--primary); /* Naranja se mantiene */
+}
+[data-bs-theme="light"] #pFacturasCompras .ticket-row {
+  color: #64748b;
+  border-bottom: 1px solid #f1f5f9;
+}
+[data-bs-theme="light"] #pFacturasCompras .ticket-row .value {
+  color: #0f172a;
+}
+[data-bs-theme="light"] #pFacturasCompras .ticket-row.total {
+  border-top: 2px solid var(--primary);
+}
+[data-bs-theme="light"] #pFacturasCompras .ticket-row.total .value {
+  color: #10b981; /* Verde para el total */
+}
+[data-bs-theme="light"] #pFacturasCompras .ticket-footer {
+  border-top-color: #e2e8f0;
+  color: #94a3b8;
+}
+
+/* 4. INPUTS Y FORMULARIOS */
+[data-bs-theme="light"] #pFacturasCompras .form-control,
+[data-bs-theme="light"] #pFacturasCompras .form-select {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+[data-bs-theme="light"] #pFacturasCompras .form-control:focus,
+[data-bs-theme="light"] #pFacturasCompras .form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+[data-bs-theme="light"] #pFacturasCompras .form-control:disabled,
+[data-bs-theme="light"] #pFacturasCompras .form-control[readonly] {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #64748b;
+}
+[data-bs-theme="light"] #pFacturasCompras .input-group-text {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+/* 5. TABLA DE DETALLE - Cambiar el fondo oscuro del TH */
+[data-bs-theme="light"] #pFacturasCompras .table thead th {
+  background: #f1f5f9 !important; /* Gris claro */
+  color: #475569 !important; /* Texto oscuro */
+  border-bottom: 2px solid #cbd5e1;
+}
+[data-bs-theme="light"] #pFacturasCompras .table tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* 6. LIBRO DE COMPRAS - Arreglar los TH con clases de Bootstrap */
+[data-bs-theme="light"] #pFacturasCompras .table-dark th,
+[data-bs-theme="light"] #pFacturasCompras .table-secondary th {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+}
+[data-bs-theme="light"] #pFacturasCompras tfoot.bg-dark {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* 7. BADGE RESUMEN (El que está arriba de la tabla) */
+[data-bs-theme="light"] #pFacturasCompras .resumen-badge {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+[data-bs-theme="light"] #pFacturasCompras .resumen-valor {
+  color: #0f172a;
+}
+
+/* 8. TARJETAS DE TOTALES (Bs / Divisa) */
+[data-bs-theme="light"] #pFacturasCompras .totales-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+}
+[data-bs-theme="light"] #pFacturasCompras .linea-total {
+  border-bottom-color: #f1f5f9;
+}
+[data-bs-theme="light"] #pFacturasCompras .linea-label {
+  color: #64748b;
+}
+[data-bs-theme="light"] #pFacturasCompras .linea-total.grand-total {
+  background: rgba(249, 115, 22, 0.04);
+  border-top: 2px solid #10b981;
+}
+[data-bs-theme="light"] #pFacturasCompras .linea-total.grand-total .linea-valor {
+  color: #10b981; /* Verde */
+}
+
+/* 9. BOTONERA FLOTANTE */
+[data-bs-theme="light"] #pFacturasCompras .botonera-flotante {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Fix para que el botón flotante no tape la tabla */
+#pFacturasCompras .table-scrollable {
+  padding-bottom: 80px; /* Espacio para el botón en móvil */
+}
+@media (min-width: 1025px) {
+  #pFacturasCompras .table-scrollable {
+    padding-bottom: 0; /* En PC no hace falta porque el botón está a la derecha */
+  }
+  #pFacturasCompras .col-xl-8 {
+    padding-right: 160px; /* Deja espacio a la derecha para la botonera fija */
+  }
+}
+</style>
+
+<div id="pFacturasCompras" class="modulo-compras-wrapper">
+  <div class="container-fluid py-3">
+
+    <!-- ===== 1. CHIPS DE NAVEGACIÓN ===== -->
+    <nav class="nav-chips" aria-label="Navegación de compras">
+      <a href="#" class="chip active" id="tabBtnFormulario" onclick="window.ModuloCompras.cambiarVista('formulario'); return false;">
+        <i class="fas fa-file-invoice-dollar"></i><span>Cargar Compra</span>
+      </a>
+      <a href="#" class="chip" onclick="if(window.changePage) window.changePage('pProveedoresLista'); return false;">
+        <i class="fas fa-user-plus"></i><span>Agregar Proveedor</span>
+      </a>
+      <a href="#" class="chip" onclick="if(window.changePage) window.changePage('pFacturasListaCompras', null, 'Compra'); return false;">
+        <i class="fas fa-list-alt"></i><span>Lista Facturas</span>
+      </a>
+      <a href="#" class="chip" id="tabBtnLibro" onclick="window.ModuloCompras.cambiarVista('libro'); return false;">
+        <i class="fas fa-book"></i><span>Libro de Compras</span>
+      </a>
+    </nav>
+
+    <!-- ===== 2. VISTA: FORMULARIO DE CARGA DE COMPRAS ===== -->
+    <div id="container-formulario-compras">
+      <div class="row g-3">
+        
+        <!-- COLUMNA IZQUIERDA: DATOS Y ENTRADA DE ITEMS -->
+        <div class="col-xl-4 col-lg-5 col-md-12 d-flex flex-column gap-3">
+          
+          <!-- TARJETA: DATOS DEL DOCUMENTO -->
+          <div class="card glass-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5><i class="fas fa-file-invoice"></i> Datos del Documento</h5>
+              <span class="badge rounded-pill" id="badgeEstadoDoc" style="background: var(--primary);">Nueva</span>
+            </div>
+            <div class="card-body">
+              <div class="row g-2">
+                
+                <!-- Proveedor con Autocomplete -->
+                <div class="col-12 dropdown-container">
+                  <label class="form-label" for="txtBuscarProveedor">Proveedor <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-building"></i></span>
+                    <input type="text" id="txtBuscarProveedor" class="form-control" placeholder="Escriba RIF o nombre..." autocomplete="off">
+                  </div>
+                  <div id="dropdownProveedores" class="custom-dropdown" role="listbox"></div>
+                </div>
+
+                <!-- RIF Proveedor -->
+                <div class="col-sm-5 col-12">
+                  <label class="form-label" for="txtRifProveedor">RIF</label>
+                  <input type="text" class="form-control" id="txtRifProveedor" readonly placeholder="J-00000000-0">
+                </div>
+
+                <!-- Moneda -->
+                <div class="col-sm-3 col-6">
+                  <label class="form-label" for="selectMoneda">Moneda</label>
+                  <select id="selectMoneda" class="form-select">
+                    <!-- Dinámico -->
+                  </select>
+                </div>
+
+                <!-- Tasa de Cambio -->
+                <div class="col-sm-4 col-6">
+                  <label class="form-label" for="txtTasaCambio">Tasa</label>
+                  <input type="number" class="form-control text-end fw-bold" id="txtTasaCambio" step="0.0001" placeholder="1.00">
+                </div>
+
+                <!-- Dirección Fiscal -->
+                <div class="col-12">
+                  <label class="form-label" for="txtDireccionProveedor">Dirección Fiscal</label>
+                  <input type="text" class="form-control" id="txtDireccionProveedor" readonly placeholder="Dirección del proveedor">
+                </div>
+
+                <div class="col-12"><hr class="divider-glass"></div>
+                
+                <!-- Tipo de Documento -->
+                <div class="col-sm-4 col-12">
+                  <label class="form-label" for="selectTipoDoc">Tipo Doc</label>
+                  <select class="form-select" id="selectTipoDoc">
+                    <option value="Factura" selected>Factura</option>
+                    <option value="NC">Nota Crédito</option>
+                    <option value="ND">Nota Débito</option>
+                    <option value="NE">Nota Entrega</option>
+                  </select>
+                </div>
+
+                <!-- N° Factura -->
+                <div class="col-sm-4 col-12">
+                  <label class="form-label" for="txtNroFactura">N° Factura <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="txtNroFactura" placeholder="00000000" autocomplete="off">
+                </div>
+
+                <!-- N° Control (Obligatorio) -->
+                <div class="col-sm-4 col-12">
+                  <label class="form-label text-warning" for="txtNroControl">N° Control <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control border-warning" id="txtNroControl" placeholder="00-00000000" autocomplete="off">
+                </div>
+ 
+                <div class="col-12"><hr class="divider-glass"></div>
+
+                <!-- Factura Afectada (Condicional para NC/ND) -->
+                <div class="col-12" id="boxFacturaAfectada" style="display: none;">
+                  <label class="form-label text-info" for="txtFacturaAfectada">Factura Afectada / Modificada <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-link"></i></span>
+                    <input type="text" class="form-control border-info" id="txtFacturaAfectada" placeholder="N° de factura que modifica">
+                  </div>
+                </div>
+
+                <!-- Fechas -->
+                <div class="col-sm-6 col-12">
+                  <label class="form-label" for="txtFechaEmision">Fecha Emisión</label>
+                  <input type="date" class="form-control" id="txtFechaEmision">
+                </div>
+
+                <div class="col-sm-6 col-12">
+                  <label class="form-label" for="txtFechaRegistro">Fecha Registro</label>
+                  <input type="date" class="form-control" id="txtFechaRegistro">
+                </div>
+
+                <!-- Concepto / Descripción -->
+                <div class="col-12">
+                  <label class="form-label" for="txtDescripcion">Descripción / Concepto</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="txtDescripcion" placeholder="Descripción de la compra...">
+                    <button type="button" class="btn btn-ghost" id="btnAutoDesc" title="Generar descripción automática">
+                      <i class="fas fa-magic"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="col-12"><hr class="divider-glass"></div>
+
+                <!-- SWITCH GENERAL DE RETENCIÓN -->
+                <div class="col-12 mt-2" id="boxCheckRetencion" style="display: none;">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="chkGenerarRetencion" checked>
+                        <label class="form-check-label text-warning fw-bold" for="chkGenerarRetencion" style="font-size: 12px; cursor: pointer;">
+                            <i class="fas fa-file-invoice-dollar"></i> Generar comprobantes de retención automáticamente
+                        </label>
+                    </div>
+                </div>
+
+                <!-- RETENCIÓN DE IVA -->
+                <div class="col-sm-3 col-12" id="boxSelectRetencionIVA">
+                  <label class="form-label" for="selectPorcentajeRetencion">Retención IVA</label>
+                  <select class="form-select" id="selectPorcentajeRetencion">
+                    <option value="0" selected>0% (Sin Ret.)</option>
+                    <option value="75">75%</option>
+                    <option value="100">100%</option>
+                  </select>
+                </div>
+                
+                <!-- NUEVO: RETENCIÓN DE ISLR -->
+                <div class="col-sm-3 col-12" id="boxSelectRetencionISLR">
+                  <label class="form-label" for="selectPorcentajeRetencionISLR">Retención ISLR</label>
+                  <select class="form-select" id="selectPorcentajeRetencionISLR">
+                    <option value="0" selected>0% (Sin Ret.)</option>
+                    <option value="1">1%</option>
+                    <option value="2">2%</option>
+                    <option value="3">3%</option>
+                    <option value="5">5%</option>
+                  </select>
+                </div>
+
+                <!-- N° COMPROBANTE IVA -->
+                <div class="col-sm-3 col-12" id="boxNroComprobante">
+                  <label class="form-label" for="txtNroComprobanteRet">N° Comprobante IVA</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="txtNroComprobanteRet" placeholder="Ej: 20260100001" disabled>
+                    <button class="btn btn-outline-success" type="button" id="btnImprimirRet" style="display:none;" title="Imprimir Comprobante de Retención IVA">
+                      <i class="fas fa-print"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- NUEVO: N° COMPROBANTE ISLR -->
+                <div class="col-sm-3 col-12" id="boxNroComprobanteISLR">
+                  <label class="form-label" for="txtNroComprobanteRetISLR">N° Comprobante ISLR</label>
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="txtNroComprobanteRetISLR" placeholder="Ej: 20260100001" disabled>
+                    <button class="btn btn-outline-success" type="button" id="btnImprimirRetISLR" style="display:none;" title="Imprimir Comprobante de Retención ISLR">
+                      <i class="fas fa-print"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Indicador de Siguiente Paso -->
+              <div id="boxIndicadorPaso" class="siguiente-paso-indicator mt-3">
+                <i class="fas fa-arrow-down"></i> Ingrese el <strong>Número de Control</strong> para habilitar productos
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TARJETA: AGREGAR PRODUCTOS -->
+          <div class="card glass-card" id="cardProductos" style="display: none;">
+            <div class="card-header border-success border-bottom">
+              <h5><i class="fas fa-boxes text-success"></i> Agregar Producto</h5>
+            </div>
+            <div class="card-body p-3">
+              <div class="row g-2">
+                
+                <!-- Buscador de Producto -->
+                <div class="col-12 dropdown-container">
+                  <label class="form-label" for="txtBuscarProducto">Buscar Código o Descripción</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-primary text-white border-primary">
+                      <i class="fas fa-barcode"></i>
+                    </span>
+                    <input type="text" id="txtBuscarProducto" class="form-control border-primary" placeholder="Escriba código o nombre..." autocomplete="off">
+                  </div>
+                  <div id="dropdownProductos" class="custom-dropdown" role="listbox"></div>
+                </div>
+
+                <!-- Nombre y Stock Visual -->
+                <div class="col-12">
+                  <div class="input-group">
+                    <input type="text" class="form-control text-secondary" id="txtProductoSeleccionado" readonly placeholder="Ningún producto seleccionado">
+                    <span id="badgeStockVisual" class="input-group-text d-none"></span>
+                  </div>
+                </div>
+
+                <!-- Cantidad -->
+                <div class="col-sm-4 col-12">
+                  <label class="form-label" for="txtCantidad">Cantidad</label>
+                  <input type="number" class="form-control text-end fw-bold" id="txtCantidad" placeholder="1" min="0.001" step="any">
+                </div>
+
+                <!-- Precio Unitario en Divisa/Base -->
+                <div class="col-sm-4 col-6">
+                  <label class="form-label" for="txtPrecioUnitario">Costo Unit. (<span class="lblSimboloMoneda">$</span>)</label>
+                  <input type="number" class="form-control text-end fw-bold" id="txtPrecioUnitario" placeholder="0.00" min="0" step="any">
+                </div>
+
+                <!-- Alícuota IVA -->
+                <div class="col-sm-4 col-6">
+                  <label class="form-label" for="selectIvaItem">% IVA</label>
+                  <select id="selectIvaItem" class="form-select">
+                    <option value="16" selected>16%</option>
+                    <option value="8">8% (Reducido)</option>
+                    <option value="0">0% (Exento)</option>
+                  </select>
+                </div>
+
+                <!-- Botón Agregar Ítem -->
+                <div class="col-12 mt-3">
+                  <button type="button" id="btnAgregarItem" class="btn btn-success w-100 d-flex justify-content-center align-items-center gap-2">
+                    <i class="fas fa-plus-circle"></i> AGREGAR A LA FACTURA
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLUMNA DERECHA: RESUMEN, TICKET Y DETALLE DE TABLA -->
+        <div class="col-xl-8 col-lg-7 col-md-12 d-flex flex-column">
+
+          <!-- BADGE RESUMEN SUPERIOR -->
+          <div id="resumenBadge" class="resumen-badge" style="display: none;">
+            <div class="resumen-item">
+              <div class="resumen-label">Items</div>
+              <div class="resumen-valor" id="lblResumenItems">0</div>
+            </div>
+            <div class="resumen-item">
+              <div class="resumen-label">Sub-Total Bs</div>
+              <div class="resumen-valor" id="lblResumenSubTotal">0,00</div>
+            </div>
+            <div class="resumen-item">
+              <div class="resumen-label">Exento Bs</div>
+              <div class="resumen-valor" id="lblResumenExento">0,00</div>
+            </div>
+            <div class="resumen-item">
+              <div class="resumen-label">IVA Bs</div>
+              <div class="resumen-valor" id="lblResumenIva">0,00</div>
+            </div>
+            <div class="resumen-item">
+              <div class="resumen-label">Total Bs</div>
+              <div class="resumen-valor text-success" id="lblResumenTotalBs">Bs 0,00</div>
+            </div>
+            <div class="resumen-item">
+              <div class="resumen-label">Total Divisa</div>
+              <div class="resumen-valor text-primary" id="lblResumenTotalDivisa">$ 0,00</div>
+            </div>
+          </div>
+
+          <!-- TICKET DIGITAL (ESTADO VACÍO O PRELIMINAR) -->
+          <div id="ticketContainer" class="ticket-container">
+            <div id="ticketEmpty" class="ticket-empty">
+              <i class="fas fa-receipt"></i>
+              <h5>Esperando datos del documento</h5>
+              <p>Complete el Proveedor y Número de Control para habilitar la carga de compras.</p>
+            </div>
+            <div id="ticketData" style="display: none;">
+              <div class="ticket-header">
+                <h4>COMPROBANTE DE COMPRA</h4>
+                <div class="ticket-sub" id="ticketTipoDoc">FACTURA</div>
+              </div>
+              <div class="ticket-body">
+                <div class="ticket-row"><span class="label">N° Control:</span><span class="value" id="ticketControl">-</span></div>
+                <div class="ticket-row"><span class="label">N° Factura:</span><span class="value" id="ticketFactura">-</span></div>
+                <div class="ticket-row"><span class="label">Proveedor:</span><span class="value" id="ticketProveedor">-</span></div>
+                <div class="ticket-row"><span class="label">RIF:</span><span class="value" id="ticketRif">-</span></div>
+                <div class="ticket-row"><span class="label">Fecha:</span><span class="value" id="ticketFecha">-</span></div>
+                <div class="ticket-row"><span class="label">Tasa:</span><span class="value" id="ticketTasa">-</span></div>
+                <div class="ticket-row"><span class="label">Items:</span><span class="value" id="ticketItems">0</span></div>
+                <div class="ticket-row"><span class="label">Sub-Total Bs:</span><span class="value" id="ticketSubTotal">0,00</span></div>
+                <div class="ticket-row"><span class="label">Exento Bs:</span><span class="value" id="ticketExento">0,00</span></div>
+                <div class="ticket-row"><span class="label">IVA Bs:</span><span class="value" id="ticketIva">0,00</span></div>
+                <div class="ticket-row total"><span class="label">TOTAL Bs:</span><span class="value" id="ticketTotal">0,00</span></div>
+                <div class="ticket-row"><span class="label">Total Divisa:</span><span class="value text-primary" id="ticketTotalDivisa">0,00</span></div>
+              </div>
+              <div class="ticket-footer">
+                <span id="ticketFechaRegistro">-</span> • Documento Registrado
+              </div>
+            </div>
+          </div>
+
+          <!-- TABLA DINÁMICA DE ITEMS -->
+          <div class="card flex-grow-1 glass-card d-flex flex-column" id="cardTablaItems" style="display: none;">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5><i class="fas fa-list-alt"></i> Detalle de la Compra</h5>
+              <span class="badge rounded-pill px-3 py-1 bg-primary" id="badgeTotalItems">0 renglones</span>
+            </div>
+            <div class="card-body p-0 d-flex flex-column h-100">
+              <div class="table-scrollable flex-grow-1">
+                <table class="table table-hover mb-0" id="tablaDetalleCompra">
+                  <thead>
+                    <tr>
+                      <th class="ps-3">Código</th>
+                      <th>Descripción Producto</th>
+                      <th class="text-end">Cant.</th>
+                      <th class="text-end">Costo Unit.</th>
+                      <th class="text-end">Neto</th>
+                      <th class="text-center">% IVA</th>
+                      <th class="text-end">Monto IVA</th>
+                      <th class="text-end">Total Renglón</th>
+                      <th class="text-center" style="width: 80px;">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodyDetalleCompra"></tbody>
+                </table>
+              </div>
+
+              <!-- Resumen al pie de la tabla -->
+              <div class="p-2 border-top divider-glass mt-auto">
+                <div class="row small fw-bold text-secondary">
+                  <div class="col-6 ps-3" id="lblPieCantidadItems">Renglones: 0</div>
+                  <div class="col-6 text-end pe-3" id="lblPieTotalBruto">Total Bruto: 0,00</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CUADRO DE TOTALES DUAL (BS / DIVISA) -->
+          <div id="boxTotalesDual" class="mt-auto" style="display: none;">
+            <div class="totales-section mt-2">
+              
+              <!-- Tarjeta Totales en Bolívares -->
+              <div class="totales-card bs">
+                <div class="totales-header">
+                  <div class="totales-icon"><i class="fas fa-coins"></i></div>
+                  <div>
+                    <div class="totales-title">Bolívares (Bs)</div>
+                    <div class="totales-subtitle">Moneda de Curso Legal</div>
+                  </div>
+                </div>
+                <div class="linea-total">
+                  <span class="linea-label">Base Imponible</span>
+                  <span class="linea-valor" id="lblTotalBaseBs">0,00 Bs</span>
+                </div>
+                <div class="linea-total linea-exento">
+                  <span class="linea-label">Monto Exento</span>
+                  <span class="linea-valor text-purple" id="lblTotalExentoBs">0,00 Bs</span>
+                </div>
+                <div class="linea-total">
+                  <span class="linea-label">Impuesto IVA</span>
+                  <span class="linea-valor" id="lblTotalIvaBs">0,00 Bs</span>
+                </div>
+                <div class="linea-total" id="lineaRetencionBs" style="display: none;">
+                  <span class="linea-label text-danger">Retención de IVA</span>
+                  <span class="linea-valor text-danger" id="lblTotalRetencionBs">- 0,00 Bs</span>
+                </div>
+                <div class="linea-total grand-total">
+                  <span class="linea-label">Total a Pagar</span>
+                  <span class="linea-valor" id="lblGranTotalBs">0,00 Bs</span>
+                </div>
+              </div>
+
+              <!-- Tarjeta Totales en Divisa -->
+              <div class="totales-card divisa" id="boxTotalesDivisa">
+                <div class="totales-header">
+                  <div class="totales-icon"><i class="fas fa-dollar-sign"></i></div>
+                  <div>
+                    <div class="totales-title" id="lblNombreDivisa">Divisa</div>
+                    <div class="totales-subtitle">Cálculo de Referencia</div>
+                  </div>
+                </div>
+                <div class="linea-total">
+                  <span class="linea-label">Base Imponible</span>
+                  <span class="linea-valor"><span class="lblSimboloMoneda">$</span> <span id="lblTotalBaseUSD">0,00</span></span>
+                </div>
+                <div class="linea-total linea-exento">
+                  <span class="linea-label">Monto Exento</span>
+                  <span class="linea-valor text-purple"><span class="lblSimboloMoneda">$</span> <span id="lblTotalExentoUSD">0,00</span></span>
+                </div>
+                <div class="linea-total">
+                  <span class="linea-label">Impuesto IVA</span>
+                  <span class="linea-valor"><span class="lblSimboloMoneda">$</span> <span id="lblTotalIvaUSD">0,00</span></span>
+                </div>
+                <div class="linea-total grand-total">
+                  <span class="linea-label">Total en Divisa</span>
+                  <span class="linea-valor text-primary"><span class="lblSimboloMoneda">$</span> <span id="lblGranTotalUSD">0,00</span></span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== 3. VISTA: LIBRO DE COMPRAS ===== -->
+    <div id="container-libro-compras" class="d-none">
+
+      <!-- Panel de Resumen Fiscal -->
+      <div id="resumen-libro-compras" class="mb-3 d-none">
+        <div class="row g-2">
+          <div class="col-md-2 col-4"><div class="card p-2 text-center glass-card"><span class="form-label">Docs</span><h5 id="resLibroDocs" class="text-primary m-0">0</h5></div></div>
+          <div class="col-md-2 col-4"><div class="card p-2 text-center glass-card"><span class="form-label">Total Compras</span><h5 id="resLibroTotal" class="text-success m-0">0,00</h5></div></div>
+          <div class="col-md-2 col-4"><div class="card p-2 text-center glass-card"><span class="form-label">Base Imponible</span><h5 id="resLibroBase" class="text-info m-0">0,00</h5></div></div>
+          <div class="col-md-2 col-4"><div class="card p-2 text-center glass-card"><span class="form-label">Exento</span><h5 id="resLibroExento" class="text-purple m-0">0,00</h5></div></div>
+          <div class="col-md-2 col-4"><div class="card p-2 text-center glass-card"><span class="form-label">Crédito IVA</span><h5 id="resLibroIva" class="text-warning m-0">0,00</h5></div></div>
+          <div class="col-md-2 col-4"><div class="card p-2 text-center glass-card"><span class="form-label">Retenciones</span><h5 id="resLibroRetenido" class="text-danger m-0">0,00</h5></div></div>
+        </div>
+      </div>
+
+      <!-- Filtros del Libro -->
+      <div class="card glass-card mb-3">
+        <div class="card-header">
+          <h5><i class="fas fa-calendar-alt text-primary"></i> Filtros y Período del Libro de Compras</h5>
+          <div class="col-md-3 col-12">
+          <button type="button" class="btn btn-ghost" onclick="window.ModuloCompras.cambiarVista('formulario');"><i class="fas fa-arrow-left"></i></button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-3 col-6">
+              <label for="filtroFechaDesdeLibro" class="form-label">Desde:</label>
+              <input type="date" id="filtroFechaDesdeLibro" class="form-control">
+            </div>
+            <div class="col-md-3 col-6">
+              <label for="filtroFechaHastaLibro" class="form-label">Hasta:</label>
+              <input type="date" id="filtroFechaHastaLibro" class="form-control">
+            </div>
+            <div class="col-md-3 col-12">
+              <label for="filtroProveedorLibro" class="form-label">Proveedor (opcional):</label>
+              <input type="text" id="filtroProveedorLibro" class="form-control" placeholder="Nombre o RIF...">
+            </div>
+            <div class="col-md-3 col-12">
+              <label for="filtroTipoDocLibro" class="form-label">Tipo Documento:</label>
+              <select id="filtroTipoDocLibro" class="form-select">
+                <option value="">Todos los documentos</option>
+                <option value="Factura">Facturas</option>
+                <option value="NC">Notas de Crédito</option>
+                <option value="ND">Notas de Débito</option>
+              </select>
+              <button type="button" class="btn btn-primary" id="btnConsultarLibro"><i class="fas fa-search"></i></button>
+
+            </div>
+            <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de Datos del Libro -->
+      <div id="tabla-libro-compras-container" class="card glass-card d-none">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5><i class="fas fa-table text-primary"></i> Detalle de Operaciones Tributarias</h5>
+          <div class="d-flex gap-2 align-items-center">
+            <span id="badgePeriodoLibro" class="badge bg-secondary"></span>
+            <button class="btn btn-icon" id="btnImprimirLibro" title="Imprimir Libro"><i class="fas fa-print"></i></button>
+            <button class="btn btn-icon" id="btnExcelLibro" title="Exportar a Excel"><i class="fas fa-file-excel text-success"></i></button>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-scrollable">
+            <table class="table table-hover mb-0" id="tablaLibroCompras" style="font-size: 0.75rem;">
+              <thead>
+                <tr class="table-dark">
+                  <th rowspan="2" class="text-center align-middle">N°</th>
+                  <th rowspan="2" class="text-center align-middle">Fecha</th>
+                  <th rowspan="2" class="text-center align-middle">RIF</th>
+                  <th rowspan="2" class="align-middle">Proveedor / Razón Social</th>
+                  <th rowspan="2" class="text-center align-middle">Tipo</th>
+                  <th rowspan="2" class="text-center align-middle">N° Factura</th>
+                  <th rowspan="2" class="text-center align-middle">N° Control</th>
+                  <th colspan="2" class="text-center">Notas</th>
+                  <th rowspan="2" class="text-center align-middle">Fact. Afectada</th>
+                  <th rowspan="2" class="text-center align-middle">N° Comprobante Ret.</th>
+                  <th colspan="2" class="text-center">Totales Compra</th>
+                  <th rowspan="2" class="text-end align-middle">Base Imponible</th>
+                  <th rowspan="2" class="text-center align-middle">% Alic.</th>
+                  <th rowspan="2" class="text-end align-middle">Crédito IVA</th>
+                  <th rowspan="2" class="text-end align-middle">IVA Retenido</th>
+                </tr>
+                <tr class="table-secondary">
+                  <th class="text-center">Débito</th>
+                  <th class="text-center">Crédito</th>
+                  <th class="text-end">Total Facturado</th>
+                  <th class="text-end">Monto Exento</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyLibroCompras"></tbody>
+              <tfoot class="fw-bold bg-dark text-white">
+                <tr>
+                  <td colspan="11" class="text-end pe-3">TOTALES GENERALES:</td>
+                  <td id="lblTotalLibroCompras" class="text-end text-warning">0,00</td>
+                  <td id="lblTotalLibroExento" class="text-end text-warning">0,00</td>
+                  <td id="lblTotalLibroBase" class="text-end text-warning">0,00</td>
+                  <td></td>
+                  <td id="lblTotalLibroIva" class="text-end text-warning">0,00</td>
+                  <td id="lblTotalLibroRetenido" class="text-end text-warning">0,00</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ===== 4. BOTONERA FLOTANTE ACCIONABLE ===== -->
+  <aside class="botonera-flotante" id="botoneraFlotante" style="display: none;" aria-label="Acciones de la factura">
+        <button type="button" class="btn btn-primary" id="btnGuardarFactura" title="Guardar factura en sistema"><i class="fas fa-save"></i><span>Guardar</span></button>
+        <button type="button" class="btn btn-dynamic" id="btnLimpiarFactura" title="Limpiar formulario"><i class="fas fa-eraser"></i><span>Limpiar</span></button>
+        <button type="button" class="btn btn-dynamic" id="btnBuscarFactura" title="Buscar factura existente"><i class="fas fa-search"></i><span>Buscar</span></button>
+        <button type="button" class="btn btn-dynamic" id="btnImprimirRet" title="Buscar Retencion"><i class="fas fa-search"></i><span>Buscar</span></button>
+  </aside>
+
+</div>
+
+<script>
+(function(window) {
+  'use strict';
+
+  // =========================================================================
+  // 1. CONFIGURACIÓN Y SERVICIO DE INTERFAZ UNIFICADO (GProUI)
+  // =========================================================================
+  const UI = {
+    loading: function(titulo, subtitulo) {
+      if (window.GProUI && window.GProUI.mostrarLoading) {
+        window.GProUI.mostrarLoading(titulo, subtitulo || 'Procesando...', 45);
+      } else if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          title: titulo,
+          text: subtitulo || 'Por favor espere...',
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading()
+        });
+      }
+    },
+    ocultarLoading: function() {
+      if (window.GProUI && window.GProUI.ocultarLoading) {
+        window.GProUI.ocultarLoading();
+      } else if (typeof Swal !== 'undefined' && Swal.isVisible()) {
+        Swal.close();
+      }
+    },
+    toast: {
+      exito: (msg) => (window.GProUI && window.GProUI.toast ? window.GProUI.toast.exito(msg) : alert(msg)),
+      error: (msg) => (window.GProUI && window.GProUI.toast ? window.GProUI.toast.error(msg) : alert('Error: ' + msg)),
+      advertencia: (msg) => (window.GProUI && window.GProUI.toast ? window.GProUI.toast.advertencia(msg) : console.warn(msg)),
+      info: (msg) => (window.GProUI && window.GProUI.toast ? window.GProUI.toast.info(msg) : console.info(msg)),
+      confirmar: (msg, tipo, btnSi, btnNo, cb) => {
+        if (window.GProUI && window.GProUI.toast && window.GProUI.toast.confirmar) {
+          window.GProUI.toast.confirmar(msg, tipo || 'warning', btnSi || 'Confirmar', btnNo || 'Cancelar', cb);
+        } else if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            title: '¿Confirmar acción?',
+            text: msg,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: btnSi || 'Confirmar',
+            cancelButtonText: btnNo || 'Cancelar'
+          }).then(res => cb(res.isConfirmed));
+        } else {
+          cb(confirm(msg));
+        }
+      }
+    }
+  };
+
+  function getToken() {
+    try {
+      const u = JSON.parse(sessionStorage.getItem('userData') || '{}');
+      return u.token || '';
+    } catch(e) { return ''; }
+  }
+
+  // =========================================================================
+  // 2. ESTADO CENTRALIZADO (Single Source of Truth)
+  // =========================================================================
+  const estadoInicial = () => ({
+    vistaActiva: 'formulario',
+    proveedor: { nombre: '', rif: '', direccion: '' },
+    moneda: 'Dolares',
+    tasa: 1.00,
+    tipoDoc: 'Factura',
+    nroFactura: '',
+    nroControl: '',
+    facturaAfectada: '',
+    fechaEmision: new Date().toISOString().split('T')[0],
+    fechaRegistro: new Date().toISOString().split('T')[0],
+    porcentajeRetencion: 0,
+    porcentajeRetencionISLR: 0, // NUEVO
+    generarRetencionAuto: true, 
+    nroComprobanteRet: '',
+    nroComprobanteRetISLR: '', // NUEVO
+    descripcion: '',
+    itemBorrador: null,
+    items: [],
+    totales: {
+      baseBs: 0, exentoBs: 0, ivaBs: 0, 
+      retencionBs: 0, retencionIslrBs: 0, // NUEVO
+      totalBs: 0, totalFacturaBs: 0, 
+      baseUSD: 0, exentoUSD: 0, ivaUSD: 0, totalUSD: 0
+    }
+  });
+
+  let estado = estadoInicial();
+  let catalogoProveedores = [];
+  let catalogoProductos = [];
+  let catalogoMonedas = [];
+  let datosLibroCompras = [];
+  let isMounted = false;
+  let eventsBound = false; // PREVIENE DUPLICACIÓN DE LISTENERS AL NAVEGAR
+
+  // =========================================================================
+  // 3. UTILIDADES MATEMÁTICAS Y DE FORMATO
+  // =========================================================================
+  function round2(num) {
+    return Math.round((Number(num) + Number.EPSILON) * 100) / 100;
+  }
+
+  function parseNumero(val) {
+    if (val === null || val === undefined || val === '') return 0;
+    if (typeof val === 'number') return isNaN(val) ? 0 : val;
+    let str = String(val).trim();
+    if (str.includes('.') && str.includes(',')) {
+      str = str.replace(/\./g, '').replace(',', '.');
+    } else if (str.includes(',')) {
+      str = str.replace(',', '.');
+    }
+    const num = parseFloat(str);
+    return isNaN(num) ? 0 : num;
+  }
+
+  function formatMoney(num, simbolo = '') {
+    const n = round2(num);
+    const formatted = n.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return simbolo ? `${formatted} ${simbolo}`.trim() : formatted;
+  }
+
+  // =========================================================================
+  // 4. MOTOR DE CÁLCULO EN MEMORIA
+  // =========================================================================
+
+  function recalcularTotales() {
+    let baseUSD = 0, exentoUSD = 0, ivaUSD = 0;
+    let baseBs = 0, exentoBs = 0, ivaBs = 0;
+    const tasa = estado.tasa > 0 ? estado.tasa : 1;
+
+    estado.items.forEach(item => {
+      const renglonUSD = round2(item.precioUSD * item.cantidad);
+      const renglonBs = round2(renglonUSD * tasa);
+
+      if (item.tasaIva === 0) {
+        exentoUSD = round2(exentoUSD + renglonUSD);
+        exentoBs = round2(exentoBs + renglonBs);
+      } else {
+        baseUSD = round2(baseUSD + renglonUSD);
+        ivaUSD = round2(ivaUSD + round2(renglonUSD * (item.tasaIva / 100)));
+        baseBs = round2(baseBs + renglonBs);
+        ivaBs = round2(ivaBs + round2(renglonBs * (item.tasaIva / 100)));
+      }
+    });
+
+    const retencionPorc = estado.porcentajeRetencion || 0;
+    const retencionBs = round2(ivaBs * (retencionPorc / 100));
+
+    const retencionIslrPorc = estado.porcentajeRetencionISLR || 0;
+    const retencionIslrBs = round2(baseBs * (retencionIslrPorc / 100)); // ISLR sobre base imponible
+
+    const totalFacturaBs = round2(baseBs + exentoBs + ivaBs);
+    const totalPagarBs = round2(totalFacturaBs - retencionBs - retencionIslrBs); // Resta ambos
+    const totalUSD = round2(baseUSD + exentoUSD + ivaUSD);
+
+    estado.totales = {
+      baseBs, exentoBs, ivaBs, retencionBs, retencionIslrBs,
+      totalBs: totalPagarBs, totalFacturaBs, baseUSD, exentoUSD, ivaUSD, totalUSD
+    };
+  }
+  // =========================================================================
+  // 5. MOTOR DE RENDERIZADO REACTIVO (Render State to DOM)
+  // =========================================================================
+function render() {
+  if (!isMounted) return;
+
+  const doc = document;
+
+  const tieneControl = estado.nroControl.trim().length > 0;
+  const tieneItems = estado.items.length > 0;
+  const esNC_ND = estado.tipoDoc === 'NC' || estado.tipoDoc === 'ND';
+
+  const cardProductos = doc.getElementById('cardProductos');
+  const boxIndicadorPaso = doc.getElementById('boxIndicadorPaso');
+  const cardTablaItems = doc.getElementById('cardTablaItems');
+  const boxTotalesDual = doc.getElementById('boxTotalesDual');
+  const resumenBadge = doc.getElementById('resumenBadge');
+  const botonera = doc.getElementById('botoneraFlotante');
+  const boxFacturaAfectada = doc.getElementById('boxFacturaAfectada');
+  const ticketEmpty = doc.getElementById('ticketEmpty');
+  const ticketData = doc.getElementById('ticketData');
+
+  if (cardProductos) cardProductos.style.display = tieneControl ? 'block' : 'none';
+  if (boxIndicadorPaso) boxIndicadorPaso.style.display = tieneControl ? 'none' : 'block';
+  if (botonera) botonera.style.display = tieneControl ? 'flex' : 'none';
+  if (boxFacturaAfectada) boxFacturaAfectada.style.display = esNC_ND ? 'block' : 'none';
+
+  if (cardTablaItems) cardTablaItems.style.display = tieneItems ? 'flex' : 'none';
+  if (boxTotalesDual) boxTotalesDual.style.display = tieneItems ? 'block' : 'none';
+  if (resumenBadge) resumenBadge.style.display = tieneItems ? 'grid' : 'none';
+
+  if (ticketEmpty) ticketEmpty.style.display = tieneControl ? 'none' : 'flex';
+  if (ticketData) ticketData.style.display = tieneControl ? 'block' : 'none';
+
+  // ─────────────────────────────────────────────
+  // SINCRONIZAR MONEDA Y TASA CON EL DOM
+  // ─────────────────────────────────────────────
+  const selMoneda = doc.getElementById('selectMoneda');
+  const inputTasa = doc.getElementById('txtTasaCambio');
+  if (selMoneda && estado.moneda) {
+    const existeOpcion = Array.from(selMoneda.options).some(o => o.value === estado.moneda);
+    if (existeOpcion && selMoneda.value !== estado.moneda) {
+      selMoneda.value = estado.moneda;
+    }
+  }
+  if (inputTasa && inputTasa.value !== String(estado.tasa)) {
+    inputTasa.value = estado.tasa;
+    inputTasa.disabled = (estado.moneda === 'Bolivares');
+  }
+
+  // ─────────────────────────────────────────────
+  // SINCRONIZAR RETENCIÓN CON EL DOM
+  // ─────────────────────────────────────────────
+  const selRet = doc.getElementById('selectPorcentajeRetencion');
+  const inpRet = doc.getElementById('txtNroComprobanteRet');
+  const selRetISLR = doc.getElementById('selectPorcentajeRetencionISLR');
+  const inpRetISLR = doc.getElementById('txtNroComprobanteRetISLR');
+  const boxCheck = doc.getElementById('boxCheckRetencion');
+  const chkAuto = doc.getElementById('chkGenerarRetencion');
+
+  if (selRet && estado.porcentajeRetencion !== undefined) {
+    const valStr = String(estado.porcentajeRetencion);
+    const existeOpcion = Array.from(selRet.options).some(o => o.value === valStr);
+    if (existeOpcion) selRet.value = valStr;
+  }
+  if (inpRet && estado.nroComprobanteRet !== undefined) {
+    if (inpRet.value !== estado.nroComprobanteRet && estado.nroComprobanteRet !== 'Generando...') {
+      inpRet.value = estado.nroComprobanteRet;
+    }
+    inpRet.disabled = (estado.porcentajeRetencion === 0);
+  }
+
+  if (selRetISLR && estado.porcentajeRetencionISLR !== undefined) {
+    const valStr = String(estado.porcentajeRetencionISLR);
+    const existeOpcion = Array.from(selRetISLR.options).some(o => o.value === valStr);
+    if (existeOpcion) selRetISLR.value = valStr;
+  }
+  if (inpRetISLR && estado.nroComprobanteRetISLR !== undefined) {
+    if (inpRetISLR.value !== estado.nroComprobanteRetISLR && estado.nroComprobanteRetISLR !== 'Generando...') {
+      inpRetISLR.value = estado.nroComprobanteRetISLR;
+    }
+    inpRetISLR.disabled = (estado.porcentajeRetencionISLR === 0);
+  }
+
+  if (boxCheck) {
+    boxCheck.style.display = (estado.porcentajeRetencion > 0 || estado.porcentajeRetencionISLR > 0) ? 'block' : 'none';
+  }
+  if (chkAuto && estado.generarRetencionAuto !== undefined) {
+    chkAuto.checked = estado.generarRetencionAuto;
+  }
+
+  // ─────────────────────────────────────────────
+  // RESTO DEL RENDER (Tabla, Ticket, Totales)
+  // ─────────────────────────────────────────────
+  const simbolo = estado.moneda === 'Bolivares' ? 'Bs' : (estado.moneda === 'Euros' ? '€' : '$');
+  doc.querySelectorAll('.lblSimboloMoneda').forEach(el => el.textContent = simbolo);
+
+  // Tabla de Ítems
+  const tbody = doc.getElementById('tbodyDetalleCompra');
+  if (tbody) {
+    if (estado.items.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center py-3 text-muted">No hay productos agregados</td></tr>';
+    } else {
+      const tasa = estado.tasa > 0 ? estado.tasa : 1;
+      tbody.innerHTML = estado.items.map((item, idx) => {
+        const costoEnMoneda = estado.moneda === 'Bolivares' ? round2(item.precioUSD * tasa) : item.precioUSD;
+        const netoEnMoneda = round2(costoEnMoneda * item.cantidad);
+        const ivaEnMoneda = round2(netoEnMoneda * (item.tasaIva / 100));
+        const totalEnMoneda = round2(netoEnMoneda + ivaEnMoneda);
+
+        return `
+          <tr>
+            <td class="ps-3"><span class="producto-codigo">${item.codigo}</span></td>
+            <td class="fw-semibold">${item.nombre}</td>
+            <td class="text-end fw-bold">${item.cantidad}</td>
+            <td class="text-end">${formatMoney(costoEnMoneda)}</td>
+            <td class="text-end">${formatMoney(netoEnMoneda)}</td>
+            <td class="text-center"><span class="badge" style="background: rgba(249,115,22,0.15); color: var(--primary);">${item.tasaIva}%</span></td>
+            <td class="text-end">${formatMoney(ivaEnMoneda)}</td>
+            <td class="text-end fw-bold text-success">${formatMoney(totalEnMoneda)}</td>
+            <td class="text-center">
+              <button type="button" class="btn-icon me-1" onclick="window.ModuloCompras.editarItem(${idx})" title="Editar"><i class="fas fa-pen"></i></button>
+              <button type="button" class="btn-icon danger" onclick="window.ModuloCompras.eliminarItem(${idx})" title="Eliminar"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+  }
+
+  const tot = estado.totales;
+  const bItems = doc.getElementById('badgeTotalItems');
+  const pItems = doc.getElementById('lblPieCantidadItems');
+  const pBruto = doc.getElementById('lblPieTotalBruto');
+  if (bItems) bItems.textContent = `${estado.items.length} renglones`;
+  if (pItems) pItems.textContent = `Renglones: ${estado.items.length}`;
+  if (pBruto) pBruto.textContent = `Total Compra: ${formatMoney(tot.totalFacturaBs, 'Bs')}`;
+
+  // Badges Superiores
+  const rItems = doc.getElementById('lblResumenItems');
+  const rSub = doc.getElementById('lblResumenSubTotal');
+  const rExe = doc.getElementById('lblResumenExento');
+  const rIva = doc.getElementById('lblResumenIva');
+  const rTotBs = doc.getElementById('lblResumenTotalBs');
+  const rTotDiv = doc.getElementById('lblResumenTotalDivisa');
+
+  if (rItems) rItems.textContent = estado.items.length;
+  if (rSub) rSub.textContent = formatMoney(tot.baseBs);
+  if (rExe) rExe.textContent = formatMoney(tot.exentoBs);
+  if (rIva) rIva.textContent = formatMoney(tot.ivaBs);
+  if (rTotBs) rTotBs.textContent = formatMoney(tot.totalBs, 'Bs');
+  if (rTotDiv) rTotDiv.textContent = formatMoney(tot.totalUSD, '$');
+
+  // Cuadro Totales Duales
+  const tBaseBs = doc.getElementById('lblTotalBaseBs');
+  const tExeBs = doc.getElementById('lblTotalExentoBs');
+  const tIvaBs = doc.getElementById('lblTotalIvaBs');
+  const tGranBs = doc.getElementById('lblGranTotalBs');
+
+  if (tBaseBs) tBaseBs.textContent = formatMoney(tot.baseBs, 'Bs');
+  if (tExeBs) tExeBs.textContent = formatMoney(tot.exentoBs, 'Bs');
+  if (tIvaBs) tIvaBs.textContent = formatMoney(tot.ivaBs, 'Bs');
+  if (tGranBs) tGranBs.textContent = formatMoney(tot.totalBs, 'Bs');
+
+  const lineaRet = doc.getElementById('lineaRetencionBs');
+  if (lineaRet) {
+    if (tot.retencionBs > 0) {
+      lineaRet.style.display = 'flex';
+      const lblRet = doc.getElementById('lblTotalRetencionBs');
+      if (lblRet) lblRet.textContent = `- ${formatMoney(tot.retencionBs, 'Bs')} (${estado.porcentajeRetencion}%)`;
+    } else {
+      lineaRet.style.display = 'none';
+    }
+  }
+
+  const boxDivisa = doc.getElementById('boxTotalesDivisa');
+  if (boxDivisa) {
+    boxDivisa.style.display = (estado.moneda === 'Bolivares') ? 'none' : 'block';
+    const nDiv = doc.getElementById('lblNombreDivisa');
+    const bUSD = doc.getElementById('lblTotalBaseUSD');
+    const eUSD = doc.getElementById('lblTotalExentoUSD');
+    const iUSD = doc.getElementById('lblTotalIvaUSD');
+    const gUSD = doc.getElementById('lblGranTotalUSD');
+
+    if (nDiv) nDiv.textContent = estado.moneda;
+    if (bUSD) bUSD.textContent = formatMoney(tot.baseUSD);
+    if (eUSD) eUSD.textContent = formatMoney(tot.exentoUSD);
+    if (iUSD) iUSD.textContent = formatMoney(tot.ivaUSD);
+    if (gUSD) gUSD.textContent = formatMoney(tot.totalUSD);
+  }
+
+  // Ticket Digital
+  const tTipo = doc.getElementById('ticketTipoDoc');
+  const tCtrl = doc.getElementById('ticketControl');
+  const tFact = doc.getElementById('ticketFactura');
+  const tProv = doc.getElementById('ticketProveedor');
+  const tRif = doc.getElementById('ticketRif');
+  const tFech = doc.getElementById('ticketFecha');
+  const tTasa = doc.getElementById('ticketTasa');
+  const tItms = doc.getElementById('ticketItems');
+  const tSubT = doc.getElementById('ticketSubTotal');
+  const tExen = doc.getElementById('ticketExento');
+  const tIvaT = doc.getElementById('ticketIva');
+  const tTotB = doc.getElementById('ticketTotal');
+  const tTotD = doc.getElementById('ticketTotalDivisa');
+  const tRegs = doc.getElementById('ticketFechaRegistro');
+
+  if (tTipo) tTipo.textContent = estado.tipoDoc.toUpperCase();
+  if (tCtrl) tCtrl.textContent = estado.nroControl || '-';
+  if (tFact) tFact.textContent = estado.nroFactura || '-';
+  if (tProv) tProv.textContent = estado.proveedor.nombre || '-';
+  if (tRif) tRif.textContent = estado.proveedor.rif || '-';
+  if (tFech) tFech.textContent = estado.fechaEmision || '-';
+  if (tTasa) tTasa.textContent = formatMoney(estado.tasa);
+  if (tItms) tItms.textContent = estado.items.length;
+  if (tSubT) tSubT.textContent = formatMoney(tot.baseBs);
+  if (tExen) tExen.textContent = formatMoney(tot.exentoBs);
+  if (tIvaT) tIvaT.textContent = formatMoney(tot.ivaBs);
+  if (tTotB) tTotB.textContent = formatMoney(tot.totalBs, 'Bs');
+  if (tTotD) tTotD.textContent = formatMoney(tot.totalUSD, '$');
+  if (tRegs) tRegs.textContent = estado.fechaRegistro || '-';
+}
+  // =========================================================================
+  // 6. AUTOCOMPLETADOS INTELIGENTES
+  // =========================================================================
+  function setupAutocompleteProveedores() {
+    const input = document.getElementById('txtBuscarProveedor');
+    const dropdown = document.getElementById('dropdownProveedores');
+    if (!input || !dropdown) return;
+
+    input.oninput = function(e) {
+      const q = e.target.value.toLowerCase().trim();
+      if (!q) {
+        dropdown.classList.remove('show');
+        return;
+      }
+
+      // Filtrar por Nombre (índice 1) o RIF (índice 2)
+      const matches = catalogoProveedores.filter(p =>
+        String(p[1] || '').toLowerCase().includes(q) ||
+        String(p[2] || '').toLowerCase().includes(q)
+      ).slice(0, 15);
+
+      if (matches.length === 0) {
+        dropdown.innerHTML = '<div class="dropdown-option text-muted">No se encontraron proveedores</div>';
+      } else {
+        dropdown.innerHTML = matches.map(p => `
+          <div class="dropdown-option"
+               data-rif="${p[2] || ''}"
+               data-nombre="${p[1] || ''}"
+               data-dir="${p[3] || ''}"
+               data-retiva="${p[4] || 0}"
+               data-retislr="${p[5] || 0}">
+            <span class="proveedor-nombre">${p[1]}</span>
+            <span class="proveedor-rif">${p[2]}</span>
+          </div>
+        `).join('');
+      }
+      dropdown.classList.add('show');
+    };
+
+    dropdown.onclick = function(e) {
+      const opt = e.target.closest('.dropdown-option');
+      if (opt && opt.dataset.nombre) {
+        estado.proveedor.nombre = opt.dataset.nombre;
+        estado.proveedor.rif = opt.dataset.rif;
+        estado.proveedor.direccion = opt.dataset.dir;
+
+        var retIva = parseNumero(opt.dataset.retiva) || 0;
+        estado.porcentajeRetencion = retIva;
+
+        var boxCheck = document.getElementById('boxCheckRetencion');
+        var chkAuto = document.getElementById('chkGenerarRetencion');
+
+        if (retIva > 0) {
+            if (boxCheck) boxCheck.style.display = 'block';
+            if (chkAuto) chkAuto.checked = true;
+            estado.generarRetencionAuto = true;
+        } else {
+            if (boxCheck) boxCheck.style.display = 'none';
+            estado.generarRetencionAuto = false;
+        }
+
+        input.value = estado.proveedor.nombre;
+        document.getElementById('txtRifProveedor').value = estado.proveedor.rif;
+        document.getElementById('txtDireccionProveedor').value = estado.proveedor.direccion;
+
+        var selPct = document.getElementById('selectPorcentajeRetencion');
+        if (selPct) {
+          var opcionExiste = Array.from(selPct.options).some(function(o) {
+            return parseInt(o.value, 10) === retIva;
+          });
+          selPct.value = opcionExiste ? String(retIva) : '0';
+        }
+
+        var inputComp = document.getElementById('txtNroComprobanteRet');
+        if (inputComp) {
+          if (retIva > 0) {
+            inputComp.disabled = false;
+            inputComp.value = 'Generando...';
+            google.script.run
+              .withSuccessHandler(function(correlativo) {
+                if (correlativo && inputComp.value === 'Generando...') {
+                  inputComp.value = correlativo;
+                  estado.nroComprobanteRet = correlativo;
+                } else if (!correlativo && inputComp.value === 'Generando...') {
+                  inputComp.value = '';
+                }
+              })
+              .withFailureHandler(function() {
+                if (inputComp.value === 'Generando...') inputComp.value = '';
+              })
+              .previewCorrelativoRetencionCompras();
+          } else {
+            inputComp.disabled = true;
+            inputComp.value = '';
+            estado.nroComprobanteRet = '';
+          }
+        }
+
+        dropdown.classList.remove('show');
+        document.getElementById('txtNroFactura')?.focus();
+        sugerirDescripcion();
+        recalcularTotales();
+        render();
+      }
+    };
+  }
+
+  function setupAutocompleteProductos() {
+    const input = document.getElementById('txtBuscarProducto');
+    const dropdown = document.getElementById('dropdownProductos');
+    if (!input || !dropdown) return;
+
+    input.oninput = function(e) {
+      const q = e.target.value.toLowerCase().trim();
+      if (!q) {
+        dropdown.classList.remove('show');
+        return;
+      }
+
+      // Filtrar por Código (índice 0) o Nombre (índice 1)
+      const matches = catalogoProductos.filter(p => 
+        String(p[0] || '').toLowerCase().includes(q) || 
+        String(p[1] || '').toLowerCase().includes(q)
+      ).slice(0, 15);
+
+      if (matches.length === 0) {
+        dropdown.innerHTML = '<div class="dropdown-option text-muted">Producto no encontrado</div>';
+      } else {
+        dropdown.innerHTML = matches.map(p => {
+          const costo = parseNumero(p[2]);
+          const stock = parseNumero(p[5]);
+          return `
+            <div class="dropdown-option" 
+                 data-codigo="${p[0]}" 
+                 data-nombre="${p[1]}" 
+                 data-costo="${costo}" 
+                 data-iva="${p[4] !== undefined ? p[4] : 16}" 
+                 data-stock="${stock}" 
+                 data-codcontable="${p[6] || ''}" 
+                 data-nombrecuenta="${p[7] || 'INVENTARIO'}" 
+                 data-cuenta="${p[8] || ''}" 
+                 data-subcuenta="${p[9] || ''}" 
+                 data-cat="${p[10] || ''}">
+              <div class="producto-info">
+                <span class="producto-codigo">${p[0]}</span>
+                <span class="producto-nombre">${p[1]}</span>
+              </div>
+              <span class="badge bg-secondary">$ ${costo.toFixed(2)}</span>
+            </div>
+          `;
+        }).join('');
+      }
+      dropdown.classList.add('show');
+    };
+
+    dropdown.onclick = function(e) {
+      const opt = e.target.closest('.dropdown-option');
+      if (opt && opt.dataset.codigo) {
+        estado.itemBorrador = {
+          id: opt.dataset.codigo,
+          codigo: opt.dataset.codigo,
+          nombre: opt.dataset.nombre,
+          precioUSD: parseNumero(opt.dataset.costo),
+          tasaIva: parseNumero(opt.dataset.iva),
+          stock: parseNumero(opt.dataset.stock),
+          codcontable: opt.dataset.codcontable,
+          nombreCuenta: opt.dataset.nombrecuenta,
+          cuenta: opt.dataset.cuenta,
+          subcuenta: opt.dataset.subcuenta,
+          categoria: opt.dataset.cat,
+          esServicio: String(opt.dataset.cat).toUpperCase().startsWith('S')
+        };
+
+        input.value = estado.itemBorrador.codigo;
+        document.getElementById('txtProductoSeleccionado').value = estado.itemBorrador.nombre;
+        document.getElementById('txtPrecioUnitario').value = estado.itemBorrador.precioUSD;
+        document.getElementById('selectIvaItem').value = estado.itemBorrador.tasaIva;
+
+        const badgeStock = document.getElementById('badgeStockVisual');
+        if (badgeStock) {
+          badgeStock.className = 'input-group-text d-inline-flex';
+          badgeStock.innerHTML = estado.itemBorrador.esServicio
+            ? '<i class="fas fa-concierge-bell text-info me-1"></i> Servicio'
+            : `<i class="fas fa-boxes me-1"></i> Stock: ${estado.itemBorrador.stock}`;
+        }
+
+        dropdown.classList.remove('show');
+        const inputCant = document.getElementById('txtCantidad');
+        inputCant.value = '1';
+        inputCant.focus();
+        inputCant.select();
+      }
+    };
+  }
+
+
+  // =========================================================================
+  // 7. GESTIÓN DE ACCIONES Y FORMULARIO
+  // =========================================================================
+  function sugerirDescripcion() {
+    const txtDesc = document.getElementById('txtDescripcion');
+    if (txtDesc && !txtDesc.value.trim()) {
+      if (estado.nroFactura && estado.proveedor.nombre) {
+        txtDesc.value = `${estado.tipoDoc} N° ${estado.nroFactura} - ${estado.proveedor.nombre}`;
+        estado.descripcion = txtDesc.value;
+      }
+    }
+  }
+
+  function agregarItem() {
+    const cantInput = document.getElementById('txtCantidad');
+    const precioInput = document.getElementById('txtPrecioUnitario');
+    const ivaSelect = document.getElementById('selectIvaItem');
+
+    const cantidad = parseNumero(cantInput.value);
+    const precioUSD = parseNumero(precioInput.value);
+    const tasaIva = parseNumero(ivaSelect.value);
+
+    if (!estado.itemBorrador || !estado.itemBorrador.codigo) {
+      UI.toast.advertencia('Seleccione un producto del catálogo.');
+      document.getElementById('txtBuscarProducto')?.focus();
+      return;
+    }
+    if (cantidad <= 0) {
+      UI.toast.advertencia('La cantidad debe ser mayor a 0.');
+      cantInput.focus();
+      return;
+    }
+    if (precioUSD < 0) {
+      UI.toast.advertencia('El costo no puede ser negativo.');
+      precioInput.focus();
+      return;
+    }
+
+    estado.items.push({
+      ...estado.itemBorrador,
+      cantidad,
+      precioUSD,
+      tasaIva
+    });
+
+    estado.itemBorrador = null;
+    document.getElementById('txtBuscarProducto').value = '';
+    document.getElementById('txtProductoSeleccionado').value = '';
+    const badgeStock = document.getElementById('badgeStockVisual');
+    if (badgeStock) badgeStock.className = 'input-group-text d-none';
+    cantInput.value = '1';
+    precioInput.value = '0.00';
+
+    recalcularTotales();
+    render();
+    document.getElementById('txtBuscarProducto').focus();
+    UI.toast.exito('Producto agregado al detalle');
+  }
+
+  function eliminarItem(index) {
+    if (index >= 0 && index < estado.items.length) {
+      estado.items.splice(index, 1);
+      recalcularTotales();
+      render();
+      UI.toast.info('Renglón eliminado');
+    }
+  }
+
+  function editarItem(index) {
+    if (index >= 0 && index < estado.items.length) {
+      const item = estado.items[index];
+      estado.itemBorrador = { ...item };
+
+      document.getElementById('txtBuscarProducto').value = item.codigo;
+      document.getElementById('txtProductoSeleccionado').value = item.nombre;
+      document.getElementById('txtCantidad').value = item.cantidad;
+      document.getElementById('txtPrecioUnitario').value = item.precioUSD;
+      document.getElementById('selectIvaItem').value = item.tasaIva;
+
+      eliminarItem(index);
+      document.getElementById('txtCantidad').focus();
+      UI.toast.info('Modifique los campos y vuelva a agregar');
+    }
+  }
+
+  // =========================================================================
+  // LIMPIEZA TOTAL DEL DOM Y ESTADO (PARA RECARGA LIMPIA DE SPA)
+  // =========================================================================
+  function limpiarFormulario(confirmar = true) {
+    const ejecutarLimpieza = () => {
+      estado = estadoInicial();
+      const doc = document;
+      const bProv = doc.getElementById('txtBuscarProveedor');
+      const rProv = doc.getElementById('txtRifProveedor');
+      const dProv = doc.getElementById('txtDireccionProveedor');
+      const nFact = doc.getElementById('txtNroFactura');
+      const nCtrl = doc.getElementById('txtNroControl');
+      const fAfec = doc.getElementById('txtFacturaAfectada');
+      const desc = doc.getElementById('txtDescripcion');
+      const nComp = doc.getElementById('txtNroComprobanteRet');
+      const sRet = doc.getElementById('selectPorcentajeRetencion');
+      const bProd = doc.getElementById('txtBuscarProducto');
+      const pSel = doc.getElementById('txtProductoSeleccionado');
+      const bStk = doc.getElementById('badgeStockVisual');
+      const bEst = doc.getElementById('badgeEstadoDoc');
+      const boxCheck = doc.getElementById('boxCheckRetencion');
+      const chkAuto = doc.getElementById('chkGenerarRetencion');
+      const selMoneda = doc.getElementById('selectMoneda');
+      const inputTasa = doc.getElementById('txtTasaCambio');
+      
+      if (boxCheck) boxCheck.style.display = 'none';
+      if (chkAuto) chkAuto.checked = true;
+      if (bProv) bProv.value = '';
+      if (rProv) rProv.value = '';
+      if (dProv) dProv.value = '';
+      if (nFact) nFact.value = '';
+      if (nCtrl) nCtrl.value = '';
+      if (fAfec) fAfec.value = '';
+      if (desc) desc.value = '';
+      if (nComp) { nComp.value = ''; nComp.disabled = true; }
+      if (sRet) sRet.value = '0';
+      if (bProd) bProd.value = '';
+      if (pSel) pSel.value = '';
+      if (bStk) bStk.className = 'input-group-text d-none';
+      if (bEst) bEst.textContent = 'Nueva';
+      if (selMoneda) selMoneda.selectedIndex = 0; // Primera opción (Dolares usualmente)
+      if (inputTasa) {
+         // Si es Dolares, buscar su tasa en el select y colocarla
+         if (selMoneda && selMoneda.options.length > 0) {
+             const opt = selMoneda.selectedOptions[0];
+             const val = parseNumero(opt.dataset.tasa) || 1;
+             inputTasa.value = val;
+             estado.tasa = val;
+             inputTasa.disabled = (estado.moneda === 'Bolivares');
+         } else {
+             inputTasa.value = '1';
+         }
+      }
+
+      recalcularTotales();
+      render();
+    };
+
+    if (confirmar) {
+      UI.toast.confirmar('¿Desea limpiar todos los campos?', 'warning', 'Limpiar', 'Cancelar', (ok) => {
+        if (ok) {
+          ejecutarLimpieza();
+          UI.toast.info('Formulario reiniciado');
+        }
+      });
+    } else {
+      ejecutarLimpieza();
+    }
+  }
+
+  // =========================================================================
+  // 8. COMUNICACIÓN CON EL SERVIDOR (Google Apps Script)
+  // =========================================================================
+function cargarCatalogos() {
+    if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+
+    // Obtener el ID de la empresa activa desde sessionStorage
+    let idSpreadsheetEmpresa = '';
+    try {
+      const emp = JSON.parse(sessionStorage.getItem('empresaActiva') || '{}');
+      idSpreadsheetEmpresa = emp.idSpreadsheet || '';
+    } catch(e) {}
+
+    let completados = 0;
+    const chequearFin = () => {
+      completados++;
+      if (completados >= 3) UI.ocultarLoading();
+    };
+
+    // 1. PROVEEDORES
+    google.script.run
+      .withSuccessHandler((data) => {
+        catalogoProveedores = Array.isArray(data) ? data : [];
+        chequearFin();
+      })
+      .withFailureHandler(() => chequearFin())
+      .getDataProveedores(idSpreadsheetEmpresa);
+
+    // 2. PRODUCTOS
+    google.script.run
+      .withSuccessHandler((data) => {
+        catalogoProductos = Array.isArray(data) ? data : [];
+        chequearFin();
+      })
+      .withFailureHandler(() => chequearFin())
+      .getDataProductos(idSpreadsheetEmpresa);
+
+    // 3. MONEDAS + TASA
+    google.script.run
+      .withSuccessHandler((data) => {
+        catalogoMonedas = Array.isArray(data) && data.length > 0
+          ? data
+          : [{ nombre: 'Dolares', tasa: 1 }];
+
+        const sel = document.getElementById('selectMoneda');
+        const inputTasa = document.getElementById('txtTasaCambio');
+
+        if (sel) {
+          const monedaPrevia = sel.value || null;
+
+          sel.innerHTML = catalogoMonedas.map(m => `
+            <option value="${m.nombre}" data-tasa="${m.tasa}">${m.nombre}</option>
+          `).join('');
+
+          const existePrevia = monedaPrevia && catalogoMonedas.some(m => m.nombre === monedaPrevia);
+          const existeDolares = catalogoMonedas.some(m => m.nombre === 'Dolares');
+
+          if (existePrevia) {
+            sel.value = monedaPrevia;
+          } else if (existeDolares) {
+            sel.value = 'Dolares';
+          } else {
+            sel.value = catalogoMonedas[0].nombre;
+          }
+
+          // ✅ FIX: Disparamos el evento change para que actualice el input de la tasa automáticamente
+          sel.dispatchEvent(new Event('change'));
+        }
+
+        chequearFin();
+      })
+      .withFailureHandler(() => {
+        const sel = document.getElementById('selectMoneda');
+        const inputTasa = document.getElementById('txtTasaCambio');
+        if (sel && !sel.options.length) {
+          sel.innerHTML = '<option value="Dolares" data-tasa="1">Dolares</option>';
+          sel.value = 'Dolares';
+        }
+        if (inputTasa) inputTasa.value = '1';
+        chequearFin();
+      })
+      .getDataMoneda(idSpreadsheetEmpresa);
+  }
+
+  function guardarFactura() {
+    if (!estado.proveedor.nombre) {
+      UI.toast.error('Debe seleccionar un proveedor válido.');
+      document.getElementById('txtBuscarProveedor')?.focus();
+      return;
+    }
+    if (!estado.nroFactura.trim()) {
+      UI.toast.error('Ingrese el número de la factura del proveedor.');
+      document.getElementById('txtNroFactura')?.focus();
+      return;
+    }
+    if (!estado.nroControl.trim()) {
+      UI.toast.error('El número de control es obligatorio.');
+      document.getElementById('txtNroControl')?.focus();
+      return;
+    }
+    if ((estado.tipoDoc === 'NC' || estado.tipoDoc === 'ND') && !estado.facturaAfectada.trim()) {
+      UI.toast.error('Para Notas de Crédito o Débito debe indicar la factura afectada.');
+      document.getElementById('txtFacturaAfectada')?.focus();
+      return;
+    }
+    if (estado.items.length === 0) {
+      UI.toast.error('Debe agregar al menos un producto a la factura.');
+      return;
+    }
+
+    UI.loading('Guardando Factura...', 'Registrando compra, asientos y retenciones.');
+
+    // ✅ FIX: Sincronizar estado con el DOM justo antes de guardar
+    estado.proveedor.nombre = document.getElementById('txtBuscarProveedor').value.trim();
+    estado.proveedor.rif = document.getElementById('txtRifProveedor').value.trim();
+    estado.nroFactura = document.getElementById('txtNroFactura').value.trim();
+    estado.nroControl = document.getElementById('txtNroControl').value.trim();
+    estado.tasa = parseNumero(document.getElementById('txtTasaCambio').value) || 1;
+
+    // Si después de leer el DOM sigue vacío, frenamos
+    if (!estado.proveedor.nombre) {
+      UI.toast.error('Debe seleccionar un proveedor de la lista.');
+      return;
+    }
+
+    const payload = {
+      token: getToken(),
+      NombreProveedor: estado.proveedor.nombre,
+      RifProveedor: estado.proveedor.rif,
+      FechaFacturaProveedor: estado.fechaEmision.split('-').reverse().join('/'),
+      TipoProveedor: estado.tipoDoc,
+      NroFacturaProveedor: estado.nroFactura,
+      NroControlProveedor: estado.nroControl,
+      MonedaProveedor: estado.moneda,
+      TasaProveedor: estado.tasa,
+      SubTotalProveedor: estado.totales.baseBs,
+      totalExentoCompra: estado.totales.exentoBs,
+      IvaProveedor: estado.totales.ivaBs,
+      TotalProveedor: estado.totales.totalFacturaBs,
+      
+      // Saldos brutos (el backend resta las retenciones)
+      SaldoProveedor: estado.totales.totalFacturaBs, 
+      SaldoProveedorDivisa: estado.totales.totalUSD, 
+      IVAProveedorDivisa: estado.totales.ivaUSD,
+      TotalProveedorDivisa: estado.totales.totalUSD,
+      
+      // Retención IVA
+      PorcentajeRetencion: estado.generarRetencionAuto ? (estado.porcentajeRetencion || 0) : 0,
+      RetencionIva: estado.generarRetencionAuto ? (estado.totales.retencionBs || 0) : 0,
+      NroComprobanteRetencion: estado.generarRetencionAuto ? (estado.nroComprobanteRet || '') : '',
+      
+      // Retención ISLR (NUEVO)
+      PorcentajeRetencionISLR: estado.generarRetencionAuto ? (estado.porcentajeRetencionISLR || 0) : 0,
+      RetencionIslr: estado.generarRetencionAuto ? (estado.totales.retencionIslrBs || 0) : 0,
+      NroComprobanteRetencionISLR: estado.generarRetencionAuto ? (estado.nroComprobanteRetISLR || '') : '',
+
+      TransaccionProveedor: 'Compra',
+      tipoTransaccion: 'Compra',
+      cobradaPagada: 'porPagar',
+      Abono: 0,
+      fechaAbono: '',
+      descripcionCompra: estado.descripcion || `${estado.tipoDoc} N° ${estado.nroFactura}`,
+      NroFacturaAfectada: estado.facturaAfectada || '',
+
+      items: estado.items.map(it => {
+        const netoBs = round2(it.precioUSD * estado.tasa * it.cantidad);
+        const ivaBs = round2(netoBs * (it.tasaIva / 100));
+        return {
+          NroFactura: estado.nroFactura,
+          Producto: it.nombre,
+          Categoria: it.categoria || '',
+          Cantidad: it.cantidad,
+          Precio: round2(it.precioUSD * estado.tasa),
+          PorcentajeIVA: it.tasaIva,
+          MontoIVA: ivaBs,
+          PrecioTotal: round2(netoBs + ivaBs),
+          PrecioUSD: it.precioUSD,
+          PorcentajeIVAUSD: it.tasaIva,
+          MontoIVAUSD: round2((it.precioUSD * it.cantidad) * (it.tasaIva / 100)),
+          PrecioTotalUSD: round2((it.precioUSD * it.cantidad) * (1 + (it.tasaIva / 100))),
+          CuentaContable: it.codcontable || '120505001',
+          Cuenta: it.nombreCuenta || 'INVENTARIO DE SUMINISTROS',
+          SubCuenta: it.subcuenta || 'INVENTARIO',
+          Transaccion: 'Compra',
+          IdProducto: it.id || it.codigo || ''
+        };
+      })
+    };
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler((res) => {
+          UI.ocultarLoading();
+          if (res && res.status === 'success') {
+            let retHtml = '';
+            if (res.comprobanteRetencion || res.comprobanteRetencionISLR) {
+              retHtml = `<div style="margin-top:15px; padding:10px; background:#f0fdf4; border:1px solid #22c55e; border-radius:8px; text-align:left;">
+                           <h4 style="margin:0 0 10px 0; color:#166534;">✅ Comprobantes Generados</h4>`;
+              if (res.comprobanteRetencion) {
+                retHtml += `<p style="margin:5px 0;"><b>IVA N°:</b> ${res.comprobanteRetencion} 
+                            <button class="btn btn-sm btn-success ms-2" onclick="window.ModuloCompras.imprimirComprobanteRetencion('${res.comprobanteRetencion}', 'IVA')"><i class="fas fa-print"></i> Imprimir</button></p>`;
+              }
+              if (res.comprobanteRetencionISLR) {
+                retHtml += `<p style="margin:5px 0;"><b>ISLR N°:</b> ${res.comprobanteRetencionISLR} 
+                            <button class="btn btn-sm btn-success ms-2" onclick="window.ModuloCompras.imprimirComprobanteRetencion('${res.comprobanteRetencionISLR}', 'ISLR')"><i class="fas fa-print"></i> Imprimir</button></p>`;
+              }
+              retHtml += `</div>`;
+            }
+
+            Swal.fire({
+              title: 'Factura Guardada',
+              html: `<p>ID: ${res.idCompra} | Asiento: ${res.nroAsiento}</p> ${retHtml}`,
+              icon: 'success',
+              confirmButtonText: 'Aceptar'
+            }).then(() => {
+              limpiarFormulario(false);
+            });
+            
+          } else {
+            UI.toast.error(res?.message || 'Error al guardar');
+          }
+        })
+        .withFailureHandler((err) => {
+          UI.ocultarLoading();
+          UI.toast.error('Fallo del servidor: ' + err.message);
+        })
+        .guardarDatosFacturaCompras(payload);
+    } else {
+      UI.ocultarLoading();
+      UI.toast.exito('Modo local: Factura simulada guardada');
+      limpiarFormulario(false);
+    }
+  }
+
+  function buscarFactura() {
+    const nro = estado.nroFactura.trim();
+    if (!nro) {
+      UI.toast.advertencia('Escriba el número de factura a consultar.');
+      document.getElementById('txtNroFactura')?.focus();
+      return;
+    }
+
+    UI.loading('Consultando factura...', `Buscando comprobante N° ${nro}`);
+
+    google.script.run
+      .withSuccessHandler((res) => {
+        UI.ocultarLoading();
+        
+        // Si la factura se cargó con éxito, la mostramos en pantalla
+        if (res && res.status === 'success' && res.data) {
+          const d = res.data;
+          
+          // 1. Restaurar Proveedor y Documento
+          estado.proveedor.nombre = d.proveedor || '';
+          estado.proveedor.rif = d.rif || '';
+          estado.nroFactura = d.nroFactura || '';
+          estado.nroControl = d.nroControl || '';
+          estado.tipoDoc = String(d.tipoDoc || 'Factura').trim();
+          
+          // ✅ FIX: Forzar moneda y tasa si vienen nulas o inválidas
+          estado.moneda = d.moneda || 'Dolares';
+          estado.tasa = parseFloat(d.tasa) > 0 ? parseFloat(d.tasa) : 1;
+          
+          estado.fechaEmision = d.fechaEmision || new Date().toISOString().split('T')[0];
+          estado.fechaRegistro = d.fechaRegistro || new Date().toISOString().split('T')[0];
+          estado.descripcion = d.descripcion || '';
+          estado.facturaAfectada = d.nroFacturaAfectada || '';
+          
+          // 2. Restaurar Retenciones
+          estado.nroComprobanteRet = d.nroComprobanteRet || '';
+          estado.porcentajeRetencion = d.retencionIva > 0 ? 75 : 0; 
+          
+          estado.nroComprobanteRetISLR = d.nroComprobanteRetISLR || '';
+          estado.porcentajeRetencionISLR = d.retencionIslr > 0 ? 2 : 0; 
+          
+          estado.generarRetencionAuto = (d.retencionIva > 0 || d.retencionIslr > 0);
+
+          // 3. Reflejar en el DOM
+          document.getElementById('txtBuscarProveedor').value = estado.proveedor.nombre;
+          document.getElementById('txtRifProveedor').value = estado.proveedor.rif;
+          document.getElementById('txtNroFactura').value = estado.nroFactura;
+          document.getElementById('txtNroControl').value = estado.nroControl;
+          document.getElementById('selectTipoDoc').value = estado.tipoDoc;
+          
+          // ✅ FIX: Asignar fechas al DOM
+          document.getElementById('txtFechaEmision').value = estado.fechaEmision;
+          document.getElementById('txtFechaRegistro').value = estado.fechaRegistro;
+          
+          document.getElementById('txtDescripcion').value = estado.descripcion;
+          document.getElementById('txtFacturaAfectada').value = estado.facturaAfectada;
+          
+          document.getElementById('txtNroComprobanteRet').value = estado.nroComprobanteRet;
+          document.getElementById('txtNroComprobanteRetISLR').value = estado.nroComprobanteRetISLR;
+          document.getElementById('badgeEstadoDoc').textContent = `Factura #${estado.nroFactura}`;
+
+          // ✅ FIX: Reflejar Moneda y Tasa en el DOM
+          const selMoneda = document.getElementById('selectMoneda');
+          if (selMoneda) {
+            selMoneda.value = estado.moneda;
+            const inputTasa = document.getElementById('txtTasaCambio');
+            if (inputTasa) {
+              inputTasa.value = estado.tasa;
+              inputTasa.disabled = (estado.moneda === 'Bolivares');
+            }
+          }
+
+          const chkAuto = document.getElementById('chkGenerarRetencion');
+          if (chkAuto) chkAuto.checked = estado.generarRetencionAuto;
+          
+          const boxCheck = document.getElementById('boxCheckRetencion');
+          if (boxCheck) boxCheck.style.display = estado.generarRetencionAuto ? 'block' : 'none';
+          
+          // 4. Botones de impresión
+          const btnImprimirRet = document.getElementById('btnImprimirRet');
+          if (btnImprimirRet) {
+            if (estado.nroComprobanteRet) {
+              btnImprimirRet.style.display = 'block';
+              btnImprimirRet.setAttribute('onclick', `window.ModuloCompras.imprimirComprobanteRetencion('${estado.nroComprobanteRet}', 'IVA')`);
+            } else {
+              btnImprimirRet.style.display = 'none';
+            }
+          }
+
+          const btnImprimirRetISLR = document.getElementById('btnImprimirRetISLR');
+          if (btnImprimirRetISLR) {
+            if (estado.nroComprobanteRetISLR) {
+              btnImprimirRetISLR.style.display = 'block';
+              btnImprimirRetISLR.setAttribute('onclick', `window.ModuloCompras.imprimirComprobanteRetencion('${estado.nroComprobanteRetISLR}', 'ISLR')`);
+            } else {
+              btnImprimirRetISLR.style.display = 'none';
+            }
+          }
+
+          // 5. Restaurar Productos
+          estado.items = (d.items || []).map(function(it) {
+            return {
+              id: it.codigo || 'N/A',
+              codigo: it.codigo || 'N/A',
+              nombre: it.nombre,
+              cantidad: parseNumero(it.cantidad),
+              precioUSD: parseNumero(it.precioUSD),
+              tasaIva: parseNumero(it.tasaIva),
+              codcontable: it.codcontable || '',
+              nombreCuenta: it.nombreCuenta || 'INVENTARIO',
+              cuenta: 'INVENTARIO',
+              subcuenta: 'COMPRAS'
+            };
+          });
+
+          recalcularTotales();
+          render();
+          
+          UI.toast.exito('Factura cargada correctamente');
+
+          // ✅ NUEVO: Preguntar si desea anular
+          UI.toast.confirmar(
+            'Factura N° ' + d.nroFactura + ' encontrada. ¿Deseas ANULAR esta factura?',
+            'warning',
+            'Sí, Anular',
+            'Solo Ver',
+            (confirmado) => {
+              if (confirmado) {
+                ejecutarAnulacion(d.nroFactura);
+              }
+            }
+          );
+
+        } else {
+          UI.toast.advertencia(res && res.message ? res.message : 'Factura no encontrada.');
+        }
+      })
+      .withFailureHandler((err) => {
+        UI.ocultarLoading();
+        UI.toast.error('Error al consultar: ' + err.message);
+      })
+      .obtenerFacturaCompra(nro);
+  }
+  // =========================================================================
+  // 9. VISTA: LIBRO DE COMPRAS
+  // =========================================================================
+  function cambiarVista(vista) {
+    estado.vistaActiva = vista;
+    const vForm = document.getElementById('container-formulario-compras');
+    const vLibro = document.getElementById('container-libro-compras');
+    const tabForm = document.getElementById('tabBtnFormulario');
+    const tabLibro = document.getElementById('tabBtnLibro');
+    const botonera = document.getElementById('botoneraFlotante');
+
+    if (vista === 'libro') {
+      vForm?.classList.add('d-none');
+      vLibro?.classList.remove('d-none');
+      tabForm?.classList.remove('active');
+      tabLibro?.classList.add('active');
+      if (botonera) botonera.style.display = 'none';
+
+      const hoy = new Date();
+      const primerDia = new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString().split('T')[0];
+      const ultimoDia = hoy.toISOString().split('T')[0];
+
+      const fDesde = document.getElementById('filtroFechaDesdeLibro');
+      const fHasta = document.getElementById('filtroFechaHastaLibro');
+      if (fDesde && !fDesde.value) fDesde.value = primerDia;
+      if (fHasta && !fHasta.value) fHasta.value = ultimoDia;
+    } else {
+      vLibro?.classList.add('d-none');
+      vForm?.classList.remove('d-none');
+      tabLibro?.classList.remove('active');
+      tabForm?.classList.add('active');
+      render();
+    }
+  }
+
+  function consultarLibroCompras() {
+    const desde = document.getElementById('filtroFechaDesdeLibro').value;
+    const hasta = document.getElementById('filtroFechaHastaLibro').value;
+    const proveedor = document.getElementById('filtroProveedorLibro').value.trim();
+    const tipo = document.getElementById('filtroTipoDocLibro').value;
+
+    if (!desde || !hasta) {
+      UI.toast.advertencia('Seleccione el rango de fechas.');
+      return;
+    }
+
+    UI.loading('Generando Libro...', 'Procesando transacciones del período.');
+
+    google.script.run
+      .withSuccessHandler((data) => {
+        UI.ocultarLoading();
+        datosLibroCompras = Array.isArray(data) ? data : [];
+        renderTablaLibro();
+      })
+      .withFailureHandler((err) => {
+        UI.ocultarLoading();
+        UI.toast.error('Error al generar libro: ' + err.message);
+      })
+      .obtenerLibroCompras(desde, hasta, proveedor, tipo);
+  }
+
+  function renderTablaLibro() {
+    const tbody = document.getElementById('tbodyLibroCompras');
+    const panelResumen = document.getElementById('resumen-libro-compras');
+    const tablaCont = document.getElementById('tabla-libro-compras-container');
+
+    if (datosLibroCompras.length === 0) {
+      UI.toast.advertencia('No se encontraron transacciones en las fechas indicadas.');
+      panelResumen?.classList.add('d-none');
+      tablaCont?.classList.add('d-none');
+      return;
+    }
+
+    panelResumen?.classList.remove('d-none');
+    tablaCont?.classList.remove('d-none');
+
+    let tCompras = 0, tExento = 0, tBase = 0, tIva = 0, tRet = 0;
+
+    tbody.innerHTML = datosLibroCompras.map((f, i) => {
+      const esNC = f.tipoFacturaProveedor === 'NC';
+      const factor = esNC ? -1 : 1;
+
+      const total = parseNumero(f.total) * factor;
+      const exento = parseNumero(f.exentas) * factor;
+      const base = parseNumero(f.subTotal) * factor;
+      const iva = parseNumero(f.iva) * factor;
+      const ret = parseNumero(f.retencionIVA) * factor;
+
+      tCompras += total;
+      tExento += exento;
+      tBase += base;
+      tIva += iva;
+      tRet += ret;
+
+      return `
+        <tr>
+          <td class="text-center font-monospace">${i + 1}</td>
+          <td class="text-center">${f.fechaFacturaProveedor}</td>
+          <td class="text-center font-monospace">${f.rifProveedor || ''}</td>
+          <td class="text-truncate" style="max-width:180px;">${f.nombreProveedor || ''}</td>
+          <td class="text-center"><span class="badge ${esNC ? 'bg-danger' : 'bg-primary'}">${f.tipoFacturaProveedor}</span></td>
+          <td class="text-center fw-bold text-warning">${f.nroFacturaProveedor || ''}</td>
+          <td class="text-center font-monospace">${f.nroControlProveedor || '-'}</td>
+          <td class="text-center">${f.tipoFacturaProveedor === 'ND' ? f.nroFacturaProveedor : '-'}</td>
+          <td class="text-center">${esNC ? f.nroFacturaProveedor : '-'}</td>
+          <td class="text-center font-monospace">${f.nroFacturaAfectada || '-'}</td>
+          <td class="text-center font-monospace text-info">${f.nroComprobantes || '-'}</td>
+          <td class="text-end fw-bold">${formatMoney(total)}</td>
+          <td class="text-end text-purple">${formatMoney(exento)}</td>
+          <td class="text-end">${formatMoney(base)}</td>
+          <td class="text-center">${f.alicuota || 16}%</td>
+          <td class="text-end">${formatMoney(iva)}</td>
+          <td class="text-end text-danger">${formatMoney(ret)}</td>
+        </tr>
+      `;
+    }).join('');
+
+    document.getElementById('lblTotalLibroCompras').textContent = formatMoney(tCompras);
+    document.getElementById('lblTotalLibroExento').textContent = formatMoney(tExento);
+    document.getElementById('lblTotalLibroBase').textContent = formatMoney(tBase);
+    document.getElementById('lblTotalLibroIva').textContent = formatMoney(tIva);
+    document.getElementById('lblTotalLibroRetenido').textContent = formatMoney(tRet);
+
+    document.getElementById('resLibroDocs').textContent = datosLibroCompras.length;
+    document.getElementById('resLibroTotal').textContent = formatMoney(tCompras);
+    document.getElementById('resLibroBase').textContent = formatMoney(tBase);
+    document.getElementById('resLibroExento').textContent = formatMoney(tExento);
+    document.getElementById('resLibroIva').textContent = formatMoney(tIva);
+    document.getElementById('resLibroRetenido').textContent = formatMoney(tRet);
+  }
+
+// =========================================================================
+// 9.1 IMPRIMIR LIBRO DE COMPRAS (PDF vía HTML del backend)
+// =========================================================================
+function imprimirLibroCompras() {
+  const desde = document.getElementById('filtroFechaDesdeLibro').value;
+  const hasta = document.getElementById('filtroFechaHastaLibro').value;
+  const proveedor = document.getElementById('filtroProveedorLibro').value.trim();
+  const tipo = document.getElementById('filtroTipoDocLibro').value;
+
+  if (!desde || !hasta) {
+    UI.toast.advertencia('Seleccione el rango de fechas.');
+    return;
+  }
+
+  UI.loading('Generando Libro...', 'Preparando documento para imprimir.');
+
+  google.script.run
+    .withSuccessHandler(function(res) {
+      UI.ocultarLoading();
+      if (!res || !res.success) {
+        UI.toast.error(res && res.message ? res.message : 'No se pudo generar el libro.');
+        return;
+      }
+
+      var frame = document.getElementById('iframe-print-libro');
+      if (!frame) {
+        frame = document.createElement('iframe');
+        frame.id = 'iframe-print-libro';
+        frame.style.position = 'fixed';
+        frame.style.right = '0';
+        frame.style.bottom = '0';
+        frame.style.width = '0';
+        frame.style.height = '0';
+        frame.style.border = '0';
+        document.body.appendChild(frame);
+      }
+
+      try {
+        var doc = frame.contentWindow || frame.contentDocument;
+        if (doc.document) doc = doc.document;
+        doc.open();
+        doc.write(res.html);
+        doc.close();
+        setTimeout(function() {
+          try {
+            frame.contentWindow.focus();
+            frame.contentWindow.print();
+          } catch (e) {
+            var win = window.open('', '_blank');
+            if (win) {
+              win.document.write(res.html);
+              win.document.close();
+              setTimeout(function() { win.print(); }, 500);
+            }
+          }
+        }, 400);
+      } catch (e) {
+        UI.toast.error('Error al imprimir: ' + e.message);
+      }
+    })
+    .withFailureHandler(function(err) {
+      UI.ocultarLoading();
+      UI.toast.error('Error: ' + err.message);
+    })
+    .generarLibroComprasHTML(desde, hasta, proveedor, tipo);
+}
+
+// =========================================================================
+// 9.2 EXPORTAR LIBRO A EXCEL (descarga base64)
+// =========================================================================
+function exportarLibroCompras() {
+  const desde = document.getElementById('filtroFechaDesdeLibro').value;
+  const hasta = document.getElementById('filtroFechaHastaLibro').value;
+  const proveedor = document.getElementById('filtroProveedorLibro').value.trim();
+  const tipo = document.getElementById('filtroTipoDocLibro').value;
+
+  if (!desde || !hasta) {
+    UI.toast.advertencia('Seleccione el rango de fechas.');
+    return;
+  }
+
+  UI.loading('Generando Excel...', 'Preparando archivo para descargar.');
+
+  google.script.run
+    .withSuccessHandler(function(res) {
+      UI.ocultarLoading();
+      if (!res || !res.success) {
+        UI.toast.error(res && res.message ? res.message : 'No se pudo exportar.');
+        return;
+      }
+
+      try {
+        var byteCharacters = atob(res.base64);
+        var byteNumbers = new Array(byteCharacters.length);
+        for (var i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        var byteArray = new Uint8Array(byteNumbers);
+        var blob = new Blob([byteArray], { type: res.mimeType });
+        var url = URL.createObjectURL(blob);
+
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = res.nombreArchivo || 'Libro_Compras.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+
+        UI.toast.exito('Excel descargado correctamente.');
+      } catch (e) {
+        UI.toast.error('Error al descargar: ' + e.message);
+      }
+    })
+    .withFailureHandler(function(err) {
+      UI.ocultarLoading();
+      UI.toast.error('Error: ' + err.message);
+    })
+    .exportarLibroComprasExcel(desde, hasta, proveedor, tipo);
+}
+  // =========================================================================
+  // 10. CICLO DE VIDA (Mount / Unmount)
+  // =========================================================================
+
+  function bindEvents() {
+    if (eventsBound) return;
+    eventsBound = true;
+
+    const doc = document;
+
+    doc.getElementById('txtNroFactura')?.addEventListener('input', (e) => {
+      estado.nroFactura = e.target.value.trim();
+      sugerirDescripcion();
+      render();
+    });
+
+    doc.getElementById('txtNroControl')?.addEventListener('input', (e) => {
+      estado.nroControl = e.target.value.trim();
+      render();
+    });
+
+    doc.getElementById('txtFacturaAfectada')?.addEventListener('input', (e) => {
+      estado.facturaAfectada = e.target.value.trim();
+    });
+
+    doc.getElementById('selectTipoDoc')?.addEventListener('change', (e) => {
+      estado.tipoDoc = e.target.value;
+      sugerirDescripcion();
+      render();
+    });
+
+    doc.getElementById('selectMoneda')?.addEventListener('change', (e) => {
+      estado.moneda = e.target.value;
+      const opt = e.target.selectedOptions[0];
+      estado.tasa = opt ? parseNumero(opt.dataset.tasa) : 1;
+      const inputTasa = doc.getElementById('txtTasaCambio');
+      if (inputTasa) {
+        inputTasa.value = estado.tasa;
+        inputTasa.disabled = (estado.moneda === 'Bolivares');
+      }
+      recalcularTotales();
+      render();
+    });
+
+    doc.getElementById('txtTasaCambio')?.addEventListener('input', (e) => {
+      estado.tasa = parseNumero(e.target.value) || 1;
+      recalcularTotales();
+      render();
+    });
+
+    doc.getElementById('txtFechaEmision')?.addEventListener('change', (e) => {
+      estado.fechaEmision = e.target.value;
+      render();
+    });
+
+    doc.getElementById('txtFechaRegistro')?.addEventListener('change', (e) => {
+      estado.fechaRegistro = e.target.value;
+      render();
+    });
+
+    // LISTENER IVA
+    doc.getElementById('selectPorcentajeRetencion')?.addEventListener('change', (e) => {
+      estado.porcentajeRetencion = parseNumero(e.target.value);
+      const inputComp = doc.getElementById('txtNroComprobanteRet');
+      if (inputComp) {
+        inputComp.disabled = (estado.porcentajeRetencion === 0);
+        if (estado.porcentajeRetencion === 0) {
+            inputComp.value = '';
+            estado.nroComprobanteRet = '';
+        } else if (!inputComp.value) {
+            inputComp.value = 'Generando...';
+            google.script.run.withSuccessHandler(function(corr) {
+                if (corr) { inputComp.value = corr; estado.nroComprobanteRet = corr; }
+                else { inputComp.value = ''; }
+            }).previewCorrelativoRetencionCompras('IVA');
+        }
+      }
+      recalcularTotales();
+      render();
+    });
+
+    // LISTENER ISLR
+    doc.getElementById('selectPorcentajeRetencionISLR')?.addEventListener('change', (e) => {
+      estado.porcentajeRetencionISLR = parseNumero(e.target.value);
+      const inputComp = doc.getElementById('txtNroComprobanteRetISLR');
+      if (inputComp) {
+        inputComp.disabled = (estado.porcentajeRetencionISLR === 0);
+        if (estado.porcentajeRetencionISLR === 0) {
+            inputComp.value = '';
+            estado.nroComprobanteRetISLR = '';
+        } else if (!inputComp.value) {
+            inputComp.value = 'Generando...';
+            google.script.run.withSuccessHandler(function(corr) {
+                if (corr) { inputComp.value = corr; estado.nroComprobanteRetISLR = corr; }
+                else { inputComp.value = ''; }
+            }).previewCorrelativoRetencionCompras('ISLR');
+        }
+      }
+      recalcularTotales();
+      render();
+    });
+
+    doc.getElementById('txtNroComprobanteRet')?.addEventListener('input', (e) => {
+      estado.nroComprobanteRet = e.target.value.trim();
+    });
+
+    doc.getElementById('txtNroComprobanteRetISLR')?.addEventListener('input', (e) => {
+      estado.nroComprobanteRetISLR = e.target.value.trim();
+    });
+
+    doc.getElementById('txtDescripcion')?.addEventListener('input', (e) => {
+      estado.descripcion = e.target.value;
+    });
+
+    doc.getElementById('btnAutoDesc')?.addEventListener('click', () => {
+      sugerirDescripcion();
+      render();
+    });
+
+    doc.getElementById('btnAgregarItem')?.addEventListener('click', agregarItem);
+    doc.getElementById('btnGuardarFactura')?.addEventListener('click', guardarFactura);
+    doc.getElementById('btnBuscarFactura')?.addEventListener('click', buscarFactura);
+    doc.getElementById('btnLimpiarFactura')?.addEventListener('click', () => limpiarFormulario(true));
+    doc.getElementById('btnImprimirLibro')?.addEventListener('click', imprimirLibroCompras);
+    doc.getElementById('btnExcelLibro')?.addEventListener('click', exportarLibroCompras);
+
+    // SWITCH MAESTRO DE RETENCIÓN
+    doc.getElementById('chkGenerarRetencion')?.addEventListener('change', (e) => {
+      estado.generarRetencionAuto = e.target.checked;
+      
+      const selPctIva = document.getElementById('selectPorcentajeRetencion');
+      const inpCompIva = document.getElementById('txtNroComprobanteRet');
+      const selPctIslr = document.getElementById('selectPorcentajeRetencionISLR');
+      const inpCompIslr = document.getElementById('txtNroComprobanteRetISLR');
+
+      if (estado.generarRetencionAuto) {
+          selPctIva.disabled = false;
+          selPctIslr.disabled = false;
+          
+          if (estado.porcentajeRetencion > 0) {
+              selPctIva.value = estado.porcentajeRetencion;
+              inpCompIva.disabled = false;
+              if (inpCompIva.value === '') {
+                  inpCompIva.value = 'Generando...';
+                  google.script.run.withSuccessHandler(function(corr) {
+                      if (corr) { inpCompIva.value = corr; estado.nroComprobanteRet = corr; }
+                  }).previewCorrelativoRetencionCompras('IVA');
+              }
+          }
+          
+          if (estado.porcentajeRetencionISLR > 0) {
+              selPctIslr.value = estado.porcentajeRetencionISLR;
+              inpCompIslr.disabled = false;
+              if (inpCompIslr.value === '') {
+                  inpCompIslr.value = 'Generando...';
+                  google.script.run.withSuccessHandler(function(corr) {
+                      if (corr) { inpCompIslr.value = corr; estado.nroComprobanteRetISLR = corr; }
+                  }).previewCorrelativoRetencionCompras('ISLR');
+              }
+          }
+      } else {
+          selPctIva.value = '0';
+          selPctIva.disabled = true;
+          inpCompIva.value = '';
+          inpCompIva.disabled = true;
+          estado.porcentajeRetencion = 0;
+          estado.nroComprobanteRet = '';
+
+          selPctIslr.value = '0';
+          selPctIslr.disabled = true;
+          inpCompIslr.value = '';
+          inpCompIslr.disabled = true;
+          estado.porcentajeRetencionISLR = 0;
+          estado.nroComprobanteRetISLR = '';
+      }
+
+      recalcularTotales();
+      render();
+    });
+
+    setupAutocompleteProveedores();
+    setupAutocompleteProductos();
+    
+    // ✅ FIX GLOBAL: Un solo listener para cerrar dropdowns, registrado en bindEvents
+    doc.addEventListener('click', cerrarDropdownsFuera);
+  }
+
+  // ✅ NUEVA FUNCIÓN: Cerrar dropdowns al hacer clic fuera
+  function cerrarDropdownsFuera(e) {
+    if (!e.target.closest('.dropdown-container')) {
+      document.getElementById('dropdownProveedores')?.classList.remove('show');
+      document.getElementById('dropdownProductos')?.classList.remove('show');
+    }
+  }
+
+  function mount() {
+    isMounted = true;
+    bindEvents();
+    
+    // ✅ FIX: Asignar fecha de hoy por defecto en los inputs del DOM
+    const hoy = new Date().toISOString().split('T')[0];
+    const inputFechaEmision = document.getElementById('txtFechaEmision');
+    const inputFechaRegistro = document.getElementById('txtFechaRegistro');
+    if (inputFechaEmision) inputFechaEmision.value = hoy;
+    if (inputFechaRegistro) inputFechaRegistro.value = hoy;
+    
+    // RECARGA LIMPIA: Al entrar se resetea todo a blanco
+    limpiarFormulario(false);
+    
+    cargarCatalogos();
+    render();
+    console.log('✅ [ModuloCompras] Montado y formulario limpio');
+  }
+
+  function unmount() {
+    isMounted = false;
+    document.getElementById('dropdownProveedores')?.classList.remove('show');
+    document.getElementById('dropdownProductos')?.classList.remove('show');
+    
+    // ✅ FIX: Remover el listener global al desmontar
+    document.removeEventListener('click', cerrarDropdownsFuera);
+    
+    limpiarFormulario(false);
+    console.log('🛑 [ModuloCompras] Desmontado limpiamente');
+  }
+
+  // =========================================================================
+  // 11. EXPOSICIÓN GLOBAL PÚBLICA (API del Módulo)
+  // =========================================================================
+  window.ModuloCompras = {
+    mount,
+    unmount,
+    cambiarVista,
+    agregarItem,
+    eliminarItem,
+    editarItem,
+    limpiarFormulario,
+    guardarFactura,
+    buscarFactura,
+    consultarLibroCompras,
+    imprimirLibroCompras,
+    exportarLibroCompras,
+    // Función para imprimir desde el frontend
+    imprimirComprobanteRetencion: function(nroComprobante, tipo) {
+      UI.loading('Generando Comprobante...', 'Preparando documento PDF/HTML.');
+      google.script.run
+        .withSuccessHandler((res) => {
+          UI.ocultarLoading();
+          if (res && res.html) {
+            const win = window.open('', '_blank');
+            win.document.write(res.html);
+            win.document.close();
+          } else {
+            UI.toast.error('No se pudo generar el comprobante.');
+          }
+        })
+        .withFailureHandler((err) => {
+          UI.ocultarLoading();
+          UI.toast.error('Error: ' + err.message);
+        })
+        .reimprimirComprobanteHistorial(nroComprobante, tipo, null);
+    }
+  };
+
+  window.initCargarFacturaCompras = function() {
+    if (window.ModuloCompras && typeof window.ModuloCompras.mount === 'function') {
+      window.ModuloCompras.mount();
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mount);
+  } else {
+    mount();
+  }
+
+})(window);
+
+</script>

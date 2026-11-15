@@ -1,0 +1,1988 @@
+<style>
+  .user-table-wrapper{overflow-x:auto}.user-table{width:100%;border-collapse:separate;border-spacing:0;font-size:.85rem;margin-bottom:0}.user-table thead th{background:linear-gradient(135deg,rgba(6,182,212,.15),rgba(59,130,246,.08));color:#7dd3fc;font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;padding:.9rem .6rem;border-bottom:1px solid rgba(56,189,248,.2);white-space:nowrap;position:sticky;top:0;z-index:10;text-align:center}.user-table thead th:first-child{border-top-left-radius:12px}.user-table thead th:last-child{border-top-right-radius:12px}.user-table tbody tr{transition:all .2s ease;border-bottom:1px solid rgba(56,189,248,.05)}.user-table tbody tr:hover{background:rgba(56,189,248,.05)}.user-table tbody td{padding:.75rem .6rem;color:#e2e8f0;vertical-align:middle;border-bottom:1px solid rgba(56,189,248,.05);text-align:center}.user-table .perm-icon-yes{color:#34d399;text-shadow:0 0 8px rgba(52,211,153,.4);font-size:1.05rem}.user-table .perm-icon-no{color:#64748b;opacity:.5;font-size:1.05rem}.user-table .role-badge{padding:.3rem .65rem;border-radius:20px;font-size:.7rem;font-weight:500;display:inline-block}.user-table .role-admin{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.2)}.user-table .role-owner{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.2)}.user-table .role-usuario{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.2)}.user-table .role-consulta{background:rgba(148,163,184,.15);color:#94a3b8;border:1px solid rgba(148,163,184,.2)}.user-table .role-vendedor{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.2)}.user-table .status-badge{padding:.25rem .55rem;border-radius:20px;font-size:.65rem;font-weight:500;display:inline-block}.user-table .status-activo{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.2)}.user-table .status-inactivo{background:rgba(100,116,139,.15);color:#94a3b8;border:1px solid rgba(100,116,139,.2)}.user-table .status-pendiente{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.2)}.user-cell-name{display:flex;flex-direction:column;gap:.15rem;align-items:flex-start;text-align:left}.user-cell-name .name-line{display:flex;align-items:center;gap:.35rem;font-weight:700;color:#e2e8f0;font-size:.85rem}.user-cell-name .sub-line{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap}.user-cell-name .username-line{font-size:.7rem;color:#94a3b8}.table-filters{display:flex;gap:.75rem;padding:1rem 1.5rem;flex-wrap:wrap;align-items:center;border-bottom:1px solid rgba(56,189,248,.1)}.table-filters input,.table-filters select{background:rgba(15,23,42,.6);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:.5rem .75rem;color:#e2e8f0;font-size:.85rem;min-width:150px}.table-filters input:focus,.table-filters select:focus{outline:0;border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.1)}.pagination-wrapper{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;flex-wrap:wrap;gap:1rem;border-top:1px solid rgba(56,189,248,.1)}.pagination-info{color:#94a3b8;font-size:.85rem}.pagination-controls{display:flex;gap:.25rem;align-items:center}.pagination-controls button{background:rgba(15,23,42,.6);border:1px solid rgba(56,189,248,.2);color:#e2e8f0;padding:.4rem .75rem;border-radius:8px;font-size:.85rem;cursor:pointer;transition:all .2s}.pagination-controls button:hover:not(:disabled){background:rgba(56,189,248,.15);border-color:rgba(34,211,238,.4)}.pagination-controls button:disabled{opacity:.4;cursor:not-allowed}.pagination-controls button.active{background:linear-gradient(135deg,#0891b2,#2563eb);border-color:transparent;color:#fff}.page-size-select{background:rgba(15,23,42,.6);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:.4rem .5rem;color:#e2e8f0;font-size:.85rem}.action-icons{display:flex;justify-content:center;gap:.35rem;flex-wrap:wrap}.action-btn-pill{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;font-size:.95rem;cursor:pointer;background:rgba(15,23,42,.6);border:1px solid rgba(56,189,248,.15);transition:all .25s cubic-bezier(.16,1,.3,1);color:#e2e8f0;padding:0}.action-btn-pill:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.3)}.action-btn-pill i{font-size:.95rem}.pill-ver{color:#60a5fa}.pill-ver:hover{background:rgba(59,130,246,.2);border-color:#3b82f6}.pill-edit{color:#fbbf24}.pill-edit:hover{background:rgba(245,158,11,.2);border-color:#f59e0b}.pill-pass{color:#34d399}.pill-pass:hover{background:rgba(16,185,129,.2);border-color:#10b981}.pill-key{color:#38bdf8}.pill-key:hover{background:rgba(56,189,248,.2);border-color:#0ea5e9}.pill-delete{color:#f87171}.pill-delete:hover{background:rgba(239,68,68,.2);border-color:#ef4444}.pill-unlock{color:#a78bfa}.pill-unlock:hover{background:rgba(167,139,250,.2);border-color:#8b5cf6}.btn-close-white{filter:invert(1) grayscale(100%) brightness(200%);opacity:.7}.btn-close-white:hover{opacity:1}.user-avatar-circle{background:linear-gradient(135deg,rgba(6,182,212,.2),rgba(59,130,246,.2))!important;border:2px solid rgba(34,211,238,.3);box-shadow:0 0 30px rgba(34,211,238,.2)}.list-group-item{background:transparent!important;border-color:rgba(56,189,248,.1)!important;color:#e2e8f0!important;padding:.75rem 0!important}.list-group-item strong{color:#7dd3fc;font-weight:600}.list-group-item span{color:#cbd5e1}.perm-granted{color:#34d399;text-shadow:0 0 10px rgba(52,211,153,.4)}.perm-denied{color:#f87171;opacity:.6}::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:rgba(15,23,42,.5)}::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#0891b2,#2563eb);border-radius:4px}::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#22d3ee,#3b82f6)}@keyframes slideInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.glass-card{animation:slideInUp .6s ease-out}.glass-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(34,211,238,.5),transparent);transition:left .8s}.glass-card:hover::before{left:100%}@keyframes fadeInRow{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}.user-table tbody tr{animation:fadeInRow .3s ease-out}.spinner-border.text-primary{color:#22d3ee!important;border-width:.25em}.text-primary{color:#22d3ee!important}.text-muted{color:#94a3b8!important}.text-danger{color:#f87171!important}#loadingOverlayUsuarios{background:rgba(15,23,42,.95);position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:none;flex-direction:column;justify-content:center;align-items:center;color:#22d3ee;transition:opacity .5s}#loadingOverlayUsuarios .spinner{width:50px;height:50px;border:4px solid rgba(34,211,238,.2);border-radius:50%;border-top-color:#22d3ee;animation:spin .8s linear infinite;margin-bottom:15px}@keyframes spin{to{transform:rotate(360deg)}}#overlayUsuario{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);z-index:9999;backdrop-filter:blur(8px);justify-content:center;align-items:center}#overlayUsuario>div{color:#e2e8f0;font-size:20px;text-align:center}.modal-content{background:rgba(15,23,42,.95)!important;backdrop-filter:blur(24px);border:1px solid rgba(56,189,248,.15)!important;border-radius:24px!important;color:#e2e8f0}.modal-header{border-bottom:1px solid rgba(56,189,248,.1)!important;background:linear-gradient(135deg,rgba(6,182,212,.08) 0%,transparent 100%);border-radius:24px 24px 0 0!important}.modal-footer{border-top:1px solid rgba(56,189,248,.1)!important}.fila-activo{background:rgba(16,185,129,.06)!important}.fila-activo:hover td{background:rgba(16,185,129,.12)!important}.fila-inactivo{background:rgba(239,68,68,.06)!important}.fila-inactivo:hover td{background:rgba(239,68,68,.12)!important}.fila-pendiente{background:rgba(245,158,11,.06)!important}.fila-pendiente:hover td{background:rgba(245,158,11,.12)!important}.badge-bloqueado{background:rgba(239,68,68,.2);color:#f87171;padding:.15rem .45rem;border-radius:10px;font-size:.62rem;font-weight:600;border:1px solid rgba(239,68,68,.3);white-space:nowrap;display:inline-flex;align-items:center;gap:.2rem}.badge-intentos{background:rgba(245,158,11,.2);color:#fbbf24;padding:.15rem .45rem;border-radius:10px;font-size:.62rem;font-weight:600;border:1px solid rgba(245,158,11,.3);white-space:nowrap;display:inline-flex;align-items:center;gap:.2rem}.perm-grid-mobile{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}.swal-perm-list{max-height:340px;overflow-y:auto;padding-right:.25rem}.swal-perm-list .form-check{padding:.5rem .5rem .5rem 2.2rem;border-radius:8px;background:rgba(30,41,59,.4);border:1px solid rgba(56,189,248,.08);margin-bottom:.4rem}.swal-perm-list .form-check-input{margin-left:-1.7rem;margin-top:.15rem}.swal-perm-list .form-check-label{font-size:.82rem;width:100%}.user-swipe-indicator{position:fixed;top:50%;transform:translateY(-50%) scale(.8);width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#0891b2,#2563eb);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;z-index:99999;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;box-shadow:0 4px 16px rgba(37,99,235,.5)}
+  .user-swipe-indicator.left{left:16px}.user-swipe-indicator.right{right:16px}.user-swipe-indicator.visible{opacity:1;transform:translateY(-50%) scale(1)}.user-swipe-indicator.pulse{animation:userSwipePulse .4s ease}@keyframes userSwipePulse{0%{transform:translateY(-50%) scale(1)}50%{transform:translateY(-50%) scale(1.15)}100%{transform:translateY(-50%) scale(1)}}.user-table tbody tr.user-swipe-active{transform:scale(.98);box-shadow:0 2px 8px rgba(0,0,0,.3)!important;transition:transform .1s ease,box-shadow .1s ease}.bottom-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:100000;opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease;display:flex;align-items:flex-end;justify-content:center}.bottom-sheet-overlay.active{opacity:1;visibility:visible}.bottom-sheet{background:linear-gradient(180deg,rgba(15,23,42,.98) 0%,rgba(15,23,42,.95) 100%);border:1px solid rgba(56,189,248,.2);border-bottom:none;border-radius:24px 24px 0 0;width:100%;max-width:600px;max-height:92vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .35s cubic-bezier(.16,1,.3,1);box-shadow:0 -8px 40px rgba(0,0,0,.5);color:#e2e8f0;position:relative;overflow:hidden}.bottom-sheet.active{transform:translateY(0)}.bottom-sheet.dragging{transition:none}.bottom-sheet-handle{width:48px;height:5px;background:rgba(148,163,184,.5);border-radius:3px;margin:12px auto 8px;cursor:grab;flex-shrink:0;transition:background .2s}.bottom-sheet-handle:hover{background:rgba(148,163,184,.8)}.bottom-sheet.dragging .bottom-sheet-handle{cursor:grabbing;background:#22d3ee}.bottom-sheet-header{padding:.75rem 1.25rem 1rem;border-bottom:1px solid rgba(56,189,248,.12);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:linear-gradient(135deg,rgba(6,182,212,.08),transparent)}.bottom-sheet-header h3{font-size:1.1rem;font-weight:700;margin:0;color:#e2e8f0;display:flex;align-items:center;gap:.5rem}.bottom-sheet-header h3 i{color:#22d3ee}.bottom-sheet-close{background:rgba(148,163,184,.15);border:none;width:34px;height:34px;border-radius:50%;color:#94a3b8;cursor:pointer;font-size:1.15rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}.bottom-sheet-close:hover,.bottom-sheet-close:active{background:rgba(239,68,68,.25);color:#f87171}.bottom-sheet-body{flex:1;padding:1.25rem;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.bottom-sheet-body::-webkit-scrollbar{width:6px}.bottom-sheet-body::-webkit-scrollbar-track{background:rgba(15,23,42,.5)}.bottom-sheet-body::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#0891b2,#2563eb);border-radius:3px}.bottom-sheet-footer{padding:1rem 1.25rem;border-top:1px solid rgba(56,189,248,.12);background:rgba(15,23,42,.98);display:flex;gap:.75rem;flex-shrink:0;position:sticky;bottom:0}.bottom-sheet-footer button{flex:1;height:48px;border-radius:12px;font-weight:600;font-size:.95rem;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;transition:all .2s}.bottom-sheet-footer .btn-sheet-cancel{background:rgba(100,116,139,.2);color:#94a3b8;border:1px solid rgba(100,116,139,.3)}.bottom-sheet-footer .btn-sheet-cancel:hover{background:rgba(100,116,139,.35);color:#cbd5e1}.bottom-sheet-footer .btn-sheet-confirm{background:linear-gradient(135deg,#0891b2,#2563eb);color:#fff}.bottom-sheet-footer .btn-sheet-confirm:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(37,99,235,.4)}.bottom-sheet-footer .btn-sheet-danger{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff}.bottom-sheet-footer .btn-sheet-danger:hover{box-shadow:0 4px 16px rgba(220,38,38,.4)}.bottom-sheet-body .form-label{font-size:.8rem;font-weight:600;color:#7dd3fc;text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem;display:block}.bottom-sheet-body .form-control,.bottom-sheet-body .form-select{background:rgba(30,41,59,.6);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:.75rem .9rem;color:#e2e8f0;font-size:.9rem;width:100%;transition:all .2s;height:46px}.bottom-sheet-body .form-control:focus,.bottom-sheet-body .form-select:focus{outline:0;border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.15);background:rgba(30,41,59,.8)}.bottom-sheet-body .form-control:disabled{opacity:.5;cursor:not-allowed}.bottom-sheet-body .form-group{margin-bottom:1rem}.bottom-sheet-body .row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}.sheet-perm-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem}.sheet-perm-item{display:flex;align-items:center;gap:.65rem;padding:.7rem .85rem;background:rgba(30,41,59,.5);border:1px solid rgba(56,189,248,.1);border-radius:12px;cursor:pointer;transition:all .15s ease;user-select:none;-webkit-tap-highlight-color:transparent}.sheet-perm-item:active{transform:scale(.97);background:rgba(34,211,238,.1)}.sheet-perm-item.checked{background:rgba(16,185,129,.12);border-color:rgba(52,211,153,.4)}.sheet-perm-item input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:6px;border:2px solid rgba(148,163,184,.5);background:transparent;cursor:pointer;position:relative;flex-shrink:0;transition:all .2s}.sheet-perm-item input[type="checkbox"]:checked{background:linear-gradient(135deg,#10b981,#059669);border-color:#34d399}.sheet-perm-item input[type="checkbox"]:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;font-weight:900;font-size:.85rem;line-height:1}.sheet-perm-item label{font-size:.82rem;color:#cbd5e1;cursor:pointer;flex:1;line-height:1.2;margin:0}.sheet-perm-item.checked label{color:#34d399;font-weight:600}.sheet-user-hero{text-align:center;padding:1rem 0 1.5rem;border-bottom:1px solid rgba(56,189,248,.1);margin-bottom:1.25rem}.sheet-user-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,rgba(6,182,212,.25),rgba(59,130,246,.25));border:3px solid rgba(34,211,238,.4);display:inline-flex;align-items:center;justify-content:center;font-size:2.2rem;color:#22d3ee;margin-bottom:.75rem;box-shadow:0 0 30px rgba(34,211,238,.3)}.sheet-user-hero h4{font-size:1.25rem;font-weight:700;margin:0 0 .5rem;color:#e2e8f0}.sheet-user-hero .role-badge{font-size:.8rem;padding:.4rem .9rem}.sheet-info-list{list-style:none;padding:0;margin:0 0 1.25rem}.sheet-info-list li{display:flex;justify-content:space-between;align-items:center;padding:.75rem 0;border-bottom:1px solid rgba(56,189,248,.06);font-size:.88rem;gap:.75rem}.sheet-info-list li:last-child{border-bottom:none}.sheet-info-list li strong{color:#7dd3fc;font-weight:600;display:flex;align-items:center;gap:.5rem;flex-shrink:0}.sheet-info-list li span{color:#cbd5e1;text-align:right;word-break:break-word}.sheet-section-title{font-size:.8rem;font-weight:700;color:#7dd3fc;text-transform:uppercase;letter-spacing:.05em;margin:1.25rem 0 .75rem;display:flex;align-items:center;gap:.5rem}.sheet-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(56,189,248,.3),transparent)}.sheet-alert{padding:.875rem 1rem;border-radius:12px;font-size:.85rem;display:flex;align-items:flex-start;gap:.65rem;margin:1rem 0;line-height:1.4}.sheet-alert.danger{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5}.sheet-alert.warning{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#fcd34d}.sheet-alert.info{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#93c5fd}.sheet-alert i{font-size:1.1rem;flex-shrink:0;margin-top:.1rem}.pass-strength{margin-top:.5rem;display:flex;gap:.25rem;height:4px}.pass-strength-bar{flex:1;height:100%;border-radius:2px;background:rgba(148,163,184,.2);transition:background .2s}.pass-strength-bar.active-weak{background:#ef4444}.pass-strength-bar.active-medium{background:#f59e0b}.pass-strength-bar.active-strong{background:#10b981}.pass-strength-text{font-size:.72rem;margin-top:.35rem;color:#94a3b8;text-align:right}.user-ptr-indicator{position:fixed;top:0;left:50%;transform:translateX(-50%) translateY(-70px);width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#0891b2,#2563eb);color:#fff;display:flex;align-items:center;justify-content:center;z-index:99998;transition:transform .25s ease;box-shadow:0 4px 16px rgba(37,99,235,.5)}.user-ptr-indicator.visible{transform:translateX(-50%) translateY(12px)}.user-ptr-indicator.refreshing i{animation:spin .8s linear infinite}.user-ptr-indicator i{font-size:1.1rem}.user-swipe-boundary{position:fixed;top:50%;transform:translateY(-50%);padding:.75rem 1.25rem;background:rgba(15,23,42,.95);border:1px solid rgba(56,189,248,.3);border-radius:12px;color:#94a3b8;font-size:.8rem;font-weight:600;z-index:99999;opacity:0;pointer-events:none;transition:opacity .2s ease;display:flex;align-items:center;gap:.5rem;white-space:nowrap}.user-swipe-boundary.left{left:1rem}.user-swipe-boundary.right{right:1rem}.user-swipe-boundary.visible{opacity:1}.longpress-active{animation:longpressPop .35s ease;box-shadow:0 8px 32px rgba(34,211,238,.4)!important;border-color:rgba(34,211,238,.6)!important}.longpress-hold{animation:longpressHold .5s ease;transform:scale(.98)}@keyframes longpressHold{0%{transform:scale(1)}50%{transform:scale(.97)}100%{transform:scale(.98)}}@keyframes longpressPop{0%{transform:scale(.98)}50%{transform:scale(1.02)}100%{transform:scale(1)}}.longpress-ripple{position:fixed;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.4) 0%,rgba(34,211,238,0) 70%);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);animation:longpressRipple .6s ease-out forwards}@keyframes longpressRipple{0%{width:0;height:0;opacity:.8}100%{width:200px;height:200px;opacity:0}}.context-menu{position:fixed;background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(15,23,42,.95));border:1px solid rgba(56,189,248,.25);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(34,211,238,.15);z-index:100001;min-width:220px;max-width:280px;overflow:hidden;opacity:0;transform:scale(.85);transform-origin:var(--origin,center);transition:opacity .2s ease,transform .2s cubic-bezier(.16,1,.3,1);backdrop-filter:blur(20px)}.context-menu.active{opacity:1;transform:scale(1)}.context-menu-header{padding:.85rem 1rem;background:linear-gradient(135deg,rgba(6,182,212,.15),rgba(59,130,246,.08));border-bottom:1px solid rgba(56,189,248,.15);display:flex;align-items:center;gap:.6rem}.context-menu-header .cm-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,rgba(6,182,212,.3),rgba(59,130,246,.3));border:2px solid rgba(34,211,238,.4);display:flex;align-items:center;justify-content:center;color:#22d3ee;font-size:1rem;flex-shrink:0}.context-menu-header .cm-info{flex:1;min-width:0}.context-menu-header .cm-username{font-size:.9rem;font-weight:700;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.context-menu-header .cm-nombre{font-size:.72rem;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.context-menu-list{list-style:none;padding:.35rem;margin:0;max-height:60vh;overflow-y:auto}.context-menu-item{display:flex;align-items:center;gap:.75rem;padding:.75rem .85rem;border-radius:10px;cursor:pointer;transition:all .15s ease;user-select:none;-webkit-tap-highlight-color:transparent;color:#e2e8f0;font-size:.88rem;font-weight:500;border:none;background:transparent;width:100%;text-align:left;font-family:inherit}.context-menu-item i{font-size:1.15rem;width:22px;text-align:center;flex-shrink:0}.context-menu-item:active{transform:scale(.97)}.context-menu-item:hover{background:rgba(56,189,248,.1)}.context-menu-item.cm-ver{color:#60a5fa}.context-menu-item.cm-ver:hover{background:rgba(59,130,246,.15)}.context-menu-item.cm-edit{color:#fbbf24}.context-menu-item.cm-edit:hover{background:rgba(245,158,11,.15)}.context-menu-item.cm-pass{color:#34d399}.context-menu-item.cm-pass:hover{background:rgba(16,185,129,.15)}.context-menu-item.cm-unlock{color:#a78bfa}.context-menu-item.cm-unlock:hover{background:rgba(167,139,250,.15)}.context-menu-item.cm-copy{color:#38bdf8}.context-menu-item.cm-copy:hover{background:rgba(56,189,248,.15)}.context-menu-item.cm-delete{color:#f87171}.context-menu-item.cm-delete:hover{background:rgba(239,68,68,.15)}.context-menu-item.cm-delete:active{background:rgba(239,68,68,.25)}.context-menu-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(56,189,248,.2),transparent);margin:.35rem .5rem;list-style:none}.context-menu-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(2px);z-index:100000;opacity:0;transition:opacity .2s ease;pointer-events:none}.context-menu-backdrop.active{opacity:1;pointer-events:auto}.longpress-hint{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);padding:.6rem 1.1rem;background:rgba(15,23,42,.95);border:1px solid rgba(56,189,248,.3);border-radius:20px;color:#7dd3fc;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.5rem;z-index:99997;opacity:0;pointer-events:none;transition:all .3s ease;box-shadow:0 4px 16px rgba(0,0,0,.4)}.longpress-hint.visible{opacity:1;transform:translateX(-50%) translateY(0)}.longpress-hint i{font-size:1rem;color:#22d3ee}@media (max-width:768px){.table-filters{flex-direction:column;padding:.875rem 1rem;gap:.6rem}.table-filters input,.table-filters select{min-width:100%;font-size:.9rem;padding:.7rem .85rem}.table-filters #botonesUsuario{display:grid!important;grid-template-columns:repeat(4,1fr);gap:.5rem;width:100%}.table-filters #botonesUsuario .btn-dynamic{padding:.7rem .4rem;font-size:.75rem;justify-content:center;flex-direction:column;gap:.3rem;min-width:0;min-height:66px}.table-filters #botonesUsuario .btn-dynamic .btn-text{max-width:none!important;opacity:1!important;font-size:.68rem;margin:0!important;text-align:center;line-height:1.1}.table-filters #botonesUsuario .btn-dynamic .btn-text span{display:inline!important}
+  .table-filters #botonesUsuario .btn-dynamic i{font-size:1.2rem}.user-table-wrapper{overflow-x:visible;padding:.75rem}.user-table{display:block;font-size:.85rem;min-width:0!important}.user-table thead{display:none}.user-table tbody{display:block}.user-table tbody tr{display:block!important;background:linear-gradient(135deg,rgba(15,23,42,.85),rgba(30,41,59,.7));border:1px solid rgba(56,189,248,.15);border-radius:16px;margin-bottom:.875rem;padding:1rem;box-shadow:0 4px 16px rgba(0,0,0,.25);transition:all .2s ease;animation:fadeInRow .3s ease-out;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}.user-table tbody tr:active{transform:scale(.985)}.user-table tbody tr::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#22d3ee,#3b82f6);opacity:.7}.user-table tbody tr.fila-activo::before{background:linear-gradient(90deg,#34d399,#10b981)}.user-table tbody tr.fila-inactivo::before{background:linear-gradient(90deg,#f87171,#ef4444)}.user-table tbody tr.fila-pendiente::before{background:linear-gradient(90deg,#fbbf24,#f59e0b)}.user-table tbody td{display:flex!important;justify-content:space-between;align-items:center;padding:.35rem 0!important;border-bottom:1px dashed rgba(56,189,248,.08)!important;text-align:right!important;font-size:.8rem;white-space:normal}.user-table tbody td:last-child{border-bottom:none!important}.user-table tbody td::before{content:attr(data-label);font-weight:600;color:#7dd3fc;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;text-align:left;padding-right:.5rem;flex-shrink:0}.user-table tbody td:not([data-label])::before{display:none}.user-table tbody td[data-mobile="header"]{display:block!important;padding:0 0 .875rem 0!important;border-bottom:1px solid rgba(56,189,248,.15)!important;margin-bottom:.65rem;text-align:left!important}.user-table tbody td[data-mobile="header"]::before{display:none}.user-table tbody td[data-mobile="header"] .user-cell-header{display:flex;align-items:flex-start;gap:.75rem;width:100%;text-align:left}.user-table tbody td[data-mobile="header"] .user-avatar-mini{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,rgba(6,182,212,.25),rgba(59,130,246,.25));border:2px solid rgba(34,211,238,.35);display:flex;align-items:center;justify-content:center;color:#22d3ee;font-size:1.15rem;flex-shrink:0;box-shadow:0 0 16px rgba(34,211,238,.25)}.user-table tbody td[data-mobile="header"] .user-cell-info{flex:1;min-width:0}.user-table tbody td[data-mobile="header"] .user-cell-info strong{display:block;color:#e2e8f0;font-size:1rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.user-table tbody td[data-mobile="header"] .user-cell-info small{display:block;color:#94a3b8;font-size:.72rem;margin-top:.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.user-table tbody td[data-mobile="header"] .user-cell-badges{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem}.user-table tbody td[data-mobile="perms-summary"]{display:flex!important;justify-content:space-between!important;align-items:center;padding:.4rem 0!important;border-bottom:1px dashed rgba(56,189,248,.08)!important}.user-table tbody td[data-mobile="perms-summary"] .perms-count{display:inline-flex;align-items:center;gap:.35rem;font-size:.75rem;color:#22d3ee;font-weight:600;background:rgba(34,211,238,.1);padding:.2rem .55rem;border-radius:12px;border:1px solid rgba(34,211,238,.2)}.user-table tbody td[data-mobile="actions"]{display:flex!important;justify-content:flex-end!important;gap:.4rem;padding:.75rem 0 0 0!important;border-bottom:none!important;border-top:1px solid rgba(56,189,248,.12)!important;margin-top:.4rem}.user-table tbody td[data-mobile="actions"]::before{display:none}.user-table tbody td[data-mobile="actions"] .action-icons{display:flex;justify-content:flex-end;gap:.45rem;width:100%}.user-table tbody td[data-mobile="actions"] .action-btn-pill{width:40px;height:40px;border-radius:12px;padding:0}.user-table tbody td[data-mobile="actions"] .action-btn-pill i{font-size:1.1rem}.user-table tbody td[data-mobile="actions"] .action-btn-pill:active{background:rgba(34,211,238,.15)!important;transform:scale(.92)}.user-table tbody td.perm-toggle{display:none!important}.user-table tbody td[data-mobile="id-cell"]{display:none!important}.user-table tbody td[colspan]{display:block!important;text-align:center!important;padding:2.5rem 1rem!important;border:none!important}.user-table tbody td[colspan]::before{display:none}.pagination-wrapper{flex-direction:column;align-items:stretch;text-align:center;padding:.875rem 1rem}.pagination-wrapper>div:last-child{flex-direction:column;gap:.6rem}.pagination-controls{justify-content:center;flex-wrap:wrap}.page-size-select{width:100%}.pagination-info{font-size:.78rem}.perm-grid-mobile{grid-template-columns:1fr}.swal-perm-list{max-height:280px}.swal2-popup{width:94%!important;padding:1rem!important}.swal2-title{font-size:1.1rem!important}.swal2-html-container{margin:.5rem 0!important}.swal2-actions{gap:.5rem!important;flex-direction:column-reverse!important;width:100%!important}.swal2-actions button{width:100%!important;margin:0!important}}@media (min-width:769px){.bottom-sheet-overlay{display:none!important}.user-table tbody td[data-mobile="header"],.user-table tbody td[data-mobile="perms-summary"]{display:none!important}}@media (max-width:480px){.user-table tbody td[data-mobile="header"] .user-avatar-mini{width:42px;height:42px;font-size:1rem}.user-table tbody td[data-mobile="header"] .user-cell-info strong{font-size:.95rem}.table-filters #botonesUsuario{grid-template-columns:repeat(3,1fr)}.user-table tbody td[data-mobile="actions"] .action-btn-pill{width:38px;height:38px}.context-menu{min-width:200px;max-width:calc(100vw - 2rem)}}@media (min-width:769px) and (max-width:1024px){.table-filters{gap:.5rem}.table-filters input,.table-filters select{min-width:130px;font-size:.8rem}.action-btn-pill{width:30px;height:30px}.action-btn-pill i{font-size:.85rem}}@media print{body{background:#fff!important}.glass-card{background:#fff!important;backdrop-filter:none!important;border:1px solid #ddd!important;box-shadow:none!important}.glass-header{background:#001f3f!important;border-bottom:2px solid #001f3f!important}.glass-header h5{color:#fff!important}.user-table thead th{background:#001f3f!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.user-table tbody td{color:#333!important;border-bottom:1px solid #ddd!important}#botonesUsuario,.table-filters,.pagination-wrapper,.theme-toggle,.action-btn-pill,.context-menu,.context-menu-backdrop,.longpress-hint{display:none!important}}
+
+</style>
+
+<!-- Loading Overlay específico -->
+<div id="loadingOverlayUsuarios"><div class="spinner"></div><p>Cargando usuarios...</p></div>
+
+<!-- Overlay para cargas -->
+<div id="overlayUsuario"><div><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Procesando, por favor espere...</p></div></div>
+
+<!-- Main Content -->
+<div class="container-fluid py-4">
+    <div class="card glass-card">
+        <!-- Header -->
+        <div class="card-header glass-header d-flex justify-content-between align-items-center flex-wrap gap-3"><h5 class="mb-0 fw-bold fs-4"><i class="bi bi-people-fill me-2 text-primary"></i>Gestión de Usuarios</h5></div>
+
+        <div class="card-body p-0">
+            <!-- Filtros -->
+            <div class="table-filters">
+                <input type="text" id="filter-username" placeholder="🔍 Filtrar Username..." oninput="window.userPageScope.aplicarFiltros()">
+                <input type="text" id="filter-nombre" placeholder="🔍 Filtrar Nombre..." oninput="window.userPageScope.aplicarFiltros()">
+                <select id="filter-rol" onchange="window.userPageScope.aplicarFiltros()">
+                    <option value="">Todos los Roles</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Usuario">Usuario</option>
+                    <option value="Consulta">Consulta</option>
+                    <option value="Owner">Owner</option>
+                </select>
+                <select id="filter-status" onchange="window.userPageScope.aplicarFiltros()">
+                    <option value="">Todos los Status</option>
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                    <option value="Pendiente">Pendiente</option>
+                </select>
+
+                <div id="botonesUsuario" class="d-flex gap-2 flex-wrap">
+                    <button type="button" class="btn-dynamic" onclick="window.userPageScope.abrirModalAgregar()" title="Nuevo Usuario"><i class="bi bi-person-plus-fill"></i><span class="btn-text ms-1"><span>Nuevo</span></span></button>
+                    <button type="button" class="btn-dynamic" onclick="window.userPageScope.abrirModalCorreo()" title="Enviar Correo"><i class="bi bi-envelope-fill"></i><span class="btn-text ms-1"><span>Correo</span></span></button>
+                    <button type="button" class="btn-dynamic" id="download-xlsx-usuarios" title="Exportar XLSX"><i class="bi bi-file-earmark-excel-fill"></i><span class="btn-text ms-1"><span>XLSX</span></span></button>
+                    <button type="button" class="btn-dynamic" id="download-pdf-usuarios" title="Exportar PDF"><i class="bi bi-file-earmark-pdf-fill"></i><span class="btn-text ms-1"><span>PDF</span></span></button>
+                    <button type="button" class="btn-dynamic" id="print-table-usuarios" title="Imprimir"><i class="bi bi-printer-fill"></i><span class="btn-text ms-1"><span>Imprimir</span></span></button>
+                    <button type="button" class="btn-dynamic" onclick="window.userPageScope.recargarUsuarios()" title="Actualizar"><i class="bi bi-arrow-clockwise"></i><span class="btn-text ms-1"><span>Actualizar</span></span></button>
+                    <button type="button" class="btn-dynamic" onclick="window.userPageScope.limpiarFiltros()" title="Limpiar filtros"><i class="bi bi-x-circle-fill"></i><span class="btn-text ms-1"><span>Limpiar</span></span></button>
+                </div>
+
+            </div>
+
+            <!-- Tabla -->
+            <div class="user-table-wrapper">
+                <table class="user-table" id="user-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre / Usuario</th>
+                            <th>Correo</th>
+                            <th class="text-center">Acciones</th>
+                            <th class="text-center" title="Acceso">Acceso</th>
+                            <th class="text-center" title="Fact. Compra">Fact. Compra</th>
+                            <th class="text-center" title="Plan Ctas">Plan Ctas</th>
+                            <th class="text-center" title="Gest. Users">Gest. Users</th>
+                            <th class="text-center" title="Fact. Ventas">Fact. Ventas</th>
+                            <th class="text-center" title="Clientes">Clientes</th>
+                            <th class="text-center" title="Proveedores">Proveedores</th>
+                            <th class="text-center" title="Productos">Productos</th>
+                            <th class="text-center" title="Lista Fact.">Lista Fact.</th>
+                            <th class="text-center" title="Contabil.">Contabil.</th>
+                            <th class="text-center" title="Cobrar/Pagar">Cobrar/Pagar</th>
+                            <th class="text-center" title="Bancos">Bancos</th>
+                            <th class="text-center" title="Pedidos">Pedidos</th>
+                            <th class="text-center" title="Asientos">Asientos</th>
+                            <th class="text-center" title="Pagos Prov.">Pagos Prov.</th>
+                            <th class="text-center" title="Ajuste Inv.">Ajuste Inv.</th>
+                            <th class="text-center" title="CXC/CXP">CXC/CXP</th>
+                            <th class="text-center" title="Impuestos">Impuestos</th>
+                            <th class="text-center" title="Reportes">Reportes</th>
+                            <th class="text-center" title="Compras Mas.">Compras Mas.</th>
+                            <th class="text-center" title="Perfil">Perfil</th>
+                            <th class="text-center" title="Pedidos Vendedor">Pedidos Vend.</th>
+                            <th class="text-center" title="empresaConfig">Configuracion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-table-body">
+                        <!-- Filas generadas por JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="pagination-wrapper">
+                <div class="pagination-info" id="pagination-info">Mostrando 0 de 0 registros</div>
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <select class="page-size-select" id="page-size" onchange="window.userPageScope.cambiarPageSize()">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <div class="pagination-controls" id="pagination-controls">
+                        <!-- Botones generados por JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(){
+  'use strict';
+
+  // ============================================================
+  // VARIABLES GLOBALES
+  // ============================================================
+  let usuariosData = [];
+  let usuariosFiltrados = [];
+  let currentPage = 1;
+  let pageSize = 10;
+
+  // 21 permisos (agregados: perfil, pedidosVendedor)
+  const permissionFields = [
+    "usuario",
+    "cargarFacturaCompra",
+    "cuentaContableLista",
+    "usuariosLista",
+    "cargarFacturaVentas",
+    "clientesLista",
+    "proveedoresLista",
+    "productosLista",
+    "facturasLista",
+    "contabilizacion",
+    "cobrarYpagar",
+    "bancosCajas",
+    "pedidos",
+    "asientos",
+    "pagosProveedores",
+    "ajusteInventario",
+    "cxcycxp",
+    "impuestos",
+    "reportes",
+    "comprasMasiva",
+    "perfil",
+    "pedidosVendedor",
+    "empresaConfig"
+  ];
+
+  const permissionLabels = {
+    "usuario": "Acceso",
+    "cargarFacturaCompra": "Fact. Compra",
+    "cuentaContableLista": "Plan Ctas",
+    "usuariosLista": "Gest. Users",
+    "cargarFacturaVentas": "Fact. Ventas",
+    "clientesLista": "Clientes",
+    "proveedoresLista": "Proveedores",
+    "productosLista": "Productos",
+    "facturasLista": "Lista Fact.",
+    "contabilizacion": "Contabil.",
+    "cobrarYpagar": "Cobrar/Pagar",
+    "bancosCajas": "Bancos",
+    "pedidos": "Pedidos",
+    "asientos": "Asientos",
+    "pagosProveedores": "Pagos Prov.",
+    "ajusteInventario": "Ajuste Inv.",
+    "cxcycxp": "CXC/CXP",
+    "impuestos": "Impuestos",
+    "reportes": "Reportes",
+    "comprasMasiva": "Compras Mas.",
+    "perfil": "Perfil",
+    "pedidosVendedor": "Pedidos Vend."
+    "empresaConfig": "Configuracion",
+  };
+
+  // ============================================================
+  // HELPERS
+  // ============================================================
+  function getToken() {
+    try {
+      const u = JSON.parse(sessionStorage.getItem('userData') || '{}');
+      return u.token || '';
+    } catch (e) { return ''; }
+  }
+
+  function getUserRole() {
+    try {
+      const u = JSON.parse(sessionStorage.getItem('userData') || '{}');
+      return (u.role || '').toLowerCase();
+    } catch (e) { return ''; }
+  }
+
+  function esCorreoValido(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function escapeHtml(str) {
+    const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'};
+    return String(str || '').replace(/[&<>"']/g, c => map[c]);
+  }
+
+  function mostrarToast(titulo, mensaje, tipo, duracion) {
+    tipo = tipo || 'success';
+    duracion = duracion || 3000;
+    Swal.fire({
+      icon: tipo,
+      title: titulo,
+      text: mensaje,
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: duracion,
+      timerProgressBar: true,
+      background: 'rgba(15, 23, 42, 0.95)',
+      color: '#e2e8f0'
+    });
+  }
+
+  function mostrarOverlay(mostrar) {
+    const o = document.getElementById('overlayUsuario');
+    if (o) o.style.display = mostrar ? 'flex' : 'none';
+  }
+
+  function mostrarLoadingUsuarios(mostrar) {
+    const o = document.getElementById('loadingOverlayUsuarios');
+    if (o) o.style.display = mostrar ? 'flex' : 'none';
+  }
+
+  function isMobileViewport() {
+    return window.innerWidth <= 768;
+  }
+
+  function shouldUseBottomSheet() {
+    return isMobileViewport();
+  }
+
+  // ============================================================
+  // RENDER TABLA
+  // ============================================================
+  function renderTabla() {
+    const tbody = document.getElementById('user-table-body');
+    if (!tbody) return;
+
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    const visibles = usuariosFiltrados.slice(start, end);
+
+    if (visibles.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="25" class="text-center py-5 text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            No hay usuarios para mostrar.
+          </td>
+        </tr>`;
+      renderPagination();
+      updatePaginationInfo();
+      return;
+    }
+
+    const rolActual = getUserRole();
+    const puedeDesbloquear = (rolActual === 'admin' || rolActual === 'owner');
+
+    tbody.innerHTML = visibles.map(function(u, idx) {
+      const username = escapeHtml(u.username || '');
+      const roleClass = `role-${(u.role || '').toLowerCase()}`;
+      const statusClass = `status-${(u.status || '').toLowerCase()}`;
+      const filaClass = `fila-${(u.status || '').toLowerCase()}`;
+
+      const estaBloqueado = (u.bloqueado === true || u.bloqueado === 'TRUE' || u.bloqueado === 'true');
+      const intentos = parseInt(u.intentosFallidos || 0);
+
+      const permisosActivos = permissionFields.filter(f => u[f]).length;
+
+      // Badges de estado (bloqueado / intentos)
+      let badgesExtra = '';
+      if (estaBloqueado) {
+        badgesExtra += `<span class="badge-bloqueado"><i class="bi bi-lock-fill"></i>BLOQUEADO</span>`;
+      } else if (intentos > 0) {
+        badgesExtra += `<span class="badge-intentos"><i class="bi bi-exclamation-triangle-fill"></i>${intentos}</span>`;
+      }
+
+      // Columna unificada "Nombre / Usuario"
+      const nombreCompletoHTML = `
+        <div class="user-cell-name">
+          <div class="name-line">
+            <i class="bi bi-person-circle" style="color:#22d3ee;font-size:.95rem;"></i>
+            <span>${escapeHtml(u.nombre || 'Sin nombre')}</span>
+          </div>
+          <div class="sub-line">
+            <span class="username-line">@${username}</span>
+          </div>
+          <div class="sub-line" style="margin-top:.15rem;">
+            <span class="role-badge ${roleClass}">${u.role || ''}</span>
+            <span class="status-badge ${statusClass}">${u.status || ''}</span>
+            ${badgesExtra}
+          </div>
+        </div>
+      `;
+
+      // Permisos desktop (21 columnas)
+      const permisosDesktopHTML = permissionFields.map(function(campo) {
+        const tiene = u[campo];
+        const icono = tiene
+          ? '<i class="bi bi-check-circle-fill perm-icon-yes"></i>'
+          : '<i class="bi bi-x-circle-fill perm-icon-no"></i>';
+        return `<td class="text-center perm-toggle" data-label="${permissionLabels[campo]}" onclick="window.userPageScope.togglePermiso('${u.idUsuario}','${campo}',this)" title="Clic para ${tiene?'denegar':'conceder'}" style="cursor:pointer;">${icono}</td>`;
+      }).join('');
+
+      // Botones de acción (solo iconos, sin labels)
+      const btnEliminar = u.role !== 'Owner'
+        ? `<button type="button" class="action-btn-pill pill-delete" onclick="event.stopPropagation();window.userPageScope.borrarUsuarioModal('${u.idUsuario}','${username}')" title="Eliminar"><i class="bi bi-trash"></i></button>`
+        : '';
+
+      const btnDesbloquear = (estaBloqueado && puedeDesbloquear)
+        ? `<button type="button" class="action-btn-pill pill-unlock" onclick="event.stopPropagation();window.userPageScope.desbloquearUsuario('${u.idUsuario}','${username}')" title="Desbloquear"><i class="bi bi-unlock-fill"></i></button>`
+        : '';
+
+      return `
+        <tr class="${filaClass}" data-user-id="${u.idUsuario}" data-username="${username}" style="animation-delay: ${0.03 * idx}s">
+
+          <!-- HEADER MÓVIL (nombre + username + rol + status) -->
+          <td data-mobile="header" data-label="">
+            <div class="user-cell-header">
+              <div class="user-avatar-mini"><i class="bi bi-person-fill"></i></div>
+              <div class="user-cell-info">
+                <strong>${escapeHtml(u.nombre || 'Sin nombre')}</strong>
+                <small>@${username}</small>
+                <div class="user-cell-badges">
+                  <span class="role-badge ${roleClass}">${u.role || ''}</span>
+                  <span class="status-badge ${statusClass}">${u.status || ''}</span>
+                  ${badgesExtra}
+                </div>
+              </div>
+            </div>
+          </td>
+
+          <!-- Nombre / Usuario unificado (desktop) -->
+          <td data-label="Nombre / Usuario">${nombreCompletoHTML}</td>
+
+          <!-- Correo -->
+          <td data-label="Correo" style="font-size:.78rem;color:#94a3b8;">${escapeHtml(u.correo || '-')}</td>
+
+          <!-- Acciones (solo iconos) -->
+          <td data-mobile="actions" data-label="Acciones">
+            <div class="action-icons">
+              <button type="button" class="action-btn-pill pill-ver" onclick="event.stopPropagation();window.userPageScope.verUsuarioModal('${u.idUsuario}')" title="Ver detalles"><i class="bi bi-eye"></i></button>
+              <button type="button" class="action-btn-pill pill-edit" onclick="event.stopPropagation();window.userPageScope.editarUsuarioModal('${u.idUsuario}')" title="Editar"><i class="bi bi-pencil-square"></i></button>
+              <button type="button" class="action-btn-pill pill-pass" onclick="event.stopPropagation();window.userPageScope.editarPasswordModal('${u.idUsuario}')" title="Cambiar contraseña"><i class="bi bi-key-fill"></i></button>
+              ${btnDesbloquear}
+              ${btnEliminar}
+            </div>
+          </td>
+
+          <!-- Resumen de permisos (solo móvil) -->
+          <td data-mobile="perms-summary" data-label="Permisos">
+            <span style="color:#94a3b8;font-size:.75rem;"><i class="bi bi-shield-check me-1"></i>Accesos</span>
+            <span class="perms-count"><i class="bi bi-check2-circle"></i>${permisosActivos} / ${permissionFields.length}</span>
+          </td>
+
+          <!-- 21 columnas de permisos (solo desktop) -->
+          ${permisosDesktopHTML}
+        </tr>`;
+    }).join('');
+
+    renderPagination();
+    updatePaginationInfo();
+  }
+
+  function renderPagination() {
+    const totalPaginas = Math.ceil(usuariosFiltrados.length / pageSize) || 1;
+    const el = document.getElementById('pagination-controls');
+    if (!el) return;
+
+    let html = '';
+    html += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="window.userPageScope.irPagina(1)"><i class="bi bi-chevron-double-left"></i></button>`;
+    html += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="window.userPageScope.irPagina(${currentPage-1})"><i class="bi bi-chevron-left"></i></button>`;
+
+    const startP = Math.max(1, currentPage - 2);
+    const endP = Math.min(totalPaginas, startP + 4);
+    for (let i = startP; i <= endP; i++) {
+      html += `<button class="${i === currentPage ? 'active' : ''}" onclick="window.userPageScope.irPagina(${i})">${i}</button>`;
+    }
+
+    html += `<button ${currentPage === totalPaginas ? 'disabled' : ''} onclick="window.userPageScope.irPagina(${currentPage+1})"><i class="bi bi-chevron-right"></i></button>`;
+    html += `<button ${currentPage === totalPaginas ? 'disabled' : ''} onclick="window.userPageScope.irPagina(${totalPaginas})"><i class="bi bi-chevron-double-right"></i></button>`;
+
+    el.innerHTML = html;
+  }
+
+  function updatePaginationInfo() {
+    const total = usuariosFiltrados.length;
+    const start = total === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+    const end = Math.min(currentPage * pageSize, total);
+    const info = document.getElementById('pagination-info');
+    if (info) info.textContent = `Mostrando ${start} - ${end} de ${total} registros`;
+  }
+
+  // ============================================================
+  // FETCH DATA
+  // ============================================================
+  function fetchUsuariosData() {
+    mostrarLoadingUsuarios(true);
+    const token = getToken();
+    if (!token) {
+      mostrarLoadingUsuarios(false);
+      mostrarToast('Error', 'Sesión expirada', 'error');
+      return;
+    }
+
+    google.script.run
+      .withSuccessHandler(function(data) {
+        usuariosData = Array.isArray(data) ? data.map(function(item) {
+          const user = Object.assign({}, item);
+          permissionFields.forEach(function(field) {
+            user[field] = (item[field] === 'X' || item[field] === true || item[field] === 'TRUE');
+          });
+          user.bloqueado = (item.bloqueado === true || item.bloqueado === 'TRUE' || item.bloqueado === 'true');
+          user.intentosFallidos = parseInt(item.intentosFallidos || 0);
+          return user;
+        }) : [];
+
+        usuariosFiltrados = usuariosData.slice();
+        renderTabla();
+        mostrarLoadingUsuarios(false);
+      })
+      .withFailureHandler(function(error) {
+        const tbody = document.getElementById('user-table-body');
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="25" class="text-center py-5 text-danger">
+                <i class="bi bi-exclamation-triangle fs-1 d-block mb-2"></i>
+                Error al cargar datos: ${error.message || 'Desconocido'}
+              </td>
+            </tr>`;
+        }
+        mostrarLoadingUsuarios(false);
+      })
+      .getDataPlanusuarios();
+  }
+
+  // ============================================================
+  // EXPORTAR
+  // ============================================================
+  function exportarXLSX() {
+    if (typeof XLSX === 'undefined') {
+      mostrarToast('Error', 'Librería XLSX no disponible', 'error');
+      return;
+    }
+    const data = usuariosFiltrados.map(function(u) {
+      const base = {
+        ID: u.idUsuario,
+        Username: u.username,
+        Nombre: u.nombre,
+        Correo: u.correo,
+        Telefono: u.telefono,
+        Rol: u.role,
+        Status: u.status,
+        Bloqueado: u.bloqueado ? 'SÍ' : 'NO',
+        IntentosFallidos: u.intentosFallidos || 0
+      };
+      permissionFields.forEach(function(f) {
+        base[permissionLabels[f]] = u[f] ? 'Sí' : 'No';
+      });
+      return base;
+    });
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Usuarios");
+    XLSX.writeFile(wb, "usuarios.xlsx");
+    mostrarToast('Éxito', 'Archivo XLSX generado');
+  }
+
+  async function exportarPDF() {
+    if (typeof html2canvas === 'undefined' || typeof jspdf === 'undefined') {
+      mostrarToast('Error', 'Librerías PDF no disponibles', 'error');
+      return;
+    }
+    try {
+      mostrarOverlay(true);
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape' });
+      const table = document.getElementById('user-table');
+      const canvas = await html2canvas(table, { scale: 2, backgroundColor: '#0f172a' });
+      const imgData = canvas.toDataURL('image/png');
+      const props = doc.getImageProperties(imgData);
+      const pdfW = doc.internal.pageSize.getWidth();
+      const pdfH = (props.height * pdfW) / props.width;
+      doc.addImage(imgData, 'PNG', 0, 10, pdfW, pdfH);
+      doc.save('usuarios.pdf');
+      mostrarToast('Éxito', 'PDF generado');
+    } catch (e) {
+      mostrarToast('Error', 'No se pudo generar PDF', 'error');
+    } finally {
+      mostrarOverlay(false);
+    }
+  }
+
+  function imprimirTabla() {
+    const win = window.open('', '_blank');
+    const html = document.getElementById('user-table').outerHTML;
+    win.document.write(`
+      <html><head><title>Usuarios</title>
+      <style>
+        body{font-family:Arial,sans-serif;padding:20px;}
+        table{width:100%;border-collapse:collapse;font-size:11px;}
+        th,td{border:1px solid #ccc;padding:6px;text-align:left;}
+        th{background:#0891b2;color:#fff;}
+        .perm-icon-yes{color:#10b981;}
+        .perm-icon-no{color:#64748b;}
+        .badge-bloqueado{background:#fee;color:#c00;padding:2px 6px;border-radius:8px;font-size:10px;}
+      </style></head><body>${html}</body></html>
+    `);
+    win.document.close();
+    win.focus();
+    setTimeout(() => { win.print(); win.close(); }, 250);
+  }
+
+  // ============================================================
+  // BOTTOM-SHEET NATIVO
+  // ============================================================
+  let activeSheet = null;
+
+  function openBottomSheet(opts) {
+    if (!isMobileViewport()) return null;
+
+    closeBottomSheet();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'bottom-sheet-overlay';
+    overlay.innerHTML = `
+      <div class="bottom-sheet" role="dialog" aria-modal="true">
+        <div class="bottom-sheet-handle"></div>
+        <div class="bottom-sheet-header">
+          <h3><i class="bi ${opts.icon || 'bi-window'}"></i> ${opts.title || ''}</h3>
+          <button class="bottom-sheet-close" aria-label="Cerrar"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="bottom-sheet-body">${opts.bodyHTML || ''}</div>
+        <div class="bottom-sheet-footer">
+          <button class="btn-sheet-cancel">${opts.cancelText || 'Cancelar'}</button>
+          <button class="btn-sheet-confirm ${opts.confirmType === 'danger' ? 'btn-sheet-danger' : ''}">${opts.confirmText || 'Guardar'}</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    const sheet = overlay.querySelector('.bottom-sheet');
+    const handle = overlay.querySelector('.bottom-sheet-handle');
+    const closeBtn = overlay.querySelector('.bottom-sheet-close');
+    const cancelBtn = overlay.querySelector('.btn-sheet-cancel');
+    const confirmBtn = overlay.querySelector('.btn-sheet-confirm');
+
+    requestAnimationFrame(() => {
+      overlay.classList.add('active');
+      requestAnimationFrame(() => sheet.classList.add('active'));
+    });
+
+    let dragState = { startY: 0, currentY: 0, dragging: false };
+
+    function onDragStart(e) {
+      const touch = e.touches ? e.touches[0] : e;
+      dragState.startY = touch.clientY;
+      dragState.currentY = touch.clientY;
+      dragState.dragging = true;
+      sheet.classList.add('dragging');
+    }
+
+    function onDragMove(e) {
+      if (!dragState.dragging) return;
+      const touch = e.touches ? e.touches[0] : e;
+      dragState.currentY = touch.clientY;
+      const dy = dragState.currentY - dragState.startY;
+      if (dy > 0) {
+        sheet.style.transform = `translateY(${dy}px)`;
+      }
+    }
+
+    function onDragEnd() {
+      if (!dragState.dragging) return;
+      dragState.dragging = false;
+      sheet.classList.remove('dragging');
+      const dy = dragState.currentY - dragState.startY;
+
+      if (dy > 120) {
+        closeBottomSheet();
+      } else {
+        sheet.style.transform = '';
+      }
+    }
+
+    [handle, overlay.querySelector('.bottom-sheet-header')].forEach(el => {
+      el.addEventListener('touchstart', onDragStart, { passive: true });
+      el.addEventListener('touchmove', onDragMove, { passive: true });
+      el.addEventListener('touchend', onDragEnd);
+      el.addEventListener('mousedown', onDragStart);
+    });
+    document.addEventListener('mousemove', onDragMove);
+    document.addEventListener('mouseup', onDragEnd);
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeBottomSheet();
+    });
+
+    function close() {
+      if (opts.onClose) opts.onClose();
+      closeBottomSheet();
+    }
+
+    closeBtn.addEventListener('click', close);
+    cancelBtn.addEventListener('click', () => {
+      if (opts.onCancel) opts.onCancel();
+      closeBottomSheet();
+    });
+    confirmBtn.addEventListener('click', () => {
+      if (opts.onConfirm) {
+        const result = opts.onConfirm(sheet);
+        if (result === false) return;
+      }
+      closeBottomSheet();
+    });
+
+    activeSheet = { overlay, sheet, opts };
+    return activeSheet;
+  }
+
+  function closeBottomSheet() {
+    if (!activeSheet) return;
+    const { overlay, sheet } = activeSheet;
+    sheet.classList.remove('active');
+    overlay.classList.remove('active');
+    setTimeout(() => {
+      overlay.remove();
+      if (!document.querySelector('.bottom-sheet-overlay')) {
+        document.body.style.overflow = '';
+      }
+    }, 320);
+    activeSheet = null;
+  }
+
+  window.userPageScope_bottomSheet = { open: openBottomSheet, close: closeBottomSheet };
+
+  // ============================================================
+  // SWIPE GESTURES
+  // ============================================================
+  const SWIPE = {
+    minDistance: 70,
+    maxVerticalDev: 80,
+    timeLimit: 600
+  };
+
+  let swipeState = { startX: 0, startY: 0, startTime: 0, tracking: false, row: null, direction: null };
+  let swipeIndicatorEl = null;
+  let swipeBoundaryEl = null;
+
+  function getSwipeIndicator(dir) {
+    if (!swipeIndicatorEl) {
+      swipeIndicatorEl = document.createElement('div');
+      swipeIndicatorEl.className = 'user-swipe-indicator';
+      document.body.appendChild(swipeIndicatorEl);
+    }
+    swipeIndicatorEl.className = 'user-swipe-indicator ' + dir;
+    swipeIndicatorEl.innerHTML = dir === 'left'
+      ? '<i class="bi bi-chevron-left"></i>'
+      : '<i class="bi bi-chevron-right"></i>';
+    return swipeIndicatorEl;
+  }
+
+  function showSwipeIndicator(dir) {
+    const el = getSwipeIndicator(dir);
+    void el.offsetWidth;
+    el.classList.add('visible');
+  }
+
+  function hideSwipeIndicator() {
+    if (swipeIndicatorEl) swipeIndicatorEl.classList.remove('visible');
+  }
+
+  function showSwipeBoundary(text, side) {
+    if (!swipeBoundaryEl) {
+      swipeBoundaryEl = document.createElement('div');
+      swipeBoundaryEl.className = 'user-swipe-boundary';
+      document.body.appendChild(swipeBoundaryEl);
+    }
+    swipeBoundaryEl.className = 'user-swipe-boundary ' + side;
+    swipeBoundaryEl.innerHTML = `<i class="bi bi-info-circle"></i> ${text}`;
+    void swipeBoundaryEl.offsetWidth;
+    swipeBoundaryEl.classList.add('visible');
+    clearTimeout(swipeBoundaryEl._hideTimer);
+    swipeBoundaryEl._hideTimer = setTimeout(() => {
+      swipeBoundaryEl.classList.remove('visible');
+    }, 1200);
+  }
+
+  function handleSwipeStart(e) {
+    if (!isMobileViewport()) return;
+    if (activeSheet) return;
+    if (longPressState.pressed) return;
+
+    const touch = e.touches ? e.touches[0] : e;
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (['input', 'select', 'textarea', 'button', 'a'].includes(tag)) return;
+    if (e.target.closest('input, select, textarea, button, a, .action-btn-pill')) return;
+
+    swipeState.startX = touch.clientX;
+    swipeState.startY = touch.clientY;
+    swipeState.startTime = Date.now();
+    swipeState.tracking = true;
+    swipeState.direction = null;
+    swipeState.row = e.target.closest('.user-table tbody tr');
+  }
+
+  function handleSwipeMove(e) {
+    if (!swipeState.tracking) return;
+    if (longPressState.pressed) { swipeState.tracking = false; return; }
+
+    const touch = e.touches ? e.touches[0] : e;
+    const dx = touch.clientX - swipeState.startX;
+    const dy = touch.clientY - swipeState.startY;
+
+    if (!swipeState.direction) {
+      if (Math.abs(dx) > 12 || Math.abs(dy) > 12) {
+        if (Math.abs(dx) > Math.abs(dy) * 1.5) {
+          swipeState.direction = 'horizontal';
+        } else {
+          swipeState.direction = 'vertical';
+        }
+      }
+    }
+
+    if (swipeState.direction !== 'horizontal') return;
+    if (Math.abs(dy) > SWIPE.maxVerticalDev) {
+      swipeState.tracking = false;
+      hideSwipeIndicator();
+      return;
+    }
+
+    if (Math.abs(dx) > 20) {
+      if (e.cancelable) e.preventDefault();
+
+      if (dx < -20) {
+        showSwipeIndicator('right');
+      } else if (dx > 20) {
+        showSwipeIndicator('left');
+      }
+
+      if (swipeState.row) {
+        const resistance = 0.25;
+        const maxT = 40;
+        const t = Math.max(-maxT, Math.min(maxT, dx * resistance));
+        swipeState.row.style.transform = `translateX(${t}px)`;
+        swipeState.row.classList.add('user-swipe-active');
+      }
+    }
+  }
+
+  function handleSwipeEnd(e) {
+    if (!swipeState.tracking) return;
+
+    const touch = e.changedTouches ? e.changedTouches[0] : e;
+    const dx = touch.clientX - swipeState.startX;
+    const dy = touch.clientY - swipeState.startY;
+    const dt = Date.now() - swipeState.startTime;
+
+    if (swipeState.row) {
+      swipeState.row.style.transform = '';
+      swipeState.row.classList.remove('user-swipe-active');
+    }
+
+    hideSwipeIndicator();
+
+    const totalPaginas = Math.ceil(usuariosFiltrados.length / pageSize) || 1;
+    const isValid = Math.abs(dx) >= SWIPE.minDistance &&
+                    Math.abs(dy) <= SWIPE.maxVerticalDev &&
+                    dt <= SWIPE.timeLimit &&
+                    swipeState.direction === 'horizontal';
+
+    if (isValid) {
+      if (dx < 0) {
+        if (currentPage < totalPaginas) {
+          currentPage++;
+          renderTabla();
+          if (swipeIndicatorEl) swipeIndicatorEl.classList.add('pulse');
+          setTimeout(() => swipeIndicatorEl && swipeIndicatorEl.classList.remove('pulse'), 400);
+        } else {
+          showSwipeBoundary('Última página', 'right');
+        }
+      } else {
+        if (currentPage > 1) {
+          currentPage--;
+          renderTabla();
+          if (swipeIndicatorEl) swipeIndicatorEl.classList.add('pulse');
+          setTimeout(() => swipeIndicatorEl && swipeIndicatorEl.classList.remove('pulse'), 400);
+        } else {
+          showSwipeBoundary('Primera página', 'left');
+        }
+      }
+    }
+
+    swipeState.tracking = false;
+    swipeState.direction = null;
+    swipeState.row = null;
+  }
+
+  function initSwipeGestures() {
+    document.addEventListener('touchstart', handleSwipeStart, { passive: true });
+    document.addEventListener('touchmove', handleSwipeMove, { passive: false });
+    document.addEventListener('touchend', handleSwipeEnd, { passive: true });
+    document.addEventListener('touchcancel', handleSwipeEnd, { passive: true });
+  }
+
+  // ============================================================
+  // PULL TO REFRESH
+  // ============================================================
+  function initPullToRefresh() {
+    let ptr = { startY: 0, pulling: false, triggered: false, el: null };
+
+    function getEl() {
+      if (!ptr.el) {
+        ptr.el = document.createElement('div');
+        ptr.el.className = 'user-ptr-indicator';
+        ptr.el.innerHTML = '<i class="bi bi-arrow-clockwise"></i>';
+        document.body.appendChild(ptr.el);
+      }
+      return ptr.el;
+    }
+
+    document.addEventListener('touchstart', (e) => {
+      if (!isMobileViewport() || activeSheet) return;
+      if (window.scrollY > 5) return;
+      ptr.startY = e.touches[0].clientY;
+      ptr.pulling = true;
+      ptr.triggered = false;
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!ptr.pulling || !isMobileViewport() || activeSheet) return;
+      const dy = e.touches[0].clientY - ptr.startY;
+      if (dy > 60 && window.scrollY <= 5) {
+        const el = getEl();
+        el.classList.add('visible');
+        const icon = el.querySelector('i');
+        if (dy > 130) {
+          icon.style.transform = 'rotate(180deg)';
+          ptr.triggered = true;
+        } else {
+          icon.style.transform = `rotate(${dy}deg)`;
+        }
+      }
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => {
+      if (!ptr.pulling) return;
+      ptr.pulling = false;
+      const el = ptr.el;
+      if (!el) return;
+      if (ptr.triggered) {
+        el.classList.add('refreshing');
+        el.querySelector('i').style.transform = '';
+        mostrarToast('Actualizando...', 'Recargando lista de usuarios', 'info', 1500);
+        fetchUsuariosData();
+        setTimeout(() => {
+          el.classList.remove('visible', 'refreshing');
+          el.querySelector('i').style.transform = '';
+        }, 1200);
+      } else {
+        el.classList.remove('visible');
+      }
+      ptr.triggered = false;
+    }, { passive: true });
+  }
+
+  // ============================================================
+  // LONG-PRESS + MENÚ CONTEXTUAL
+  // ============================================================
+  const LONG_PRESS_DURATION = 500;
+  const LONG_PRESS_MOVE_TOLERANCE = 10;
+  const LONG_PRESS_HAPTIC = 15;
+
+  let longPressState = {
+    timer: null,
+    pressed: false,
+    startX: 0,
+    startY: 0,
+    row: null,
+    userId: null,
+    username: null,
+    fired: false
+  };
+
+  let contextMenuEl = null;
+  let contextMenuBackdropEl = null;
+  let longPressHintEl = null;
+  let longPressHintShown = false;
+
+  function vibrate(ms) {
+    try {
+      if (navigator.vibrate) navigator.vibrate(ms);
+    } catch (e) {}
+  }
+
+  function getLongPressHint() {
+    if (!longPressHintEl) {
+      longPressHintEl = document.createElement('div');
+      longPressHintEl.className = 'longpress-hint';
+      longPressHintEl.innerHTML = '<i class="bi bi-hand-index-thumb-fill"></i> Mantén presionado para opciones';
+      document.body.appendChild(longPressHintEl);
+    }
+    return longPressHintEl;
+  }
+
+  function showLongPressHint() {
+    if (longPressHintShown) return;
+    longPressHintShown = true;
+    const el = getLongPressHint();
+    el.classList.add('visible');
+    setTimeout(() => el.classList.remove('visible'), 3500);
+  }
+
+  function createRipple(x, y) {
+    const ripple = document.createElement('div');
+    ripple.className = 'longpress-ripple';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 650);
+  }
+
+  function getContextMenuBackdrop() {
+    if (!contextMenuBackdropEl) {
+      contextMenuBackdropEl = document.createElement('div');
+      contextMenuBackdropEl.className = 'context-menu-backdrop';
+      contextMenuBackdropEl.addEventListener('click', closeContextMenu);
+      contextMenuBackdropEl.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        closeContextMenu();
+      }, { passive: false });
+      document.body.appendChild(contextMenuBackdropEl);
+    }
+    return contextMenuBackdropEl;
+  }
+
+  function closeContextMenu() {
+    if (contextMenuEl) {
+      contextMenuEl.classList.remove('active');
+      const el = contextMenuEl;
+      setTimeout(() => el.remove(), 220);
+      contextMenuEl = null;
+    }
+    if (contextMenuBackdropEl) {
+      contextMenuBackdropEl.classList.remove('active');
+    }
+    if (longPressState.row) {
+      longPressState.row.classList.remove('longpress-active', 'longpress-hold');
+    }
+    longPressState.pressed = false;
+    longPressState.row = null;
+    longPressState.userId = null;
+    longPressState.username = null;
+  }
+
+  function openContextMenu(x, y, user) {
+    closeContextMenu();
+
+    const rolActual = getUserRole();
+    const puedeDesbloquear = (rolActual === 'admin' || rolActual === 'owner');
+    const estaBloqueado = user.bloqueado;
+
+    const menu = document.createElement('div');
+    menu.className = 'context-menu';
+
+    const items = [];
+
+    items.push(`<button class="context-menu-item cm-ver" data-action="ver"><i class="bi bi-eye-fill"></i><span>Ver detalles</span></button>`);
+    items.push(`<button class="context-menu-item cm-edit" data-action="edit"><i class="bi bi-pencil-square"></i><span>Editar usuario</span></button>`);
+    items.push(`<button class="context-menu-item cm-pass" data-action="pass"><i class="bi bi-key-fill"></i><span>Cambiar contraseña</span></button>`);
+
+    if (estaBloqueado && puedeDesbloquear) {
+      items.push(`<button class="context-menu-item cm-unlock" data-action="unlock"><i class="bi bi-unlock-fill"></i><span>Desbloquear</span></button>`);
+    }
+
+    items.push(`<li class="context-menu-divider"></li>`);
+    items.push(`<button class="context-menu-item cm-copy" data-action="copyUser"><i class="bi bi-clipboard"></i><span>Copiar username</span></button>`);
+    items.push(`<button class="context-menu-item cm-copy" data-action="copyId"><i class="bi bi-hash"></i><span>Copiar ID</span></button>`);
+
+    if (user.role !== 'Owner') {
+      items.push(`<li class="context-menu-divider"></li>`);
+      items.push(`<button class="context-menu-item cm-delete" data-action="delete"><i class="bi bi-trash-fill"></i><span>Eliminar usuario</span></button>`);
+    }
+
+    menu.innerHTML = `
+      <div class="context-menu-header">
+        <div class="cm-avatar"><i class="bi bi-person-fill"></i></div>
+        <div class="cm-info">
+          <div class="cm-username">${escapeHtml(user.username)}</div>
+          <div class="cm-nombre">${escapeHtml(user.nombre || 'Sin nombre')}</div>
+        </div>
+      </div>
+      <ul class="context-menu-list">${items.join('')}</ul>
+    `;
+
+    document.body.appendChild(menu);
+    const backdrop = getContextMenuBackdrop();
+    backdrop.classList.add('active');
+    contextMenuEl = menu;
+
+    const menuRect = menu.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const padding = 12;
+
+    let posX = x;
+    let posY = y;
+
+    if (posX + menuRect.width / 2 > vw - padding) {
+      posX = vw - menuRect.width / 2 - padding;
+    }
+    if (posX - menuRect.width / 2 < padding) {
+      posX = menuRect.width / 2 + padding;
+    }
+
+    if (posY + menuRect.height > vh - padding) {
+      posY = y - menuRect.height - 10;
+      menu.style.setProperty('--origin', 'bottom center');
+    } else {
+      posY = y + 10;
+      menu.style.setProperty('--origin', 'top center');
+    }
+    if (posY < padding) posY = padding;
+
+    menu.style.left = (posX - menuRect.width / 2) + 'px';
+    menu.style.top = posY + 'px';
+
+    requestAnimationFrame(() => menu.classList.add('active'));
+
+    menu.querySelectorAll('.context-menu-item').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const action = btn.dataset.action;
+        handleContextAction(action, user);
+        closeContextMenu();
+      });
+    });
+  }
+
+  function handleContextAction(action, user) {
+    const id = user.idUsuario;
+    const username = user.username;
+
+    switch (action) {
+      case 'ver': window.userPageScope.verUsuarioModal(id); break;
+      case 'edit': window.userPageScope.editarUsuarioModal(id); break;
+      case 'pass': window.userPageScope.editarPasswordModal(id); break;
+      case 'unlock': window.userPageScope.desbloquearUsuario(id, username); break;
+      case 'delete': window.userPageScope.borrarUsuarioModal(id, username); break;
+      case 'copyUser': copyToClipboard(username, 'Username copiado'); break;
+      case 'copyId': copyToClipboard(id, 'ID copiado'); break;
+      default: break;
+    }
+  }
+
+  function copyToClipboard(text, msg) {
+    const ok = () => mostrarToast('Copiado', msg || 'Texto copiado', 'success', 1800);
+    const fail = () => mostrarToast('Error', 'No se pudo copiar', 'error');
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(String(text)).then(ok).catch(() => {
+        fallbackCopy(text, ok, fail);
+      });
+    } else {
+      fallbackCopy(text, ok, fail);
+    }
+  }
+
+  function fallbackCopy(text, ok, fail) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = String(text);
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(ta);
+      success ? ok() : fail();
+    } catch (e) { fail(); }
+  }
+
+  function handleLongPressStart(e) {
+    if (!isMobileViewport()) return;
+    if (activeSheet) return;
+    if (contextMenuEl) closeContextMenu();
+
+    const touch = e.touches ? e.touches[0] : e;
+    const target = e.target;
+    const tag = (target.tagName || '').toLowerCase();
+
+    if (['input', 'select', 'textarea', 'button', 'a'].includes(tag)) return;
+    if (target.closest('.action-btn-pill, button, input, select, textarea, a')) return;
+
+    const row = target.closest('.user-table tbody tr');
+    if (!row) return;
+
+    const userId = row.dataset.userId;
+    if (!userId) return;
+    const user = usuariosData.find(u => String(u.idUsuario) === String(userId));
+    if (!user) return;
+
+    longPressState.startX = touch.clientX;
+    longPressState.startY = touch.clientY;
+    longPressState.row = row;
+    longPressState.userId = userId;
+    longPressState.username = user.username;
+    longPressState.pressed = false;
+    longPressState.fired = false;
+
+    row.classList.add('longpress-hold');
+
+    if (!longPressHintShown) {
+      const timerHint = setTimeout(() => {
+        if (!longPressState.pressed) showLongPressHint();
+      }, 250);
+      longPressState._hintTimer = timerHint;
+    }
+
+    longPressState.timer = setTimeout(() => {
+      if (longPressState.fired) return;
+      longPressState.fired = true;
+      longPressState.pressed = true;
+
+      if (longPressState._hintTimer) {
+        clearTimeout(longPressState._hintTimer);
+        longPressState._hintTimer = null;
+      }
+
+      vibrate(LONG_PRESS_HAPTIC);
+      createRipple(touch.clientX, touch.clientY);
+
+      row.classList.remove('longpress-hold');
+      row.classList.add('longpress-active');
+
+      setTimeout(() => {
+        openContextMenu(touch.clientX, touch.clientY, user);
+        row.classList.remove('longpress-active');
+      }, 120);
+
+    }, LONG_PRESS_DURATION);
+  }
+
+  function handleLongPressMove(e) {
+    if (!longPressState.timer) return;
+
+    const touch = e.touches ? e.touches[0] : e;
+    const dx = Math.abs(touch.clientX - longPressState.startX);
+    const dy = Math.abs(touch.clientY - longPressState.startY);
+
+    if (dx > LONG_PRESS_MOVE_TOLERANCE || dy > LONG_PRESS_MOVE_TOLERANCE) {
+      cancelLongPress();
+    }
+  }
+
+  function handleLongPressEnd() {
+    if (longPressState.timer) {
+      clearTimeout(longPressState.timer);
+      longPressState.timer = null;
+    }
+    if (longPressState._hintTimer) {
+      clearTimeout(longPressState._hintTimer);
+      longPressState._hintTimer = null;
+    }
+    if (longPressState.row) {
+      longPressState.row.classList.remove('longpress-hold');
+    }
+    setTimeout(() => {
+      longPressState.fired = false;
+      longPressState.pressed = false;
+    }, 50);
+  }
+
+  function cancelLongPress() {
+    if (longPressState.timer) {
+      clearTimeout(longPressState.timer);
+      longPressState.timer = null;
+    }
+    if (longPressState._hintTimer) {
+      clearTimeout(longPressState._hintTimer);
+      longPressState._hintTimer = null;
+    }
+    if (longPressState.row) {
+      longPressState.row.classList.remove('longpress-hold');
+    }
+    longPressState.fired = false;
+    longPressState.pressed = false;
+  }
+
+  function handleClickCapture(e) {
+    if (longPressState.fired) {
+      e.preventDefault();
+      e.stopPropagation();
+      longPressState.fired = false;
+      return false;
+    }
+  }
+
+  function initLongPress() {
+    document.addEventListener('touchstart', handleLongPressStart, { passive: true });
+    document.addEventListener('touchmove', handleLongPressMove, { passive: true });
+    document.addEventListener('touchend', handleLongPressEnd, { passive: true });
+    document.addEventListener('touchcancel', cancelLongPress, { passive: true });
+
+    document.addEventListener('mousedown', handleLongPressStart);
+    document.addEventListener('mousemove', handleLongPressMove);
+    document.addEventListener('mouseup', handleLongPressEnd);
+
+    document.addEventListener('click', handleClickCapture, true);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && contextMenuEl) closeContextMenu();
+    });
+
+    window.addEventListener('resize', () => {
+      if (contextMenuEl) closeContextMenu();
+    });
+
+    window.addEventListener('scroll', () => {
+      if (contextMenuEl) closeContextMenu();
+    }, { passive: true });
+  }
+
+  // ============================================================
+  // API PÚBLICA
+  // ============================================================
+  window.userPageScope = {
+
+    // ---- FILTROS ----
+    aplicarFiltros: function() {
+      const fUser = (document.getElementById('filter-username').value || '').toLowerCase();
+      const fNombre = (document.getElementById('filter-nombre').value || '').toLowerCase();
+      const fRol = document.getElementById('filter-rol').value;
+      const fStatus = document.getElementById('filter-status').value;
+
+      usuariosFiltrados = usuariosData.filter(function(u) {
+        const okUser = !fUser || (u.username || '').toLowerCase().includes(fUser);
+        const okNombre = !fNombre || (u.nombre || '').toLowerCase().includes(fNombre);
+        const okRol = !fRol || u.role === fRol;
+        const okStatus = !fStatus || u.status === fStatus;
+        return okUser && okNombre && okRol && okStatus;
+      });
+      currentPage = 1;
+      renderTabla();
+    },
+
+    limpiarFiltros: function() {
+      document.getElementById('filter-username').value = '';
+      document.getElementById('filter-nombre').value = '';
+      document.getElementById('filter-rol').value = '';
+      document.getElementById('filter-status').value = '';
+      this.aplicarFiltros();
+    },
+
+    irPagina: function(page) {
+      const total = Math.ceil(usuariosFiltrados.length / pageSize) || 1;
+      if (page < 1 || page > total) return;
+      currentPage = page;
+      renderTabla();
+    },
+
+    cambiarPageSize: function() {
+      pageSize = parseInt(document.getElementById('page-size').value);
+      currentPage = 1;
+      renderTabla();
+    },
+
+    recargarUsuarios: function() {
+      fetchUsuariosData();
+    },
+
+    // ---- MODAL CORREO (placeholder) ----
+    abrirModalCorreo: function() {
+      if (typeof window.abrirModalCorreoUsuarios === 'function') {
+        window.abrirModalCorreoUsuarios();
+      } else {
+        mostrarToast('Info', 'Función de correo no configurada', 'info');
+      }
+    },
+
+    // ---- TOGGLE PERMISO ----
+    togglePermiso: function(idUsuario, campo, elemento) {
+      const user = usuariosData.find(u => String(u.idUsuario) === String(idUsuario));
+      if (!user) return;
+
+      const nuevoValor = !user[campo];
+      user[campo] = nuevoValor;
+
+      const icon = elemento.querySelector('i');
+      if (nuevoValor) {
+        icon.className = 'bi bi-check-circle-fill perm-icon-yes';
+        elemento.title = 'Clic para denegar';
+      } else {
+        icon.className = 'bi bi-x-circle-fill perm-icon-no';
+        elemento.title = 'Clic para conceder';
+      }
+
+      google.script.run
+        .withSuccessHandler(function() {
+          mostrarToast('Éxito', `Permiso '${permissionLabels[campo] || campo}' actualizado.`);
+        })
+        .withFailureHandler(function(error) {
+          mostrarToast('Error', 'No se pudo guardar: ' + error.message, 'error');
+          user[campo] = !nuevoValor;
+          renderTabla();
+        })
+        .updateSheet(idUsuario, campo, nuevoValor ? 'X' : '');
+    },
+
+    // ---- DESBLOQUEAR ----
+    desbloquearUsuario: function(idUsuario, username) {
+      if (shouldUseBottomSheet()) {
+        const bodyHTML = `
+          <div style="text-align:center;padding:.5rem 0;">
+            <div style="width:80px;height:80px;border-radius:50%;background:rgba(167,139,250,.15);border:2px solid rgba(167,139,250,.3);display:inline-flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+              <i class="bi bi-unlock-fill" style="font-size:2rem;color:#a78bfa;"></i>
+            </div>
+            <p style="margin:0 0 .5rem;font-size:.95rem;color:#cbd5e1;">Se resetearán los intentos fallidos de:</p>
+            <p style="font-size:1.15rem;font-weight:700;color:#a78bfa;margin:0 0 1.25rem;">${escapeHtml(username)}</p>
+            <div class="sheet-alert info">
+              <i class="bi bi-info-circle-fill"></i>
+              <span>El usuario podrá volver a iniciar sesión inmediatamente.</span>
+            </div>
+          </div>
+        `;
+
+        openBottomSheet({
+          title: 'Desbloquear Usuario',
+          icon: 'bi-unlock-fill',
+          bodyHTML: bodyHTML,
+          confirmText: '<i class="bi bi-unlock"></i> Desbloquear',
+          cancelText: 'Cancelar',
+          onConfirm: () => {
+            const token = getToken();
+            if (!token) { mostrarToast('Error', 'Sesión inválida', 'error'); return false; }
+            mostrarOverlay(true);
+            google.script.run
+              .withSuccessHandler(res => {
+                mostrarOverlay(false);
+                if (res.success) { mostrarToast('Éxito', res.message); fetchUsuariosData(); }
+                else { mostrarToast('Error', res.message, 'error'); }
+              })
+              .withFailureHandler(err => { mostrarOverlay(false); mostrarToast('Error', err.message || 'Error de conexión', 'error'); })
+              .desbloquearUsuario(token, username);
+          }
+        });
+        return;
+      }
+
+      const token = getToken();
+      if (!token) { Swal.fire('Error', 'Sesión inválida', 'error'); return; }
+      Swal.fire({
+        title: '¿Desbloquear usuario?',
+        html: `<p>Se resetearán los intentos fallidos de:</p><p style="font-weight:700;color:#f97316;font-size:1.1rem;margin:8px 0;">${escapeHtml(username)}</p><p style="font-size:0.85rem;color:#94a3b8;">El usuario podrá volver a iniciar sesión inmediatamente.</p>`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: '<i class="bi bi-unlock me-1"></i> Sí, desbloquear',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#10b981',
+        cancelButtonColor: '#6b7280',
+        background: 'rgba(15, 23, 42, 0.95)',
+        color: '#e2e8f0'
+      }).then(r => {
+        if (!r.isConfirmed) return;
+        Swal.fire({ title: 'Desbloqueando...', allowOutsideClick: false, didOpen: () => Swal.showLoading(), background: 'rgba(15, 23, 42, 0.95)', color: '#e2e8f0' });
+        google.script.run
+          .withSuccessHandler(function(res) {
+            Swal.close();
+            if (res.success) { Swal.fire({ icon: 'success', title: '¡Desbloqueado!', text: res.message, timer: 2000, showConfirmButton: false, background: 'rgba(15, 23, 42, 0.95)', color: '#e2e8f0' }); fetchUsuariosData(); }
+            else { Swal.fire('Error', res.message, 'error'); }
+          })
+          .withFailureHandler(function(err) { Swal.close(); Swal.fire('Error', err.message || 'Error de conexión', 'error'); })
+          .desbloquearUsuario(token, username);
+      });
+    },
+
+    // ---- AGREGAR USUARIO ----
+    abrirModalAgregar: function() {
+      Swal.fire({
+        title: '<i class="bi bi-person-plus-fill me-2"></i>Nuevo Usuario',
+        html: `
+          <div style="text-align:left;max-height:70vh;overflow-y:auto;">
+            <div class="mb-3"><label class="form-label">Username *</label>
+              <input type="text" class="form-control" id="swal-username" placeholder="juan.perez"></div>
+            <div class="mb-3"><label class="form-label">Nombre Completo *</label>
+              <input type="text" class="form-control" id="swal-nombre" placeholder="Juan Pérez"></div>
+            <div class="mb-3"><label class="form-label">Correo Electrónico *</label>
+              <input type="email" class="form-control" id="swal-correo" placeholder="juan@empresa.com"></div>
+            <div class="mb-3"><label class="form-label">Teléfono *</label>
+              <input type="tel" class="form-control" id="swal-telefono" placeholder="+58 412 1234567"></div>
+            <div class="row">
+              <div class="col-md-6 mb-3"><label class="form-label">Rol *</label>
+                <select class="form-select" id="swal-rol">
+                  <option value="Usuario">Usuario</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Consulta">Consulta</option>
+                  <option value="Vendedor">Vendedor</option>
+                </select></div>
+              <div class="col-md-6 mb-3"><label class="form-label">Status *</label>
+                <select class="form-select" id="swal-status">
+                  <option value="Activo">Activo</option>
+                  <option value="Inactivo">Inactivo</option>
+                </select></div>
+            </div>
+            <div class="mb-3"><label class="form-label">Contraseña *</label>
+              <input type="password" class="form-control" id="swal-password" placeholder="Mínimo 10 caracteres">
+              <small class="text-muted">Mayúscula, minúscula, número y símbolo.</small></div>
+            <div class="mb-3"><label class="form-label">Confirmar Contraseña *</label>
+              <input type="password" class="form-control" id="swal-repassword" placeholder="Repite la contraseña"></div>
+          </div>`,
+        showCancelButton: true,
+        confirmButtonText: '<i class="bi bi-check-lg me-1"></i>Registrar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#0891b2',
+        cancelButtonColor: '#64748b',
+        background: 'rgba(15, 23, 42, 0.95)',
+        color: '#e2e8f0',
+        preConfirm: () => {
+          const username = document.getElementById('swal-username').value.trim();
+          const nombre = document.getElementById('swal-nombre').value.trim();
+          const correo = document.getElementById('swal-correo').value.trim();
+          const telefono = document.getElementById('swal-telefono').value.trim();
+          const rol = document.getElementById('swal-rol').value;
+          const status = document.getElementById('swal-status').value;
+          const password = document.getElementById('swal-password').value;
+          const repassword = document.getElementById('swal-repassword').value;
+
+          if (!username || !nombre || !correo || !rol || !password) {
+            Swal.showValidationMessage('Todos los campos obligatorios son requeridos');
+            return false;
+          }
+          if (!esCorreoValido(correo)) {
+            Swal.showValidationMessage('Correo inválido');
+            return false;
+          }
+          if (usuariosData.some(u => u.username === username)) {
+            Swal.showValidationMessage('El usuario ya existe');
+            return false;
+          }
+          if (password !== repassword) {
+            Swal.showValidationMessage('Las contraseñas no coinciden');
+            return false;
+          }
+          if (password.length < 10) {
+            Swal.showValidationMessage('Mínimo 10 caracteres');
+            return false;
+          }
+          if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) ||
+              !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+            Swal.showValidationMessage('Debe incluir mayúscula, minúscula, número y símbolo');
+            return false;
+          }
+          return { username, nombre, correo, telefono, rol, status, password };
+        }
+      }).then(result => {
+        if (!result.isConfirmed) return;
+        const token = getToken();
+        if (!token) { Swal.fire('Error', 'Sesión inválida', 'error'); return; }
+
+        const d = result.value;
+        const nuevoUsuario = {
+          username: d.username,
+          password: d.password,
+          nombre: d.nombre,
+          correo: d.correo,
+          role: d.rol,
+          status: d.status,
+          telefono: d.telefono
+        };
+
+        mostrarOverlay(true);
+        google.script.run
+          .withSuccessHandler(res => {
+            mostrarOverlay(false);
+            if (!res || res.success === false) {
+              Swal.fire('Error', res.message || 'Error al crear usuario', 'error');
+              return;
+            }
+            Swal.fire({
+              icon: 'success',
+              title: '¡Usuario Creado!',
+              text: `Usuario ${d.username} registrado correctamente.`,
+              background: 'rgba(15, 23, 42, 0.95)',
+              color: '#e2e8f0'
+            });
+            fetchUsuariosData();
+          })
+          .withFailureHandler(err => {
+            mostrarOverlay(false);
+            Swal.fire('Error', err.message || 'Error de conexión', 'error');
+          })
+          .adminCrearUsuario(token, nuevoUsuario);
+      });
+    },
+
+    // ---- VER USUARIO ----
+    verUsuarioModal: function(idUsuario) {
+      const u = usuariosData.find(x => String(x.idUsuario) === String(idUsuario));
+      if (!u) { Swal.fire('Error', 'Usuario no encontrado.', 'error'); return; }
+
+      const estaBloqueado = u.bloqueado;
+      const intentos = parseInt(u.intentosFallidos || 0);
+
+      if (shouldUseBottomSheet()) {
+        const permisosMobileHTML = permissionFields.map(f => {
+          const tiene = u[f];
+          return `<div class="sheet-perm-item ${tiene ? 'checked' : ''}"><input type="checkbox" ${tiene ? 'checked' : ''} disabled><label>${permissionLabels[f]}</label></div>`;
+        }).join('');
+
+        const bodyHTML = `
+          <div class="sheet-user-hero">
+            <div class="sheet-user-avatar"><i class="bi bi-person-fill"></i></div>
+            <h4>${escapeHtml(u.username)}</h4>
+            <span class="role-badge role-${(u.role || '').toLowerCase()}">${u.role || ''}</span>
+          </div>
+
+          <ul class="sheet-info-list">
+            <li><strong><i class="bi bi-fingerprint"></i>ID</strong><span>${u.idUsuario}</span></li>
+            <li><strong><i class="bi bi-person"></i>Nombre</strong><span>${escapeHtml(u.nombre)}</span></li>
+            <li><strong><i class="bi bi-envelope"></i>Correo</strong><span>${escapeHtml(u.correo)}</span></li>
+            <li><strong><i class="bi bi-telephone"></i>Teléfono</strong><span>${escapeHtml(u.telefono || 'N/A')}</span></li>
+            <li><strong><i class="bi bi-activity"></i>Estado</strong><span>
+              <span class="status-badge status-${(u.status || '').toLowerCase()}">${u.status}</span>
+              ${estaBloqueado ? '<span class="badge-bloqueado ms-1"><i class="bi bi-lock-fill"></i> BLOQUEADO</span>' : ''}
+              ${(!estaBloqueado && intentos > 0) ? `<span class="badge-intentos ms-1">${intentos} intento(s)</span>` : ''}
+            </span></li>
+            ${u.ultimoLogin ? `<li><strong><i class="bi bi-clock-history"></i>Último login</strong><span>${new Date(u.ultimoLogin).toLocaleString('es-ES')}</span></li>` : ''}
+          </ul>
+
+          <div class="sheet-section-title"><i class="bi bi-shield-check"></i> Permisos Habilitados (${permissionFields.filter(f => u[f]).length}/${permissionFields.length})</div>
+          <div class="sheet-perm-grid">${permisosMobileHTML}</div>
+        `;
+
+        openBottomSheet({
+          title: 'Ficha de Usuario',
+          icon: 'bi-eye-fill',
+          bodyHTML: bodyHTML,
+          confirmText: '<i class="bi bi-pencil-square"></i> Editar',
+          cancelText: '<i class="bi bi-x-lg"></i> Cerrar',
+          onConfirm: () => {
+            setTimeout(() => window.userPageScope.editarUsuarioModal(idUsuario), 350);
+          }
+        });
+        return;
+      }
+
+      const permisosHTML = permissionFields.map(function(f) {
+        const tiene = u[f];
+        const icon = tiene ? 'bi-check-circle-fill perm-granted' : 'bi-x-circle-fill perm-denied';
+        return `<div class="col-6"><div class="d-flex align-items-center py-2 px-3 rounded-3 mb-2" style="background:rgba(15,23,42,0.4);border:1px solid rgba(56,189,248,0.1);"><i class="bi ${icon} me-2"></i><span style="font-size:0.85rem;">${permissionLabels[f]}</span></div></div>`;
+      }).join('');
+
+      Swal.fire({
+        title: '<i class="bi bi-eye-fill me-2"></i>Ficha de Usuario',
+        html: `
+          <div style="text-align:left;max-height:70vh;overflow-y:auto;">
+            <div class="text-center mb-4">
+              <div class="d-inline-flex align-items-center justify-content-center text-primary rounded-circle mb-3" style="width:80px;height:80px;background:rgba(6,182,212,0.15);"><i class="bi bi-person" style="font-size:2.5rem;"></i></div>
+              <h4 class="mb-1 fw-bold">${escapeHtml(u.username)}</h4>
+              <span class="badge rounded-pill px-3 py-2" style="background:linear-gradient(135deg,#0891b2,#2563eb);">${u.role}</span>
+            </div>
+            <ul class="list-group list-group-flush bg-transparent mb-4">
+              <li class="list-group-item d-flex justify-content-between align-items-center"><strong><i class="bi bi-fingerprint me-2 text-primary"></i>ID:</strong><span>${u.idUsuario}</span></li>
+              <li class="list-group-item d-flex justify-content-between align-items-center"><strong><i class="bi bi-person me-2 text-primary"></i>Nombre:</strong><span>${escapeHtml(u.nombre)}</span></li>
+              <li class="list-group-item d-flex justify-content-between align-items-center"><strong><i class="bi bi-envelope me-2 text-primary"></i>Correo:</strong><span>${escapeHtml(u.correo)}</span></li>
+              <li class="list-group-item d-flex justify-content-between align-items-center"><strong><i class="bi bi-telephone me-2 text-primary"></i>Teléfono:</strong><span>${escapeHtml(u.telefono || 'N/A')}</span></li>
+              <li class="list-group-item d-flex justify-content-between align-items-center"><strong><i class="bi bi-activity me-2 text-primary"></i>Estado:</strong><span><span class="status-badge status-${(u.status || '').toLowerCase()}">${u.status}</span>${estaBloqueado ? '<span class="badge-bloqueado ms-2"><i class="bi bi-lock-fill"></i> BLOQUEADO</span>' : ''}${(!estaBloqueado && intentos > 0) ? `<span class="badge-intentos ms-2">${intentos} intento(s)</span>` : ''}</span></li>
+              ${u.ultimoLogin ? `<li class="list-group-item d-flex justify-content-between align-items-center"><strong><i class="bi bi-clock-history me-2 text-primary"></i>Último login:</strong><span>${new Date(u.ultimoLogin).toLocaleString('es-ES')}</span></li>` : ''}
+            </ul>
+            <hr class="glass-border my-4">
+            <h6 class="mb-3 fw-bold" style="color:#7dd3fc;"><i class="bi bi-shield-check me-2"></i>Permisos Habilitados</h6>
+            <div class="row">${permisosHTML}</div>
+          </div>`,
+        confirmButtonText: '<i class="bi bi-x-lg me-1"></i>Cerrar',
+        confirmButtonColor: '#64748b',
+        background: 'rgba(15, 23, 42, 0.95)',
+        color: '#e2e8f0',
+        width: '800px'
+      });
+    },
+
+    // ---- ELIMINAR ----
+    borrarUsuarioModal: function(idUsuario, username) {
+      if (shouldUseBottomSheet()) {
+        const bodyHTML = `
+          <div style="text-align:center;padding:.5rem 0;">
+            <div style="width:80px;height:80px;border-radius:50%;background:rgba(239,68,68,.15);border:2px solid rgba(239,68,68,.3);display:inline-flex;align-items:center;justify-content:center;margin-bottom:1rem;">
+              <i class="bi bi-trash" style="font-size:2rem;color:#f87171;"></i>
+            </div>
+            <p style="margin:0 0 .5rem;font-size:.95rem;color:#cbd5e1;">¿Eliminar permanentemente al usuario?</p>
+            <p style="font-size:1.15rem;font-weight:700;color:#f87171;margin:0 0 1.25rem;">${escapeHtml(username)}</p>
+            <div class="sheet-alert danger">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <span>Esta acción es <strong>irreversible</strong>. Todos los datos del usuario se perderán.</span>
+            </div>
+          </div>
+        `;
+
+        openBottomSheet({
+          title: 'Eliminar Usuario',
+          icon: 'bi-trash-fill',
+          bodyHTML: bodyHTML,
+          confirmText: '<i class="bi bi-trash"></i> Eliminar',
+          cancelText: 'Cancelar',
+          confirmType: 'danger',
+          onConfirm: () => {
+            mostrarOverlay(true);
+            google.script.run
+              .withSuccessHandler(() => {
+                mostrarOverlay(false);
+                mostrarToast('Éxito', 'Usuario eliminado');
+                fetchUsuariosData();
+              })
+              .withFailureHandler(error => {
+                mostrarOverlay(false);
+                mostrarToast('Error', error.message, 'error');
+              })
+              .eliminarUsuario(idUsuario);
+          }
+        });
+        return;
+      }
+
+      Swal.fire({
+        title: '<i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>Eliminar Registro',
+        html: `<div style="text-align:center;"><div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width:70px;height:70px;background:rgba(239,68,68,0.15);border:2px solid rgba(239,68,68,0.3);"><i class="bi bi-trash" style="font-size:2rem;color:#f87171;"></i></div><p class="mb-3">¿Eliminar permanentemente al usuario?</p><p class="fw-bold fs-5 mb-4" style="color:#f87171;">${escapeHtml(username)}</p><div class="alert alert-danger text-start"><strong>Atención:</strong> Esta acción es irreversible.</div></div>`,
+        showCancelButton: true,
+        confirmButtonText: '<i class="bi bi-trash me-1"></i>Eliminar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#64748b',
+        background: 'rgba(15, 23, 42, 0.95)',
+        color: '#e2e8f0'
+      }).then(result => {
+        if (!result.isConfirmed) return;
+        mostrarOverlay(true);
+        google.script.run
+          .withSuccessHandler(() => {
+            mostrarOverlay(false);
+            Swal.fire({ icon: 'success', title: 'Usuario Eliminado', showConfirmButton: false, timer: 1500, background: 'rgba(15, 23, 42, 0.95)', color: '#e2e8f0' });
+            fetchUsuariosData();
+          })
+          .withFailureHandler(error => { mostrarOverlay(false); Swal.fire('Error', error.message, 'error'); })
+          .eliminarUsuario(idUsuario);
+      });
+    },
+
+    // ---- EDITAR ----
+    editarUsuarioModal: function(idUsuario) {
+      const u = usuariosData.find(x => String(x.idUsuario) === String(idUsuario));
+      if (!u) { Swal.fire('Error', 'Usuario no encontrado.', 'error'); return; }
+
+      if (shouldUseBottomSheet()) {
+        const permisosMobileHTML = permissionFields.map(f => {
+          const tiene = u[f];
+          return `<div class="sheet-perm-item ${tiene ? 'checked' : ''}" data-perm="${f}" onclick="this.classList.toggle('checked');this.querySelector('input').checked=this.classList.contains('checked');">
+            <input type="checkbox" ${tiene ? 'checked' : ''} tabindex="-1">
+            <label>${permissionLabels[f]}</label>
+          </div>`;
+        }).join('');
+
+        const bodyHTML = `
+          <div class="form-group">
+            <label class="form-label">Username (no editable)</label>
+            <input type="text" class="form-control" value="${escapeHtml(u.username)}" disabled>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nombre Completo *</label>
+            <input type="text" class="form-control" id="bs-nombre" value="${escapeHtml(u.nombre)}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Correo *</label>
+            <input type="email" class="form-control" id="bs-correo" value="${escapeHtml(u.correo)}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Teléfono *</label>
+            <input type="tel" class="form-control" id="bs-telefono" value="${escapeHtml(u.telefono || '')}">
+          </div>
+          <div class="row">
+            <div class="form-group">
+              <label class="form-label">Rol *</label>
+              <select class="form-select" id="bs-rol">
+                <option value="Usuario" ${u.role === 'Usuario' ? 'selected' : ''}>Usuario</option>
+                <option value="Admin" ${u.role === 'Admin' ? 'selected' : ''}>Admin</option>
+                <option value="Consulta" ${u.role === 'Consulta' ? 'selected' : ''}>Consulta</option>
+                <option value="Vendedor" ${u.role === 'Vendedor' ? 'selected' : ''}>Vendedor</option>
+                <option value="Owner" ${u.role === 'Owner' ? 'selected' : ''}>Owner</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Status *</label>
+              <select class="form-select" id="bs-status">
+                <option value="Activo" ${u.status === 'Activo' ? 'selected' : ''}>Activo</option>
+                <option value="Inactivo" ${u.status === 'Inactivo' ? 'selected' : ''}>Inactivo</option>
+                <option value="Pendiente" ${u.status === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+              </select>
+            </div>
+          </div>
+          <div class="sheet-section-title"><i class="bi bi-shield-lock"></i> Permisos (${permissionFields.filter(f => u[f]).length}/${permissionFields.length})</div>
+          <div class="sheet-perm-grid">${permisosMobileHTML}</div>
+        `;
+
+        openBottomSheet({
+          title: 'Editar Usuario',
+          icon: 'bi-pencil-square',
+          bodyHTML: bodyHTML,
+          confirmText: '<i class="bi bi-save"></i> Guardar',
+          cancelText: 'Cancelar',
+          onConfirm: (sheet) => {
+            const nombre = sheet.querySelector('#bs-nombre').value.trim();
+            const correo = sheet.querySelector('#bs-correo').value.trim();
+            const telefono = sheet.querySelector('#bs-telefono').value.trim();
+            const rol = sheet.querySelector('#bs-rol').value;
+            const status = sheet.querySelector('#bs-status').value;
+
+            if (!nombre || !correo) { mostrarToast('Error', 'Nombre y correo requeridos', 'error'); return false; }
+            if (!esCorreoValido(correo)) { mostrarToast('Error', 'Correo inválido', 'error'); return false; }
+
+            const datos = { idUsuario: u.idUsuario, username: u.username, nombre, correo, telefono, role: rol, status };
+            permissionFields.forEach(f => {
+              const item = sheet.querySelector(`.sheet-perm-item[data-perm="${f}"]`);
+              datos[f] = item && item.classList.contains('checked') ? 'X' : '';
+            });
+
+            mostrarOverlay(true);
+            google.script.run
+              .withSuccessHandler(() => {
+                mostrarOverlay(false);
+                mostrarToast('Éxito', 'Usuario modificado correctamente.');
+                fetchUsuariosData();
+              })
+              .withFailureHandler(error => {
+                mostrarOverlay(false);
+                mostrarToast('Error', error.message || 'Error al editar', 'error');
+              })
+              .editarUsuario(datos);
+          }
+        });
+        return;
+      }
+
+      const permisosHTML = permissionFields.map(function(f) {
+        return `<div class="form-check form-switch mb-2"><input class="form-check-input" type="checkbox" id="swal-edit-${f}" ${u[f] ? 'checked' : ''}><label class="form-check-label" for="swal-edit-${f}">${permissionLabels[f]}</label></div>`;
+      }).join('');
+
+      Swal.fire({
+        title: '<i class="bi bi-pencil-square me-2"></i>Editar Usuario',
+        html: `
+          <div style="text-align:left;max-height:70vh;overflow-y:auto;">
+            <div class="mb-3"><label class="form-label">Username</label><input type="text" class="form-control" value="${escapeHtml(u.username)}" disabled style="opacity:0.6;"></div>
+            <div class="mb-3"><label class="form-label">Nombre Completo *</label><input type="text" class="form-control" id="swal-edit-nombre" value="${escapeHtml(u.nombre)}"></div>
+            <div class="mb-3"><label class="form-label">Correo *</label><input type="email" class="form-control" id="swal-edit-correo" value="${escapeHtml(u.correo)}"></div>
+            <div class="mb-3"><label class="form-label">Teléfono *</label><input type="text" class="form-control" id="swal-edit-telefono" value="${escapeHtml(u.telefono || '')}"></div>
+            <div class="row">
+              <div class="col-md-6 mb-3"><label class="form-label">Rol *</label><select class="form-select" id="swal-edit-rol"><option value="Usuario" ${u.role === 'Usuario' ? 'selected' : ''}>Usuario</option><option value="Admin" ${u.role === 'Admin' ? 'selected' : ''}>Admin</option><option value="Consulta" ${u.role === 'Consulta' ? 'selected' : ''}>Consulta</option><option value="Vendedor" ${u.role === 'Vendedor' ? 'selected' : ''}>Vendedor</option><option value="Owner" ${u.role === 'Owner' ? 'selected' : ''}>Owner</option></select></div>
+              <div class="col-md-6 mb-3"><label class="form-label">Status *</label><select class="form-select" id="swal-edit-status"><option value="Activo" ${u.status === 'Activo' ? 'selected' : ''}>Activo</option><option value="Inactivo" ${u.status === 'Inactivo' ? 'selected' : ''}>Inactivo</option><option value="Pendiente" ${u.status === 'Pendiente' ? 'selected' : ''}>Pendiente</option></select></div>
+            </div>
+            <div class="mb-3"><label class="form-label fw-bold">Permisos de Acceso</label><div style="background:rgba(30,41,59,0.4);padding:1rem;border-radius:12px;border:1px solid rgba(56,189,248,0.1);max-height:300px;overflow-y:auto;">${permisosHTML}</div></div>
+          </div>`,
+        showCancelButton: true,
+        confirmButtonText: '<i class="bi bi-save me-1"></i>Guardar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#0891b2',
+        cancelButtonColor: '#64748b',
+        background: 'rgba(15, 23, 42, 0.95)',
+        color: '#e2e8f0',
+        width: '700px',
+        preConfirm: () => {
+          const nombre = document.getElementById('swal-edit-nombre').value.trim();
+          const correo = document.getElementById('swal-edit-correo').value.trim();
+          const telefono = document.getElementById('swal-edit-telefono').value.trim();
+          const rol = document.getElementById('swal-edit-rol').value;
+          const status = document.getElementById('swal-edit-status').value;
+          if (!nombre || !correo) { Swal.showValidationMessage('Nombre y correo son requeridos'); return false; }
+          if (!esCorreoValido(correo)) { Swal.showValidationMessage('Correo inválido'); return false; }
+          const datos = { idUsuario: u.idUsuario, username: u.username, nombre, correo, telefono, role: rol, status };
+          permissionFields.forEach(f => { datos[f] = document.getElementById(`swal-edit-${f}`).checked ? 'X' : ''; });
+          return datos;
+        }
+      }).then(result => {
+        if (!result.isConfirmed) return;
+        mostrarOverlay(true);
+        google.script.run
+          .withSuccessHandler(() => {
+            mostrarOverlay(false);
+            mostrarToast('Éxito', 'Usuario modificado correctamente.');
+            fetchUsuariosData();
+          })
+          .withFailureHandler(error => {
+            mostrarOverlay(false);
+            Swal.fire('Error', error.message || 'Error al editar', 'error');
+          })
+          .editarUsuario(result.value);
+      });
+    },
+
+    // ---- CAMBIAR PASSWORD ----
+    editarPasswordModal: function(idUsuario) {
+      const u = usuariosData.find(x => String(x.idUsuario) === String(idUsuario));
+      if (!u) { Swal.fire('Error', 'Usuario no encontrado.', 'error'); return; }
+
+      if (shouldUseBottomSheet()) {
+        const bodyHTML = `
+          <div class="sheet-alert info">
+            <i class="bi bi-info-circle-fill"></i>
+            <span>Cambiando contraseña de <strong style="color:#22d3ee;">${escapeHtml(u.username)}</strong></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nueva Contraseña *</label>
+            <input type="password" class="form-control" id="bs-pass" placeholder="Mínimo 10 caracteres" autocomplete="new-password">
+            <div class="pass-strength" id="bs-strength">
+              <div class="pass-strength-bar"></div>
+              <div class="pass-strength-bar"></div>
+              <div class="pass-strength-bar"></div>
+              <div class="pass-strength-bar"></div>
+            </div>
+            <div class="pass-strength-text" id="bs-strength-text">Debe incluir mayúscula, minúscula, número y símbolo</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirmar Contraseña *</label>
+            <input type="password" class="form-control" id="bs-repass" placeholder="Repite la contraseña" autocomplete="new-password">
+          </div>
+        `;
+
+        const sheetRef = openBottomSheet({
+          title: 'Cambiar Contraseña',
+          icon: 'bi-key-fill',
+          bodyHTML: bodyHTML,
+          confirmText: '<i class="bi bi-save"></i> Guardar',
+          cancelText: 'Cancelar',
+          onConfirm: (sheet) => {
+            const password = sheet.querySelector('#bs-pass').value;
+            const repassword = sheet.querySelector('#bs-repass').value;
+            if (!password || !repassword) { mostrarToast('Error', 'Ambos campos requeridos', 'error'); return false; }
+            if (password !== repassword) { mostrarToast('Error', 'Las contraseñas no coinciden', 'error'); return false; }
+            if (password.length < 10) { mostrarToast('Error', 'Mínimo 10 caracteres', 'error'); return false; }
+            if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+              mostrarToast('Error', 'Debe incluir mayúscula, minúscula, número y símbolo', 'error'); return false;
+            }
+
+            const token = getToken();
+            if (!token) { mostrarToast('Error', 'Sesión inválida', 'error'); return false; }
+
+            mostrarOverlay(true);
+            google.script.run
+              .withSuccessHandler(res => {
+                mostrarOverlay(false);
+                if (res.success) { mostrarToast('Éxito', 'Contraseña actualizada'); fetchUsuariosData(); }
+                else { mostrarToast('Error', res.message, 'error'); }
+              })
+              .withFailureHandler(error => { mostrarOverlay(false); mostrarToast('Error', error.message, 'error'); })
+              .adminCambiarPassword(token, idUsuario, password);
+          }
+        });
+
+        if (sheetRef) {
+          const passInput = sheetRef.sheet.querySelector('#bs-pass');
+          const bars = sheetRef.sheet.querySelectorAll('.pass-strength-bar');
+          const text = sheetRef.sheet.querySelector('#bs-strength-text');
+          passInput.addEventListener('input', () => {
+            const v = passInput.value;
+            let score = 0;
+            if (v.length >= 10) score++;
+            if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
+            if (/[0-9]/.test(v)) score++;
+            if (/[^A-Za-z0-9]/.test(v)) score++;
+
+            bars.forEach((b, i) => {
+              b.className = 'pass-strength-bar';
+              if (i < score) {
+                if (score <= 2) b.classList.add('active-weak');
+                else if (score === 3) b.classList.add('active-medium');
+                else b.classList.add('active-strong');
+              }
+            });
+
+            const labels = ['Muy débil', 'Débil', 'Aceptable', 'Fuerte'];
+            text.textContent = v ? labels[Math.min(score - 1, 3)] || 'Muy débil' : 'Debe incluir mayúscula, minúscula, número y símbolo';
+            text.style.color = score <= 2 ? '#f87171' : score === 3 ? '#fbbf24' : '#34d399';
+          });
+        }
+        return;
+      }
+
+      Swal.fire({
+        title: '<i class="bi bi-key-fill me-2"></i>Cambiar Contraseña',
+        html: `<div style="text-align:left;"><div class="alert alert-info d-flex align-items-center gap-3 mb-4"><div class="d-flex align-items-center justify-content-center rounded-circle" style="width:50px;height:50px;background:rgba(6,182,212,0.15);border:1px solid rgba(34,211,238,0.3);"><i class="bi bi-person text-primary fs-4"></i></div><div><small class="text-muted d-block">Usuario:</small><strong class="fs-5 text-primary">${escapeHtml(u.username)}</strong></div></div><div class="mb-3"><label class="form-label">Nueva Contraseña *</label><input type="password" class="form-control" id="swal-new-password" placeholder="Mínimo 10 caracteres"><small class="text-muted">Mayúscula, minúscula, número y símbolo.</small></div><div class="mb-4"><label class="form-label">Confirmar Contraseña *</label><input type="password" class="form-control" id="swal-new-repassword" placeholder="Repite la contraseña"></div></div>`,
+        showCancelButton: true,
+        confirmButtonText: '<i class="bi bi-save me-1"></i>Guardar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#0891b2',
+        cancelButtonColor: '#64748b',
+        background: 'rgba(15, 23, 42, 0.95)',
+        color: '#e2e8f0',
+        preConfirm: () => {
+          const password = document.getElementById('swal-new-password').value;
+          const repassword = document.getElementById('swal-new-repassword').value;
+          if (!password || !repassword) { Swal.showValidationMessage('Ambos campos son requeridos'); return false; }
+          if (password !== repassword) { Swal.showValidationMessage('Las contraseñas no coinciden'); return false; }
+          if (password.length < 10) { Swal.showValidationMessage('Mínimo 10 caracteres'); return false; }
+          if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) { Swal.showValidationMessage('Debe incluir mayúscula, minúscula, número y símbolo'); return false; }
+          return password;
+        }
+      }).then(result => {
+        if (!result.isConfirmed) return;
+        const token = getToken();
+        if (!token) { Swal.fire('Error', 'Sesión inválida', 'error'); return; }
+        mostrarOverlay(true);
+        google.script.run
+          .withSuccessHandler(res => {
+            mostrarOverlay(false);
+            if (res.success) { Swal.fire({ icon: 'success', title: 'Contraseña Actualizada', text: 'El usuario deberá iniciar sesión nuevamente.', background: 'rgba(15, 23, 42, 0.95)', color: '#e2e8f0' }); fetchUsuariosData(); }
+            else { Swal.fire('Error', res.message, 'error'); }
+          })
+          .withFailureHandler(error => { mostrarOverlay(false); Swal.fire('Error', error.message || 'Error al cambiar contraseña', 'error'); })
+          .adminCambiarPassword(token, idUsuario, result.value);
+      });
+    }
+  };
+
+// ============================================================
+  // PROTOCOLO DE CICLO DE VIDA SPA (MÓDULO USUARIOS)
+  // ============================================================
+  let listenersIniciados = false;
+
+  function resetearDOMUsuarios() {
+    if (typeof closeBottomSheet === 'function') closeBottomSheet();
+    if (typeof closeContextMenu === 'function') closeContextMenu();
+    try { if (typeof Swal !== 'undefined') Swal.close(); } catch(e){}
+
+    const u = document.getElementById('filter-username');
+    const n = document.getElementById('filter-nombre');
+    const r = document.getElementById('filter-rol');
+    const s = document.getElementById('filter-status');
+    if (u) u.value = '';
+    if (n) n.value = '';
+    if (r) r.value = '';
+    if (s) s.value = '';
+
+    currentPage = 1;
+    document.body.style.overflow = '';
+  }
+
+  window.ModuloUsuarios = {
+    mount: function() {
+      resetearDOMUsuarios();
+      fetchUsuariosData();
+    },
+    unmount: function() {
+      resetearDOMUsuarios();
+    }
+  };
+
+  window.initUsuariosLista = function() {
+    if (!listenersIniciados) {
+      listenersIniciados = true;
+      const btnXLSX = document.getElementById('download-xlsx-usuarios');
+      const btnPDF = document.getElementById('download-pdf-usuarios');
+      const btnPrint = document.getElementById('print-table-usuarios');
+
+      if (btnXLSX) btnXLSX.addEventListener('click', exportarXLSX);
+      if (btnPDF) btnPDF.addEventListener('click', exportarPDF);
+      if (btnPrint) btnPrint.addEventListener('click', imprimirTabla);
+
+      if (isMobileViewport()) {
+        initSwipeGestures();
+        initPullToRefresh();
+        initLongPress();
+      }
+    }
+
+    window.ModuloUsuarios.mount();
+  };
+
+  if (typeof window.initUsuariosLista === 'function') {
+    window.initUsuariosLista();
+  }
+
+})();
+</script>

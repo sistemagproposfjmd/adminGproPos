@@ -1,0 +1,905 @@
+<!-- ============================================================
+     GESTIÓN Y CONFIGURACIÓN DE EMPRESAS
+     (Versión con efecto Flip Anverso/Reverso corregido y mejorado)
+============================================================ -->
+<style>
+  /* ==========================================
+     FIX CRÍTICO PARA EL MODAL
+     ========================================== */
+  .modal-backdrop {
+    z-index: 99998 !important;
+    background-color: rgba(0, 0, 0, 0.75) !important;
+  }
+  #modalConfigEmpresa.modal {
+    z-index: 99999 !important;
+    background-color: transparent !important;
+  }
+  #modalConfigEmpresa .modal-content {
+    background-color: #0B1E28 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 18px !important;
+    color: #fff !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
+  }
+  #modalConfigEmpresa .modal-dialog-scrollable .modal-body {
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+  }
+
+  /* ==========================================
+     CONTENEDOR DEL GRID - "Mesa" donde descansa la tarjeta
+     ========================================== */
+  .empresa-card-wrapper {
+    perspective: 1600px;            /* Profundidad amplia para un giro realista */
+    perspective-origin: center 40%; /* Punto de vista ligeramente elevado */
+    height: 360px;
+    width: 100%;
+    position: relative;
+  }
+
+  /* ==========================================
+     LA TARJETA Y EL EFECTO DE GIRO REALISTA
+     - La tarjeta se "levanta" ligeramente al voltear (translateZ)
+       como si la sacaras un poco de la mesa.
+     - Easing suave tipo "card flip" físico.
+     ========================================== */
+  .empresa-card-flip {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* Easing "bounce suave" - imita la inercia de una tarjeta física */
+    transition: transform 0.85s cubic-bezier(0.32, 0.72, 0.35, 1.05);
+    transform-style: preserve-3d;
+    cursor: pointer;
+    will-change: transform;
+    transform-origin: center center;
+  }
+
+  /* Al voltear: rotación 180° + pequeño levantamiento en Z */
+  .empresa-card-flip.flipped {
+    transform: rotateY(180deg) translateZ(20px);
+  }
+
+  /* Sombra que se "estira" en el suelo mientras la tarjeta se levanta */
+  .empresa-card-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 10%;
+    width: 80%;
+    height: 18px;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 70%);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0.6;
+    transition: all 0.85s cubic-bezier(0.32, 0.72, 0.35, 1.05);
+    pointer-events: none;
+    filter: blur(4px);
+  }
+  /* Al voltear, la sombra se achica y se difumina (tarjeta más lejos del suelo) */
+  .empresa-card-wrapper:has(.empresa-card-flip.flipped)::after {
+    opacity: 0.25;
+    width: 70%;
+    height: 12px;
+    filter: blur(8px);
+  }
+
+  /* ==========================================
+     CARAS (Anverso / Reverso)
+     - Mantiene backface-visibility limpio (sin translateZ conflictivos).
+     - Capa de "luz" superpuesta que reacciona al giro (shine effect).
+     ========================================== */
+  .empresa-card-front,
+  .empresa-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    background: rgba(13, 34, 32, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 20px;
+    backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+      0 4px 15px rgba(0,0,0,0.3),
+      inset 0 1px 0 rgba(255,255,255,0.06); /* brillo sutil en el borde superior */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  /* La cara trasera se gira 180° para que aparezca al voltear */
+  .empresa-card-back {
+    transform: rotateY(180deg);
+  }
+
+  /* Capa de "brillo" que recorre la tarjeta durante el giro
+     (luz reflejada simulando el material físico) */
+  .empresa-card-front::before,
+  .empresa-card-back::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.08) 48%,
+      rgba(255, 255, 255, 0.18) 50%,
+      rgba(255, 255, 255, 0.08) 52%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    z-index: 3;
+  }
+  /* El brillo aparece durante el giro (cuando la tarjeta está en movimiento) */
+  .empresa-card-flip:hover::before,
+  .empresa-card-front::before,
+  .empresa-card-back::before {
+    opacity: 0;
+  }
+  .empresa-card-flip.flipping .empresa-card-front::before,
+  .empresa-card-flip.flipping .empresa-card-back::before {
+    opacity: 1;
+    animation: shineSweep 0.85s ease;
+  }
+  @keyframes shineSweep {
+    0%   { background-position: -200% 0; opacity: 0; }
+    40%  { opacity: 1; }
+    100% { background-position: 200% 0; opacity: 0; }
+  }
+
+  /* Efecto Hover (Borde naranja) */
+  .empresa-card-wrapper:hover .empresa-card-front,
+  .empresa-card-wrapper:hover .empresa-card-back {
+    border-color: rgba(249, 115, 22, 0.6);
+    box-shadow:
+      0 12px 30px rgba(0,0,0,0.5),
+      0 0 0 1px rgba(249, 115, 22, 0.25),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+
+  /* Estado de la Empresa Activa */
+  .empresa-card-wrapper.activa-ahora .empresa-card-front,
+  .empresa-card-wrapper.activa-ahora .empresa-card-back {
+    border: 2px solid #F97316;
+    background: rgba(249, 115, 22, 0.15);
+  }
+
+  /* ==========================================
+     ESTILOS INTERNOS DE LAS CARAS
+     ========================================== */
+  .empresa-card-front {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .logo-grande {
+    width: 110px;
+    height: 110px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #F97316;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 0 auto 15px auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  .logo-grande img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .empresa-card-back {
+    justify-content: space-between;
+  }
+
+  .badge-fiscal {
+    font-size: 0.72rem;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #cbd5e1;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Indicador de giro (sutil) en la esquina */
+  .flip-hint {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-size: 0.7rem;
+    color: rgba(203, 213, 225, 0.55);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .flip-hint i {
+    font-size: 0.8rem;
+  }
+
+  /* Animación sutil del icono de giro en hover */
+  .empresa-card-wrapper:hover .flip-hint i {
+    animation: flipWiggle 0.8s ease;
+  }
+  @keyframes flipWiggle {
+    0%, 100% { transform: rotateY(0deg); }
+    50%      { transform: rotateY(180deg); }
+  }
+
+  /* ==========================================
+     ESTILOS DEL MODAL (INPUTS)
+     ========================================== */
+  #modalConfigEmpresa .form-control,
+  #modalConfigEmpresa .form-select {
+    background-color: #122a36 !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  }
+  #modalConfigEmpresa .form-control:focus,
+  #modalConfigEmpresa .form-select:focus {
+    background-color: #122a36 !important;
+    color: #fff !important;
+    border-color: #F97316 !important;
+    box-shadow: 0 0 0 0.2rem rgba(249, 115, 22, 0.25) !important;
+  }
+  #modalConfigEmpresa .form-control::placeholder {
+    color: rgba(203, 213, 225, 0.5) !important;
+  }
+  #modalConfigEmpresa .nav-pills .nav-link {
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  #modalConfigEmpresa .nav-pills .nav-link.active {
+    background: #F97316 !important;
+    color: #fff !important;
+    border-color: #F97316 !important;
+  }
+  #listaUsuariosAsignables::-webkit-scrollbar { width: 6px; }
+  #listaUsuariosAsignables::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+  }
+</style>
+
+<div class="container-fluid py-4">
+
+  <!-- CABECERA -->
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+      <h3 class="fw-bold text-white mb-1">
+        <i class="fas fa-city text-warning me-2"></i>Gestión de Empresas
+      </h3>
+      <p class="text-muted mb-0" style="font-size: 0.88rem;">
+        Administra las entidades, parámetros fiscales (IVA, ISLR, IGTF) y asigna usuarios
+      </p>
+    </div>
+    <button type="button" class="btn btn-warning fw-bold px-3 py-2 rounded-3"
+            onclick="abrirModalEmpresa(null)"
+            style="background: linear-gradient(135deg, #F97316, #EA580C); border: none; color: #fff;">
+      <i class="fas fa-plus-circle me-1"></i> Nueva Empresa
+    </button>
+  </div>
+
+  <!-- SPINNER DE CARGA -->
+  <div id="loadingEmpresasGrid" class="text-center py-5">
+    <div class="spinner-border text-warning" role="status"></div>
+    <div class="text-muted mt-2" style="font-size: 0.9rem;">Cargando catálogo de empresas...</div>
+  </div>
+
+  <!-- GRID DE TARJETAS -->
+  <div id="gridEmpresasContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" style="display: none;"></div>
+
+</div>
+
+<!-- ============================================================
+     MODAL DE CREACIÓN / EDICIÓN DE EMPRESA
+============================================================ -->
+<div class="modal fade" id="modalConfigEmpresa" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header border-bottom border-secondary border-opacity-25 py-3">
+        <h5 class="modal-title fw-bold" id="modalEmpresaTitulo">Configurar Empresa</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <ul class="nav nav-pills mb-3 gap-2" id="empresaTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active btn-sm" id="tab-general" data-bs-toggle="pill" data-bs-target="#panel-general" type="button" role="tab">
+              <i class="fas fa-id-card me-1"></i> 1. Identificación
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link btn-sm" id="tab-fiscal" data-bs-toggle="pill" data-bs-target="#panel-fiscal" type="button" role="tab">
+              <i class="fas fa-file-invoice-dollar me-1"></i> 2. Parámetros Fiscales
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link btn-sm" id="tab-usuarios" data-bs-toggle="pill" data-bs-target="#panel-usuarios" type="button" role="tab">
+              <i class="fas fa-users-cog me-1"></i> 3. Asignación de Usuarios
+            </button>
+          </li>
+        </ul>
+
+        <form id="formConfigEmpresa" onsubmit="guardarEmpresaSubmit(event)" novalidate>
+          <input type="hidden" id="empIdEmpresa">
+          <div class="tab-content" id="empresaTabsContent">
+            <!-- PANEL 1: GENERAL -->
+            <div class="tab-pane fade show active" id="panel-general" role="tabpanel">
+              <div class="row g-3">
+                <div class="col-md-7">
+                  <label class="form-label small text-muted">Razón Social / Nombre Comercial *</label>
+                  <input type="text" id="empNombre" class="form-control" required placeholder="Ej: Distribuidora Alpha, C.A." maxlength="120">
+                </div>
+                <div class="col-md-5">
+                  <label class="form-label small text-muted">RIF / Identificación Fiscal *</label>
+                  <input type="text" id="empRif" class="form-control" required placeholder="J-12345678-9" maxlength="20" style="text-transform: uppercase;">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small text-muted">Correo Electrónico</label>
+                  <input type="email" id="empCorreo" class="form-control" placeholder="admin@empresa.com">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small text-muted">Teléfono de Contacto</label>
+                  <input type="text" id="empTelefono" class="form-control" placeholder="0414-0000000">
+                </div>
+                <div class="col-md-8">
+                  <label class="form-label small text-muted">URL del Logo (Opcional)</label>
+                  <input type="url" id="empLogo" class="form-control" placeholder="https://..." oninput="previewLogoUrlDebounced(this.value)">
+                </div>
+                <div class="col-md-4 d-flex align-items-center gap-2 mt-4">
+                  <div id="boxLogoPreviewModal" class="logo-grande" style="width: 50px; height: 50px; border-radius: 12px; font-size: 1.5rem; margin: 0;">E</div>
+                  <small class="text-muted" style="font-size:0.75rem;">Vista previa</small>
+                </div>
+                <div class="col-12">
+                  <label class="form-label small text-muted">Dirección Fiscal</label>
+                  <input type="text" id="empDireccion" class="form-control" placeholder="Av. Principal, Edif...">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small text-muted">Estado de la Empresa</label>
+                  <select id="empStatus" class="form-select">
+                    <option value="Activo">Activa (Disponible para operar)</option>
+                    <option value="Inactivo">Inactiva (Bloqueada)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- PANEL 2: FISCAL -->
+            <div class="tab-pane fade" id="panel-fiscal" role="tabpanel">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small text-muted">% Retención IVA Predeterminado</label>
+                  <select id="empRetIva" class="form-select">
+                    <option value="75">75% (Contribuyente Especial)</option>
+                    <option value="100">100% (Retención Total)</option>
+                    <option value="0">0% (No aplica retención)</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small text-muted">% Retención ISLR Base</label>
+                  <select id="empRetIslr" class="form-select">
+                    <option value="1">1% (Bienes)</option>
+                    <option value="2">2% (Servicios Generales)</option>
+                    <option value="3">3% (Comisiones)</option>
+                    <option value="5">5% (Honorarios Profesionales PJ)</option>
+                    <option value="0">0% (Exento)</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-check form-switch mt-2">
+                    <input class="form-check-input" type="checkbox" id="empIgtf">
+                    <label class="form-check-label text-white fw-bold" for="empIgtf">Aplica IGTF (3% Divisas)</label>
+                  </div>
+                  <small class="text-muted d-block">Habilita el cálculo del 3% en cobros y pagos con moneda extranjera.</small>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-check form-switch mt-2">
+                    <input class="form-check-input" type="checkbox" id="empAlcaldia">
+                    <label class="form-check-label text-white fw-bold" for="empAlcaldia">Aplica Impuesto Municipal / Alcaldía</label>
+                  </div>
+                  <small class="text-muted d-block">Control de actividades económicas municipales.</small>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small text-muted">Cierre del Ejercicio Económico</label>
+                  <input type="text" id="empCierre" class="form-control" placeholder="31/12" value="31/12" maxlength="5">
+                  <small class="text-muted">Día y mes del cierre fiscal (Ej: 31/12 o 30/06).</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- PANEL 3: ASIGNACIÓN DE USUARIOS -->
+            <div class="tab-pane fade" id="panel-usuarios" role="tabpanel">
+              <p class="small text-muted mb-2">Marca los usuarios que tendrán acceso a esta empresa y selecciona su rol interno:</p>
+              <div id="listaUsuariosAsignables" style="max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+          </div>
+
+          <div class="modal-footer border-top border-secondary border-opacity-25 px-0 pb-0 mt-4">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" id="btnGuardarEmpresaModal" class="btn btn-warning btn-sm fw-bold px-4" style="background:#F97316; border:none; color:#fff;">
+              <i class="fas fa-save me-1"></i> Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ESTADO GLOBAL
+============================================================ */
+let __cacheEmpresasData = [];
+let __cacheUsuariosList = [];
+let __previewTimer = null;
+const RIF_REGEX = /^[VEJPG]-\d{8}-\d$/i;
+
+/* ============================================================
+   INICIALIZACIÓN
+============================================================ */
+function initEmpresasConfig() {
+  cargarGridEmpresas();
+}
+
+function cargarGridEmpresas() {
+  const loading = document.getElementById('loadingEmpresasGrid');
+  const container = document.getElementById('gridEmpresasContainer');
+  if (loading) loading.style.display = 'block';
+  if (container) container.style.display = 'none';
+
+  const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+  if (!userData.token) {
+    if (loading) loading.style.display = 'none';
+    Swal.fire('Sesión expirada', 'Vuelve a iniciar sesión.', 'warning');
+    return;
+  }
+
+  google.script.run
+    .withSuccessHandler(function(res) {
+      if (loading) loading.style.display = 'none';
+      if (!res || !res.success) {
+        Swal.fire('Error', (res && res.message) || 'No se pudieron cargar las empresas', 'error');
+        return;
+      }
+      __cacheEmpresasData = res.empresas || [];
+      __cacheUsuariosList = res.todosLosUsuarios || [];
+      renderizarEmpresasGrid(__cacheEmpresasData);
+    })
+    .withFailureHandler(function(err) {
+      if (loading) loading.style.display = 'none';
+      Swal.fire('Error', err.message, 'error');
+    })
+    .apiObtenerDatosGestionEmpresas(userData.token);
+}
+
+/* ============================================================
+   RENDER DEL GRID
+============================================================ */
+function renderizarEmpresasGrid(empresas) {
+  const container = document.getElementById('gridEmpresasContainer');
+  if (!container) return;
+
+  const empresaActiva = JSON.parse(sessionStorage.getItem('empresaActiva') || '{}');
+  const idActiva = String(empresaActiva.idEmpresa || '');
+
+  if (!Array.isArray(empresas) || empresas.length === 0) {
+    container.innerHTML = `
+      <div class="col-12 text-center text-muted py-5">
+        <i class="fas fa-building fa-2x mb-2 d-block"></i>
+        No hay empresas registradas. Crea la primera con el botón <strong>Nueva Empresa</strong>.
+      </div>`;
+    container.style.display = 'flex';
+    return;
+  }
+
+  let html = '';
+
+  empresas.forEach(emp => {
+    const idStr = String(emp.idEmpresa || '');
+    const esActiva = idStr !== '' && idStr === idActiva;
+
+    const statusStr = String(emp.status || 'Inactivo').trim();
+    const esStatusActivo = statusStr.toLowerCase() === 'activo';
+
+    const manejaIGTF = emp.manejaIGTF === true || emp.manejaIGTF === 'TRUE' || emp.manejaIGTF === 'SI';
+    const manejaAlcaldia = emp.manejaAlcaldia === true || emp.manejaAlcaldia === 'TRUE' || emp.manejaAlcaldia === 'SI';
+
+    const nombre = String(emp.nombreEmpresa || 'Sin nombre');
+    const inicial = nombre.charAt(0).toUpperCase() || 'E';
+
+    const numUsuarios = Array.isArray(emp.usuariosAsignados) ? emp.usuariosAsignados.length : 0;
+
+    const logoHtml = emp.logo
+      ? `<img src="${escapeHtml(emp.logo)}" alt="logo" onerror="this.parentNode.textContent='${escapeHtml(inicial)}';this.parentNode.style.color='#F97316';">`
+      : escapeHtml(inicial);
+
+    html += `
+      <div class="col">
+        <div class="empresa-card-wrapper ${esActiva ? 'activa-ahora' : ''}">
+
+          <div class="empresa-card-flip"
+               role="button"
+               tabindex="0"
+               aria-label="Tarjeta de ${escapeHtml(nombre)}. Presiona Enter para voltear."
+               onclick="toggleFlipCard(event, this)"
+               onkeydown="handleFlipKeydown(event, this)">
+
+            <!-- CARA FRONTAL (Anverso) -->
+            <div class="empresa-card-front">
+              <span class="flip-hint"><i class="fas fa-sync-alt"></i> Voltear</span>
+              <div class="w-100">
+                <div class="logo-grande">${logoHtml}</div>
+                <h4 class="text-white fw-bold mb-2">${escapeHtml(nombre)}</h4>
+                <span class="badge ${esStatusActivo ? 'bg-success' : 'bg-danger'} bg-opacity-75 mb-3">
+                  ${escapeHtml(statusStr)}
+                </span>
+                <div class="text-muted small mt-3" style="opacity: 0.6;">
+                  <i class="fas fa-sync-alt me-1"></i> Clic para ver detalles
+                </div>
+              </div>
+            </div>
+
+            <!-- CARA TRASERA (Reverso) -->
+            <div class="empresa-card-back">
+              <span class="flip-hint"><i class="fas fa-sync-alt"></i> Voltear</span>
+              <div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <h6 class="text-white fw-bold mb-0 text-truncate" title="${escapeHtml(nombre)}">${escapeHtml(nombre)}</h6>
+                  <span class="badge ${esStatusActivo ? 'bg-success' : 'bg-danger'} bg-opacity-75">${escapeHtml(statusStr)}</span>
+                </div>
+
+                <div class="text-muted small mb-3">
+                  <i class="fas fa-barcode me-1"></i>${escapeHtml(String(emp.rifEmpresa || '—'))}
+                </div>
+
+                <div class="d-flex flex-wrap gap-1 mb-3">
+                  <span class="badge-fiscal">Ret. IVA: ${escapeHtml(String(emp.porcentajeIVA ?? '—'))}%</span>
+                  <span class="badge-fiscal">Ret. ISLR: ${escapeHtml(String(emp.porcentajeISLR ?? '—'))}%</span>
+                  <span class="badge-fiscal">IGTF: ${manejaIGTF ? 'SÍ' : 'NO'}</span>
+                  <span class="badge-fiscal">Alcaldía: ${manejaAlcaldia ? 'SÍ' : 'NO'}</span>
+                  <span class="badge-fiscal">Cierre: ${escapeHtml(String(emp.cierreEjercicio || '—'))}</span>
+                </div>
+
+                <div class="small text-muted mb-3">
+                  <i class="fas fa-users me-1"></i>${numUsuarios} usuarios asignados
+                </div>
+              </div>
+
+              <!-- Botones de acción -->
+              <div class="d-flex gap-2 pt-3 border-top border-secondary border-opacity-25 mt-auto">
+                <button type="button"
+                        class="btn btn-sm ${esActiva ? 'btn-outline-warning disabled' : 'btn-outline-light'} flex-grow-1"
+                        data-emp-id="${escapeHtml(idStr)}"
+                        onclick="event.stopPropagation(); activarEmpresaPorId(this.dataset.empId)"
+                        ${esActiva ? 'disabled' : ''}>
+                  ${esActiva ? '<i class="fas fa-check me-1"></i>En uso' : '<i class="fas fa-play me-1"></i>Trabajar aquí'}
+                </button>
+                <button type="button"
+                        class="btn btn-sm btn-secondary"
+                        data-emp-id="${escapeHtml(idStr)}"
+                        onclick="event.stopPropagation(); abrirModalEmpresa(this.dataset.empId)"
+                        title="Configurar empresa">
+                  <i class="fas fa-cog"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+  container.style.display = 'flex';
+}
+
+/* ============================================================
+   LÓGICA DEL EFECTO FLIP
+   - Recibe `event` como parámetro (no usa el global deprecado).
+   - Si el clic viene de un botón, no gira (botones manejan su acción).
+   - Acordeón: solo una tarjeta girada a la vez.
+============================================================ */
+function toggleFlipCard(event, element) {
+  if (!element) return;
+
+  // Si el clic fue dentro de un botón, dejamos que el botón haga su acción
+  if (event && event.target && event.target.closest('button')) return;
+
+  const isFlipped = element.classList.contains('flipped');
+
+  // 1. Cerrar todas las demás tarjetas (acordeón)
+  document.querySelectorAll('.empresa-card-flip.flipped').forEach(card => {
+    if (card !== element) card.classList.remove('flipped');
+  });
+
+  // 2. Disparar el efecto de brillo durante el giro
+  element.classList.add('flipping');
+  setTimeout(() => element.classList.remove('flipping'), 850);
+
+  // 3. Girar o devolver la tarjeta actual
+  if (isFlipped) {
+    element.classList.remove('flipped');
+    const lbl = element.getAttribute('aria-label') || '';
+    if (lbl.endsWith('. Tarjeta volteada.')) {
+      element.setAttribute('aria-label', lbl.replace('. Tarjeta volteada.', ''));
+    }
+  } else {
+    element.classList.add('flipped');
+    const lbl = element.getAttribute('aria-label') || '';
+    if (!lbl.endsWith('. Tarjeta volteada.')) {
+      element.setAttribute('aria-label', lbl + '. Tarjeta volteada.');
+    }
+  }
+}
+
+/* Soporte de teclado: Enter o Espacio voltean la tarjeta */
+function handleFlipKeydown(event, element) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    toggleFlipCard(event, element);
+  }
+}
+
+/* ============================================================
+   ACTIVAR EMPRESA
+============================================================ */
+function activarEmpresaPorId(idEmpresa) {
+  const emp = __cacheEmpresasData.find(e => String(e.idEmpresa) === String(idEmpresa));
+  if (!emp) {
+    Swal.fire('Error', 'Empresa no encontrada en caché. Recarga la página.', 'error');
+    return;
+  }
+  if (typeof seleccionarEmpresaActiva !== 'function') {
+    Swal.fire('Error', 'Función seleccionarEmpresaActiva no disponible.', 'error');
+    return;
+  }
+  seleccionarEmpresaActiva(emp, true);
+}
+
+/* ============================================================
+   MODAL: ABRIR
+============================================================ */
+function abrirModalEmpresa(idEmpresa) {
+  const form = document.getElementById('formConfigEmpresa');
+  if (!form) return;
+  form.reset();
+
+  const titulo = document.getElementById('modalEmpresaTitulo');
+  const firstTab = new bootstrap.Tab(document.getElementById('tab-general'));
+  firstTab.show();
+
+  let emp = null;
+  if (idEmpresa) {
+    emp = __cacheEmpresasData.find(e => String(e.idEmpresa) === String(idEmpresa));
+    if (!emp) {
+      Swal.fire('Error', 'Empresa no encontrada en caché.', 'error');
+      return;
+    }
+    titulo.innerHTML = '<i class="fas fa-edit text-warning me-2"></i>Editar Empresa';
+  } else {
+    titulo.innerHTML = '<i class="fas fa-plus-circle text-warning me-2"></i>Nueva Empresa';
+  }
+
+  document.getElementById('empIdEmpresa').value = emp ? String(emp.idEmpresa) : '';
+  document.getElementById('empNombre').value = emp ? (emp.nombreEmpresa || '') : '';
+  document.getElementById('empRif').value = emp ? (emp.rifEmpresa || '') : '';
+  document.getElementById('empCorreo').value = emp ? (emp.correoEmpresa || '') : '';
+  document.getElementById('empTelefono').value = emp ? (emp.telefonoEmpresa || '') : '';
+  document.getElementById('empDireccion').value = emp ? (emp.direccionEmpresa || '') : '';
+  document.getElementById('empLogo').value = emp ? (emp.logo || '') : '';
+  document.getElementById('empStatus').value = emp ? (emp.status || 'Activo') : 'Activo';
+
+  document.getElementById('empRetIva').value = emp ? String(emp.porcentajeIVA ?? 75) : '75';
+  document.getElementById('empRetIslr').value = emp ? String(emp.porcentajeISLR ?? 2) : '2';
+
+  const manejaIGTF = emp ? (emp.manejaIGTF === true || emp.manejaIGTF === 'TRUE' || emp.manejaIGTF === 'SI') : true;
+  const manejaAlcaldia = emp ? (emp.manejaAlcaldia === true || emp.manejaAlcaldia === 'TRUE' || emp.manejaAlcaldia === 'SI') : false;
+
+  document.getElementById('empIgtf').checked = manejaIGTF;
+  document.getElementById('empAlcaldia').checked = manejaAlcaldia;
+  document.getElementById('empCierre').value = emp ? (emp.cierreEjercicio || '31/12') : '31/12';
+
+  _previewLogoUrl(emp ? (emp.logo || '') : '');
+
+  const contenedorU = document.getElementById('listaUsuariosAsignables');
+  let uHtml = '';
+  const asignados = emp && Array.isArray(emp.usuariosAsignados) ? emp.usuariosAsignados : [];
+
+  if (!__cacheUsuariosList.length) {
+    uHtml = `<div class="text-muted small text-center py-3">No hay usuarios activos para asignar. Crea usuarios primero.</div>`;
+  } else {
+    __cacheUsuariosList.forEach(u => {
+      const asignadoObj = asignados.find(a => String(a.username).toLowerCase() === String(u.username).toLowerCase());
+      const marcado = !!asignadoObj;
+      const rolActual = asignadoObj ? asignadoObj.rolEmpresa : (u.role || 'Consulta');
+      const safeUser = escapeHtml(String(u.username));
+      const safeNombre = escapeHtml(String(u.nombre || u.username));
+
+      uHtml += `
+        <div class="d-flex align-items-center justify-content-between p-2 rounded-3"
+             data-user-row data-username="${safeUser}"
+             style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+          <div class="form-check mb-0">
+            <input class="form-check-input chk-user-emp" type="checkbox"
+                   value="${safeUser}" id="chk_user_${safeUser.replace(/[^a-zA-Z0-9]/g, '_')}"
+                   ${marcado ? 'checked' : ''} onchange="toggleRolSelect(this)">
+            <label class="form-check-label text-white small" for="chk_user_${safeUser.replace(/[^a-zA-Z0-9]/g, '_')}">
+              <strong>${safeNombre}</strong> <span class="text-muted">(${safeUser})</span>
+            </label>
+          </div>
+          <select class="form-select form-select-sm sel-user-rol" data-username="${safeUser}" style="width: 140px;" ${marcado ? '' : 'disabled'}>
+            <option value="Admin" ${rolActual === 'Admin' ? 'selected' : ''}>Admin</option>
+            <option value="Facturador" ${rolActual === 'Facturador' ? 'selected' : ''}>Facturador</option>
+            <option value="Vendedor" ${rolActual === 'Vendedor' ? 'selected' : ''}>Vendedor</option>
+            <option value="Consulta" ${rolActual === 'Consulta' ? 'selected' : ''}>Consulta</option>
+          </select>
+        </div>
+      `;
+    });
+  }
+  contenedorU.innerHTML = uHtml;
+
+  const modalEl = document.getElementById('modalConfigEmpresa');
+  if (modalEl.parentNode !== document.body) document.body.appendChild(modalEl);
+
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  modal.show();
+}
+
+/* ============================================================
+   MODAL: UI HELPERS
+============================================================ */
+function toggleRolSelect(chk) {
+  const row = chk.closest('[data-user-row]');
+  if (!row) return;
+  const sel = row.querySelector('.sel-user-rol');
+  if (sel) sel.disabled = !chk.checked;
+}
+
+function previewLogoUrlDebounced(url) {
+  clearTimeout(__previewTimer);
+  __previewTimer = setTimeout(() => _previewLogoUrl(url), 300);
+}
+
+function _previewLogoUrl(url) {
+  const box = document.getElementById('boxLogoPreviewModal');
+  if (!box) return;
+  const cleanUrl = String(url || '').trim();
+  if (cleanUrl && /^https?:\/\//i.test(cleanUrl)) {
+    box.innerHTML = `<img src="${escapeHtml(cleanUrl)}" alt="preview" onerror="this.parentNode.textContent='E';this.parentNode.style.color='#F97316';">`;
+  } else {
+    box.textContent = 'E';
+    box.style.color = '#F97316';
+  }
+}
+
+/* ============================================================
+   MODAL: GUARDAR
+============================================================ */
+function guardarEmpresaSubmit(e) {
+  e.preventDefault();
+
+  const idEmpresa = document.getElementById('empIdEmpresa').value.trim();
+  const esEdicion = !!idEmpresa;
+
+  const nombre = document.getElementById('empNombre').value.trim();
+  const rifRaw = document.getElementById('empRif').value.trim().toUpperCase();
+
+  if (!nombre) return Swal.fire('Campo requerido', 'El nombre de la empresa es obligatorio.', 'warning');
+  if (!rifRaw) return Swal.fire('Campo requerido', 'El RIF es obligatorio.', 'warning');
+  if (!RIF_REGEX.test(rifRaw)) return Swal.fire('RIF inválido', 'Formato esperado: J-12345678-9', 'warning');
+
+  const cierre = document.getElementById('empCierre').value.trim() || '31/12';
+  if (!/^\d{2}\/\d{2}$/.test(cierre)) return Swal.fire('Cierre inválido', 'Usa el formato DD/MM (ej: 31/12).', 'warning');
+
+  const datosEmpresa = {
+    idEmpresa: idEmpresa,
+    nombreEmpresa: nombre,
+    rifEmpresa: rifRaw,
+    correoEmpresa: document.getElementById('empCorreo').value.trim(),
+    telefonoEmpresa: document.getElementById('empTelefono').value.trim(),
+    direccionEmpresa: document.getElementById('empDireccion').value.trim(),
+    logo: document.getElementById('empLogo').value.trim(),
+    status: document.getElementById('empStatus').value,
+    porcentajeIVA: Number(document.getElementById('empRetIva').value),
+    porcentajeISLR: Number(document.getElementById('empRetIslr').value),
+    manejaIGTF: document.getElementById('empIgtf').checked,
+    manejaAlcaldia: document.getElementById('empAlcaldia').checked,
+    cierreEjercicio: cierre
+  };
+
+  const usuariosAsignados = [];
+  document.querySelectorAll('.chk-user-emp:checked').forEach(chk => {
+    const row = chk.closest('[data-user-row]');
+    const selRol = row ? row.querySelector('.sel-user-rol') : null;
+    usuariosAsignados.push({ username: chk.value, rolEmpresa: selRol ? selRol.value : 'Consulta' });
+  });
+
+  const btn = document.getElementById('btnGuardarEmpresaModal');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Guardando...';
+
+  const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+  if (!userData.token) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-save me-1"></i> Guardar Cambios';
+    return Swal.fire('Sesión expirada', 'Vuelve a iniciar sesión.', 'warning');
+  }
+
+  const successHandler = function(res) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-save me-1"></i> Guardar Cambios';
+
+    if (res && res.success) {
+      _sincronizarEmpresaActivaSiAplica(datosEmpresa, esEdicion);
+      const modalEl = document.getElementById('modalConfigEmpresa');
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) modal.hide();
+      Swal.fire('Éxito', res.message || 'Guardado correctamente.', 'success');
+      cargarGridEmpresas();
+    } else {
+      Swal.fire('Error', (res && res.message) || 'No se pudo guardar', 'error');
+    }
+  };
+
+  const failureHandler = function(err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-save me-1"></i> Guardar Cambios';
+    Swal.fire('Error', err.message || 'Error de red', 'error');
+  };
+
+  const runner = google.script.run.withSuccessHandler(successHandler).withFailureHandler(failureHandler);
+
+  if (esEdicion) {
+    runner.apiGuardarDatosEmpresa(userData.token, datosEmpresa, usuariosAsignados);
+  } else {
+    runner.apiCrearEmpresaCompleta(userData.token, datosEmpresa, usuariosAsignados);
+  }
+}
+
+/* ============================================================
+   HELPERS
+============================================================ */
+function _sincronizarEmpresaActivaSiAplica(datosEmpresa, esEdicion) {
+  if (!esEdicion) return;
+  try {
+    const activa = JSON.parse(sessionStorage.getItem('empresaActiva') || '{}');
+    if (String(activa.idEmpresa) === String(datosEmpresa.idEmpresa)) {
+      const merged = Object.assign({}, activa, datosEmpresa);
+      sessionStorage.setItem('empresaActiva', JSON.stringify(merged));
+    }
+  } catch (e) {
+    console.warn('No se pudo sincronizar empresaActiva:', e);
+  }
+}
+
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+</script>

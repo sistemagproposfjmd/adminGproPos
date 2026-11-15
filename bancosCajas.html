@@ -1,0 +1,2152 @@
+<!-- ============================================================
+     MÓDULO: Bancos y Cajas - Tesorería Pro (REDiseñado)
+     ============================================================ -->
+
+<style>
+:root {
+  --bc-bg-main: #0a0c10;
+  --bc-bg-card: rgba(17, 20, 28, 0.85);
+  --bc-bg-card-hover: rgba(26, 30, 41, 0.95);
+  --bc-border: rgba(0, 212, 255, 0.12);
+  --bc-border-hover: rgba(0, 212, 255, 0.35);
+  --bc-accent: #00d4ff;
+  --bc-accent-grad: linear-gradient(135deg, #00d4ff 0%, #0077ff 100%);
+  --bc-text-primary: #f8fafc;
+  --bc-text-secondary: #94a3b8;
+  --bc-text-muted: #64748b;
+  --bc-success: #10b981;
+  --bc-danger: #ef4444;
+  --bc-warning: #f59e0b;
+  --bc-glass: rgba(13, 16, 23, 0.75);
+}
+
+.bc-app {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--bc-text-primary);
+  background: var(--bc-bg-main);
+  min-height: 100vh;
+  padding-bottom: 5rem;
+}
+
+/* ===== RESUMEN FINANCIERO SUPERIOR (KPIS) ===== */
+.bc-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.85rem;
+  padding: 1rem 1rem 0 1rem;
+}
+.bc-kpi-card {
+  background: var(--bc-bg-card);
+  border: 1px solid var(--bc-border);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.bc-kpi-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+}
+.bc-kpi-val {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-top: 0.2rem;
+}
+.bc-kpi-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--bc-text-muted);
+}
+
+/* ===== NAVEGACIÓN POR TABS ===== */
+.bc-tabs-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10, 12, 16, 0.95);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--bc-border);
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.bc-tabs-bar::-webkit-scrollbar { display: none; }
+.bc-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--bc-text-secondary);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.bc-tab-btn:hover {
+  color: var(--bc-text-primary);
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px 8px 0 0;
+}
+.bc-tab-btn.active {
+  color: var(--bc-accent);
+  border-bottom-color: var(--bc-accent);
+}
+
+/* ===== VISTAS / SECCIONES ===== */
+.bc-tab-content {
+  display: none;
+  padding: 1.25rem 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.bc-tab-content.active {
+  display: block;
+  animation: bcFade 0.25s ease-out;
+}
+@keyframes bcFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== TARJETAS Y CONTENEDORES ===== */
+.bc-card {
+  background: var(--bc-bg-card);
+  border: 1px solid var(--bc-border);
+  border-radius: 14px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+}
+.bc-card-header {
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--bc-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.bc-card-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.02em;
+}
+.bc-card-body {
+  padding: 1.25rem;
+}
+
+/* ===== FORMULARIOS ===== */
+.bc-form-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(12, 1fr);
+}
+.bc-col-12 { grid-column: span 12; }
+.bc-col-8 { grid-column: span 8; }
+.bc-col-6 { grid-column: span 6; }
+.bc-col-4 { grid-column: span 4; }
+.bc-col-3 { grid-column: span 3; }
+.bc-col-2 { grid-column: span 2; }
+
+.bc-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.bc-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--bc-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.bc-label i { color: var(--bc-accent); }
+.bc-input, .bc-select, .bc-textarea {
+  height: 42px;
+  background: rgba(0, 212, 255, 0.04) !important;
+  border: 1.5px solid var(--bc-border) !important;
+  color: var(--bc-text-primary) !important;
+  border-radius: 8px;
+  padding: 0 0.85rem;
+  font-size: 0.88rem;
+  transition: all 0.25s ease;
+  width: 100%;
+}
+.bc-textarea {
+  height: auto;
+  min-height: 70px;
+  padding: 0.6rem 0.85rem;
+}
+.bc-input:focus, .bc-select:focus, .bc-textarea:focus {
+  background: rgba(0, 212, 255, 0.09) !important;
+  border-color: var(--bc-accent) !important;
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2) !important;
+  outline: none;
+}
+.bc-input[readonly] {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: var(--bc-text-muted) !important;
+  cursor: default;
+}
+
+/* Banner de equivalencia financiera */
+.bc-exchange-box {
+  background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,102,255,0.06));
+  border: 1px dashed var(--bc-border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* ===== TABLAS Y LISTADOS ===== */
+.bc-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.bc-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.85rem;
+}
+.bc-table th {
+  background: rgba(0, 212, 255, 0.06);
+  color: var(--bc-accent);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  padding: 0.85rem 0.75rem;
+  border-bottom: 1px solid var(--bc-border);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.bc-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: middle;
+}
+.bc-table tbody tr {
+  transition: background 0.15s ease;
+}
+.bc-table tbody tr:hover {
+  background: rgba(0, 212, 255, 0.04);
+}
+
+/* ===== BOTONES ===== */
+.bc-btn {
+  height: 42px;
+  padding: 0 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.bc-btn-primary {
+  background: var(--bc-accent-grad);
+  color: #fff;
+  box-shadow: 0 0 14px rgba(0, 212, 255, 0.3);
+}
+.bc-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+.bc-btn-success { background: #10b981; color: white; }
+.bc-btn-warning { background: #f59e0b; color: white; }
+.bc-btn-danger { background: #ef4444; color: white; }
+.bc-btn-ghost {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--bc-border);
+  color: var(--bc-text-secondary);
+}
+.bc-btn-ghost:hover {
+  background: rgba(255,255,255,0.09);
+  color: var(--bc-text-primary);
+}
+
+.bc-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--bc-border);
+  color: var(--bc-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.bc-icon-btn:hover {
+  color: #fff;
+  background: var(--bc-accent);
+  border-color: var(--bc-accent);
+}
+.bc-icon-btn.danger:hover {
+  background: var(--bc-danger);
+  border-color: var(--bc-danger);
+}
+
+/* Badges */
+.bc-badge {
+  padding: 0.25rem 0.55rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.bc-badge-success { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+.bc-badge-danger { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+.bc-badge-cyan { background: rgba(0, 212, 255, 0.15); color: #00d4ff; border: 1px solid rgba(0, 212, 255, 0.3); }
+
+/* Botón flotante */
+.bc-fab {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--bc-accent-grad);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,212,255,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.25rem;
+  z-index: 1050;
+  transition: transform 0.2s;
+}
+.bc-fab:hover { transform: scale(1.08); }
+
+/* Loader */
+.bc-spinner-overlay {
+  display: none;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+/* ============================================================
+   RESPONSIVE ADAPTATIVO (MÓVIL TIPO APPSHEET)
+   ============================================================ */
+@media (max-width: 820px) {
+  .bc-col-12, .bc-col-8, .bc-col-6, .bc-col-4, .bc-col-3, .bc-col-2 {
+    grid-column: span 12 !important;
+  }
+  .bc-tab-btn span { display: none; }
+  .bc-tab-btn { padding: 0.85rem 1rem; font-size: 1.1rem; }
+  
+  .bc-table thead { display: none; }
+  .bc-table tbody tr {
+    display: block;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--bc-border);
+    border-radius: 12px;
+    margin-bottom: 0.85rem;
+    padding: 0.85rem;
+  }
+  .bc-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    padding: 0.35rem 0;
+    font-size: 0.82rem;
+  }
+  .bc-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--bc-text-muted);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+  }
+  .bc-table tbody td.actions-td {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin-top: 0.5rem;
+    padding-top: 0.6rem;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+  .bc-table tbody td.actions-td::before { display: none; }
+  
+  .hide-mobile { display: none !important; }
+}
+</style>
+
+<div class="bc-app">
+
+  <!-- Toast Notification Container -->
+  <div id="bc-toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1090"></div>
+
+  <!-- ══════════ RESUMEN FINANCIERO SUPERIOR ══════════ -->
+  <div class="bc-kpi-grid">
+    <div class="bc-kpi-card">
+      <div>
+        <div class="bc-kpi-label">Saldo Total Estimado</div>
+        <div class="bc-kpi-val text-success" id="bc-kpi-total-usd">$0.00</div>
+      </div>
+      <div class="bc-kpi-icon" style="background:rgba(16,185,129,0.15);color:#10b981;">
+        <i class="fas fa-wallet"></i>
+      </div>
+    </div>
+    <div class="bc-kpi-card">
+      <div>
+        <div class="bc-kpi-label">Equivalente Total</div>
+        <div class="bc-kpi-val" style="color:var(--bc-accent)" id="bc-kpi-total-bs">Bs 0.00</div>
+      </div>
+      <div class="bc-kpi-icon" style="background:rgba(0,212,255,0.15);color:var(--bc-accent);">
+        <i class="fas fa-coins"></i>
+      </div>
+    </div>
+    <div class="bc-kpi-card">
+      <div>
+        <div class="bc-kpi-label">Bancos Registrados</div>
+        <div class="bc-kpi-val" id="bc-kpi-bancos-count">0</div>
+      </div>
+      <div class="bc-kpi-icon" style="background:rgba(0,119,255,0.15);color:#0077ff;">
+        <i class="fas fa-university"></i>
+      </div>
+    </div>
+    <div class="bc-kpi-card">
+      <div>
+        <div class="bc-kpi-label">Cajas Activas</div>
+        <div class="bc-kpi-val" id="bc-kpi-cajas-count">0</div>
+      </div>
+      <div class="bc-kpi-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b;">
+        <i class="fas fa-cash-register"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ TABS DE NAVEGACIÓN ══════════ -->
+  <div class="bc-tabs-bar">
+    <button class="bc-tab-btn active" data-tab="movimientos">
+      <i class="fas fa-exchange-alt"></i> <span>Movimientos</span>
+    </button>
+    <button class="bc-tab-btn" data-tab="anticipos">
+      <i class="fas fa-hand-holding-usd"></i> <span>Anticipos</span>
+    </button>
+    <button class="bc-tab-btn" data-tab="cuentas">
+      <i class="fas fa-credit-card"></i> <span>Cuentas Bancarias</span>
+    </button>
+    <button class="bc-tab-btn" data-tab="entidades">
+      <i class="fas fa-sliders-h"></i> <span>Bancos y Cajas</span>
+    </button>
+  </div>
+
+  <!-- SPINNER / CARGADOR GLOBAL -->
+  <div id="bc-global-loader" class="bc-spinner-overlay">
+    <div class="spinner-border text-info" role="status"></div>
+    <div class="mt-2 text-muted small">Cargando tesorería...</div>
+  </div>
+
+  <!-- ============================================================
+       TAB 1: MOVIMIENTOS
+       ============================================================ -->
+  <div id="bc-view-movimientos" class="bc-tab-content active">
+
+    <!-- Card de Formulario de Movimiento (colapsable) -->
+    <div id="bc-box-form-mov" class="bc-card" style="display:none;">
+      <div class="bc-card-header">
+        <h5 class="bc-card-title">
+          <i class="fas fa-edit" style="color:var(--bc-accent)"></i> <span id="bc-mov-form-title">Nuevo Movimiento</span>
+        </h5>
+        <button type="button" class="bc-btn-ghost bc-btn" id="bc-btn-cerrar-form-mov"><i class="fas fa-times"></i> Cancelar</button>
+      </div>
+      <div class="bc-card-body">
+        <form id="bc-form-movimiento">
+          <input type="hidden" id="bc-mov-id">
+          
+          <div class="bc-form-grid">
+            <div class="bc-col-3">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-calendar"></i> Fecha</label>
+                <input type="date" class="bc-input" id="bc-mov-fecha" required>
+              </div>
+            </div>
+            <div class="bc-col-3">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-tag"></i> Tipo Origen</label>
+                <select class="bc-select" id="bc-mov-origen" required>
+                  <option value="">Seleccione...</option>
+                  <option value="Banco">Banco</option>
+                  <option value="Caja">Caja</option>
+                </select>
+              </div>
+            </div>
+            <div class="bc-col-6">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-landmark"></i> Cuenta / Entidad</label>
+                <input class="bc-input" list="bc-dl-cuentas-mov" id="bc-mov-cuenta-input" placeholder="Buscar cuenta o caja..." required>
+                <datalist id="bc-dl-cuentas-mov"></datalist>
+              </div>
+            </div>
+
+            <div class="bc-col-4">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-exchange-alt"></i> Naturaleza</label>
+                <select class="bc-select" id="bc-mov-tipo-trans" required>
+                  <option value="Transf Positiva(+)">Ingreso (+)</option>
+                  <option value="Transf Negativa(-)">Egreso / Pago (-)</option>
+                </select>
+              </div>
+            </div>
+            <div class="bc-col-4">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-hashtag"></i> Referencia</label>
+                <input type="text" class="bc-input" id="bc-mov-referencia" placeholder="Nro de comprobante" required>
+              </div>
+            </div>
+
+<!-- SECCIÓN MULTILÍNEA: DISTRIBUCIÓN DE CUENTAS CONTABLES -->
+            <div class="bc-col-12 mt-2">
+              <div class="bc-card mb-0" style="background: rgba(0, 212, 255, 0.02); border: 1px dashed var(--bc-border);">
+                <div class="bc-card-header py-2 px-3 d-flex justify-content-between align-items-center">
+                  <span class="small fw-bold text-uppercase" style="color:var(--bc-accent);"><i class="fas fa-sitemap me-2"></i>Distribución Contable Multilínea (Detalle)</span>
+                  <span class="badge bg-secondary" id="bc-badge-total-lineas">0 cuentas agregadas</span>
+                </div>
+                <div class="bc-card-body p-3">
+                  <!-- Inputs para agregar un renglón -->
+                  <div class="row g-2 align-items-end mb-2">
+                    <div class="col-md-5 col-12">
+                      <label class="bc-label"><i class="fas fa-book"></i> Cuenta Contable</label>
+                      <input type="text" class="bc-input" list="bc-dl-cuentas-contables" id="bc-renglon-contable" placeholder="Buscar cuenta contable...">
+                    </div>
+                    <div class="col-md-3 col-6">
+                      <label class="bc-label"><i class="fas fa-comment-alt"></i> Concepto Renglón</label>
+                      <input type="text" class="bc-input" id="bc-renglon-concepto" placeholder="Detalle (opcional)">
+                    </div>
+                    <div class="col-md-2 col-6">
+                      <label class="bc-label"><i class="fas fa-dollar-sign"></i> Monto ($)</label>
+                      <input type="number" step="0.01" class="bc-input" id="bc-renglon-monto" placeholder="0.00">
+                    </div>
+                    <div class="col-md-2 col-12">
+                      <button type="button" class="bc-btn bc-btn-primary w-100" id="bc-btn-agregar-renglon" onclick="window.agregarRenglonContable()">
+                        <i class="fas fa-plus"></i> Agregar
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Tabla de renglones contables -->
+                  <div class="table-responsive mt-2">
+                    <table class="table table-sm table-hover align-middle mb-0" style="font-size:0.82rem;">
+                      <thead style="background:rgba(255,255,255,0.03); color:var(--bc-text-muted);">
+                        <tr>
+                          <th>Cuenta Contable</th>
+                          <th class="hide-mobile">Concepto</th>
+                          <th class="text-end">Monto USD</th>
+                          <th class="text-end">Equivalente Bs</th>
+                          <th class="text-center" style="width:50px;">Quitar</th>
+                        </tr>
+                      </thead>
+                      <tbody id="bc-renglones-tbody">
+                        <tr><td colspan="5" class="text-center text-muted py-3">Agregue al menos una cuenta contable a este movimiento</td></tr>
+                      </tbody>
+                      <tfoot style="border-top:1px solid var(--bc-border); font-weight:700;">
+                        <tr>
+                          <td colspan="2" class="text-end text-muted">Total Distribución:</td>
+                          <td class="text-end text-success" id="bc-total-renglones-usd">$0.00</td>
+                          <td class="text-end" style="color:var(--bc-accent);" id="bc-total-renglones-bs">Bs 0.00</td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bloque Divisas -->
+            <div class="bc-col-12">
+              <div class="bc-exchange-box">
+                <div style="flex:1;min-width:140px;">
+                  <label class="bc-label"><i class="fas fa-coins"></i> Moneda</label>
+                  <select class="bc-select" id="bc-mov-moneda" required></select>
+                </div>
+                <div style="flex:1;min-width:120px;">
+                  <label class="bc-label"><i class="fas fa-percent"></i> Tasa de Cambio</label>
+                  <input type="number" step="0.0001" class="bc-input" id="bc-mov-tasa" value="1.0000" required>
+                </div>
+                <div style="flex:1.2;min-width:140px;">
+                  <label class="bc-label"><i class="fas fa-dollar-sign"></i> Monto (Moneda Origen)</label>
+                  <input type="number" step="0.01" class="bc-input" id="bc-mov-monto" placeholder="0.00" required>
+                </div>
+                <div style="flex:1.2;min-width:160px;">
+                  <label class="bc-label"><i class="fas fa-calculator"></i> Total Equivalente (Bs)</label>
+                  <input type="text" class="bc-input" id="bc-mov-montobs" readonly style="font-weight:700;color:var(--bc-success)">
+                </div>
+              </div>
+            </div>
+
+            <div class="bc-col-12">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-align-left"></i> Concepto o Descripción</label>
+                <input type="text" class="bc-input" id="bc-mov-descripcion" placeholder="Detalle del movimiento...">
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-3 pt-3" style="border-top:1px solid var(--bc-border);">
+            <button type="button" class="bc-btn bc-btn-ghost" id="bc-btn-cancelar-mov-sub">Cancelar</button>
+            <button type="submit" class="bc-btn bc-btn-primary"><i class="fas fa-save"></i> Guardar Movimiento</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Barra de Filtros y Acciones -->
+    <div class="bc-card" id="bc-box-filtros-mov">
+      <div class="bc-card-body" style="padding:1rem;">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-3 col-6">
+            <input type="date" class="bc-input" id="bc-filtro-desde" title="Desde">
+          </div>
+          <div class="col-md-3 col-6">
+            <input type="date" class="bc-input" id="bc-filtro-hasta" title="Hasta">
+          </div>
+          <div class="col-md-3 col-6">
+            <select class="bc-select" id="bc-filtro-cuenta">
+              <option value="">Todas las cuentas</option>
+            </select>
+          </div>
+          <div class="col-md-3 col-6">
+            <select class="bc-select" id="bc-filtro-tipo">
+              <option value="">Todos los tipos</option>
+              <option value="Banco">Solo Bancos</option>
+              <option value="Caja">Solo Cajas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mt-3 pt-2" style="border-top:1px solid rgba(255,255,255,0.05)">
+          <div class="d-flex gap-2">
+            <button class="bc-btn bc-btn-primary" id="bc-btn-nuevo-mov"><i class="fas fa-plus"></i> Nuevo Movimiento</button>
+            <button class="bc-btn bc-btn-ghost" id="bc-btn-aplicar-filtros"><i class="fas fa-search"></i> Filtrar</button>
+            <button class="bc-btn bc-btn-ghost" id="bc-btn-limpiar-filtros" title="Restablecer"><i class="fas fa-undo"></i></button>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="bc-btn bc-btn-ghost" id="bc-btn-export-excel" title="Exportar CSV/Excel"><i class="fas fa-file-excel text-success"></i> Excel</button>
+            <button class="bc-btn bc-btn-ghost" id="bc-btn-export-pdf" title="Imprimir o PDF"><i class="fas fa-print text-info"></i> Imprimir</button>
+            <button class="bc-btn bc-btn-ghost" id="bc-btn-recargar-todo" title="Recargar Datos"><i class="fas fa-sync-alt"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de Registros -->
+    <div class="bc-card">
+      <div class="bc-table-responsive">
+        <table class="bc-table" id="bc-tabla-movimientos">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Fecha</th>
+              <th>Entidad / Cuenta</th>
+              <th class="hide-mobile">Referencia</th>
+              <th class="hide-mobile">Concepto</th>
+              <th class="text-end">Monto USD</th>
+              <th class="text-end">Monto Bs</th>
+              <th class="text-center" style="width:110px">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="bc-mov-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TAB 2: ANTICIPOS
+       ============================================================ -->
+  <div id="bc-view-anticipos" class="bc-tab-content">
+    
+    <!-- Formulario Anticipos (Toggleable) -->
+    <div id="bc-box-form-ant" class="bc-card" style="display:none;">
+      <div class="bc-card-header">
+        <h5 class="bc-card-title"><i class="fas fa-hand-holding-usd text-warning"></i> Registrar Anticipo</h5>
+        <button type="button" class="bc-btn-ghost bc-btn" id="bc-btn-cerrar-ant"><i class="fas fa-times"></i> Cancelar</button>
+      </div>
+      <div class="bc-card-body">
+        <form id="bc-form-anticipo">
+          <div class="bc-form-grid">
+            <div class="bc-col-3">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-calendar"></i> Fecha</label>
+                <input type="date" class="bc-input" id="bc-ant-fecha" required>
+              </div>
+            </div>
+            <div class="bc-col-3">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-exchange-alt"></i> Modalidad</label>
+                <select class="bc-select" id="bc-ant-tipo" required>
+                  <option value="">Seleccione...</option>
+                  <option value="Cobro">Anticipo de Cliente (+)</option>
+                  <option value="Pago">Anticipo a Proveedor (-)</option>
+                </select>
+              </div>
+            </div>
+            <div class="bc-col-6">
+              <div class="bc-field-group">
+                <label class="bc-label" id="bc-ant-cp-label"><i class="fas fa-user"></i> Cliente / Proveedor</label>
+                <input class="bc-input" list="bc-dl-ant-cp" id="bc-ant-cp-input" placeholder="Seleccione modalidad primero..." required disabled>
+                <datalist id="bc-dl-ant-cp"></datalist>
+              </div>
+            </div>
+
+            <div class="bc-col-4">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-tag"></i> Origen de Fondos</label>
+                <select class="bc-select" id="bc-ant-origen" required>
+                  <option value="">Seleccione...</option>
+                  <option value="Banco">Banco</option>
+                  <option value="Caja">Caja</option>
+                </select>
+              </div>
+            </div>
+            <div class="bc-col-4">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-landmark"></i> Cuenta Acreditada/Debitada</label>
+                <input class="bc-input" list="bc-dl-ant-cuentas" id="bc-ant-cuenta" placeholder="Buscar cuenta..." required>
+                <datalist id="bc-dl-ant-cuentas"></datalist>
+              </div>
+            </div>
+            <div class="bc-col-4">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-hashtag"></i> Nro Referencia</label>
+                <input type="text" class="bc-input" id="bc-ant-referencia" placeholder="Ej: 987654" required>
+              </div>
+            </div>
+
+            <div class="bc-col-12">
+              <div class="bc-exchange-box">
+                <div style="flex:1;min-width:140px;">
+                  <label class="bc-label"><i class="fas fa-coins"></i> Moneda</label>
+                  <select class="bc-select" id="bc-ant-moneda" required></select>
+                </div>
+                <div style="flex:1;min-width:120px;">
+                  <label class="bc-label"><i class="fas fa-percent"></i> Tasa</label>
+                  <input type="number" step="0.0001" class="bc-input" id="bc-ant-tasa" value="1.0000" readonly>
+                </div>
+                <div style="flex:1.2;min-width:140px;">
+                  <label class="bc-label"><i class="fas fa-dollar-sign"></i> Monto</label>
+                  <input type="number" step="0.01" class="bc-input" id="bc-ant-monto" placeholder="0.00" required>
+                </div>
+                <div style="flex:1.2;min-width:160px;">
+                  <label class="bc-label"><i class="fas fa-calculator"></i> Total Equivalente</label>
+                  <input type="text" class="bc-input" id="bc-ant-montobs" readonly style="font-weight:700;color:var(--bc-success)">
+                </div>
+              </div>
+            </div>
+
+            <div class="bc-col-12">
+              <div class="bc-field-group">
+                <label class="bc-label"><i class="fas fa-file-signature"></i> Concepto</label>
+                <input type="text" class="bc-input" id="bc-ant-concepto" placeholder="Ej: Anticipo según acuerdo comercial..." required>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-3 pt-3" style="border-top:1px solid var(--bc-border);">
+            <button type="button" class="bc-btn bc-btn-ghost" id="bc-btn-cancelar-ant-sub">Cancelar</button>
+            <button type="submit" class="bc-btn bc-btn-success"><i class="fas fa-check"></i> Registrar Anticipo</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Barra de Anticipos -->
+    <div class="bc-card">
+      <div class="bc-card-body d-flex justify-content-between align-items-center flex-wrap gap-2" style="padding:1rem;">
+        <div>
+          <h6 class="mb-0 fw-bold"><i class="fas fa-shield-alt text-warning me-2"></i>Anticipos Contabilizados</h6>
+          <small class="text-muted">Registro de adelantos y cobros por anticipado</small>
+        </div>
+        <button class="bc-btn bc-btn-warning" id="bc-btn-abrir-ant-form"><i class="fas fa-plus"></i> Nuevo Anticipo</button>
+      </div>
+    </div>
+
+    <!-- Listado de Anticipos -->
+    <div class="bc-card">
+      <div class="bc-table-responsive">
+        <table class="bc-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Beneficiario / Cliente</th>
+              <th class="hide-mobile">Cuenta</th>
+              <th class="hide-mobile">Referencia</th>
+              <th class="text-end">Monto $</th>
+              <th class="text-end">Equivalente Bs</th>
+            </tr>
+          </thead>
+          <tbody id="bc-anticipos-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TAB 3: CUENTAS BANCARIAS
+       ============================================================ -->
+  <div id="bc-view-cuentas" class="bc-tab-content">
+    <div class="row g-3">
+      <div class="col-lg-5">
+        <div class="bc-card">
+          <div class="bc-card-header">
+            <h5 class="bc-card-title"><i class="fas fa-link text-info"></i> Vincular Nueva Cuenta</h5>
+          </div>
+          <div class="bc-card-body">
+            <form id="bc-form-cuenta-vincular">
+              <div class="bc-field-group mb-2">
+                <label class="bc-label">Banco Registrado</label>
+                <select class="bc-select" id="bc-vinc-banco" required>
+                  <option value="">Seleccione banco...</option>
+                </select>
+              </div>
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <div class="bc-field-group">
+                    <label class="bc-label">Código Interno</label>
+                    <input type="text" class="bc-input" id="bc-vinc-codigo" placeholder="Ej: CTA01" required>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="bc-field-group">
+                    <label class="bc-label">Tipo Cuenta</label>
+                    <select class="bc-select" id="bc-vinc-tipo" required>
+                      <option value="Corriente">Corriente</option>
+                      <option value="Ahorro">Ahorro</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row g-2 mb-2">
+                <div class="col-7">
+                  <div class="bc-field-group">
+                    <label class="bc-label">Número de Cuenta</label>
+                    <input type="text" class="bc-input" id="bc-vinc-numero" placeholder="20 dígitos..." required>
+                  </div>
+                </div>
+                <div class="col-5">
+                  <div class="bc-field-group">
+                    <label class="bc-label">Moneda</label>
+                    <select class="bc-select" id="bc-vinc-moneda" required></select>
+                  </div>
+                </div>
+              </div>
+              <div class="bc-field-group mb-3">
+                <label class="bc-label">Cuenta Contable</label>
+                <input type="text" class="bc-input" list="bc-dl-cuentas-contables" id="bc-vinc-contable" placeholder="Código o descripción..." required>
+                <input type="text" class="bc-input mt-1" id="bc-vinc-nomcontable" placeholder="Nombre contable automático" readonly>
+              </div>
+              <button type="submit" class="bc-btn bc-btn-primary w-100"><i class="fas fa-link"></i> Registrar Cuenta</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="bc-card">
+          <div class="bc-card-header">
+            <h5 class="bc-card-title"><i class="fas fa-list text-primary"></i> Cuentas Bancarias Activas</h5>
+          </div>
+          <div class="bc-table-responsive">
+            <table class="bc-table">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Banco</th>
+                  <th>Nro Cuenta</th>
+                  <th class="hide-mobile">Moneda</th>
+                  <th class="text-end">Saldo</th>
+                  <th class="text-center">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="bc-cuentas-bancarias-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TAB 4: ENTIDADES (BANCOS Y CAJAS)
+       ============================================================ -->
+  <div id="bc-view-entidades" class="bc-tab-content">
+    <div class="row g-3">
+      <!-- Banco -->
+      <div class="col-lg-6">
+        <div class="bc-card">
+          <div class="bc-card-header">
+            <h5 class="bc-card-title"><i class="fas fa-university text-primary"></i> Configurar Banco</h5>
+          </div>
+          <div class="bc-card-body">
+            <form id="bc-form-reg-banco">
+              <div class="row g-2 mb-2">
+                <div class="col-4">
+                  <label class="bc-label">Código</label>
+                  <input type="text" class="bc-input" id="bc-cfg-banco-cod" placeholder="B01" required>
+                </div>
+                <div class="col-8">
+                  <label class="bc-label">Nombre de Banco</label>
+                  <input type="text" class="bc-input" id="bc-cfg-banco-nom" placeholder="Ej: Banesco, Mercantil..." required>
+                </div>
+              </div>
+              <div class="row g-2 mb-3">
+                <div class="col-5">
+                  <label class="bc-label">Moneda</label>
+                  <select class="bc-select" id="bc-cfg-banco-mon" required></select>
+                </div>
+                <div class="col-3">
+                  <label class="bc-label">Tasa</label>
+                  <input type="text" class="bc-input" id="bc-cfg-banco-tasa" readonly>
+                </div>
+                <div class="col-4">
+                  <label class="bc-label">Saldo Inicial</label>
+                  <input type="number" step="0.01" class="bc-input" id="bc-cfg-banco-saldo" placeholder="0.00" required>
+                </div>
+              </div>
+              <button type="submit" class="bc-btn bc-btn-primary w-100"><i class="fas fa-plus"></i> Guardar Banco</button>
+            </form>
+
+            <h6 class="mt-4 mb-2 small text-muted text-uppercase fw-bold"><i class="fas fa-list me-1"></i> Bancos Existentes</h6>
+            <div id="bc-bancos-items-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Caja -->
+      <div class="col-lg-6">
+        <div class="bc-card">
+          <div class="bc-card-header">
+            <h5 class="bc-card-title"><i class="fas fa-cash-register text-success"></i> Configurar Caja</h5>
+          </div>
+          <div class="bc-card-body">
+            <form id="bc-form-reg-caja">
+              <div class="row g-2 mb-2">
+                <div class="col-4">
+                  <label class="bc-label">Código</label>
+                  <input type="text" class="bc-input" id="bc-cfg-caja-cod" placeholder="CJ01" required>
+                </div>
+                <div class="col-8">
+                  <label class="bc-label">Nombre de Caja</label>
+                  <input type="text" class="bc-input" id="bc-cfg-caja-nom" placeholder="Ej: Caja Principal, Chica..." required>
+                </div>
+              </div>
+              <div class="row g-2 mb-2">
+                <div class="col-5">
+                  <label class="bc-label">Moneda</label>
+                  <select class="bc-select" id="bc-cfg-caja-mon" required></select>
+                </div>
+                <div class="col-3">
+                  <label class="bc-label">Tasa</label>
+                  <input type="text" class="bc-input" id="bc-cfg-caja-tasa" readonly>
+                </div>
+                <div class="col-4">
+                  <label class="bc-label">Saldo Inicial</label>
+                  <input type="number" step="0.01" class="bc-input" id="bc-cfg-caja-saldo" placeholder="0.00" required>
+                </div>
+              </div>
+              <div class="row g-2 mb-3">
+                <div class="col-6">
+                  <label class="bc-label">Cuenta Contable</label>
+                  <input type="text" class="bc-input" list="bc-dl-cuentas-contables" id="bc-cfg-caja-contable" placeholder="Código..." required>
+                </div>
+                <div class="col-6">
+                  <label class="bc-label">Nombre Contable</label>
+                  <input type="text" class="bc-input" id="bc-cfg-caja-nomcontable" readonly>
+                </div>
+              </div>
+              <button type="submit" class="bc-btn bc-btn-success w-100"><i class="fas fa-plus"></i> Guardar Caja</button>
+            </form>
+
+            <h6 class="mt-4 mb-2 small text-muted text-uppercase fw-bold"><i class="fas fa-list me-1"></i> Cajas Existentes</h6>
+            <div id="bc-cajas-items-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón Flotante de Recalcular / Sincronizar Saldos -->
+  <button class="bc-fab" id="bc-btn-sync-saldos" title="Recalcular Saldos">
+    <i class="fas fa-sync-alt"></i>
+  </button>
+
+  <!-- Datalist compartido para Cuentas Contables -->
+  <datalist id="bc-dl-cuentas-contables"></datalist>
+</div>
+
+<!-- ============================================================
+     MODALES DEL SISTEMA
+     ============================================================ -->
+
+<!-- Modal Detalle -->
+<div class="modal fade" id="bc-modal-ver-detalle" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background:#131722;border:1px solid var(--bc-border);color:var(--bc-text-primary);border-radius:14px;">
+      <div class="modal-header border-bottom border-secondary">
+        <h6 class="modal-title fw-bold"><i class="fas fa-info-circle text-info me-2"></i> Detalle del Registro</h6>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="bc-modal-detalle-body"></div>
+      <div class="modal-footer border-0">
+        <button class="bc-btn bc-btn-ghost" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Eliminar -->
+<div class="modal fade" id="bc-modal-confirm-del" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content" style="background:#131722;border:1px solid rgba(239,68,68,0.3);color:var(--bc-text-primary);border-radius:14px;">
+      <div class="modal-body text-center p-4">
+        <i class="fas fa-trash-alt text-danger mb-3" style="font-size:2.2rem"></i>
+        <h6 class="fw-bold mb-2">¿Eliminar este registro?</h6>
+        <p class="small text-muted mb-0">Esta acción revertirá los saldos y no se puede deshacer.</p>
+      </div>
+      <div class="modal-footer border-0 justify-content-center gap-2 pt-0">
+        <button class="bc-btn bc-btn-ghost" data-bs-dismiss="modal">Cancelar</button>
+        <button class="bc-btn bc-btn-danger" id="bc-btn-confirm-delete-action">Sí, Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT LOGIC
+     ============================================================ -->
+
+<script>
+(function() {
+  'use strict';
+
+  // 0. HELPER MULTI-EMPRESA
+  function getIdEmpresaActiva() {
+    try {
+      var e = JSON.parse(sessionStorage.getItem('empresaActiva') || '{}');
+      return e.idSpreadsheet || e.id || '';
+    } catch(err) { return ''; }
+  }
+
+  // 1. ESTADO GLOBAL
+  var state = {
+    movimientos: [],
+    bancosYCajas: [],
+    listaCuentasContables: [],
+    monedas: []
+  };
+
+  var modalVer = null;
+  var modalDel = null;
+  var deleteActionCallback = null;
+
+  // Colección de renglones multilínea en memoria
+  var renglonesContables = [];
+
+  function $(id) { return document.getElementById(id); }
+
+  // 2. BIND EVENTS
+  function bindEvents() {
+    // Tabs
+    document.querySelectorAll('.bc-tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        setTab(this.dataset.tab);
+      });
+    });
+
+    // Forms Toggles
+    $('bc-btn-nuevo-mov') && $('bc-btn-nuevo-mov').addEventListener('click', abrirFormMov);
+    $('bc-btn-cerrar-form-mov') && $('bc-btn-cerrar-form-mov').addEventListener('click', cerrarFormMov);
+    $('bc-btn-cancelar-mov-sub') && $('bc-btn-cancelar-mov-sub').addEventListener('click', cerrarFormMov);
+
+    $('bc-btn-abrir-ant-form') && $('bc-btn-abrir-ant-form').addEventListener('click', abrirFormAnt);
+    $('bc-btn-cerrar-ant') && $('bc-btn-cerrar-ant').addEventListener('click', cerrarFormAnt);
+    $('bc-btn-cancelar-ant-sub') && $('bc-btn-cancelar-ant-sub').addEventListener('click', cerrarFormAnt);
+
+    // Cálculos dinámicos Movimiento
+    $('bc-mov-origen') && $('bc-mov-origen').addEventListener('change', filtrarCuentasMov);
+    $('bc-mov-moneda') && $('bc-mov-moneda').addEventListener('change', actualizarTasaMov);
+    $('bc-mov-monto') && $('bc-mov-monto').addEventListener('input', calcularEquivalenteMov);
+    $('bc-mov-tasa') && $('bc-mov-tasa').addEventListener('input', function() {
+      calcularEquivalenteMov();
+      recalcularTotalesRenglones();
+    });
+    $('bc-mov-cuenta-input') && $('bc-mov-cuenta-input').addEventListener('input', autoSeleccionarMonedaMov);
+
+    // Cálculos Anticipo
+    $('bc-ant-tipo') && $('bc-ant-tipo').addEventListener('change', actualizarTipoAnticipo);
+    $('bc-ant-origen') && $('bc-ant-origen').addEventListener('change', filtrarCuentasAnticipo);
+    $('bc-ant-moneda') && $('bc-ant-moneda').addEventListener('change', actualizarTasaAnticipo);
+    $('bc-ant-monto') && $('bc-ant-monto').addEventListener('input', calcularEquivalenteAnt);
+
+    // Filtros & Acciones
+    $('bc-btn-aplicar-filtros') && $('bc-btn-aplicar-filtros').addEventListener('click', aplicarFiltrosMovimientos);
+    $('bc-btn-limpiar-filtros') && $('bc-btn-limpiar-filtros').addEventListener('click', limpiarFiltrosMovimientos);
+    $('bc-btn-recargar-todo') && $('bc-btn-recargar-todo').addEventListener('click', cargarTodo);
+    $('bc-btn-sync-saldos') && $('bc-btn-sync-saldos').addEventListener('click', sincronizarSaldos);
+
+    // Exportar / Imprimir
+    $('bc-btn-export-excel') && $('bc-btn-export-excel').addEventListener('click', exportarExcelCSV);
+    $('bc-btn-export-pdf') && $('bc-btn-export-pdf').addEventListener('click', imprimirReporte);
+
+    // Submits
+    $('bc-form-movimiento') && $('bc-form-movimiento').addEventListener('submit', guardarMovimiento);
+    $('bc-form-anticipo') && $('bc-form-anticipo').addEventListener('submit', guardarAnticipo);
+    $('bc-form-cuenta-vincular') && $('bc-form-cuenta-vincular').addEventListener('submit', guardarCuentaBancaria);
+    $('bc-form-reg-banco') && $('bc-form-reg-banco').addEventListener('submit', guardarConfigBanco);
+    $('bc-form-reg-caja') && $('bc-form-reg-caja').addEventListener('submit', guardarConfigCaja);
+
+    // Delegación tabla movimientos
+    $('bc-mov-tbody') && $('bc-mov-tbody').addEventListener('click', handleTablaMovClick);
+
+    // Ayudantes de Cuentas Contables (Splits de código)
+    $('bc-vinc-contable') && $('bc-vinc-contable').addEventListener('input', function() {
+      autoSepararContable(this.value, 'bc-vinc-nomcontable');
+    });
+    $('bc-cfg-caja-contable') && $('bc-cfg-caja-contable').addEventListener('input', function() {
+      autoSepararContable(this.value, 'bc-cfg-caja-nomcontable');
+    });
+
+    $('bc-cfg-banco-mon') && $('bc-cfg-banco-mon').addEventListener('change', function() {
+      actualizarTasaInput(this.value, 'bc-cfg-banco-tasa');
+    });
+    $('bc-cfg-caja-mon') && $('bc-cfg-caja-mon').addEventListener('change', function() {
+      actualizarTasaInput(this.value, 'bc-cfg-caja-tasa');
+    });
+
+    $('bc-btn-confirm-delete-action') && $('bc-btn-confirm-delete-action').addEventListener('click', function() {
+      if (typeof deleteActionCallback === 'function') {
+        deleteActionCallback();
+        deleteActionCallback = null;
+      }
+      if (modalDel) modalDel.hide();
+    });
+  }
+
+  // 3. CAMBIO DE TABS
+  function setTab(tabName) {
+    document.querySelectorAll('.bc-tab-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.tab === tabName);
+    });
+    document.querySelectorAll('.bc-tab-content').forEach(function(c) {
+      c.classList.remove('active');
+    });
+    var view = $('bc-view-' + tabName);
+    if (view) view.classList.add('active');
+  }
+
+  // 4. CARGA DE DATOS MULTI-EMPRESA
+  function cargarTodo() {
+    var loader = $('bc-global-loader');
+    if (loader) loader.style.display = 'block';
+
+    if (!google || !google.script || !google.script.run) {
+      if (loader) loader.style.display = 'none';
+      mostrarToast('Modo de prueba sin backend Google Apps Script', 'warning');
+      return;
+    }
+
+    var idEmpresa = getIdEmpresaActiva();
+
+    google.script.run
+      .withSuccessHandler(function(resp) {
+        if (loader) loader.style.display = 'none';
+        if (resp && resp.success) {
+          state = resp;
+          renderMovimientos(resp.movimientos || []);
+          renderAnticipos(resp.movimientos || []);
+          poblarListasYSelects();
+          actualizarKPIs();
+          cargarListasConfig();
+        } else {
+          mostrarToast((resp && resp.error) || 'Error al obtener datos', 'danger');
+        }
+      })
+      .withFailureHandler(function(err) {
+        if (loader) loader.style.display = 'none';
+        mostrarToast('Fallo de red: ' + err.message, 'danger');
+      })
+      .getInitialData(idEmpresa);
+  }
+
+  // 5. GESTIÓN MULTILÍNEA CONTABLE
+  window.agregarRenglonContable = function() {
+    var inpCta = $('bc-renglon-contable');
+    var inpConcepto = $('bc-renglon-concepto');
+    var inpMonto = $('bc-renglon-monto');
+
+    var ctaRaw = (inpCta.value || '').trim();
+    var monto = parseMonto(inpMonto.value);
+    var concepto = (inpConcepto.value || '').trim();
+
+    if (!ctaRaw || monto <= 0) {
+      mostrarToast('Seleccione una cuenta contable y asigne un monto válido', 'warning');
+      return;
+    }
+
+    var parts = ctaRaw.split(' - ');
+    var cod = parts[0] || '';
+    var nom = parts.slice(1).join(' - ') || parts[0] || '';
+
+    var tasa = parseMonto($('bc-mov-tasa').value) || 1;
+
+    renglonesContables.push({
+      codigo: cod,
+      nombre: nom,
+      concepto: concepto,
+      montoUSD: monto,
+      montoBs: monto * tasa
+    });
+
+    inpCta.value = '';
+    inpConcepto.value = '';
+    inpMonto.value = '';
+
+    renderTablaRenglones();
+  };
+
+  window.quitarRenglonContable = function(index) {
+    renglonesContables.splice(index, 1);
+    renderTablaRenglones();
+  };
+
+  function renderTablaRenglones() {
+    var tbody = $('bc-renglones-tbody');
+    if (!tbody) return;
+
+    if (renglonesContables.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">Agregue al menos una cuenta contable a este movimiento</td></tr>';
+      $('bc-badge-total-lineas').textContent = '0 cuentas agregadas';
+      $('bc-total-renglones-usd').textContent = '$0.00';
+      $('bc-total-renglones-bs').textContent = 'Bs 0.00';
+      return;
+    }
+
+    var tasa = parseMonto($('bc-mov-tasa').value) || 1;
+    var totalUSD = 0;
+    var totalBs = 0;
+    var html = '';
+
+    renglonesContables.forEach(function(r, idx) {
+      var bs = r.montoUSD * tasa;
+      r.montoBs = bs;
+      totalUSD += r.montoUSD;
+      totalBs += bs;
+
+      html += '<tr>' +
+        '<td><strong>' + escapeHtml(r.codigo) + '</strong> <small class="text-muted">' + escapeHtml(r.nombre) + '</small></td>' +
+        '<td class="hide-mobile">' + escapeHtml(r.concepto || '-') + '</td>' +
+        '<td class="text-end fw-bold text-success">$' + r.montoUSD.toFixed(2) + '</td>' +
+        '<td class="text-end" style="color:var(--bc-accent);">Bs ' + bs.toFixed(2) + '</td>' +
+        '<td class="text-center"><button type="button" class="bc-icon-btn danger" onclick="window.quitarRenglonContable(' + idx + ')"><i class="fas fa-trash"></i></button></td>' +
+      '</tr>';
+    });
+
+    tbody.innerHTML = html;
+    $('bc-badge-total-lineas').textContent = renglonesContables.length + ' cuenta(s) agregada(s)';
+    $('bc-total-renglones-usd').textContent = '$' + totalUSD.toFixed(2);
+    $('bc-total-renglones-bs').textContent = 'Bs ' + totalBs.toFixed(2);
+
+    // Sincronizar automáticamente el monto de la cabecera
+    $('bc-mov-monto').value = totalUSD.toFixed(2);
+    calcularEquivalenteMov();
+  }
+
+  function recalcularTotalesRenglones() {
+    renderTablaRenglones();
+  }
+
+  // 6. KPIS SUPERIORES
+  function actualizarKPIs() {
+    var totalUSD = 0;
+    var totalBs = 0;
+    (state.movimientos || []).forEach(function(m) {
+      var esNeg = String(m.TipoTransaccion || '').includes('Negativa');
+      var factor = esNeg ? -1 : 1;
+      totalUSD += factor * parseMonto(m.MontoMovUSD);
+      totalBs += factor * parseMonto(m.MontoMovBs);
+    });
+
+    if ($('bc-kpi-total-usd')) $('bc-kpi-total-usd').textContent = '$' + totalUSD.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    if ($('bc-kpi-total-bs')) $('bc-kpi-total-bs').textContent = 'Bs ' + totalBs.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+    var bancos = (state.bancosYCajas || []).filter(function(x) { return x.tipo === 'Banco'; });
+    var cajas = (state.bancosYCajas || []).filter(function(x) { return x.tipo === 'Caja'; });
+    if ($('bc-kpi-bancos-count')) $('bc-kpi-bancos-count').textContent = bancos.length;
+    if ($('bc-kpi-cajas-count')) $('bc-kpi-cajas-count').textContent = cajas.length;
+  }
+
+  // 7. RENDER MOVIMIENTOS
+  function renderMovimientos(lista) {
+    var tbody = $('bc-mov-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (!lista || !lista.length) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No se encontraron movimientos registrados</td></tr>';
+      return;
+    }
+
+    var html = '';
+    lista.forEach(function(m) {
+      var esNeg = String(m.TipoTransaccion || '').includes('Negativa');
+      var signo = esNeg ? '-' : '+';
+      var montoUSD = parseMonto(m.MontoMovUSD).toLocaleString('es-VE', {minimumFractionDigits: 2});
+      var montoBs = parseMonto(m.MontoMovBs).toLocaleString('es-VE', {minimumFractionDigits: 2});
+
+      html += '<tr>' +
+        '<td data-label="ID"><span class="bc-badge bc-badge-cyan">#' + escapeHtml(String(m.IdMovimiento || '').slice(-5)) + '</span></td>' +
+        '<td data-label="Fecha">' + formatDate(m.FechaMov) + '</td>' +
+        '<td data-label="Entidad"><strong>' + escapeHtml(m.Cuenta || '') + '</strong> <small class="text-muted">(' + escapeHtml(m.NombreBanco || '') + ')</small></td>' +
+        '<td data-label="Referencia" class="hide-mobile">' + escapeHtml(m.ReferenciaMov || '-') + '</td>' +
+        '<td data-label="Concepto" class="hide-mobile text-truncate" style="max-width:200px;">' + escapeHtml(m.descMov || '') + '</td>' +
+        '<td data-label="USD" class="text-end fw-bold ' + (esNeg ? 'text-danger' : 'text-success') + '">' + signo + '$' + montoUSD + '</td>' +
+        '<td data-label="Bs" class="text-end fw-bold ' + (esNeg ? 'text-danger' : 'text-success') + '">' + signo + 'Bs ' + montoBs + '</td>' +
+        '<td data-label="Acciones" class="text-center actions-td">' +
+          '<button class="bc-icon-btn" data-act="ver" data-id="' + m.IdMovimiento + '" title="Ver Desglose"><i class="fas fa-eye"></i></button> ' +
+          '<button class="bc-icon-btn" data-act="edit" data-id="' + m.IdMovimiento + '" title="Editar"><i class="fas fa-pencil-alt"></i></button> ' +
+          '<button class="bc-icon-btn danger" data-act="del" data-id="' + m.IdMovimiento + '" title="Eliminar"><i class="fas fa-trash"></i></button>' +
+        '</td>' +
+      '</tr>';
+    });
+    tbody.innerHTML = html;
+  }
+
+  // 8. RENDER ANTICIPOS
+  function renderAnticipos(lista) {
+    var tbody = $('bc-anticipos-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    var anticipos = (lista || []).filter(function(m) {
+      var d = String(m.descMov || '').toLowerCase();
+      var c = String(m.CuentaContable || '').toLowerCase();
+      return d.includes('anticipo') || c.includes('anticipo');
+    });
+
+    if (!anticipos.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-4">Sin anticipos registrados</td></tr>';
+      return;
+    }
+
+    var html = '';
+    anticipos.forEach(function(a) {
+      var esCobro = String(a.TipoTransaccion || '').includes('Positiva');
+      html += '<tr>' +
+        '<td data-label="Fecha">' + formatDate(a.FechaMov) + '</td>' +
+        '<td data-label="Tipo"><span class="bc-badge ' + (esCobro ? 'bc-badge-success' : 'bc-badge-danger') + '">' + (esCobro ? 'Cliente' : 'Proveedor') + '</span></td>' +
+        '<td data-label="Beneficiario">' + escapeHtml(a.NombreCuentaMov || a.descMov || '') + '</td>' +
+        '<td data-label="Cuenta" class="hide-mobile">' + escapeHtml(a.Cuenta || '') + '</td>' +
+        '<td data-label="Referencia" class="hide-mobile">' + escapeHtml(a.ReferenciaMov || '-') + '</td>' +
+        '<td data-label="USD" class="text-end fw-bold">$' + parseMonto(a.MontoMovUSD).toFixed(2) + '</td>' +
+        '<td data-label="Bs" class="text-end fw-bold text-success">Bs ' + parseMonto(a.MontoMovBs).toFixed(2) + '</td>' +
+      '</tr>';
+    });
+    tbody.innerHTML = html;
+  }
+
+  // 9. CONFIGURACIONES MULTI-EMPRESA
+  function cargarListasConfig() {
+    var idEmpresa = getIdEmpresaActiva();
+
+    google.script.run.withSuccessHandler(function(data) {
+      var cont = $('bc-bancos-items-list');
+      var selVinc = $('bc-vinc-banco');
+      if (selVinc) selVinc.innerHTML = '<option value="">Seleccione banco...</option>';
+
+      if (cont) {
+        cont.innerHTML = data && data.length ? data.map(function(b) {
+          if (selVinc) selVinc.innerHTML += '<option value="' + escapeHtml(b[1] + '|' + b[2]) + '">' + escapeHtml(b[1] + ' - ' + b[2]) + '</option>';
+          return '<div class="d-flex justify-content-between align-items-center p-2 mb-1" style="background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid var(--bc-border);">' +
+            '<div><span class="bc-badge bc-badge-cyan me-2">' + escapeHtml(b[1]) + '</span><strong>' + escapeHtml(b[2]) + '</strong> <small class="text-muted">(' + escapeHtml(b[3]) + ')</small></div>' +
+            '<div class="d-flex align-items-center gap-2">' +
+              '<span class="text-success fw-bold">$' + parseMonto(b[5]).toFixed(2) + '</span>' +
+              '<button class="bc-icon-btn danger" onclick="window.bcEliminarCfgRegistro(\'' + b[0] + '\',\'banco\')"><i class="fas fa-trash"></i></button>' +
+            '</div>' +
+          '</div>';
+        }).join('') : '<p class="small text-muted">No hay bancos registrados</p>';
+      }
+    }).getListaBancos(idEmpresa);
+
+    google.script.run.withSuccessHandler(function(data) {
+      var cont = $('bc-cajas-items-list');
+      if (cont) {
+        cont.innerHTML = data && data.length ? data.map(function(c) {
+          return '<div class="d-flex justify-content-between align-items-center p-2 mb-1" style="background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid var(--bc-border);">' +
+            '<div><span class="bc-badge bc-badge-success me-2">' + escapeHtml(c[1]) + '</span><strong>' + escapeHtml(c[2]) + '</strong> <small class="text-muted">(' + escapeHtml(c[3]) + ')</small></div>' +
+            '<div class="d-flex align-items-center gap-2">' +
+              '<span class="text-success fw-bold">$' + parseMonto(c[5]).toFixed(2) + '</span>' +
+              '<button class="bc-icon-btn danger" onclick="window.bcEliminarCfgRegistro(\'' + c[0] + '\',\'caja\')"><i class="fas fa-trash"></i></button>' +
+            '</div>' +
+          '</div>';
+        }).join('') : '<p class="small text-muted">No hay cajas registradas</p>';
+      }
+    }).getListaCajas(idEmpresa);
+
+    google.script.run.withSuccessHandler(function(data) {
+      var tbody = $('bc-cuentas-bancarias-tbody');
+      if (tbody) {
+        tbody.innerHTML = data && data.length ? data.map(function(c) {
+          return '<tr>' +
+            '<td data-label="Código"><span class="bc-badge bc-badge-cyan">' + escapeHtml(c[3]) + '</span></td>' +
+            '<td data-label="Banco">' + escapeHtml(c[2]) + '</td>' +
+            '<td data-label="Nro Cuenta"><span style="font-family:monospace;">' + escapeHtml(c[4]) + '</span></td>' +
+            '<td data-label="Moneda" class="hide-mobile">' + escapeHtml(c[5]) + '</td>' +
+            '<td data-label="Saldo" class="text-end fw-bold text-success">$' + parseMonto(c[7]).toFixed(2) + '</td>' +
+            '<td data-label="Acción" class="text-center actions-td">' +
+              '<button class="bc-icon-btn danger" onclick="window.bcEliminarCfgRegistro(\'' + c[0] + '\',\'cuenta\')"><i class="fas fa-trash"></i></button>' +
+            '</td>' +
+          '</tr>';
+        }).join('') : '<tr><td colspan="6" class="text-center text-muted">No hay cuentas bancarias vinculadas</td></tr>';
+      }
+    }).getListaCuentas(idEmpresa);
+  }
+
+  // 10. POBLAR SELECTS Y DATALISTS
+  function poblarListasYSelects() {
+    var dlContable = $('bc-dl-cuentas-contables');
+    if (dlContable) {
+      dlContable.innerHTML = '';
+      (state.listaCuentasContables || []).forEach(function(c) {
+        dlContable.innerHTML += '<option value="' + escapeHtml(c.codigo + ' - ' + c.nombre) + '">';
+      });
+    }
+
+    var idsMonedas = ['bc-mov-moneda', 'bc-ant-moneda', 'bc-vinc-moneda', 'bc-cfg-banco-mon', 'bc-cfg-caja-mon'];
+    idsMonedas.forEach(function(id) {
+      var s = $(id);
+      if (!s) return;
+      var prev = s.value;
+      s.innerHTML = '<option value="">Moneda...</option>';
+      (state.monedas || []).forEach(function(m) {
+        var opt = document.createElement('option');
+        opt.value = m.nombre;
+        opt.dataset.tasa = m.tasa;
+        opt.textContent = m.nombre;
+        s.appendChild(opt);
+      });
+      if (prev) s.value = prev;
+    });
+
+    var sFiltro = $('bc-filtro-cuenta');
+    if (sFiltro) {
+      sFiltro.innerHTML = '<option value="">Todas las cuentas</option>';
+      var unicas = new Set();
+      (state.movimientos || []).forEach(function(m) {
+        if (m.Cuenta) unicas.add(m.Cuenta + (m.NombreBanco ? ' - ' + m.NombreBanco : ''));
+      });
+      unicas.forEach(function(c) {
+        sFiltro.innerHTML += '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>';
+      });
+    }
+
+    filtrarCuentasMov();
+  }
+
+  function filtrarCuentasMov() {
+    var tipo = $('bc-mov-origen') ? $('bc-mov-origen').value : '';
+    var dl = $('bc-dl-cuentas-mov');
+    if (!dl) return;
+    dl.innerHTML = '';
+    (state.bancosYCajas || []).filter(function(x) {
+      return !tipo || (x.tipo && x.tipo.toLowerCase() === tipo.toLowerCase());
+    }).forEach(function(c) {
+      var label = c.tipo === 'Banco' ? (c.CodigoCuenta + ' - ' + c.NombreBanco) : (c.codigoCaja + ' - ' + c.nombreCaja);
+      var moneda = c.MonedaBanco || c.MonedaCaja || '';
+      var opt = document.createElement('option');
+      opt.value = label;
+      opt.dataset.moneda = moneda;
+      dl.appendChild(opt);
+    });
+  }
+
+  function autoSeleccionarMonedaMov() {
+    var val = $('bc-mov-cuenta-input').value;
+    var dl = $('bc-dl-cuentas-mov');
+    if (!dl) return;
+    var opt = Array.from(dl.options).find(function(o) { return o.value === val; });
+    if (opt && opt.dataset.moneda) {
+      var sMon = $('bc-mov-moneda');
+      if (sMon) {
+        sMon.value = opt.dataset.moneda;
+        actualizarTasaMov();
+      }
+    }
+  }
+
+  function actualizarTasaMov() {
+    var sel = $('bc-mov-moneda');
+    var inTasa = $('bc-mov-tasa');
+    if (!sel || !inTasa) return;
+    var opt = sel.options[sel.selectedIndex];
+    var tasa = opt && opt.dataset.tasa ? parseFloat(opt.dataset.tasa) : 1;
+    var nombre = (sel.value || '').toLowerCase();
+    if (nombre.includes('bolivar') || nombre.includes('bolívar') || nombre === 'bs' || nombre === 'ves') tasa = 1;
+    inTasa.value = (tasa || 1).toFixed(4);
+    calcularEquivalenteMov();
+    recalcularTotalesRenglones();
+  }
+
+  function calcularEquivalenteMov() {
+    var monto = parseMonto($('bc-mov-monto').value);
+    var tasa = parseMonto($('bc-mov-tasa').value) || 1;
+    if ($('bc-mov-montobs')) $('bc-mov-montobs').value = 'Bs ' + (monto * tasa).toLocaleString('es-VE', {minimumFractionDigits: 2});
+  }
+
+  function actualizarTipoAnticipo() {
+    var tipo = $('bc-ant-tipo').value;
+    var inp = $('bc-ant-cp-input');
+    var label = $('bc-ant-cp-label');
+    var dl = $('bc-dl-ant-cp');
+    if (!inp || !dl) return;
+    inp.value = '';
+    dl.innerHTML = '';
+
+    if (!tipo) {
+      inp.disabled = true;
+      label.innerHTML = '<i class="fas fa-user"></i> Cliente / Proveedor';
+      return;
+    }
+    inp.disabled = false;
+    var idEmpresa = getIdEmpresaActiva();
+
+    if (tipo === 'Cobro') {
+      label.innerHTML = '<i class="fas fa-user text-success"></i> Cliente';
+      google.script.run.withSuccessHandler(function(clientes) {
+        (clientes || []).forEach(function(c) {
+          var n = c.NombreCompleto || c.nombreCompleto || c.NombreCliente || c.NombreClientes || c.idClientes;
+          if (n) dl.innerHTML += '<option value="' + escapeHtml(n) + '">';
+        });
+      }).obtenerClientes(idEmpresa);
+    } else {
+      label.innerHTML = '<i class="fas fa-truck text-warning"></i> Proveedor';
+      google.script.run.withSuccessHandler(function(provs) {
+        (provs || []).forEach(function(p) {
+          var n = p.NombreProveedor || p.nombreProveedor || p.IdProveedor;
+          if (n) dl.innerHTML += '<option value="' + escapeHtml(n) + '">';
+        });
+      }).obtenerProveedoresConSaldos(idEmpresa);
+    }
+  }
+
+  function filtrarCuentasAnticipo() {
+    var tipo = $('bc-ant-origen').value;
+    var dl = $('bc-dl-ant-cuentas');
+    if (!dl) return;
+    dl.innerHTML = '';
+    $('bc-ant-cuenta').value = '';
+    (state.bancosYCajas || []).filter(function(x) {
+      return !tipo || (x.tipo && x.tipo.toLowerCase() === tipo.toLowerCase());
+    }).forEach(function(c) {
+      var val = c.tipo === 'Banco' ? (c.CodigoCuenta + ' - ' + c.NombreBanco) : (c.codigoCaja + ' - ' + c.nombreCaja);
+      dl.innerHTML += '<option value="' + escapeHtml(val) + '">';
+    });
+  }
+
+  function actualizarTasaAnticipo() {
+    var sel = $('bc-ant-moneda');
+    var inTasa = $('bc-ant-tasa');
+    if (!sel || !inTasa) return;
+    var opt = sel.options[sel.selectedIndex];
+    var tasa = opt && opt.dataset.tasa ? parseFloat(opt.dataset.tasa) : 1;
+    var nombre = (sel.value || '').toLowerCase();
+    if (nombre.includes('bolivar') || nombre.includes('bolívar') || nombre === 'bs') tasa = 1;
+    inTasa.value = (tasa || 1).toFixed(4);
+    calcularEquivalenteAnt();
+  }
+
+  function calcularEquivalenteAnt() {
+    var monto = parseMonto($('bc-ant-monto').value);
+    var tasa = parseMonto($('bc-ant-tasa').value) || 1;
+    if ($('bc-ant-montobs')) $('bc-ant-montobs').value = 'Bs ' + (monto * tasa).toFixed(2);
+  }
+
+  function actualizarTasaInput(monedaNom, targetId) {
+    var inp = $(targetId);
+    if (!inp) return;
+    var m = (state.monedas || []).find(function(x) { return x.nombre === monedaNom; });
+    var t = m ? parseFloat(m.tasa) : 1;
+    inp.value = (t || 1).toFixed(4);
+  }
+
+  function autoSepararContable(val, idDestino) {
+    var out = $(idDestino);
+    if (!out) return;
+    if (val && val.includes(' - ')) {
+      out.value = val.split(' - ').slice(1).join(' - ');
+    } else {
+      out.value = '';
+    }
+  }
+
+  // 11. SUBMITS DE DATOS
+  function guardarMovimiento(e) {
+    e.preventDefault();
+    var cuentaRaw = $('bc-mov-cuenta-input').value.trim();
+    var ref = $('bc-mov-referencia').value.trim();
+    var idMov = $('bc-mov-id').value;
+
+    if (!cuentaRaw || !ref) {
+      mostrarToast('Por favor complete la cuenta y la referencia', 'danger');
+      return;
+    }
+
+    if (renglonesContables.length === 0) {
+      mostrarToast('Debe agregar al menos una cuenta contable en la distribución multilínea', 'warning');
+      return;
+    }
+
+    var monto = parseMonto($('bc-mov-monto').value);
+    if (monto <= 0) {
+      mostrarToast('El total del movimiento debe ser mayor a cero', 'danger');
+      return;
+    }
+
+    var partes = cuentaRaw.split(' - ');
+    var codCuenta = partes[0] || '';
+    var nomBanco = partes[1] || '';
+    var tasa = parseMonto($('bc-mov-tasa').value) || 1;
+
+    var payload = {
+      idSpreadsheet: getIdEmpresaActiva(),
+      IdMovimiento: idMov || '',
+      FechaMov: $('bc-mov-fecha').value,
+      TipoMov: $('bc-mov-origen').value,
+      Cuenta: codCuenta,
+      NombreBanco: nomBanco,
+      CodigoBancos: codCuenta,
+      ReferenciaMov: ref,
+      descMov: $('bc-mov-descripcion').value,
+      TipoTransaccion: $('bc-mov-tipo-trans').value,
+      MontoMovUSD: monto,
+      MonedaMov: $('bc-mov-moneda').value,
+      TasaMov: tasa,
+      IGTF: 0,
+      MontoMovBs: monto * tasa,
+      detalles: renglonesContables,
+      fechaRegistroMov: new Date().toLocaleString('es-VE')
+    };
+
+    google.script.run
+      .withSuccessHandler(function(r) {
+        if (r && r.success) {
+          mostrarToast(r.message || 'Movimiento y detalles guardados con éxito');
+          cerrarFormMov();
+          cargarTodo();
+        } else {
+          mostrarToast((r && r.message) || 'Error al guardar', 'danger');
+        }
+      })
+      .agregarEditarMovBancoCaja(payload);
+  }
+
+  function guardarAnticipo(e) {
+    e.preventDefault();
+    var tipoAnt = $('bc-ant-tipo').value;
+    var cuentaRaw = $('bc-ant-cuenta').value;
+    var monto = parseMonto($('bc-ant-monto').value);
+    var ref = $('bc-ant-referencia').value.trim();
+    var cp = $('bc-ant-cp-input').value.trim();
+
+    if (!tipoAnt || !cuentaRaw || !ref || monto <= 0 || !cp) {
+      mostrarToast('Complete todos los campos del anticipo', 'danger');
+      return;
+    }
+
+    var partes = cuentaRaw.split(' - ');
+    var cod = partes[0] || '';
+    var tasa = parseMonto($('bc-ant-tasa').value) || 1;
+
+    var payload = {
+      idSpreadsheet: getIdEmpresaActiva(),
+      IdMovimiento: '',
+      FechaMov: $('bc-ant-fecha').value,
+      TipoMov: $('bc-ant-origen').value,
+      Cuenta: cod,
+      NombreBanco: partes[1] || '',
+      CodigoBancos: cod,
+      ReferenciaMov: ref,
+      descMov: $('bc-ant-concepto').value + ' [' + cp + ']',
+      TipoTransaccion: tipoAnt === 'Cobro' ? 'Transf Positiva(+)' : 'Transf Negativa(-)',
+      MontoMovUSD: monto,
+      MonedaMov: $('bc-ant-moneda').value,
+      TasaMov: tasa,
+      IGTF: 0,
+      MontoMovBs: monto * tasa,
+      CodigoCuentaContable: tipoAnt === 'Cobro' ? 'AnticipoCliente' : 'AnticipoProveedor',
+      CuentaContable: tipoAnt === 'Cobro' ? 'Anticipo de Cliente' : 'Anticipo a Proveedor',
+      NombreCuentaMov: cp,
+      fechaRegistroMov: new Date().toLocaleString('es-VE')
+    };
+
+    google.script.run
+      .withSuccessHandler(function(r) {
+        if (r && r.success) {
+          mostrarToast(r.message || 'Anticipo registrado exitosamente');
+          cerrarFormAnt();
+          cargarTodo();
+        } else {
+          mostrarToast((r && r.message) || 'Error al procesar anticipo', 'danger');
+        }
+      })
+      .registrarAnticipo(payload);
+  }
+
+  function guardarCuentaBancaria(e) {
+    e.preventDefault();
+    var data = {
+      idSpreadsheet: getIdEmpresaActiva(),
+      type: 'cuenta',
+      banco: $('bc-vinc-banco').value,
+      codigo: $('bc-vinc-codigo').value,
+      tipo: $('bc-vinc-tipo').value,
+      numero: $('bc-vinc-numero').value,
+      moneda: $('bc-vinc-moneda').value,
+      codContable: $('bc-vinc-contable').value,
+      nomContable: $('bc-vinc-nomcontable').value
+    };
+    google.script.run
+      .withSuccessHandler(function(r) {
+        if (r && r.success) {
+          mostrarToast(r.message || 'Cuenta vinculada');
+          $('bc-form-cuenta-vincular').reset();
+          cargarListasConfig();
+          cargarTodo();
+        } else mostrarToast(r.message, 'danger');
+      })
+      .saveData(data);
+  }
+
+  function guardarConfigBanco(e) {
+    e.preventDefault();
+    var data = {
+      idSpreadsheet: getIdEmpresaActiva(),
+      type: 'banco',
+      codigo: $('bc-cfg-banco-cod').value,
+      nombre: $('bc-cfg-banco-nom').value,
+      moneda: $('bc-cfg-banco-mon').value,
+      tasa: $('bc-cfg-banco-tasa').value,
+      saldo: $('bc-cfg-banco-saldo').value
+    };
+    google.script.run
+      .withSuccessHandler(function(r) {
+        if (r && r.success) {
+          mostrarToast(r.message || 'Banco configurado');
+          $('bc-form-reg-banco').reset();
+          cargarListasConfig();
+          cargarTodo();
+        } else mostrarToast(r.message, 'danger');
+      })
+      .saveData(data);
+  }
+
+  function guardarConfigCaja(e) {
+    e.preventDefault();
+    var data = {
+      idSpreadsheet: getIdEmpresaActiva(),
+      type: 'caja',
+      codigo: $('bc-cfg-caja-cod').value,
+      nombre: $('bc-cfg-caja-nom').value,
+      moneda: $('bc-cfg-caja-mon').value,
+      tasa: $('bc-cfg-caja-tasa').value,
+      saldo: $('bc-cfg-caja-saldo').value,
+      codContable: $('bc-cfg-caja-contable').value,
+      nomContable: $('bc-cfg-caja-nomcontable').value
+    };
+    google.script.run
+      .withSuccessHandler(function(r) {
+        if (r && r.success) {
+          mostrarToast(r.message || 'Caja configurada');
+          $('bc-form-reg-caja').reset();
+          cargarListasConfig();
+          cargarTodo();
+        } else mostrarToast(r.message, 'danger');
+      })
+      .saveData(data);
+  }
+
+  // 12. TABLA ACCIONES (Ver, Editar, Eliminar)
+  function handleTablaMovClick(e) {
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    var act = btn.dataset.act;
+    var id = btn.dataset.id;
+    if (!act || !id) return;
+
+    var mov = (state.movimientos || []).find(function(m) { return String(m.IdMovimiento) === String(id); });
+    if (!mov) return;
+
+    if (act === 'ver') {
+      verDetalleMov(mov);
+    } else if (act === 'edit') {
+      editarMov(mov);
+    } else if (act === 'del') {
+      solicitarEliminarMov(id);
+    }
+  }
+
+  function verDetalleMov(m) {
+    var b = $('bc-modal-detalle-body');
+    if (!b) return;
+    var esNeg = String(m.TipoTransaccion || '').includes('Negativa');
+
+    b.innerHTML = '<div class="row g-2">' +
+      '<div class="col-6"><small class="text-muted d-block">ID Transacción</small><strong>' + escapeHtml(m.IdMovimiento) + '</strong></div>' +
+      '<div class="col-6"><small class="text-muted d-block">Fecha</small><strong>' + formatDate(m.FechaMov) + '</strong></div>' +
+      '<div class="col-6"><small class="text-muted d-block">Cuenta</small><strong>' + escapeHtml(m.Cuenta || '-') + '</strong></div>' +
+      '<div class="col-6"><small class="text-muted d-block">Banco / Entidad</small><strong>' + escapeHtml(m.NombreBanco || '-') + '</strong></div>' +
+      '<div class="col-6"><small class="text-muted d-block">Referencia</small><strong>' + escapeHtml(m.ReferenciaMov || '-') + '</strong></div>' +
+      '<div class="col-6"><small class="text-muted d-block">Naturaleza</small><span class="bc-badge ' + (esNeg ? 'bc-badge-danger' : 'bc-badge-success') + '">' + (esNeg ? 'Egreso (-)' : 'Ingreso (+)') + '</span></div>' +
+      '<div class="col-12"><small class="text-muted d-block">Concepto</small><p class="mb-0 small">' + escapeHtml(m.descMov || 'Sin concepto') + '</p></div>' +
+      '<div class="col-6"><small class="text-muted d-block">Monto USD</small><strong class="fs-6 ' + (esNeg ? 'text-danger' : 'text-success') + '">$' + parseMonto(m.MontoMovUSD).toFixed(2) + '</strong></div>' +
+      '<div class="col-6"><small class="text-muted d-block">Equivalente Bs</small><strong class="fs-6 ' + (esNeg ? 'text-danger' : 'text-success') + '">Bs ' + parseMonto(m.MontoMovBs).toFixed(2) + '</strong></div>' +
+      '<div class="col-12 mt-3"><h6 class="small fw-bold text-uppercase border-bottom pb-1" style="color:var(--bc-accent);"><i class="fas fa-sitemap me-1"></i> Desglose de Cuentas Contables</h6>' +
+      '<div id="bc-ver-detalles-container"><div class="spinner-border spinner-border-sm text-info"></div> Cargando detalle contable...</div>' +
+      '</div></div>';
+
+    if (modalVer) modalVer.show();
+
+    var idEmpresa = getIdEmpresaActiva();
+    google.script.run
+      .withSuccessHandler(function(detalles) {
+        var c = $('bc-ver-detalles-container');
+        if (!c) return;
+        if (!detalles || !detalles.length) {
+          c.innerHTML = '<div class="small text-muted">Cuenta: <strong>' + escapeHtml(m.CodigoCuentaContable || '-') + '</strong> ' + escapeHtml(m.CuentaContable || '') + '</div>';
+          return;
+        }
+
+        var h = '<table class="table table-sm table-bordered mt-2" style="font-size:0.8rem;">' +
+          '<thead><tr class="table-dark"><th>Cuenta</th><th>Concepto</th><th class="text-end">USD</th><th class="text-end">Bs</th></tr></thead><tbody>';
+        detalles.forEach(function(d) {
+          h += '<tr><td><strong>' + escapeHtml(d.codigo) + '</strong> <small>' + escapeHtml(d.nombre) + '</small></td>' +
+            '<td>' + escapeHtml(d.concepto || '-') + '</td>' +
+            '<td class="text-end text-success fw-bold">$' + parseMonto(d.montoUSD).toFixed(2) + '</td>' +
+            '<td class="text-end">Bs ' + parseMonto(d.montoBs).toFixed(2) + '</td></tr>';
+        });
+        h += '</tbody></table>';
+        c.innerHTML = h;
+      })
+      .withFailureHandler(function() {
+        var c = $('bc-ver-detalles-container');
+        if (c) c.innerHTML = '<small class="text-muted">Cuenta: ' + escapeHtml(m.CodigoCuentaContable || '') + ' ' + escapeHtml(m.CuentaContable || '') + '</small>';
+      })
+      .obtenerDetallesMovimiento(m.IdMovimiento, idEmpresa);
+  }
+
+  function editarMov(m) {
+    abrirFormMov();
+    $('bc-mov-form-title').textContent = 'Editar Movimiento #' + String(m.IdMovimiento).slice(-5);
+    $('bc-mov-id').value = m.IdMovimiento;
+    $('bc-mov-fecha').value = toDateInputValue(m.FechaMov);
+    $('bc-mov-origen').value = m.TipoMov || 'Banco';
+    filtrarCuentasMov();
+
+    $('bc-mov-cuenta-input').value = (m.Cuenta || '') + (m.NombreBanco ? ' - ' + m.NombreBanco : '');
+    $('bc-mov-tipo-trans').value = m.TipoTransaccion || 'Transf Positiva(+)';
+    $('bc-mov-referencia').value = m.ReferenciaMov || '';
+    $('bc-mov-descripcion').value = m.descMov || '';
+    $('bc-mov-moneda').value = m.MonedaMov || '';
+    $('bc-mov-tasa').value = m.TasaMov || 1;
+    $('bc-mov-monto').value = parseMonto(m.MontoMovUSD);
+    calcularEquivalenteMov();
+
+    renglonesContables = [];
+    renderTablaRenglones();
+
+    var idEmpresa = getIdEmpresaActiva();
+    google.script.run
+      .withSuccessHandler(function(detalles) {
+        if (detalles && detalles.length > 0) {
+          renglonesContables = detalles;
+        } else if (m.CodigoCuentaContable) {
+          renglonesContables = [{
+            codigo: m.CodigoCuentaContable,
+            nombre: m.CuentaContable || '',
+            concepto: m.descMov || '',
+            montoUSD: parseMonto(m.MontoMovUSD),
+            montoBs: parseMonto(m.MontoMovBs)
+          }];
+        }
+        renderTablaRenglones();
+      })
+      .obtenerDetallesMovimiento(m.IdMovimiento, idEmpresa);
+  }
+
+  function solicitarEliminarMov(id) {
+    var idEmpresa = getIdEmpresaActiva();
+    deleteActionCallback = function() {
+      google.script.run
+        .withSuccessHandler(function(r) {
+          if (r && r.success) {
+            mostrarToast(r.message || 'Eliminado');
+            cargarTodo();
+          } else mostrarToast((r && r.message) || 'Error al eliminar', 'danger');
+        })
+        .eliminarMovBancoCaja(id, idEmpresa);
+    };
+    if (modalDel) modalDel.show();
+  }
+
+  window.bcEliminarCfgRegistro = function(id, tipo) {
+    var idEmpresa = getIdEmpresaActiva();
+    deleteActionCallback = function() {
+      google.script.run
+        .withSuccessHandler(function(r) {
+          if (r && r.success) {
+            mostrarToast(r.message || 'Eliminado');
+            cargarListasConfig();
+            cargarTodo();
+          } else mostrarToast(r.message, 'danger');
+        })
+        .deleteRecord(id, tipo, idEmpresa);
+    };
+    if (modalDel) modalDel.show();
+  };
+
+  // 13. FILTRADO, EXPORTACIÓN E IMPRESIÓN
+  function aplicarFiltrosMovimientos() {
+    var d = $('bc-filtro-desde').value;
+    var h = $('bc-filtro-hasta').value;
+    var c = $('bc-filtro-cuenta').value;
+    var t = $('bc-filtro-tipo').value;
+
+    var res = (state.movimientos || []).filter(function(m) {
+      if (t && (m.TipoMov || '').toLowerCase() !== t.toLowerCase()) return false;
+      if (c && ((m.Cuenta || '') + (m.NombreBanco ? ' - ' + m.NombreBanco : '')) !== c) return false;
+      if (d && new Date(m.FechaMov) < new Date(d + 'T00:00:00')) return false;
+      if (h && new Date(m.FechaMov) > new Date(h + 'T23:59:59')) return false;
+      return true;
+    });
+
+    renderMovimientos(res);
+  }
+
+  function limpiarFiltrosMovimientos() {
+    if ($('bc-filtro-desde')) $('bc-filtro-desde').value = '';
+    if ($('bc-filtro-hasta')) $('bc-filtro-hasta').value = '';
+    if ($('bc-filtro-cuenta')) $('bc-filtro-cuenta').value = '';
+    if ($('bc-filtro-tipo')) $('bc-filtro-tipo').value = '';
+    renderMovimientos(state.movimientos || []);
+  }
+
+  function exportarExcelCSV() {
+    var movs = state.movimientos || [];
+    if (!movs.length) { mostrarToast('No hay datos para exportar', 'warning'); return; }
+
+    var csv = '\uFEFFID,Fecha,Tipo,Cuenta,Banco,Referencia,Concepto,Transaccion,USD,Bs\n';
+    movs.forEach(function(m) {
+      csv += [
+        '"' + (m.IdMovimiento || '') + '"',
+        '"' + formatDate(m.FechaMov) + '"',
+        '"' + (m.TipoMov || '') + '"',
+        '"' + (m.Cuenta || '') + '"',
+        '"' + (m.NombreBanco || '') + '"',
+        '"' + (m.ReferenciaMov || '') + '"',
+        '"' + (m.descMov || '').replace(/"/g, '""') + '"',
+        '"' + (m.TipoTransaccion || '') + '"',
+        parseMonto(m.MontoMovUSD),
+        parseMonto(m.MontoMovBs)
+      ].join(',') + '\n';
+    });
+
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Movimientos_Bancos_Cajas_' + new Date().toISOString().slice(0,10) + '.csv';
+    link.click();
+  }
+
+  function imprimirReporte() {
+    window.print();
+  }
+
+  function sincronizarSaldos() {
+    var btn = $('bc-btn-sync-saldos');
+    if (btn) btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+    var idEmpresa = getIdEmpresaActiva();
+
+    google.script.run
+      .withSuccessHandler(function(r) {
+        if (btn) btn.innerHTML = '<i class="fas fa-sync-alt"></i>';
+        mostrarToast((r && r.message) || 'Saldos bancarios actualizados');
+        cargarTodo();
+      })
+      .withFailureHandler(function() {
+        if (btn) btn.innerHTML = '<i class="fas fa-sync-alt"></i>';
+      })
+      .actualizarSaldosBancariosOptimizado(idEmpresa);
+  }
+
+  // 14. UI HELPERS (Modales / Toasts)
+  function abrirFormMov() {
+    $('bc-box-form-mov').style.display = 'block';
+    $('bc-box-filtros-mov').style.display = 'none';
+    $('bc-mov-form-title').textContent = 'Nuevo Movimiento';
+    $('bc-form-movimiento').reset();
+    $('bc-mov-id').value = '';
+    $('bc-mov-fecha').value = new Date().toISOString().slice(0,10);
+    $('bc-mov-tasa').value = '1.0000';
+    renglonesContables = [];
+    renderTablaRenglones();
+    $('bc-box-form-mov').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function cerrarFormMov() {
+    $('bc-box-form-mov').style.display = 'none';
+    $('bc-box-filtros-mov').style.display = 'block';
+    $('bc-form-movimiento').reset();
+    renglonesContables = [];
+    renderTablaRenglones();
+  }
+
+  function abrirFormAnt() {
+    $('bc-box-form-ant').style.display = 'block';
+    $('bc-form-anticipo').reset();
+    $('bc-ant-fecha').value = new Date().toISOString().slice(0,10);
+    $('bc-ant-tasa').value = '1.0000';
+    $('bc-box-form-ant').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function cerrarFormAnt() {
+    $('bc-box-form-ant').style.display = 'none';
+    $('bc-form-anticipo').reset();
+  }
+
+  function parseMonto(val) {
+    if (!val) return 0;
+    if (typeof val === 'number') return val;
+    var str = String(val).trim().replace(/[$\s]/g, '');
+    if (str.includes(',') && str.includes('.')) {
+      str = str.replace(/\./g, '').replace(',', '.');
+    } else if (str.includes(',')) {
+      str = str.replace(',', '.');
+    }
+    var num = parseFloat(str);
+    return isNaN(num) ? 0 : num;
+  }
+
+  function formatDate(d) {
+    if (!d) return '-';
+    var dt = new Date(d);
+    return isNaN(dt.getTime()) ? '-' : dt.toLocaleDateString('es-VE', {timeZone:'UTC'});
+  }
+
+  function toDateInputValue(d) {
+    if (!d) return '';
+    var dt = new Date(d);
+    return isNaN(dt.getTime()) ? '' : dt.toISOString().slice(0,10);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, function(m) {
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m];
+    });
+  }
+
+  function mostrarToast(msg, tipo) {
+    tipo = tipo || 'success';
+    var c = $('bc-toast-container');
+    if (!c) return;
+    var id = 'toast-' + Date.now();
+    c.innerHTML += '<div id="' + id + '" class="toast align-items-center text-white bg-' + tipo + ' border-0 show" role="alert">' +
+      '<div class="d-flex"><div class="toast-body">' + escapeHtml(msg) + '</div>' +
+      '<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>' +
+    '</div>';
+    setTimeout(function() {
+      var el = $(id);
+      if (el) el.remove();
+    }, 3500);
+  }
+
+  // 15. PROTOCOLO DE CICLO DE VIDA SPA (MÓDULO BANCOS Y CAJAS)
+  function resetearDOMBancos() {
+    cerrarFormMov();
+    cerrarFormAnt();
+    limpiarFiltrosMovimientos();
+    setTab('movimientos');
+    var idInput = $('bc-mov-id');
+    if (idInput) idInput.value = '';
+    deleteActionCallback = null;
+    renglonesContables = [];
+    if (modalVer) try { modalVer.hide(); } catch(e){}
+    if (modalDel) try { modalDel.hide(); } catch(e){}
+  }
+
+  window.ModuloBancos = {
+    mount: function() {
+      resetearDOMBancos();
+      cargarTodo();
+    },
+    unmount: function() {
+      resetearDOMBancos();
+      document.body.style.overflow = '';
+    }
+  };
+
+  window.initBancosCajas = function() {
+    try {
+      if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+        modalVer = new bootstrap.Modal($('bc-modal-ver-detalle'));
+        modalDel = new bootstrap.Modal($('bc-modal-confirm-del'));
+      }
+    } catch (e) {
+      console.warn('Bootstrap Modal warning:', e);
+    }
+    bindEvents();
+    window.ModuloBancos.mount();
+  };
+
+  // AUTO-INICIALIZADOR
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', window.initBancosCajas);
+  } else {
+    setTimeout(window.initBancosCajas, 50);
+  }
+
+})();
+</script>

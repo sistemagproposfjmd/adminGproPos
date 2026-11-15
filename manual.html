@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <base target="_top">
+  <title>Manual de Usuario GProPOS</title>
+
+  <link rel="manifest" href="?page=manifest">
+  <meta name="theme-color" content="#0f1115">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- ✅ CSS CONSOLIDADO -->
+  <?!= HtmlService.createHtmlOutputFromFile('css').getContent() ?>
+  
+</head>
+<body data-lang="<?= lang ?>" data-user="<?= userEmail ?>" class="mnu-root">
+
+  <div class="mnu-layout">
+
+    <!-- ============================================================
+         SIDEBAR
+         ============================================================ -->
+    <aside class="mnu-sidebar" id="mnu-sidebar">
+
+      <div class="mnu-sidebar-brand">
+        <div class="mnu-brand-logo">GP</div>
+        <div class="mnu-brand-text">
+          <strong>GProPOS</strong>
+          <small>Manual de Usuario</small>
+        </div>
+      </div>
+
+      <div class="mnu-sidebar-search">
+        <input type="search" id="mnu-search-input" placeholder="🔍 Buscar...">
+      </div>
+
+      <nav class="mnu-sidebar-nav" id="mnu-sidebar-nav" role="navigation">
+        <!-- Los módulos se cargan dinámicamente -->
+      </nav>
+
+      <div class="mnu-sidebar-footer">
+        <div class="mnu-user-info">
+          <span class="mnu-user-avatar" id="mnu-user-avatar">?</span>
+          <div class="mnu-user-details">
+            <small id="mnu-user-email"><?= userEmail ?></small>
+            <span class="mnu-badge-info" id="mnu-user-rol"><?= (rol && rol.rol) ? rol.rol : 'operador' ?></span>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ============================================================
+         CONTENIDO
+         ============================================================ -->
+    <main class="mnu-content">
+
+      <header class="mnu-topbar">
+        <button id="mnu-sidebar-toggle" class="mnu-icon-btn" title="Menú">☰</button>
+
+        <h1 id="mnu-manual-title">Manual de Usuario GProPOS</h1>
+
+        <div class="mnu-topbar-actions">
+          <button id="mnu-install-btn" class="mnu-icon-btn" title="Instalar app">📲</button>
+
+          <button id="mnu-lang-toggle" class="mnu-icon-btn" title="Cambiar idioma">
+            <span id="mnu-lang-label">ES</span>
+          </button>
+
+          <button id="mnu-theme-toggle" class="mnu-icon-btn" title="Modo oscuro/claro">🌙</button>
+
+          <button id="mnu-refresh-btn" class="mnu-icon-btn" title="Actualizar app">🔄</button>
+
+          <button id="mnu-print-btn" class="mnu-icon-btn" title="Imprimir">🖨️</button>
+
+          <button id="mnu-pdf-btn" class="mnu-icon-btn" title="Exportar PDF">📥</button>
+        </div>
+      </header>
+
+      <div class="mnu-content-body" id="mnu-tab-content">
+        <div class="mnu-empty">Cargando manual…</div>
+      </div>
+
+      <footer class="mnu-content-footer">
+        <span>GProPOS · Manual de Usuario</span>
+        <span id="mnu-footer-stats"></span>
+      </footer>
+
+    </main>
+
+  </div>
+
+  <!-- Overlay móvil -->
+  <div class="mnu-overlay" id="mnu-overlay"></div>
+
+  <!-- Scripts consolidados (tus scripts + manual + SW) -->
+  <?!= HtmlService.createHtmlOutputFromFile('scripts_assets').getContent() ?>
+
+</body>
+</html>

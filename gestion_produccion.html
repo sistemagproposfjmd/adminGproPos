@@ -1,0 +1,720 @@
+<!-- ============================================================
+     MÓDULO: PRODUCCIÓN DE COMPUESTOS (MULTI-EMPRESA ADAPTADO)
+============================================================ -->
+
+<style>
+.produccion-container { padding: 0; }
+.produccion-container .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+.produccion-container .page-header h3 { font-weight: 700; margin: 0; }
+
+.produccion-tabs {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 20px;
+  gap: 5px;
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+.produccion-tabs .nav-link {
+  color: #94a3b8;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 12px 20px;
+  font-weight: 600;
+  background: transparent;
+  transition: all 0.2s;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.produccion-tabs .nav-link:hover {
+  color: #e2e8f0;
+  background: rgba(255,255,255,0.03);
+}
+.produccion-tabs .nav-link.active {
+  color: #F97316;
+  border-bottom-color: #F97316;
+  background: transparent;
+}
+
+.produccion-container .card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.produccion-container .card-header {
+  background: rgba(0,0,0,0.15);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 14px 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+.produccion-container .card-body { padding: 18px; }
+
+.produccion-container .form-control,
+.produccion-container .form-select {
+  background-color: rgba(0,0,0,0.3) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: #e2e8f0 !important;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.88rem;
+}
+.produccion-container .form-control:focus,
+.produccion-container .form-select:focus {
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15) !important;
+  border-color: #F97316 !important;
+}
+.produccion-container .form-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: #94a3b8;
+  margin-bottom: 0.4rem;
+}
+
+.produccion-container .btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  font-size: 0.88rem;
+  transition: all 0.2s;
+}
+.produccion-container .btn-primary {
+  background: linear-gradient(135deg, #F97316, #ea580c) !important;
+  border: none;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+}
+.produccion-container .btn-success {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  border: none;
+  color: white !important;
+}
+
+.produccion-container .kpi-card {
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.08);
+  text-align: center;
+}
+.produccion-container .kpi-card .kpi-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #F97316;
+  line-height: 1.2;
+}
+.produccion-container .kpi-card .kpi-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.produccion-container .ingrediente-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.produccion-container .ingrediente-item:hover {
+  border-color: #F97316;
+  background: rgba(249, 115, 22, 0.05);
+}
+.produccion-container .ingrediente-item.selected {
+  border-color: #F97316;
+  background: rgba(249, 115, 22, 0.1);
+}
+.produccion-container .ingrediente-item .info { flex: 1; }
+.produccion-container .ingrediente-item .info .nombre { font-weight: 600; font-size: 0.88rem; color: #e2e8f0; }
+.produccion-container .ingrediente-item .info .meta { font-size: 0.72rem; color: #94a3b8; }
+
+.produccion-container .badge-status {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 5px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.produccion-container .badge-ok { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+.produccion-container .badge-warning { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+.produccion-container .badge-danger { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+.produccion-container table { width: 100%; border-collapse: collapse; }
+.produccion-container table thead th {
+  background: transparent;
+  color: #94a3b8;
+  padding: 10px 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.produccion-container table tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  color: #cbd5e1;
+  font-size: 0.85rem;
+}
+.produccion-container .search-box { position: relative; margin-bottom: 10px; }
+.produccion-container .search-box .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+}
+.produccion-container .search-box input { padding-left: 36px; }
+.produccion-container .empty-state { text-align: center; padding: 40px 20px; color: #64748b; }
+.produccion-container .empty-state i { font-size: 2.5rem; opacity: 0.3; margin-bottom: 12px; }
+</style>
+
+<div class="produccion-container">
+  <div class="page-header">
+    <div>
+      <h3><i class="fas fa-industry me-2" style="color: #F97316;"></i>Producción de Compuestos</h3>
+      <p class="text-muted mb-0 small">Gestión de recetas, stock de insumos y órdenes de producción</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-outline-secondary btn-sm" onclick="abrirConfiguracion()" title="Configuración">
+        <i class="fas fa-cog"></i>
+      </button>
+      <button class="btn btn-outline-secondary btn-sm" onclick="recargarTodo()" title="Recargar">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+      <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">
+        <i class="fas fa-building me-1"></i><span id="nombreEmpresaProduccion">Empresa Activa</span>
+      </span>
+    </div>
+  </div>
+
+  <ul class="produccion-tabs" id="tabsProduccion" role="tablist">
+    <li class="nav-item">
+      <button class="nav-link active" id="tab-producir-btn" onclick="cambiarTabProduccion('producir')">
+        <i class="fas fa-hammer me-2"></i>Producir
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tab-recetas-btn" onclick="cambiarTabProduccion('recetas')">
+        <i class="fas fa-book me-2"></i>Recetas
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tab-historial-btn" onclick="cambiarTabProduccion('historial')">
+        <i class="fas fa-history me-2"></i>Historial
+      </button>
+    </li>
+  </ul>
+
+  <!-- TAB PRODUCIR -->
+  <div id="tab-producir" class="tab-pane-produccion" style="display: block;">
+    <div class="row g-3">
+      <div class="col-12 col-lg-4">
+        <div class="card mb-3">
+          <div class="card-header"><i class="fas fa-search me-2"></i>Seleccionar Compuesto</div>
+          <div class="card-body">
+            <div class="search-box">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" class="form-control" id="buscarCompuestoInput" placeholder="Buscar compuesto..." oninput="debounceBuscarCompuestos()">
+            </div>
+            <div class="ingredientes-lista mt-2" id="listaCompuestos" style="max-height: 400px; overflow-y: auto;">
+              <div class="empty-state py-3"><i class="fas fa-box-open"></i><p class="small mb-0">Cargando compuestos...</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-8">
+        <div id="detalleCompuesto">
+          <div class="card">
+            <div class="card-body text-center py-5">
+              <div class="empty-state">
+                <i class="fas fa-hand-pointer"></i>
+                <h5>Selecciona un compuesto</h5>
+                <p>Elige un producto de la lista para calcular su disponibilidad según insumos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB RECETAS -->
+  <div id="tab-recetas" class="tab-pane-produccion" style="display: none;">
+    <div class="row g-3">
+      <div class="col-12 col-lg-4">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-book me-2"></i>Compuestos</span>
+          </div>
+          <div class="card-body">
+            <div class="search-box">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" class="form-control" id="buscarRecetaInput" placeholder="Buscar producto..." oninput="debounceBuscarRecetas()">
+            </div>
+            <div class="ingredientes-lista mt-2" id="listaRecetas" style="max-height: 400px; overflow-y: auto;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-8">
+        <div id="editorReceta">
+          <div class="card">
+            <div class="card-body text-center py-5">
+              <div class="empty-state">
+                <i class="fas fa-book-open"></i>
+                <h5>Selecciona un compuesto</h5>
+                <p>Haz clic en un producto de la izquierda para diseñar o editar su receta.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB HISTORIAL -->
+  <div id="tab-historial" class="tab-pane-produccion" style="display: none;">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>Fecha</th><th>Compuesto</th>
+                <th class="text-end">Cantidad</th>
+                <th class="text-end">Costo Total</th>
+                <th class="text-end">Costo Unit.</th>
+                <th>Usuario</th><th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tablaHistorialBody">
+              <tr><td colspan="8" class="text-center text-muted py-4">Cargando historial...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Configuración -->
+<div class="modal fade" id="modalConfiguracion" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: rgba(15,23,42,0.98); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1);">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-cog me-2" style="color: #F97316;"></i>Mantenimiento de Producción</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted small mb-3">Acciones automáticas sobre la hoja de la empresa activa.</p>
+        <div class="d-grid gap-2">
+          <button class="btn btn-outline-warning" onclick="ejecutarRecalcularCostos(this)">
+            <i class="fas fa-calculator me-2"></i>Recalcular Costos Unitarios
+          </button>
+          <button class="btn btn-outline-secondary" onclick="ejecutarValidarHojas(this)">
+            <i class="fas fa-check-circle me-2"></i>Verificar / Crear Hojas Faltantes
+          </button>
+        </div>
+        <div id="resultadoConfiguracion" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CLIENTE JAVASCRIPT: PRODUCCIÓN MULTI-EMPRESA
+// ============================================================
+
+function getIdEmpresaActiva() {
+  try {
+    var e = JSON.parse(sessionStorage.getItem('empresaActiva') || '{}');
+    return e.idSpreadsheet || e.id || '';
+  } catch(err) {
+    return '';
+  }
+}
+
+var prodCompuestosData = [];
+var prodCompuestosFiltrados = [];
+var prodCompuestoSeleccionado = null;
+var prodIngredientesCatalogo = [];
+var prodDebounceTimer = null;
+
+function prodEscape(texto) {
+  if (texto === null || texto === undefined) return '';
+  return String(texto).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function prodFormatearMoneda(val) {
+  var v = parseFloat(val) || 0;
+  return '$' + v.toFixed(2);
+}
+
+window.inicializarModuloProduccion = function() {
+  var idEmpresa = getIdEmpresaActiva();
+  try {
+    var emp = JSON.parse(sessionStorage.getItem('empresaActiva') || '{}');
+    var el = document.getElementById('nombreEmpresaProduccion');
+    if (el && emp.nombreEmpresa) el.textContent = emp.nombreEmpresa;
+  } catch(e) {}
+
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    console.error('Sin conexión a Apps Script');
+    return;
+  }
+
+  google.script.run
+    .withSuccessHandler(function() {
+      prodCargarCompuestos();
+      prodCargarHistorial();
+    })
+    .initModuloProduccion(idEmpresa);
+};
+
+function prodCargarCompuestos() {
+  var idEmpresa = getIdEmpresaActiva();
+  google.script.run
+    .withSuccessHandler(function(productos) {
+      prodIngredientesCatalogo = productos || [];
+      prodCompuestosData = prodIngredientesCatalogo.filter(function(p) {
+        return p.tipo === 'Compuesto' && p.Status !== 'Inactivo';
+      });
+      prodCompuestosFiltrados = prodCompuestosData.slice();
+      prodRenderListaCompuestos();
+      prodRenderListaRecetas();
+    })
+    .obtenerProductos(idEmpresa);
+}
+
+function prodRenderListaCompuestos() {
+  var container = document.getElementById('listaCompuestos');
+  if (!container) return;
+  if (prodCompuestosFiltrados.length === 0) {
+    container.innerHTML = '<div class="empty-state py-3"><p class="small mb-0">No hay productos compuestos</p></div>';
+    return;
+  }
+  var html = '';
+  prodCompuestosFiltrados.forEach(function(c) {
+    var selected = prodCompuestoSeleccionado && prodCompuestoSeleccionado.IdProducto === c.IdProducto ? 'selected' : '';
+    html += '<div class="ingrediente-item ' + selected + '" onclick="prodSeleccionarCompuesto(\'' + c.IdProducto.replace(/'/g, "\\'") + '\')">' +
+      '<div class="info"><div class="nombre">' + prodEscape(c.NombreProducto) + '</div><div class="meta">SKU: ' + prodEscape(c.IdProducto) + '</div></div>' +
+      '<span class="badge-status badge-ok">' + c.StockProducto + '</span>' +
+    '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function debounceBuscarCompuestos() {
+  clearTimeout(prodDebounceTimer);
+  prodDebounceTimer = setTimeout(function() {
+    var term = (document.getElementById('buscarCompuestoInput').value || '').toLowerCase().trim();
+    if (!term) prodCompuestosFiltrados = prodCompuestosData.slice();
+    else {
+      prodCompuestosFiltrados = prodCompuestosData.filter(function(c) {
+        return c.NombreProducto.toLowerCase().indexOf(term) !== -1 || c.IdProducto.toLowerCase().indexOf(term) !== -1;
+      });
+    }
+    prodRenderListaCompuestos();
+  }, 250);
+}
+
+function prodSeleccionarCompuesto(idProducto) {
+  var c = prodCompuestosData.find(function(p) { return p.IdProducto === idProducto; });
+  if (!c) return;
+  prodCompuestoSeleccionado = c;
+  prodRenderListaCompuestos();
+
+  var container = document.getElementById('detalleCompuesto');
+  container.innerHTML = '<div class="card"><div class="card-body text-center py-5"><div class="spinner-border text-warning"></div><p class="mt-3 text-muted">Calculando disponibilidad según recetas...</p></div></div>';
+
+  var idEmpresa = getIdEmpresaActiva();
+  google.script.run
+    .withSuccessHandler(function(res) {
+      if (!res || !res.success) {
+        container.innerHTML = '<div class="card"><div class="card-body text-center py-5"><div class="empty-state"><i class="fas fa-exclamation-triangle text-warning"></i><h5>Sin Receta</h5><p>' + prodEscape(res ? res.message : 'Error') + '</p><button class="btn btn-primary mt-3" onclick="prodIrAEditarReceta(\'' + idProducto + '\')"><i class="fas fa-book me-2"></i>Configurar Receta</button></div></div></div>';
+        return;
+      }
+      prodRenderDetalleCompuesto(c, res);
+    })
+    .withFailureHandler(function(err) {
+      container.innerHTML = '<div class="card"><div class="card-body text-danger py-4">Error: ' + prodEscape(err.message) + '</div></div>';
+    })
+    .calcularDisponibilidadCompuesto(idProducto, idEmpresa);
+}
+
+function prodRenderDetalleCompuesto(compuesto, disponibilidad) {
+  var container = document.getElementById('detalleCompuesto');
+  var max = disponibilidad.maxProducible || 0;
+
+  var kpis = '<div class="row g-3 mb-3">' +
+    '<div class="col-6 col-md-3"><div class="kpi-card"><div class="kpi-value">' + compuesto.StockProducto + '</div><div class="kpi-label">Stock Actual</div></div></div>' +
+    '<div class="col-6 col-md-3"><div class="kpi-card"><div class="kpi-value" style="color:#10b981;">' + max + '</div><div class="kpi-label">Máx. Producible</div></div></div>' +
+    '<div class="col-6 col-md-3"><div class="kpi-card"><div class="kpi-value">' + prodFormatearMoneda(disponibilidad.costoUnitarioEstimado) + '</div><div class="kpi-label">Costo Unit.</div></div></div>' +
+    '<div class="col-6 col-md-3"><div class="kpi-card"><div class="kpi-value">' + prodFormatearMoneda(compuesto.precioVenta) + '</div><div class="kpi-label">Precio Venta</div></div></div>' +
+  '</div>';
+
+  var desglose = '<div class="table-responsive"><table><thead><tr><th>Insumo</th><th class="text-end">Req. p/ Unidad</th><th class="text-end">Stock Actual</th><th class="text-end">Límite</th><th class="text-center">Estado</th></tr></thead><tbody>';
+  (disponibilidad.desglose || []).forEach(function(i) {
+    var ok = i.maxParaEste > 0;
+    desglose += '<tr>' +
+      '<td>' + prodEscape(i.nombre) + '<br><small class="text-muted">' + prodEscape(i.id) + '</small></td>' +
+      '<td class="text-end">' + i.requeridoPorUnidad + ' ' + prodEscape(i.unidad) + '</td>' +
+      '<td class="text-end">' + i.stockDisponible + '</td>' +
+      '<td class="text-end fw-bold">' + i.maxParaEste + '</td>' +
+      '<td class="text-center">' + (ok ? '<span class="badge-status badge-ok">OK</span>' : '<span class="badge-status badge-danger">Agotado</span>') + '</td>' +
+    '</tr>';
+  });
+  desglose += '</tbody></table></div>';
+
+  var acciones = '<div class="card mt-3"><div class="card-body"><div class="row g-3 align-items-end">' +
+    '<div class="col-md-4"><label class="form-label">Cantidad a Producir</label><input type="number" id="cantProducir" class="form-control" value="1" min="1" max="' + (max || 1) + '"></div>' +
+    '<div class="col-md-8 d-flex gap-2">' +
+      '<button class="btn btn-outline-info" onclick="prodSimular()"><i class="fas fa-flask me-2"></i>Simular</button>' +
+      '<button class="btn btn-success flex-fill" onclick="prodEjecutar()" ' + (max === 0 ? 'disabled' : '') + '><i class="fas fa-play me-2"></i>Producir Ahora</button>' +
+    '</div></div></div></div>';
+
+  container.innerHTML = '<div class="card"><div class="card-header d-flex justify-content-between align-items-center"><span><i class="fas fa-cube me-2" style="color:#F97316;"></i>' + prodEscape(compuesto.NombreProducto) + '</span><button class="btn btn-sm btn-outline-warning" onclick="prodIrAEditarReceta(\'' + compuesto.IdProducto + '\')"><i class="fas fa-book me-1"></i>Editar Receta</button></div><div class="card-body">' + kpis + desglose + acciones + '</div></div>';
+}
+
+function prodEjecutar() {
+  if (!prodCompuestoSeleccionado) return;
+  var cant = parseFloat(document.getElementById('cantProducir').value);
+  var idEmpresa = getIdEmpresaActiva();
+
+  Swal.fire({
+    title: '¿Confirmar producción?',
+    text: 'Se descontarán los insumos de ' + cant + ' unidades de ' + prodCompuestoSeleccionado.NombreProducto,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, producir',
+    cancelButtonText: 'Cancelar'
+  }).then(function(res) {
+    if (res.isConfirmed) {
+      if (window.mostrarLoading) window.mostrarLoading('Producción', 'Procesando inventario...', 10);
+      google.script.run
+        .withSuccessHandler(function(r) {
+          if (window.ocultarLoading) window.ocultarLoading();
+          if (r.success) {
+            Swal.fire('¡Éxito!', prodEscape(r.message), 'success');
+            prodCargarCompuestos();
+            prodSeleccionarCompuesto(prodCompuestoSeleccionado.IdProducto);
+            prodCargarHistorial();
+          } else {
+            Swal.fire('Error', prodEscape(r.message), 'error');
+          }
+        })
+        .withFailureHandler(function(err) {
+          if (window.ocultarLoading) window.ocultarLoading();
+          Swal.fire('Error', err.message, 'error');
+        })
+        .producirCompuesto(prodCompuestoSeleccionado.IdProducto, cant, { modo: 'normal', idSpreadsheet: idEmpresa });
+    }
+  });
+}
+
+function prodSimular() {
+  if (!prodCompuestoSeleccionado) return;
+  var cant = parseFloat(document.getElementById('cantProducir').value);
+  var idEmpresa = getIdEmpresaActiva();
+
+  google.script.run
+    .withSuccessHandler(function(r) {
+      if (r.success) {
+        Swal.fire({
+          title: 'Simulación de Producción',
+          html: '<p>Costo Total Requerido: <b>' + prodFormatearMoneda(r.costoTotal) + '</b><br>Costo Unitario: <b>' + prodFormatearMoneda(r.costoUnitario) + '</b></p>',
+          icon: 'info'
+        });
+      }
+    })
+    .producirCompuesto(prodCompuestoSeleccionado.IdProducto, cant, { modo: 'simulacion', idSpreadsheet: idEmpresa });
+}
+
+function prodCargarHistorial() {
+  var idEmpresa = getIdEmpresaActiva();
+  google.script.run
+    .withSuccessHandler(function(res) {
+      var tbody = document.getElementById('tablaHistorialBody');
+      if (!tbody) return;
+      if (!res || !res.producciones || res.producciones.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No hay producciones registradas</td></tr>';
+        return;
+      }
+      var html = '';
+      res.producciones.forEach(function(p) {
+        html += '<tr>' +
+          '<td><small class="text-muted">' + prodEscape(p.idProduccion) + '</small></td>' +
+          '<td>' + new Date(p.fecha).toLocaleDateString() + '</td>' +
+          '<td>' + prodEscape(p.nombreCompuesto) + '</td>' +
+          '<td class="text-end">' + p.cantidadProducida + '</td>' +
+          '<td class="text-end">' + prodFormatearMoneda(p.costoTotalUSD) + '</td>' +
+          '<td class="text-end">' + prodFormatearMoneda(p.costoUnitarioUSD) + '</td>' +
+          '<td><small>' + prodEscape(p.usuario) + '</small></td>' +
+          '<td><span class="badge-status badge-ok">' + prodEscape(p.estado) + '</span></td>' +
+        '</tr>';
+      });
+      tbody.innerHTML = html;
+    })
+    .obtenerHistorialProducciones({ idSpreadsheet: idEmpresa });
+}
+
+// Sub-pestañas
+function cambiarTabProduccion(tab) {
+  ['producir', 'recetas', 'historial'].forEach(function(t) {
+    var p = document.getElementById('tab-' + t);
+    var b = document.getElementById('tab-' + t + '-btn');
+    if (p) p.style.display = (t === tab) ? 'block' : 'none';
+    if (b) b.classList.toggle('active', t === tab);
+  });
+  if (tab === 'historial') prodCargarHistorial();
+}
+
+function recargarTodo() {
+  prodCargarCompuestos();
+  prodCargarHistorial();
+  if (prodCompuestoSeleccionado) prodSeleccionarCompuesto(prodCompuestoSeleccionado.IdProducto);
+}
+
+function abrirConfiguracion() {
+  var m = new bootstrap.Modal(document.getElementById('modalConfiguracion'));
+  m.show();
+}
+
+function ejecutarRecalcularCostos(btn) {
+  var idEmpresa = getIdEmpresaActiva();
+  btn.disabled = true;
+  google.script.run
+    .withSuccessHandler(function(r) {
+      btn.disabled = false;
+      document.getElementById('resultadoConfiguracion').innerHTML = '<div class="alert alert-success">' + prodEscape(r.message) + '</div>';
+      prodCargarCompuestos();
+    })
+    .recalcularCostosCompuestos(idEmpresa);
+}
+
+function ejecutarValidarHojas(btn) {
+  var idEmpresa = getIdEmpresaActiva();
+  btn.disabled = true;
+  google.script.run
+    .withSuccessHandler(function(r) {
+      btn.disabled = false;
+      document.getElementById('resultadoConfiguracion').innerHTML = '<div class="alert alert-info">' + prodEscape(r.message) + '</div>';
+    })
+    .validarYCrearHojasProduccion(idEmpresa);
+}
+
+function prodRenderListaRecetas() {
+  var container = document.getElementById('listaRecetas');
+  if (!container) return;
+  var html = '';
+  prodCompuestosData.forEach(function(c) {
+    html += '<div class="ingrediente-item" onclick="prodIrAEditarReceta(\'' + c.IdProducto.replace(/'/g, "\\'") + '\')">' +
+      '<div class="info"><div class="nombre">' + prodEscape(c.NombreProducto) + '</div><div class="meta">SKU: ' + prodEscape(c.IdProducto) + '</div></div>' +
+      '<i class="fas fa-chevron-right text-muted"></i>' +
+    '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function prodIrAEditarReceta(idProducto) {
+  cambiarTabProduccion('recetas');
+  var p = prodCompuestosData.find(function(item) { return item.IdProducto === idProducto; });
+  if (!p) return;
+
+  var recetaArr = [];
+  try { recetaArr = JSON.parse(p.receta || '[]'); } catch(e) {}
+
+  var html = '<div class="card"><div class="card-header d-flex justify-content-between align-items-center"><span>Editar Receta: <b>' + prodEscape(p.NombreProducto) + '</b></span></div><div class="card-body">';
+  html += '<div id="filasRecetaEditor">';
+  
+  recetaArr.forEach(function(ing, idx) {
+    html += '<div class="d-flex gap-2 mb-2 align-items-center" id="filaReceta_' + idx + '">' +
+      '<input type="text" class="form-control" value="' + prodEscape(ing.id) + '" readonly style="width:160px;">' +
+      '<input type="text" class="form-control" value="' + prodEscape(ing.nombre || ing.id) + '" readonly>' +
+      '<input type="number" class="form-control ing-cant" value="' + ing.cantidad + '" style="width:110px;" step="any">' +
+      '<button class="btn btn-outline-danger btn-sm" onclick="this.closest(\'.d-flex\').remove()"><i class="fas fa-trash"></i></button>' +
+    '</div>';
+  });
+  
+  html += '</div>';
+  html += '<div class="d-flex justify-content-between mt-4">' +
+    '<button class="btn btn-outline-primary" onclick="agregarInsumoReceta()"><i class="fas fa-plus me-1"></i>Añadir Insumo</button>' +
+    '<button class="btn btn-success" onclick="guardarRecetaActual(\'' + p.IdProducto + '\')"><i class="fas fa-save me-1"></i>Guardar Receta</button>' +
+  '</div></div></div>';
+
+  document.getElementById('editorReceta').innerHTML = html;
+}
+
+function agregarInsumoReceta() {
+  var opciones = prodIngredientesCatalogo.filter(function(i) { return i.tipo !== 'Compuesto'; });
+  var selectHtml = '<select class="form-select ing-select">';
+  opciones.forEach(function(o) {
+    selectHtml += '<option value="' + o.IdProducto + '" data-nombre="' + prodEscape(o.NombreProducto) + '">' + prodEscape(o.NombreProducto) + ' (' + o.IdProducto + ')</option>';
+  });
+  selectHtml += '</select>';
+
+  var div = document.createElement('div');
+  div.className = 'd-flex gap-2 mb-2 align-items-center';
+  div.innerHTML = selectHtml +
+    '<input type="number" class="form-control ing-cant" value="1" style="width:110px;" step="any">' +
+    '<button class="btn btn-outline-danger btn-sm" onclick="this.closest(\'.d-flex\').remove()"><i class="fas fa-trash"></i></button>';
+  document.getElementById('filasRecetaEditor').appendChild(div);
+}
+
+function guardarRecetaActual(idProducto) {
+  var filas = document.querySelectorAll('#filasRecetaEditor > div');
+  var receta = [];
+  filas.forEach(function(f) {
+    var sel = f.querySelector('.ing-select');
+    var cantInput = f.querySelector('.ing-cant');
+    var cant = parseFloat(cantInput ? cantInput.value : 0) || 0;
+    if (cant > 0) {
+      if (sel) {
+        var opt = sel.options[sel.selectedIndex];
+        receta.push({ id: sel.value, nombre: opt.getAttribute('data-nombre'), cantidad: cant });
+      } else {
+        var id = f.querySelectorAll('input')[0].value;
+        var nom = f.querySelectorAll('input')[1].value;
+        receta.push({ id: id, nombre: nom, cantidad: cant });
+      }
+    }
+  });
+
+  var idEmpresa = getIdEmpresaActiva();
+  google.script.run
+    .withSuccessHandler(function(r) {
+      if (r.success) {
+        Swal.fire('Guardado', 'Receta guardada con éxito', 'success');
+        prodCargarCompuestos();
+      } else {
+        Swal.fire('Error', r.message, 'error');
+      }
+    })
+    .guardarReceta(idProducto, receta, idEmpresa);
+}
+</script>

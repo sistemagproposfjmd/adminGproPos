@@ -1,0 +1,462 @@
+<!-- Reportes -->
+<!-- Contenedor Único y Aislado para Evitar Conflictos Estilísticos -->
+<div id="seccion-movimientos-bancaj" class="mov-container">
+  
+  <!-- Sección de Filtros Superiores -->
+  <div class="mov-filters-row">
+    <div class="mov-filter-group">
+      <label for="filtro-fecha-desde">Desde:</label>
+      <input type="date" id="filtro-fecha-desde" class="mov-input">
+    </div>
+    
+    <div class="mov-filter-group">
+      <label for="filtro-fecha-hasta">Hasta:</label>
+      <input type="date" id="filtro-fecha-hasta" class="mov-input">
+    </div>
+    
+    <div class="mov-filter-group">
+      <label for="filtro-entidad">Banco / Caja:</label>
+      <select id="filtro-entidad" class="mov-input">
+        <option value="">-- Todos --</option>
+      </select>
+    </div>
+
+    <div class="mov-filter-group">
+      <label for="filtro-moneda-vista">Mostrar en:</label>
+      <select id="filtro-moneda-vista" class="mov-input">
+        <option value="ORIGINAL">Moneda de Registro</option>
+        <option value="USD">Dólares (USD)</option>
+        <option value="BS">Bolívares (Bs.)</option>
+      </select>
+    </div>
+
+    <div class="mov-filter-group search-group">
+      <label for="filtro-busqueda">Buscar:</label>
+      <input type="text" id="filtro-busqueda" placeholder="Ref, descripción, banco..." class="mov-input">
+    </div>
+  </div>
+
+  <!-- Contenedor de la Tabla Responsiva -->
+  <div class="mov-table-wrapper">
+    <table id="tabla-movimientos-datos">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Tipo</th>
+          <th>Banco / Caja</th>
+          <th>Cuenta / Código</th>
+          <th>Referencia</th>
+          <th>Descripción</th>
+          <th>Transacción</th>
+          <th style="text-align: right;">Monto</th>
+          <th>Moneda</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-movimientos-body">
+        <tr>
+          <td colspan="9" class="mov-text-center">Cargando movimientos...</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="mov-total-row">
+          <td colspan="7" style="text-align: right; font-weight: bold;">Total Ingresos (+):</td>
+          <td id="mov-total-ingresos" class="mov-total-val" style="text-align: right; color: #28a745; font-family: monospace; font-size: 13px;">+0,00</td>
+          <td id="mov-total-moneda-label" style="font-weight: bold;">-</td>
+        </tr>
+        <tr class="mov-total-row">
+          <td colspan="7" style="text-align: right; font-weight: bold;">Total Egresos (-):</td>
+          <td id="mov-total-egresos" class="mov-total-val" style="text-align: right; color: #dc3545; font-family: monospace; font-size: 13px;">-0,00</td>
+          <td></td>
+        </tr>
+        <tr class="mov-total-row net-row">
+          <td colspan="7" style="text-align: right; font-weight: bold;">Neto / Diferencia:</td>
+          <td id="mov-total-neto" class="mov-total-val" style="text-align: right; font-weight: bold; font-family: monospace; font-size: 14px;">0,00</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- Controles de Paginación -->
+  <div class="mov-pagination-row">
+    <div class="mov-page-info">
+      Mostrando <span id="mov-pago-desde">0</span> a <span id="mov-pago-hasta">0</span> de <span id="mov-pago-total">0</span> registros
+    </div>
+    <div class="mov-page-buttons">
+      <button id="btn-mov-prev" class="mov-btn" disabled>&laquo; Anterior</button>
+      <span id="mov-page-number" class="mov-page-indicator">Pág. 1 de 1</span>
+      <button id="btn-mov-next" class="mov-btn" disabled>Siguiente &raquo;</button>
+    </div>
+  </div>
+</div>
+
+<!-- Estilos CSS -->
+<style>
+  .mov-container { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; color: #333; background-color: #ffffff; padding: 15px; border-radius: 6px; }
+  .mov-filters-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 15px; background-color: #f8f9fa; padding: 12px; border-radius: 6px; border: 1px solid #e9ecef; }
+  .mov-filter-group { display: flex; flex-direction: column; min-width: 140px; }
+  .mov-filter-group.search-group { flex-grow: 1; min-width: 200px; }
+  .mov-filter-group label { font-size: 12px; font-weight: bold; margin-bottom: 4px; color: #495057; }
+  .mov-input { padding: 6px 10px; font-size: 13px; border: 1px solid #ced4da; border-radius: 4px; outline: none; background-color: #fff; }
+  .mov-input:focus { border-color: #80bdff; box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); }
+  .mov-table-wrapper { overflow-x: auto; margin-bottom: 15px; border: 1px solid #dee2e6; border-radius: 4px; }
+  #tabla-movimientos-datos { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+  #tabla-movimientos-datos th { background-color: #495057; color: white; padding: 9px 10px; font-weight: 600; white-space: nowrap; }
+  #tabla-movimientos-datos td { padding: 8px 10px; border-bottom: 1px solid #dee2e6; vertical-align: middle; }
+  #tabla-movimientos-datos tbody tr:hover { background-color: #f1f3f5; }
+  .mov-text-center { text-align: center; padding: 25px !important; color: #6c757d; font-style: italic; }
+  .mov-total-row td { background-color: #f8f9fa; border-bottom: none !important; padding: 6px 10px !important; }
+  .mov-total-row.net-row td { border-top: 1px solid #dee2e6 !important; border-bottom: 2px double #6c757d !important; padding-bottom: 10px !important; }
+  .mov-pagination-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 13px; padding-top: 5px; }
+  .mov-page-buttons { display: flex; align-items: center; gap: 8px; }
+  .mov-btn { padding: 5px 12px; font-size: 13px; border: 1px solid #ced4da; background-color: #fff; color: #495057; cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+  .mov-btn:hover:not(:disabled) { background-color: #e9ecef; border-color: #adb5bd; }
+  .mov-btn:disabled { background-color: #e9ecef; color: #adb5bd; cursor: not-allowed; }
+  .mov-page-indicator { font-weight: bold; color: #495057; }
+  .mov-badge { background-color: #e9ecef; color: #495057; padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+</style>
+
+<!-- Lógica JavaScript -->
+<script>
+(function() {
+  let _rawMovimientos = [];
+  let _filteredMovimientos = [];
+  let _movCurrentPage = 1;
+  const _movRowsPerPage = 10;
+
+  function escapeHtml(str) {
+    if (!str && str !== 0) return '';
+    return String(str).replace(/[&<>"']/g, function(m) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+    });
+  }
+
+  // Inicializador llamado por pageConfig del SPA
+  window.initReportes = function(transaccion, rol) {
+    _rawMovimientos = [];
+    _filteredMovimientos = [];
+    _movCurrentPage = 1;
+    
+    let intentos = 0;
+    const esperarDOM = setInterval(() => {
+      intentos++;
+      const contenedorListo = document.getElementById('filtro-fecha-desde');
+      if (contenedorListo) {
+        clearInterval(esperarDOM);
+        inicializarComponenteMovimientos();
+      } else if (intentos >= 20) {
+        clearInterval(esperarDOM);
+        console.error("No se pudo cargar la vista de reportes bancarios a tiempo.");
+      }
+    }, 100);
+  };
+
+  function inicializarComponenteMovimientos() {
+    const bind = (id, ev, fn) => { const el = document.getElementById(id); if (el) el[ev] = fn; };
+    
+    bind('filtro-fecha-desde', 'onchange', procesarFiltrosYRender);
+    bind('filtro-fecha-hasta', 'onchange', procesarFiltrosYRender);
+    bind('filtro-entidad', 'onchange', procesarFiltrosYRender);
+    bind('filtro-moneda-vista', 'onchange', procesarFiltrosYRender);
+    bind('filtro-busqueda', 'oninput', procesarFiltrosYRender);
+    
+    bind('btn-mov-prev', 'onclick', () => { 
+      if (_movCurrentPage > 1) { 
+        _movCurrentPage--; 
+        renderizarTablaPaginada(); 
+      } 
+    });
+    
+    bind('btn-mov-next', 'onclick', () => { 
+      if (_movCurrentPage * _movRowsPerPage < _filteredMovimientos.length) { 
+        _movCurrentPage++; 
+        renderizarTablaPaginada(); 
+      } 
+    });
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(cargarSelectorEntidades)
+        .withFailureHandler(err => console.error("Error al cargar bancos/cajas:", err))
+        .getBancosYCajas();
+
+      google.script.run
+        .withSuccessHandler(data => {
+          if (!Array.isArray(data)) {
+            console.error("Datos de movimientos inválidos:", data);
+            document.getElementById('tabla-movimientos-body').innerHTML = 
+              `<tr><td colspan="9" class="mov-text-center" style="color:#dc3545;">Formato de datos devuelto inválido.</td></tr>`;
+            return;
+          }
+          _rawMovimientos = data;
+          procesarFiltrosYRender();
+        })
+        .withFailureHandler(err => {
+          document.getElementById('tabla-movimientos-body').innerHTML = 
+            `<tr><td colspan="9" class="mov-text-center" style="color:#dc3545;">Error al cargar movimientos: ${escapeHtml(err.message)}</td></tr>`;
+        })
+        .getMovimientos();
+    } else {
+      console.warn("Entorno Google Apps Script no detectado.");
+    }
+  }
+
+  function cargarSelectorEntidades(entidades) {
+    const select = document.getElementById('filtro-entidad');
+    if (!select) return;
+    select.innerHTML = '<option value="">-- Todos --</option>';
+    
+    if (!entidades || !Array.isArray(entidades) || entidades.length === 0) return;
+
+    entidades.forEach(ent => {
+      const nombre = ent.tipo === 'Banco' ? ent.NombreBanco : (ent.nombreCaja || ent.NombreBanco || 'Caja');
+      const idUnico = ent.tipo === 'Banco' ? ent.NroCuenta : (ent.codigoCaja || ent.idCaja || ent.nombreCaja);
+      
+      if (nombre && idUnico) {
+        const opt = document.createElement('option');
+        opt.value = idUnico;
+        opt.textContent = `[${ent.tipo || 'Entidad'}] ${nombre} ${ent.NroCuenta ? '- ' + ent.NroCuenta : ''}`;
+        select.appendChild(opt);
+      }
+    });
+  }
+
+  function parseStringToNumber(val) {
+    if (val === undefined || val === null || val === '') return 0;
+    if (typeof val === 'number') return isNaN(val) ? 0 : val;
+    
+    let str = String(val).trim().replace(/\s/g, '');
+    if (!str) return 0;
+    
+    if (str.includes(',')) {
+      if (str.includes('.')) {
+        str = str.replace(/\./g, '').replace(/,/g, '.');
+      } else {
+        str = str.replace(/,/g, '.');
+      }
+    }
+    
+    const num = parseFloat(str);
+    return isNaN(num) ? 0 : num;
+  }
+
+  function safeGetDateString(dateVal) {
+    if (!dateVal) return "";
+    if (dateVal instanceof Date) {
+      const y = dateVal.getFullYear();
+      const m = String(dateVal.getMonth() + 1).padStart(2, '0');
+      const d = String(dateVal.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+    
+    const str = String(dateVal).trim();
+    if (str.includes("T")) return str.split("T")[0];
+    if (str.includes(" ")) {
+      const parteFecha = str.split(" ")[0];
+      if (/^\d{4}-\d{2}-\d{2}$/.test(parteFecha)) return parteFecha;
+    }
+    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+    
+    const parts = str.split("/");
+    if (parts.length === 3) {
+      const y = parts[2].split(" ")[0];
+      if (y.length === 4) {
+        const d = parts[0].padStart(2, '0');
+        const m = parts[1].padStart(2, '0');
+        return `${y}-${m}-${d}`;
+      }
+    }
+    return str;
+  }
+
+  function procesarFiltrosYRender() {
+    const desde = document.getElementById('filtro-fecha-desde').value;
+    const hasta = document.getElementById('filtro-fecha-hasta').value;
+    const entidadId = String(document.getElementById('filtro-entidad').value || "").trim().toLowerCase();
+    const busqueda = String(document.getElementById('filtro-busqueda').value || "").trim().toLowerCase();
+
+    _filteredMovimientos = _rawMovimientos.filter(mov => {
+      if (!mov || typeof mov !== 'object') return false; 
+
+      const tieneId = mov.IdMovimiento || mov.idMov;
+      const tieneFecha = mov.FechaMov || mov.fecha;
+      if (!tieneId && !tieneFecha) return false; 
+
+      if (tieneFecha) {
+        const fechaMovDate = safeGetDateString(tieneFecha);
+        if (desde && fechaMovDate < desde) return false;
+        if (hasta && fechaMovDate > hasta) return false;
+      } else if (desde || hasta) {
+        return false;
+      }
+
+      // Validación para Bancos Y Cajas
+      if (entidadId) {
+        const nroCta = String(mov.NroCuenta || "").trim().toLowerCase();
+        const codBco = String(mov.CodigoBancos || "").trim().toLowerCase();
+        const cta = String(mov.Cuenta || "").trim().toLowerCase();
+        const codCaja = String(mov.CodigoCaja || mov.codigoCaja || "").trim().toLowerCase();
+        const nomCaja = String(mov.nombreCaja || "").trim().toLowerCase();
+        
+        const coincide = (nroCta === entidadId || codBco === entidadId || cta === entidadId || codCaja === entidadId || nomCaja === entidadId);
+        if (!coincide) return false;
+      }
+
+      if (busqueda) {
+        const desc = String(mov.descMov || mov.descripcionMov || '').toLowerCase();
+        const ref = String(mov.ReferenciaMov || mov.referenciaMov || '').toLowerCase();
+        const bco = String(mov.NombreBanco || mov.nombreCaja || '').toLowerCase();
+        if (!desc.includes(busqueda) && !ref.includes(busqueda) && !bco.includes(busqueda)) return false;
+      }
+
+      return true;
+    });
+
+    _movCurrentPage = 1;
+    renderizarTablaPaginada();
+  }
+
+  function formatMoneda(valor) {
+    return Number(valor).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function renderizarTablaPaginada() {
+    const tbody = document.getElementById('tabla-movimientos-body');
+    const vistaMoneda = document.getElementById('filtro-moneda-vista').value;
+    
+    if (_filteredMovimientos.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="mov-text-center">No se encontraron movimientos con los filtros seleccionados.</td></tr>';
+      actualizarControlesPaginacion(0, 0);
+      calcularYMostrarTotales([], vistaMoneda);
+      return;
+    }
+
+    const inicio = (_movCurrentPage - 1) * _movRowsPerPage;
+    const fin = Math.min(inicio + _movRowsPerPage, _filteredMovimientos.length);
+    const subset = _filteredMovimientos.slice(inicio, fin);
+
+    let html = '';
+    subset.forEach(mov => {
+      const montoUSD = Math.abs(parseStringToNumber(mov.MontoMovUSD));
+      const montoBs = Math.abs(parseStringToNumber(mov.MontoMovBs));
+      
+      let montoMostrar = 0;
+      let monedaLabel = String(mov.MonedaMov || mov.monedaMov || '').trim();
+
+      if (vistaMoneda === 'USD') {
+        montoMostrar = montoUSD;
+        monedaLabel = 'Dólares';
+      } else if (vistaMoneda === 'BS') {
+        montoMostrar = montoBs;
+        monedaLabel = 'Bolívares';
+      } else {
+        const esUSD = (monedaLabel.toLowerCase() === 'dolares' || monedaLabel.toUpperCase() === 'USD');
+        montoMostrar = esUSD ? montoUSD : montoBs;
+      }
+
+      const tipoTransaccion = String(mov.TipoTransaccion || mov.tipoTransaccion || '').toLowerCase();
+      const esPositiva = tipoTransaccion.includes('positiva') || tipoTransaccion.includes('ingreso');
+      const colorMonto = esPositiva ? 'color: #28a745; font-weight: bold;' : 'color: #dc3545;';
+      const signo = esPositiva ? '+' : '-';
+
+      const fechaFormateada = safeGetDateString(mov.FechaMov || mov.fecha);
+      const tipoMovText = mov.TipoMov || mov.tipoMov || 'Banco';
+      const entidadNombre = mov.NombreBanco || mov.nombreCaja || mov.Cuenta || '-';
+      const ctaOCod = mov.NroCuenta || mov.CodigoBancos || mov.CodigoCaja || mov.codigoCaja || '-';
+
+      html += `<tr>
+        <td>${escapeHtml(fechaFormateada)}</td>
+        <td><span class="mov-badge">${escapeHtml(tipoMovText)}</span></td>
+        <td>${escapeHtml(entidadNombre)}</td>
+        <td>${escapeHtml(ctaOCod)}</td>
+        <td>${escapeHtml(mov.ReferenciaMov || mov.referenciaMov || '-')}</td>
+        <td>${escapeHtml(mov.descMov || mov.descripcionMov || '-')}</td>
+        <td>${escapeHtml(mov.TipoTransaccion || mov.tipoTransaccion || '-')}</td>
+        <td style="text-align: right; ${colorMonto} font-family: monospace;">${signo}${formatMoneda(montoMostrar)}</td>
+        <td>${escapeHtml(monedaLabel)}</td>
+      </tr>`;
+    });
+
+    tbody.innerHTML = html;
+    
+    actualizarControlesPaginacion(fin, inicio);
+    calcularYMostrarTotales(_filteredMovimientos, vistaMoneda);
+  }
+
+  function actualizarControlesPaginacion(fin, inicio = 0) {
+    const totalReg = _filteredMovimientos.length;
+    const totalPages = Math.ceil(totalReg / _movRowsPerPage) || 1;
+
+    document.getElementById('mov-pago-desde').textContent = totalReg === 0 ? 0 : inicio + 1;
+    document.getElementById('mov-pago-hasta').textContent = fin;
+    document.getElementById('mov-pago-total').textContent = totalReg;
+    document.getElementById('mov-page-number').textContent = `Pág. ${_movCurrentPage} de ${totalPages}`;
+
+    document.getElementById('btn-mov-prev').disabled = (_movCurrentPage === 1);
+    document.getElementById('btn-mov-next').disabled = (_movCurrentPage === totalPages || totalReg === 0);
+  }
+
+  function calcularYMostrarTotales(movimientos, vistaMoneda) {
+    const elIngresos = document.getElementById('mov-total-ingresos');
+    const elEgresos = document.getElementById('mov-total-egresos');
+    const elNeto = document.getElementById('mov-total-neto');
+    const elLabel = document.getElementById('mov-total-moneda-label');
+
+    // Desglose dual para evitar sumar peras con manzanas en multimoneda
+    if (vistaMoneda === 'ORIGINAL') {
+      let ingUSD = 0, egrUSD = 0;
+      let ingBs = 0, egrBs = 0;
+
+      movimientos.forEach(mov => {
+        const mon = String(mov.MonedaMov || mov.monedaMov || '').trim().toUpperCase();
+        const esUSD = (mon === 'DOLARES' || mon === 'USD');
+        const tipo = String(mov.TipoTransaccion || mov.tipoTransaccion || '').toLowerCase();
+        const esPositiva = tipo.includes('positiva') || tipo.includes('ingreso');
+
+        if (esUSD) {
+          const val = Math.abs(parseStringToNumber(mov.MontoMovUSD));
+          if (esPositiva) ingUSD += val; else egrUSD += val;
+        } else {
+          const val = Math.abs(parseStringToNumber(mov.MontoMovBs));
+          if (esPositiva) ingBs += val; else egrBs += val;
+        }
+      });
+
+      const netoUSD = ingUSD - egrUSD;
+      const netoBs = ingBs - egrBs;
+
+      elIngresos.innerHTML = `+${formatMoneda(ingUSD)} $ &nbsp;|&nbsp; +${formatMoneda(ingBs)} Bs.`;
+      elEgresos.innerHTML = `-${formatMoneda(egrUSD)} $ &nbsp;|&nbsp; -${formatMoneda(egrBs)} Bs.`;
+      
+      elNeto.innerHTML = `${netoUSD >= 0 ? '+' : ''}${formatMoneda(netoUSD)} $ &nbsp;|&nbsp; ${netoBs >= 0 ? '+' : ''}${formatMoneda(netoBs)} Bs.`;
+      elNeto.style.color = (netoUSD >= 0 && netoBs >= 0) ? '#28a745' : '#333';
+      elLabel.textContent = 'USD | Bs.';
+      return;
+    }
+
+    // Modo unificado (USD o BS)
+    let ingresos = 0;
+    let egresos = 0;
+
+    movimientos.forEach(mov => {
+      const monto = (vistaMoneda === 'USD') 
+        ? Math.abs(parseStringToNumber(mov.MontoMovUSD))
+        : Math.abs(parseStringToNumber(mov.MontoMovBs));
+
+      const tipo = String(mov.TipoTransaccion || mov.tipoTransaccion || '').toLowerCase();
+      const esPositiva = tipo.includes('positiva') || tipo.includes('ingreso');
+
+      if (esPositiva) ingresos += monto;
+      else egresos += monto;
+    });
+
+    const neto = ingresos - egresos;
+
+    elIngresos.textContent = `+${formatMoneda(ingresos)}`;
+    elEgresos.textContent = `-${formatMoneda(egresos)}`;
+    elNeto.textContent = (neto >= 0 ? '+' : '') + formatMoneda(neto);
+    elNeto.style.color = neto >= 0 ? '#28a745' : '#dc3545';
+    elLabel.textContent = vistaMoneda === 'USD' ? 'USD' : 'Bs.';
+  }
+})();
+</script>

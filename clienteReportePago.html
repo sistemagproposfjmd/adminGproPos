@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Reportar Soporte de Pago</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #071513;
+      --card-bg: #0c201d;
+      --border-color: rgba(255,255,255,0.1);
+      --accent: #f97316;
+    }
+    body {
+      background-color: var(--bg-dark);
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 16px;
+      margin: 0;
+    }
+    .main-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px 20px;
+      max-width: 520px;
+      margin: 0 auto;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+    .form-control, .form-select {
+      background-color: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-color);
+      color: #fff;
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .form-control:focus, .form-select:focus {
+      background-color: rgba(255,255,255,0.1);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 0 3px rgba(249,115,22,0.25);
+    }
+    .btn-submit {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      width: 100%;
+      font-size: 16px;
+      box-shadow: 0 6px 20px rgba(249,115,22,0.35);
+    }
+    .factura-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+    .factura-item.selected {
+      border-color: var(--accent);
+      background: rgba(249,115,22,0.08);
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-card">
+  <div class="text-center mb-3">
+    <div style="width:48px;height:48px;background:rgba(249,115,22,0.15);color:var(--accent);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:8px;">
+      <i class="bi bi-receipt-cutoff"></i>
+    </div>
+    <h4 class="fw-bold mb-1 text-white"><?= datos.empresaNombre ?></h4>
+    <p class="text-muted small">Reporte de Comprobante de Pago</p>
+  </div>
+
+  <div class="p-3 mb-3 rounded" style="background:rgba(255,255,255,0.03);border:1px solid var(--border-color);">
+    <div class="small text-muted">Cliente:</div>
+    <div class="fw-bold text-white"><?= datos.nombre ?></div>
+    <div class="small text-muted">RIF: <?= datos.rif ?></div>
+  </div>
+
+  <form id="formReporte" onsubmit="enviarSoporte(event)">
+    <label class="form-label small fw-bold text-light mb-2">Seleccione la(s) Factura(s) que pagó:</label>
+    <div class="mb-3" id="listaFacturas">
+      <? for (var i = 0; i < datos.facturas.length; i++) { 
+           var f = datos.facturas[i]; ?>
+        <div class="factura-item selected" onclick="toggleFactura(this)">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <input type="checkbox" class="form-check-input chk-fac me-2" checked value="<?= f.nro ?>" data-saldo="<?= f.saldoUSD ?>" onchange="recalcularTotalSeleccionado()">
+              <strong class="text-white">Factura #<?= f.nro ?></strong>
+            </div>
+            <span class="text-warning fw-bold">$ <?= Number(f.saldoUSD).toFixed(2) ?></span>
+          </div>
+          <div class="small text-muted ms-4">Fecha: <?= f.fecha || '-' ?></div>
+        </div>
+      <? } ?>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3 px-2">
+      <span class="small text-muted">Total Seleccionado:</span>
+      <span class="fs-5 fw-bold text-warning" id="txtTotalSeleccionado">$ 0.00</span>
+    </div>
+
+    <hr style="border-color:var(--border-color);" class="my-3">
+
+    <div class="mb-3">
+      <label class="form-label small text-muted">Forma de Pago</label>
+      <select class="form-select" id="formaPago" required onchange="cambiarFormaPago(this.value)">
+        <option value="PagoMovil">Pago Móvil</option>
+        <option value="Transferencia">Transferencia Bancaria</option>
+        <option value="Zelle">Zelle / Dólares</option>
+        <option value="Deposito">Depósito Bancario</option>
+      </select>
+    </div>
+
+    <div class="row g-2 mb-3">
+      <div class="col-6">
+        <label class="form-label small text-muted">Banco Emisor</label>
+        <input type="text" class="form-control" id="bancoOrigen" placeholder="Ej: Banesco, Mercantil..." required>
+      </div>
+      <div class="col-6">
+        <label class="form-label small text-muted">Banco Destino</label>
+        <input type="text" class="form-control" id="bancoDestino" placeholder="Donde depositó" required>
+      </div>
+    </div>
+
+    <div class="row g-2 mb-3">
+      <div class="col-7">
+        <label class="form-label small text-muted">N° Referencia / Comprobante</label>
+        <input type="text" class="form-control" id="referencia" placeholder="Últimos dígitos" required>
+      </div>
+      <div class="col-5">
+        <label class="form-label small text-muted">Fecha del Pago</label>
+        <input type="date" class="form-control" id="fechaPago" required>
+      </div>
+    </div>
+
+    <div class="row g-2 mb-3">
+      <div class="col-4">
+        <label class="form-label small text-muted">Moneda</label>
+        <select class="form-select" id="monedaPago">
+          <option value="USD">Dólares ($)</option>
+          <option value="BS">Bolívares (Bs)</option>
+        </select>
+      </div>
+      <div class="col-8">
+        <label class="form-label small text-muted">Monto Pagado</label>
+        <input type="number" step="0.01" class="form-control fw-bold" id="montoPagado" placeholder="0.00" required>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label small text-muted">Observaciones (Opcional)</label>
+      <input type="text" class="form-control" id="observaciones" placeholder="Teléfono de contacto o nota">
+    </div>
+
+    <button type="submit" id="btnEnviar" class="btn-submit">
+      <i class="bi bi-send-check me-2"></i> Enviar Comprobante
+    </button>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  const TOKEN = "<?= tokenRaw ?>";
+
+  window.onload = function() {
+    document.getElementById('fechaPago').value = new Date().toISOString().split('T')[0];
+    recalcularTotalSeleccionado();
+  };
+
+  function toggleFactura(el) {
+    const chk = el.querySelector('.chk-fac');
+    if (event.target !== chk) {
+      chk.checked = !chk.checked;
+    }
+    el.classList.toggle('selected', chk.checked);
+    recalcularTotalSeleccionado();
+  }
+
+  function recalcularTotalSeleccionado() {
+    let tot = 0;
+    document.querySelectorAll('.chk-fac:checked').forEach(c => {
+      tot += parseFloat(c.dataset.saldo || 0);
+    });
+    document.getElementById('txtTotalSeleccionado').textContent = '$ ' + tot.toFixed(2);
+    const inpMonto = document.getElementById('montoPagado');
+    if (!inpMonto.value || parseFloat(inpMonto.value) === 0) {
+      inpMonto.value = tot.toFixed(2);
+    }
+  }
+
+  function enviarSoporte(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btnEnviar');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Enviando...';
+
+    const facs = [];
+    document.querySelectorAll('.chk-fac:checked').forEach(c => facs.push(c.value));
+
+    const payload = {
+      token: TOKEN,
+      facturasSeleccionadas: facs,
+      formaPago: document.getElementById('formaPago').value,
+      bancoOrigen: document.getElementById('bancoOrigen').value.trim(),
+      bancoDestino: document.getElementById('bancoDestino').value.trim(),
+      referencia: document.getElementById('referencia').value.trim(),
+      fechaPago: document.getElementById('fechaPago').value,
+      moneda: document.getElementById('monedaPago').value,
+      montoUSD: parseFloat(document.getElementById('montoPagado').value) || 0,
+      montoBs: 0,
+      observaciones: document.getElementById('observaciones').value.trim()
+    };
+
+    google.script.run
+      .withSuccessHandler(function(res) {
+        if (res.success) {
+          Swal.fire({
+            icon: 'success',
+            title: '¡Soporte Recibido!',
+            text: res.mensaje,
+            confirmButtonColor: '#f97316'
+          }).then(() => {
+            document.body.innerHTML = `
+              <div class="main-card text-center py-5">
+                <i class="bi bi-check-circle-fill text-success" style="font-size:4rem;"></i>
+                <h3 class="text-white mt-3">Comprobante Registrado</h3>
+                <p class="text-muted">Muchas gracias. Hemos notificado al departamento de cobranzas.</p>
+              </div>`;
+          });
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = 'Enviar Comprobante';
+          Swal.fire('Error', res.message, 'error');
+        }
+      })
+      .withFailureHandler(function(err) {
+        btn.disabled = false;
+        btn.innerHTML = 'Enviar Comprobante';
+        Swal.fire('Error de conexión', err.message || err.toString(), 'error');
+      })
+      .registrarSoporteWebCliente(payload);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,1451 @@
+<!-- MÓDULO: TERMINAL POS (PEDIDOS) - ADAPTADO A SPA -->
+
+<style>
+:root{--bg-main:#090d16;--bg-secondary:#0f172a;--bg-card:#152033;--bg-card-hover:#1c2b45;--bg-input:#0a0f1d;--border-color:rgba(255,255,255,0.08);--border-focus:rgba(59,130,246,0.5);--text-main:#f8fafc;--text-muted:#94a3b8;--primary:#3b82f6;--primary-hover:#2563eb;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;--info:#06b6d4;--shadow-sm:0 2px 8px rgba(0,0,0,0.35);--shadow-md:0 8px 24px rgba(0,0,0,0.5);--radius-sm:8px;--radius-md:12px;--radius-lg:16px}[data-bs-theme="light"]{--bg-main:#f1f5f9;--bg-secondary:#ffffff;--bg-card:#ffffff;--bg-card-hover:#f8fafc;--bg-input:#f8fafc;--border-color:#e2e8f0;--text-main:#0f172a;--text-muted:#64748b;--primary:#2563eb}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%;width:100%;margin:0;padding:0;background-color:transparent;color:var(--text-main);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}#pos-wrapper{display:flex;flex-direction:column;height:calc(100vh - 75px);min-height:550px;width:100%;position:relative;background-color:var(--bg-main);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md)}#posTopBar{background:var(--bg-secondary);border-bottom:1px solid var(--border-color);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0;z-index:100}.brand-info{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1rem}.tasa-chip{background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);padding:3px 10px;border-radius:14px;font-size:0.76rem;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:5px}.top-actions-desktop{display:flex;align-items:center;gap:8px}.btn-header{border-radius:var(--radius-sm);font-size:0.82rem;font-weight:700;padding:6px 14px;display:inline-flex;align-items:center;gap:6px;border:1px solid transparent;cursor:pointer;transition:all 0.2s ease}.btn-nuevo{background:linear-gradient(135deg,var(--success) 0%,#059669 100%);color:#fff;box-shadow:0 2px 8px rgba(16,185,129,0.35)}.btn-nuevo:hover{transform:translateY(-1px)}.btn-historial-pc{background:rgba(255,255,255,0.05);border-color:var(--border-color);color:var(--text-main)}.btn-historial-pc:hover,.btn-historial-pc.active{background:rgba(59,130,246,0.15);border-color:var(--primary);color:#fff}.tabs-control-wrapper{background:var(--bg-secondary);border-bottom:1px solid var(--border-color);padding:6px 10px;flex-shrink:0;display:none}.tabs-nav-bar{display:flex;background:var(--bg-input);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:3px;gap:4px}.tab-btn{flex:1;background:transparent;border:none;color:var(--text-muted);font-size:0.8rem;font-weight:700;padding:8px 4px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:all 0.2s ease;position:relative}.tab-btn.active{background:var(--primary);color:#ffffff;box-shadow:0 2px 10px rgba(59,130,246,0.4)}.cart-badge-counter{background:var(--danger);color:#fff;font-size:0.68rem;font-weight:800;padding:1px 6px;border-radius:10px}.pos-views-container{flex:1;display:flex;min-height:0;position:relative;overflow:hidden;gap:12px;padding:12px}.panel-container{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);display:flex;flex-direction:column;box-shadow:var(--shadow-sm);overflow:hidden;min-height:0}#viewCatalog{flex:1;min-width:0}.catalog-header-filters{padding:8px 10px;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);display:flex;gap:8px;flex-shrink:0}.search-input-wrap{position:relative;flex:1}.search-input-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted)}.form-control,.form-select{background:var(--bg-input);border:1px solid var(--border-color);color:var(--text-main);border-radius:var(--radius-sm);padding:6px 10px;font-size:0.84rem;outline:none}.form-control:focus,.form-select:focus{background:var(--bg-input);border-color:var(--primary);box-shadow:0 0 0 3px rgba(59,130,246,0.25);color:var(--text-main)}.grid-prod-scroll{flex:1;overflow-y:auto;overflow-x:hidden;display:grid;grid-template-columns:repeat(2,1fr);row-gap:5px;column-gap:6px;padding:8px;min-height:0;align-content:start}@media (min-width:992px){.grid-prod-scroll{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));row-gap:4px !important;column-gap:8px !important;padding:8px 10px !important;align-content:start !important}.tarjeta-producto{height:64px !important;padding:4px 6px !important;gap:6px !important}.tarjeta-producto .p-thumb{width:50px !important;min-width:50px !important;height:52px !important;padding:3px !important}}.tarjeta-producto{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-sm);display:flex;flex-direction:row;align-items:center;cursor:pointer;overflow:hidden;user-select:none;box-shadow:var(--shadow-sm);transition:transform 0.12s ease,border-color 0.12s ease;padding:5px;gap:8px;height:72px}.tarjeta-producto:hover{border-color:var(--primary);background:var(--bg-card-hover)}.tarjeta-producto:active{transform:scale(0.98)}.tarjeta-producto .p-thumb{width:56px;height:100%;min-width:56px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;padding:4px;overflow:hidden;flex-shrink:0}.tarjeta-producto .p-thumb img{max-height:100%;max-width:100%;object-fit:contain}.tarjeta-producto .p-details{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:1px}.p-header-info{display:flex;justify-content:space-between;align-items:center;line-height:1;margin-bottom:2px}.p-precio{font-size:0.8rem;font-weight:800;color:var(--success)}.stock-pill{font-size:0.6rem;font-weight:700;padding:1px 4px;border-radius:4px;line-height:1;white-space:nowrap}.st-ok{background:rgba(16,185,129,0.15);color:var(--success)}.st-low{background:rgba(239,68,68,0.15);color:var(--danger)}.p-nombre{font-size:0.72rem;font-weight:600;color:var(--text-main);line-height:1.15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}.p-bs{font-size:0.62rem;color:var(--info);line-height:1;font-weight:500}#viewCart{width:380px;flex-shrink:0}.cart-client-panel{padding:10px 12px;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);flex-shrink:0}.cart-scroll-items{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px;min-height:0}.cart-item-card{display:flex;align-items:center;justify-content:space-between;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:6px 10px}.btn-qty{width:26px;height:26px;border-radius:6px;border:1px solid var(--border-color);background:var(--bg-input);color:var(--text-main);display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:bold}.btn-qty:hover{background:var(--primary);color:#fff}.cart-totals-footer{padding:12px 14px;background:var(--bg-secondary);border-top:1px solid var(--border-color);flex-shrink:0}#viewHistory{position:absolute;inset:12px;z-index:50;display:none;background:var(--bg-card);border:1px solid var(--primary);border-radius:var(--radius-lg);box-shadow:var(--shadow-md)}#viewHistory.show-history{display:flex !important}.historial-metrics-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px;background:var(--bg-secondary);border-bottom:1px solid var(--border-color);flex-shrink:0}.metric-chip{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:6px 10px;display:flex;flex-direction:column}.metric-chip .m-title{font-size:0.65rem;color:var(--text-muted);font-weight:700;text-transform:uppercase}.metric-chip .m-value{font-size:1.1rem;font-weight:800;color:var(--text-main)}.historial-filters-bar{padding:8px 10px;display:flex;gap:8px;background:var(--bg-main);border-bottom:1px solid var(--border-color);flex-shrink:0}.orders-cards-scroll{flex:1;overflow-y:auto;padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;min-height:0;align-items:start;align-content:start}.orders-cards-scroll>*{align-self:start !important;height:fit-content !important;max-height:fit-content !important}.order-appsheet-card{background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:12px;transition:transform 0.15s ease;align-self:start;height:fit-content;max-height:fit-content;display:flex;flex-direction:column}.order-appsheet-card.pendiente{border-left:4px solid var(--warning)}.order-appsheet-card.procesado{border-left:4px solid var(--success)}.order-appsheet-card.cancelado{border-left:4px solid var(--danger);opacity:0.7}.order-appsheet-card .oa-acciones{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}#posLoader{position:absolute;inset:0;background:rgba(9,13,22,0.85);backdrop-filter:blur(4px);z-index:3000;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:var(--radius-lg)}.pos-confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);z-index:999999 !important;display:flex;align-items:center;justify-content:center;padding:16px;animation:posFadeIn 0.15s ease-out}.pos-confirm-dialog{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);box-shadow:0 16px 36px rgba(0,0,0,0.7);width:100%;max-width:380px;padding:20px;text-align:center;animation:posScaleUp 0.15s ease-out}@keyframes posFadeIn{from{opacity:0}to{opacity:1}}@keyframes posScaleUp{from{transform:scale(0.92);opacity:0}to{transform:scale(1);opacity:1}}@media (max-width:991px){#pos-wrapper{height:calc(100vh - 65px)}#posTopBar{padding:6px 10px}.btn-historial-pc{display:none !important}.tabs-control-wrapper{display:block}.pos-views-container{padding:0;gap:0}.form-control,.form-select{font-size:16px !important}#viewCatalog,#viewCart,#viewHistory{width:100% !important;height:100% !important;position:absolute !important;inset:0 !important;border-radius:0 !important;border:none !important;display:none !important;z-index:1 !important}#viewCatalog.active-tab,#viewCart.active-tab,#viewHistory.active-tab{display:flex !important;z-index:2 !important}#viewHistory.show-history:not(.active-tab){display:none !important}.historial-metrics-strip{grid-template-columns:repeat(2,1fr)}.historial-filters-bar{flex-direction:column}.orders-cards-scroll{grid-template-columns:1fr;padding:8px}.order-appsheet-card{padding:10px}.order-appsheet-card .oa-acciones{justify-content:flex-start;margin-top:8px;padding-top:8px;border-top:1px solid var(--border-color)}}@media (max-width:480px){.order-appsheet-card .oa-acciones .btn{font-size:0.68rem;padding:3px 8px !important}.order-appsheet-card .oa-acciones .btn i{margin-right:2px}}
+</style>
+
+<div id="pos-wrapper">
+
+  <!-- SPINNER LOADER LOCAL -->
+  <div id="posLoader" style="display: flex;">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
+    <div class="mt-3 fw-bold text-light small">Cargando Catálogo de Productos...</div>
+  </div>
+
+  <!-- 1. BARRA SUPERIOR -->
+  <header id="posTopBar">
+    <div class="brand-info">
+      <i class="bi bi-shop text-primary fs-5"></i>
+      <span class="d-none d-sm-inline">POS MÓVIL</span>
+    </div>
+
+    <div class="tasa-chip">
+      <span class="text-muted">TASA:</span>
+      <span id="lblTasa">0.00 Bs/$</span>
+    </div>
+
+    <div class="top-actions-desktop">
+      <button class="btn-header btn-historial-pc" id="btnHistorialPC" onclick="window.posManager.toggleHistorialPC()">
+        <i class="bi bi-clock-history"></i>
+        <span>Historial</span>
+      </button>
+
+      <button class="btn-header btn-nuevo" onclick="window.posManager.nuevoPedido(true)">
+        <i class="bi bi-plus-circle-fill"></i>
+        <span>Nuevo</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. CONTROL DE PESTAÑAS (SOLO EN MÓVIL) -->
+  <nav class="tabs-control-wrapper">
+    <div class="tabs-nav-bar">
+      <button class="tab-btn active" id="tabBtnCatalog" onclick="window.posManager.switchTabMobile('catalog')">
+        <i class="bi bi-grid-fill"></i>
+        <span>Catálogo</span>
+      </button>
+
+      <button class="tab-btn" id="tabBtnCart" onclick="window.posManager.switchTabMobile('cart')">
+        <i class="bi bi-cart3"></i>
+        <span>Carrito</span>
+        <span class="cart-badge-counter" id="cartBadgeQty" style="display:none;">0</span>
+      </button>
+
+      <button class="tab-btn" id="tabBtnHistory" onclick="window.posManager.switchTabMobile('history')">
+        <i class="bi bi-clock-history"></i>
+        <span>Historial</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- 3. CONTENEDOR PRINCIPAL FLEXIBLE -->
+  <main class="pos-views-container">
+
+    <!-- ==================== VISTA 1: CATÁLOGO ==================== -->
+    <section class="panel-container active-tab" id="viewCatalog">
+      <div class="catalog-header-filters">
+        <div class="search-input-wrap">
+          <i class="bi bi-search"></i>
+          <input type="text" id="inpBuscar" class="form-control ps-5" placeholder="Buscar por producto...">
+        </div>
+        <select id="selCat" class="form-select" style="max-width: 140px;">
+          <option value="">Categorías</option>
+        </select>
+      </div>
+
+      <div id="gridProd" class="grid-prod-scroll"></div>
+    </section>
+
+    <!-- ==================== VISTA 2: CARRITO ==================== -->
+    <section class="panel-container" id="viewCart">
+
+      <div class="cart-client-panel">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <label class="text-muted small fw-bold">DATOS DEL PEDIDO</label>
+          <div class="d-flex gap-2 align-items-center">
+            <span class="badge bg-secondary">#<span id="lblIdPedido">1</span></span>
+            <button class="btn btn-sm btn-link text-danger p-0 text-decoration-none" onclick="window.posManager.limpiarCarrito()" title="Vaciar Carrito">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+        </div>
+
+        <select id="selCliente" class="form-select mb-2"></select>
+        <div class="row g-2 mb-2">
+          <div class="col-6">
+            <input type="text" id="inpRif" class="form-control" placeholder="RIF/Cédula" readonly>
+          </div>
+          <div class="col-6">
+            <input type="date" id="inpFecha" class="form-control">
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-12">
+            <div class="input-group input-group-sm">
+              <span class="input-group-text bg-primary text-white fw-bold" style="font-size:0.72rem;">
+                <i class="bi bi-person-badge me-1"></i>VENDEDOR
+              </span>
+              <input type="text" id="inpVendedor" class="form-control fw-bold" placeholder="Escriba o confirme el vendedor..." autocomplete="off">
+              <button class="btn btn-outline-secondary" type="button" id="btnReloadVendedor" title="Restaurar vendedor logueado">
+                <i class="bi bi-arrow-clockwise"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cartList" class="cart-scroll-items"></div>
+
+      <div class="cart-totals-footer">
+        <div class="d-flex justify-content-between text-muted small mb-1">
+          <span>Subtotal:</span><span id="lblSub" class="fw-bold">$0.00</span>
+        </div>
+        <div class="d-flex justify-content-between text-muted small mb-1 border-bottom border-secondary pb-1">
+          <span>IVA (16%):</span><span id="lblIva" class="fw-bold">$0.00</span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <span class="fw-bold">TOTAL USD:</span>
+          <span id="lblTotal" class="fw-bold fs-4 text-success">$0.00</span>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <small class="text-muted">Equivalente:</small>
+          <span id="lblBs" class="fw-bold text-info">Bs 0.00</span>
+        </div>
+        <button id="btnProcesar" class="btn btn-success w-100 py-2 fw-bold" onclick="window.posManager.procesar()">
+          <i class="bi bi-check2-circle me-1"></i>PROCESAR PEDIDO
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== VISTA 3: HISTORIAL ==================== -->
+    <section class="panel-container" id="viewHistory">
+      <div class="d-flex justify-content-between align-items-center p-2 px-3 border-bottom border-secondary bg-secondary">
+        <span class="fw-bold text-primary"><i class="bi bi-clock-history me-1"></i>Historial de Pedidos</span>
+        <button class="btn btn-sm btn-outline-danger d-none d-lg-inline-flex align-items-center gap-1" onclick="window.posManager.toggleHistorialPC(false)">
+          <i class="bi bi-x-lg"></i><span>Cerrar Historial</span>
+        </button>
+      </div>
+
+      <!-- MÉTRICAS RÁPIDAS -->
+      <div class="historial-metrics-strip">
+        <div class="metric-chip"><span class="m-title">Pedidos</span><span class="m-value" id="statTotalPedidos">0</span></div>
+        <div class="metric-chip"><span class="m-title text-success">Total USD</span><span class="m-value text-success" id="statMontoTotal">$0.00</span></div>
+        <div class="metric-chip"><span class="m-title text-info">Total Bs.</span><span class="m-value text-info" id="statMontoTotalBs">Bs 0.00</span></div>
+        <div class="metric-chip"><span class="m-title text-warning">Pendientes</span><span class="m-value text-warning" id="statPendientes">0</span></div>
+      </div>
+
+      <!-- FILTROS -->
+      <div class="historial-filters-bar">
+        <input type="text" id="filtroBusqueda" class="form-control" placeholder="Buscar cliente o ID..." onkeyup="window.posManager.filtrarHistorial()">
+        <select id="filtroEstado" class="form-select" style="max-width: 140px;" onchange="window.posManager.filtrarHistorial()">
+          <option value="">Estado</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="Procesado">Procesado</option>
+          <option value="Cancelado">Cancelado</option>
+        </select>
+        <input type="date" id="filtroFechaDesde" class="form-control" onchange="window.posManager.filtrarHistorial()" title="Desde">
+        <input type="date" id="filtroFechaHasta" class="form-control" onchange="window.posManager.filtrarHistorial()" title="Hasta">
+        <button class="btn btn-outline-primary btn-sm px-3" onclick="window.posManager.cargarHistorial()"><i class="bi bi-arrow-clockwise"></i></button>
+      </div>
+
+      <div id="pedidosGrid" class="orders-cards-scroll"></div>
+      <div id="sinResultados" class="text-center py-5 text-muted" style="display:none;">
+        <i class="bi bi-inbox fs-1 d-block mb-1"></i>No hay registros encontrados
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- MODAL TICKET COMPACTO -->
+<div class="modal fade" id="modalTicketCompacto" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content" style="background: var(--bg-card); border: 1px solid var(--border-color);">
+      <div class="modal-header py-2 border-secondary">
+        <h6 class="modal-title fw-bold text-primary"><i class="bi bi-receipt me-2"></i>Comprobante</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-3">
+        <div id="ticketContent" class="bg-white text-dark p-3 rounded small font-monospace"></div>
+        <div class="d-flex gap-2 mt-3">
+          <button class="btn btn-sm btn-success flex-fill" onclick="window.posManager.imprimirTicket()"><i class="bi bi-printer me-1"></i>Imprimir</button>
+          <button class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// HELPERS MULTIEMPRESA SEGUROS
+// ============================================================
+function getIdEmpresaActivaPOS() {
+  try {
+    var e = JSON.parse(sessionStorage.getItem('empresaActiva') || '{}');
+    return e.idSpreadsheet || e.idSpreadsheetEmpresa || e.id || e.idEmpresa || '';
+  } catch(err) { 
+    return ''; 
+  }
+}
+
+function getNombreEmpresaActivaPOS() {
+  try {
+    var e = JSON.parse(sessionStorage.getItem('empresaActiva') || '{}');
+    return e.nombreEmpresa || e.nombre || 'GPro POS';
+  } catch(err) { 
+    return 'GPro POS'; 
+  }
+}
+
+// Convertidor universal de URLs de Google Drive a imágenes reales
+function formatearUrlImagen(url) {
+  if (!url || typeof url !== 'string') return '';
+  var u = url.trim();
+  if (u.indexOf('drive.google.com') !== -1) {
+    var match = u.match(/[-\w]{25,}/);
+    if (match && match[0]) {
+      return 'https://drive.google.com/thumbnail?id=' + match[0] + '&sz=w240';
+    }
+  }
+  return u;
+}
+
+// ============================================================
+// HELPERS CENTRALIZADOS DE UI
+// ============================================================
+function _mostrarCargandoPOS(titulo, subtitulo, pct) {
+  if (window.GProUI && typeof window.GProUI.mostrarLoading === 'function') {
+    return window.GProUI.mostrarLoading(titulo || 'Cargando Catálogo', subtitulo || 'Por favor espere...', pct || 40);
+  }
+  if (typeof mostrarLoading === 'function') {
+    return mostrarLoading(titulo || 'Cargando Catálogo', subtitulo || 'Por favor espere...', pct || 40);
+  }
+  var loader = document.getElementById('posLoader');
+  if (loader) loader.style.display = 'flex';
+}
+
+function _ocultarCargandoPOS() {
+  if (window.GProUI && typeof window.GProUI.ocultarLoading === 'function') {
+    try { window.GProUI.ocultarLoading(); } catch (e) {}
+  } else if (typeof ocultarLoading === 'function') {
+    try { ocultarLoading(); } catch (e) {}
+  }
+  var loader = document.getElementById('posLoader');
+  if (loader) loader.style.display = 'none';
+}
+
+// ============================================================
+// OBJETO DE NOTIFICACIONES UNIFICADO (INDEX + FALLBACK)
+// ============================================================
+var _notificarPOS = {
+  exito: function(msg) {
+    if (window.GProUI && window.GProUI.toast) return window.GProUI.toast.exito(msg);
+    if (window.notificar && typeof window.notificar.exito === 'function') return window.notificar.exito(msg);
+    if (window.Swal) return Swal.fire({ icon: 'success', title: msg, timer: 2000, toast: true, position: 'top-end', showConfirmButton: false });
+    console.log('[Éxito]', msg);
+  },
+  error: function(msg) {
+    if (window.GProUI && window.GProUI.toast) return window.GProUI.toast.error(msg);
+    if (window.notificar && typeof window.notificar.error === 'function') return window.notificar.error(msg);
+    if (window.Swal) return Swal.fire({ icon: 'error', title: 'Error', text: msg, timer: 3500 });
+    console.error('[Error]', msg);
+  },
+  advertencia: function(msg) {
+    if (window.GProUI && window.GProUI.toast) return window.GProUI.toast.advertencia(msg);
+    if (window.notificar && typeof window.notificar.advertencia === 'function') return window.notificar.advertencia(msg);
+    if (window.Swal) return Swal.fire({ icon: 'warning', title: 'Atención', text: msg, timer: 3000 });
+    console.warn('[Atención]', msg);
+  },
+  info: function(msg) {
+    if (window.GProUI && window.GProUI.toast) return window.GProUI.toast.info(msg);
+    if (window.notificar && typeof window.notificar.info === 'function') return window.notificar.info(msg);
+    console.log('[Info]', msg);
+  },
+  escapeHtml: function(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(m) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+    });
+  }
+};
+
+// ============================================================
+// POS MANAGER (CON MULTIEMPRESA INTEGRADA)
+// ============================================================
+window.posManager = {
+  data: { prods:[], clis:[], cats:[], cart:[], tasa:1, id:1, nuevoId:1, editing:false },
+  pedidosCache: [],
+  pedidosFiltrados: [],
+  filtrosActivos: { fechaDesde:'', fechaHasta:'', estado:'', cliente:'' },
+  filtroTimeout: null,
+  procesandoAccion: false,
+  procesandoVenta: false,
+  confirmacionActiva: null,
+  eventsBound: false,
+
+  _cargarVendedorLogueado: function() {
+    var inpVend = document.getElementById('inpVendedor');
+    if (!inpVend) return;
+
+    var self = this;
+    var btnReload = document.getElementById('btnReloadVendedor');
+    if (btnReload && !btnReload.dataset.bound) {
+      btnReload.dataset.bound = '1';
+      btnReload.onclick = function(e) {
+        e.preventDefault();
+        self._cargarVendedorLogueado();
+        _notificarPOS.info('Vendedor restaurado al usuario activo');
+      };
+    }
+
+    var nombre = '';
+    try {
+      var userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+      nombre = userData.nombre || userData.username || '';
+    } catch (e) {}
+
+    if (nombre) {
+      inpVend.value = nombre;
+      this.data.vendedor = nombre;
+      return;
+    }
+
+    if (typeof google !== 'undefined' && google.script && google.script.run && typeof google.script.run.obtenerUsuarioApp === 'function') {
+      inpVend.value = 'Cargando...';
+      google.script.run
+        .withSuccessHandler(function(res) {
+          var n = '';
+          if (res && res.success) {
+            n = res.nombre || res.username || res.correo || '';
+          }
+          inpVend.value = n || 'Usuario';
+          self.data.vendedor = inpVend.value;
+        })
+        .withFailureHandler(function() {
+          inpVend.value = 'Usuario';
+          self.data.vendedor = 'Usuario';
+        })
+        .obtenerUsuarioApp();
+    } else {
+      inpVend.value = 'Usuario';
+      this.data.vendedor = 'Usuario';
+    }
+  },
+
+  // ==================== RESET COMPLETO ====================
+  reset: function() {
+    try {
+      this.data.cart = [];
+      this.data.editing = false;
+      this.data.id = this.data.nuevoId || 1;
+
+      this.pedidosCache = [];
+      this.pedidosFiltrados = [];
+      this.filtrosActivos = { fechaDesde:'', fechaHasta:'', estado:'', cliente:'' };
+
+      this.procesandoAccion = false;
+      this.procesandoVenta = false;
+      this.cerrarConfirmacionActiva();
+
+      var selC = document.getElementById('selCliente');
+      var inpRif = document.getElementById('inpRif');
+      var inpFecha = document.getElementById('inpFecha');
+      if (selC) selC.value = '';
+      if (inpRif) inpRif.value = '';
+      if (inpFecha) inpFecha.value = new Date().toISOString().split('T')[0];
+
+      try { this._cargarVendedorLogueado(); } catch (e) {}
+
+      var fBusq = document.getElementById('filtroBusqueda');
+      var fEst = document.getElementById('filtroEstado');
+      var fDesde = document.getElementById('filtroFechaDesde');
+      var fHasta = document.getElementById('filtroFechaHasta');
+      if (fBusq) fBusq.value = '';
+      if (fEst) fEst.value = '';
+      if (fDesde) fDesde.value = '';
+      if (fHasta) fHasta.value = '';
+
+      var inpBuscar = document.getElementById('inpBuscar');
+      var selCat = document.getElementById('selCat');
+      if (inpBuscar) inpBuscar.value = '';
+      if (selCat) selCat.value = '';
+
+      var btn = document.getElementById('btnProcesar');
+      if (btn) {
+        btn.classList.remove('btn-warning');
+        btn.classList.add('btn-success');
+        btn.innerHTML = '<i class="bi bi-check2-circle me-1"></i>PROCESAR PEDIDO';
+        btn.disabled = false;
+      }
+
+      var hist = document.getElementById('viewHistory');
+      var btnHist = document.getElementById('btnHistorialPC');
+      if (hist) hist.classList.remove('show-history');
+      if (btnHist) btnHist.classList.remove('active');
+
+      try { this.switchTabMobile('catalog'); } catch (e) {}
+      try { this.renderCart(); } catch (e) {}
+
+    } catch (error) {
+      console.error('Error al resetear posManager:', error);
+    }
+  },
+
+  // ==================== INIT (MULTIEMPRESA) ====================
+  init: function() {
+    this.reset();
+
+    var fechaInput = document.getElementById('inpFecha');
+    if (fechaInput) fechaInput.value = new Date().toISOString().split('T')[0];
+
+    this.setupListeners();
+    var self = this;
+
+    var empNombre = getNombreEmpresaActivaPOS();
+    _mostrarCargandoPOS('Cargando Catálogo', 'Empresa: ' + empNombre + '...', 20);
+
+    var yaRespondio = false;
+    var finalizarCarga = function() {
+      if (yaRespondio) return;
+      yaRespondio = true;
+      clearTimeout(timeoutSeguro);
+      _ocultarCargandoPOS();
+    };
+
+    var timeoutSeguro = setTimeout(function() {
+      if (yaRespondio) return;
+      finalizarCarga();
+      if (!self.data.prods.length) {
+        _notificarPOS.advertencia("El servidor tardó en responder. Pulsa reintentar.");
+        self.renderGrid([]);
+      }
+    }, 10000);
+
+    var idEmpresa = getIdEmpresaActivaPOS();
+    var hayBackend = (typeof google !== 'undefined' && google.script && google.script.run && typeof google.script.run.obtenerDatosPedidos === 'function');
+
+    if (hayBackend) {
+      try {
+        var token = '';
+        try {
+          var uData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+          token = uData.token || '';
+        } catch(e) {}
+
+        // Enviar explícitamente el token y el ID de la empresa activa
+        google.script.run
+          .withSuccessHandler(function(res) {
+            finalizarCarga();
+            if (!res || res.status === 'error') {
+              _notificarPOS.error(res ? (res.message || "Error al obtener datos") : "Respuesta vacía del servidor");
+              self.renderGrid([]);
+              return;
+            }
+            self.data.tasa = parseFloat(res.tasa) || 1;
+            self.procesarDatos(res);
+          })
+          .withFailureHandler(function(err) {
+            finalizarCarga();
+            _notificarPOS.error("Fallo de conexión: " + (err && err.message ? err.message : err));
+            self.renderGrid([]);
+          })
+          .obtenerDatosPedidos(token, idEmpresa);
+      } catch (e) {
+        finalizarCarga();
+        _notificarPOS.error('Error al invocar el servidor: ' + e.message);
+        self.renderGrid([]);
+      }
+    } else {
+      setTimeout(function() {
+        finalizarCarga();
+        self.data.tasa = 36.50;
+        self.procesarDatos({
+          nuevoIdPedido: 101,
+          productos: [
+            { id: 1, nombre: "Laptop Pro 15 pulgadas Core i7 16GB", precio: 850, stock: 12, categoria: "Tecnología", imagen: "" },
+            { id: 2, nombre: "Mouse Inalámbrico Ergonómico", precio: 15, stock: 45, categoria: "Accesorios", imagen: "" }
+          ],
+          clientes: [
+            { id: 1, nombre: "Inversiones Demo C.A.", rif: "J-12345678-0" }
+          ],
+          categorias: ["Tecnología", "Accesorios"]
+        });
+      }, 400);
+    }
+  },
+
+  setupListeners: function() {
+    var self = this;
+    var inp = document.getElementById('inpBuscar');
+    var cat = document.getElementById('selCat');
+    var cli = document.getElementById('selCliente');
+
+    if (inp) inp.oninput = function() { self.filtrar(); };
+    if (cat) cat.onchange = function() { self.filtrar(); };
+    if (cli) {
+      cli.onchange = function(e) {
+        var op = e.target.options[e.target.selectedIndex];
+        var rifInput = document.getElementById('inpRif');
+        if (rifInput) rifInput.value = op ? (op.getAttribute('data-rif') || '') : '';
+      };
+    }
+
+    if (this.eventsBound) return;
+    this.eventsBound = true;
+
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 991) {
+        var hist = document.getElementById('viewHistory');
+        if (hist) hist.classList.remove('show-history');
+      }
+    });
+  },
+
+  normalizarProducto: function(p, idx) {
+    if (!p) return null;
+    var rawImg = p.imagen || p.Imagen || p.foto || p.Foto || p.urlImagen || '';
+    return {
+      id: p.id || p.Id || p.ID || p.idProducto || p.IdProducto || p.codigo || (idx + 1),
+      nombre: p.nombre || p.Nombre || p.producto || p.Producto || p.descripcion || p.Descripcion || ('Producto #' + (idx + 1)),
+      precio: parseFloat(p.precio || p.Precio || p.precioUSD || p.PrecioUSD || p.monto || 0) || 0,
+      stock: parseInt(p.stock || p.Stock || p.existencia || p.Existencia || p.cantidad || 0) || 0,
+      categoria: p.categoria || p.Categoria || p.rubro || '',
+      imagen: formatearUrlImagen(rawImg)
+    };
+  },
+
+  procesarDatos: function(res) {
+    var rawProds = Array.isArray(res.productos) ? res.productos : [];
+    var self = this;
+    this.data.prods = rawProds.map(function(p, idx) { return self.normalizarProducto(p, idx); }).filter(Boolean);
+    this.data.clis = Array.isArray(res.clientes) ? res.clientes : (Array.isArray(res.clientesFull) ? res.clientesFull : []);
+    this.data.cats = Array.isArray(res.categorias) ? res.categorias : [];
+    this.data.nuevoId = parseInt(res.nuevoIdPedido) || 1;
+    if (!this.data.editing) this.data.id = this.data.nuevoId;
+    this.renderUI();
+  },
+
+  renderUI: function() {
+    var lblTasa = document.getElementById('lblTasa');
+    var lblId = document.getElementById('lblIdPedido');
+    if (lblTasa) lblTasa.innerText = this.data.tasa.toFixed(2) + ' Bs/$';
+    if (lblId) lblId.innerText = this.data.id;
+
+    var esc = _notificarPOS.escapeHtml;
+    var selC = document.getElementById('selCliente');
+    if (selC) {
+      var optHtml = '<option value="">Seleccione cliente...</option>';
+      for (var i = 0; i < this.data.clis.length; i++) {
+        var c = this.data.clis[i];
+        var id = c.id || c.Id || c.idClientes || '';
+        var nombre = c.nombre || c.Nombre || c.NombreClientes || c.cliente || 'Cliente';
+        var rif = c.rif || c.Rif || c.RifClientes || '';
+        optHtml += '<option value="' + esc(id) + '" data-rif="' + esc(rif) + '">' + esc(nombre) + ' (' + esc(rif) + ')</option>';
+      }
+      selC.innerHTML = optHtml;
+    }
+
+    var selCat = document.getElementById('selCat');
+    if (selCat) {
+      var optCat = '<option value="">Categorías</option>';
+      for (var j = 0; j < this.data.cats.length; j++) {
+        var cat = this.data.cats[j];
+        var v = (typeof cat === 'object' && cat !== null) ? (cat.nombre || cat.Nombre || '') : String(cat || '');
+        optCat += '<option value="' + esc(v) + '">' + esc(v) + '</option>';
+      }
+      selCat.innerHTML = optCat;
+    }
+
+    this.renderGrid(this.data.prods);
+    this.renderCart();
+  },
+
+  renderGrid: function(list) {
+    var div = document.getElementById('gridProd');
+    if (!div) return;
+    div.innerHTML = '';
+    var esc = _notificarPOS.escapeHtml;
+
+    if (!list || list.length === 0) {
+      div.innerHTML = '<div class="text-center py-5 text-muted" style="grid-column: 1 / -1;">' +
+        '<i class="bi bi-box-seam fs-1 d-block mb-2 opacity-50"></i>' +
+        '<p class="fw-bold mb-1">No hay productos en esta empresa</p>' +
+        '<button class="btn btn-sm btn-outline-primary px-3 mt-2" onclick="window.posManager.init()">' +
+        '<i class="bi bi-arrow-clockwise me-1"></i>Reintentar</button></div>';
+      return;
+    }
+
+    var self = this;
+    for (var i = 0; i < list.length; i++) {
+      var p = list[i];
+      var el = document.createElement('div');
+      el.className = 'tarjeta-producto';
+      (function(pid) {
+        el.onclick = function() { self.addCart(pid); };
+      })(p.id);
+
+      // Render seguro de imagen con fallback automático a icono
+      var imgHtml = p.imagen 
+        ? '<img src="' + esc(p.imagen) + '" alt="' + esc(p.nombre) + '" loading="lazy" onerror="this.onerror=null; this.parentElement.innerHTML=\'<i class=\\\'bi bi-box-seam fs-4 text-secondary\\\'></i>\';">' 
+        : '<i class="bi bi-box-seam fs-4 text-secondary"></i>';
+
+      var bs = p.precio * this.data.tasa;
+      var stockClass = p.stock <= 3 ? 'st-low' : 'st-ok';
+
+      el.innerHTML = '<div class="p-thumb">' + imgHtml + '</div>' +
+        '<div class="p-details">' +
+          '<div class="p-header-info">' +
+            '<span class="p-precio">$' + p.precio.toFixed(2) + '</span>' +
+            '<span class="stock-pill ' + stockClass + '">' + p.stock + ' un.</span>' +
+          '</div>' +
+          '<div class="p-nombre" title="' + esc(p.nombre) + '">' + esc(p.nombre) + '</div>' +
+          '<div class="p-bs">Bs ' + bs.toFixed(2) + '</div>' +
+        '</div>';
+      div.appendChild(el);
+    }
+  },
+
+  addCart: function(id) {
+    var p = null;
+    for (var i = 0; i < this.data.prods.length; i++) {
+      if (String(this.data.prods[i].id) === String(id)) { p = this.data.prods[i]; break; }
+    }
+    if (!p) return;
+    if (p.stock <= 0) { _notificarPOS.advertencia("Producto agotado"); return; }
+
+    var item = null;
+    for (var j = 0; j < this.data.cart.length; j++) {
+      if (String(this.data.cart[j].id) === String(id)) { item = this.data.cart[j]; break; }
+    }
+    if (item) {
+      if (item.cantidad < p.stock) item.cantidad++;
+      else { _notificarPOS.advertencia("Stock máximo alcanzado"); return; }
+    } else {
+      this.data.cart.push({ id: p.id, nombre: p.nombre, precio: p.precio, cantidad: 1, stock: p.stock });
+    }
+    this.renderCart();
+    _notificarPOS.exito("+1 " + p.nombre);
+  },
+
+  renderCart: function() {
+    var div = document.getElementById('cartList');
+    var badge = document.getElementById('cartBadgeQty');
+    if (!div) return;
+    div.innerHTML = '';
+    var esc = _notificarPOS.escapeHtml;
+
+    var totalQty = 0;
+    for (var q = 0; q < this.data.cart.length; q++) totalQty += this.data.cart[q].cantidad;
+    if (badge) {
+      badge.innerText = totalQty;
+      badge.style.display = totalQty > 0 ? 'inline-block' : 'none';
+    }
+
+    if (this.data.cart.length === 0) {
+      div.innerHTML = '<div class="text-center text-muted my-auto py-5"><i class="bi bi-cart-x fs-1 opacity-50 d-block mb-2"></i>El carrito está vacío</div>';
+      var lblSubV = document.getElementById('lblSub'); if (lblSubV) lblSubV.innerText = '$0.00';
+      var lblIvaV = document.getElementById('lblIva'); if (lblIvaV) lblIvaV.innerText = '$0.00';
+      var lblTotV = document.getElementById('lblTotal'); if (lblTotV) lblTotV.innerText = '$0.00';
+      var lblBsV = document.getElementById('lblBs'); if (lblBsV) lblBsV.innerText = 'Bs 0.00';
+      return;
+    }
+
+    var sub = 0;
+    for (var i = 0; i < this.data.cart.length; i++) {
+      var it = this.data.cart[i];
+      sub += (it.precio * it.cantidad);
+      var row = document.createElement('div');
+      row.className = 'cart-item-card';
+      row.innerHTML = '<div style="flex:1; min-width:0;" class="pe-2">' +
+          '<div class="fw-bold text-truncate" style="font-size:0.8rem;">' + esc(it.nombre) + '</div>' +
+          '<small class="text-success fw-bold">$' + it.precio.toFixed(2) + '</small>' +
+        '</div>' +
+        '<div class="d-flex align-items-center gap-1">' +
+          '<button class="btn-qty" data-qty="menos" data-idx="' + i + '">-</button>' +
+          '<span class="fw-bold px-2" style="font-size:0.85rem;">' + it.cantidad + '</span>' +
+          '<button class="btn-qty" data-qty="mas" data-idx="' + i + '">+</button>' +
+          '<button class="btn-qty text-danger ms-1" data-qty="del" data-idx="' + i + '"><i class="bi bi-trash3"></i></button>' +
+        '</div>';
+      div.appendChild(row);
+    }
+
+    var self = this;
+    div.querySelectorAll('[data-qty]').forEach(function(btn) {
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        var idx = parseInt(this.getAttribute('data-idx'));
+        var accion = this.getAttribute('data-qty');
+        if (accion === 'menos') self.updQty(idx, -1);
+        else if (accion === 'mas') self.updQty(idx, 1);
+        else if (accion === 'del') self.delCart(idx);
+      };
+    });
+
+    var tot = sub;
+    var lblSub = document.getElementById('lblSub'); if (lblSub) lblSub.innerText = '$' + sub.toFixed(2);
+    var lblIva = document.getElementById('lblIva'); if (lblIva) lblIva.innerText = '$0.00';
+    var lblTot = document.getElementById('lblTotal'); if (lblTot) lblTot.innerText = '$' + tot.toFixed(2);
+    var lblBs = document.getElementById('lblBs'); if (lblBs) lblBs.innerText = 'Bs ' + (tot * this.data.tasa).toFixed(2);
+  },
+
+  updQty: function(idx, delta) {
+    var it = this.data.cart[idx];
+    if (!it) return;
+    if (it.cantidad + delta <= 0) {
+      this.delCart(idx);
+    } else if (it.cantidad + delta > it.stock) {
+      _notificarPOS.advertencia("Stock insuficiente");
+    } else {
+      it.cantidad += delta;
+      this.renderCart();
+    }
+  },
+
+  delCart: function(idx) {
+    if (this.data.cart[idx]) {
+      var nombre = this.data.cart[idx].nombre;
+      this.data.cart.splice(idx, 1);
+      this.renderCart();
+      _notificarPOS.info('"' + nombre + '" eliminado');
+    }
+  },
+
+  limpiarCarrito: function() {
+    var self = this;
+    if (this.data.cart.length === 0) { _notificarPOS.info("El carrito ya está vacío"); return; }
+    this.mostrarConfirmacionUnica('¿Vaciar todo el carrito?', 'warning', 'Vaciar', 'Cancelar', function(ok) {
+      if (ok) {
+        self.data.cart = [];
+        self.renderCart();
+        _notificarPOS.info("Carrito vaciado");
+      }
+    });
+  },
+
+  nuevoPedido: function(resetCliente) {
+    this.data.cart = [];
+    this.data.editing = false;
+    this.data.id = this.data.nuevoId;
+    if (resetCliente) {
+      var cli = document.getElementById('selCliente');
+      var rif = document.getElementById('inpRif');
+      if (cli) cli.value = '';
+      if (rif) rif.value = '';
+    }
+    this.renderUI();
+    this.toggleHistorialPC(false);
+    this.switchTabMobile('catalog');
+
+    var btn = document.getElementById('btnProcesar');
+    if (btn) {
+      btn.classList.remove('btn-warning');
+      btn.classList.add('btn-success');
+      btn.innerHTML = '<i class="bi bi-check2-circle me-1"></i>PROCESAR PEDIDO';
+      btn.disabled = false;
+    }
+
+    try { this._cargarVendedorLogueado(); } catch (e) {}
+    _notificarPOS.info("Nuevo pedido iniciado");
+  },
+
+  filtrar: function() {
+    var inpBuscar = document.getElementById('inpBuscar');
+    var selCatEl = document.getElementById('selCat');
+    var txt = (inpBuscar ? inpBuscar.value : '').toLowerCase().trim();
+    var cat = selCatEl ? selCatEl.value : '';
+
+    var res = [];
+    for (var i = 0; i < this.data.prods.length; i++) {
+      var p = this.data.prods[i];
+      var cTxt = p.nombre.toLowerCase().indexOf(txt) !== -1 || String(p.id).indexOf(txt) !== -1;
+      var cCat = cat === '' || p.categoria === cat;
+      if (cTxt && cCat) res.push(p);
+    }
+    this.renderGrid(res);
+  },
+
+  toggleHistorialPC: function(forzarEstado) {
+    if (window.innerWidth <= 991) {
+      var histM = document.getElementById('viewHistory');
+      var btnM = document.getElementById('btnHistorialPC');
+      if (histM) histM.classList.remove('show-history');
+      if (btnM) btnM.classList.remove('active');
+      return;
+    }
+    var hist = document.getElementById('viewHistory');
+    var btn = document.getElementById('btnHistorialPC');
+    if (!hist) return;
+    var visible = forzarEstado !== undefined ? forzarEstado : !hist.classList.contains('show-history');
+    hist.classList.toggle('show-history', visible);
+    if (btn) btn.classList.toggle('active', visible);
+    if (visible) this.cargarHistorial();
+  },
+
+  switchTabMobile: function(tab) {
+    var elCatalog = document.getElementById('tabBtnCatalog');
+    var elCart = document.getElementById('tabBtnCart');
+    var elHist = document.getElementById('tabBtnHistory');
+    if (elCatalog) elCatalog.classList.toggle('active', tab === 'catalog');
+    if (elCart) elCart.classList.toggle('active', tab === 'cart');
+    if (elHist) elHist.classList.toggle('active', tab === 'history');
+
+    var vCatalog = document.getElementById('viewCatalog');
+    var vCart = document.getElementById('viewCart');
+    var vHist = document.getElementById('viewHistory');
+
+    if (tab !== 'history' && vHist) {
+      vHist.classList.remove('show-history');
+      var btnHistPC = document.getElementById('btnHistorialPC');
+      if (btnHistPC) btnHistPC.classList.remove('active');
+    }
+
+    if (vCatalog) vCatalog.classList.toggle('active-tab', tab === 'catalog');
+    if (vCart) vCart.classList.toggle('active-tab', tab === 'cart');
+    if (vHist) vHist.classList.toggle('active-tab', tab === 'history');
+
+    if (tab === 'cart') {
+      try { this.renderCart(); } catch (e) {}
+      try { this._cargarVendedorLogueado(); } catch (e) {}
+    }
+
+    if (tab === 'history') {
+      this.cargarHistorial();
+    }
+  },
+
+  // ==================== HISTORIAL CON MULTIEMPRESA ====================
+  cargarHistorial: function() {
+    var grid = document.getElementById('pedidosGrid');
+    if (grid) grid.innerHTML = '<div class="text-center py-4" style="grid-column:1/-1;"><div class="spinner-border text-primary spinner-border-sm"></div></div>';
+
+    var sin = document.getElementById('sinResultados');
+    if (sin) sin.style.display = 'none';
+
+    var self = this;
+    var idEmpresa = getIdEmpresaActivaPOS();
+
+    if (typeof google !== 'undefined' && google.script && google.script.run && typeof google.script.run.syncTodo === 'function') {
+      var vendedor = '';
+      try {
+        var userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+        vendedor = userData.nombre || userData.username || '';
+      } catch (e) {}
+
+      // Pasar vendedor y el ID de empresa activa
+      google.script.run
+        .withSuccessHandler(function(res) {
+          self.pedidosCache = (res && Array.isArray(res.pedidos)) ? res.pedidos : [];
+          self.aplicarFiltros();
+        })
+        .withFailureHandler(function(err) {
+          if (grid) grid.innerHTML = '<div class="text-center py-3 text-danger" style="grid-column:1/-1;">Error al cargar historial</div>';
+          _notificarPOS.error('Error: ' + (err && err.message ? err.message : ''));
+        })
+        .syncTodo(vendedor, idEmpresa);
+    } else {
+      setTimeout(function() {
+        self.pedidosCache = [
+          { idPedido: 100, nombreClientePedido: "Juan Pérez", rifClientePedido: "V-18234567", StatusPedido: "Pendiente", TotalClienteUSD: 140, TasaClientePedido: 36.50, fechaFacturaClientePedido: "2026-09-30" }
+        ];
+        self.aplicarFiltros();
+      }, 300);
+    }
+  },
+
+  filtrarHistorial: function() {
+    clearTimeout(this.filtroTimeout);
+    var self = this;
+    this.filtroTimeout = setTimeout(function() {
+      var fBusq = document.getElementById('filtroBusqueda');
+      var fEst = document.getElementById('filtroEstado');
+      var fDesde = document.getElementById('filtroFechaDesde');
+      var fHasta = document.getElementById('filtroFechaHasta');
+      self.filtrosActivos.cliente = (fBusq ? fBusq.value : '').toLowerCase().trim();
+      self.filtrosActivos.estado = fEst ? fEst.value : '';
+      self.filtrosActivos.fechaDesde = fDesde ? fDesde.value : '';
+      self.filtrosActivos.fechaHasta = fHasta ? fHasta.value : '';
+      self.aplicarFiltros();
+    }, 250);
+  },
+
+  aplicarFiltros: function() {
+    var f = this.filtrosActivos;
+    var filtrados = [];
+    var totUsd = 0;
+    var pendientes = 0;
+
+    for (var i = 0; i < this.pedidosCache.length; i++) {
+      var p = this.pedidosCache[i];
+      var matchCli = !f.cliente ||
+        (p.nombreClientePedido || '').toLowerCase().indexOf(f.cliente) !== -1 ||
+        String(p.idPedido).indexOf(f.cliente) !== -1;
+      var matchEst = !f.estado || p.StatusPedido === f.estado;
+      var matchDesde = !f.fechaDesde || p.fechaFacturaClientePedido >= f.fechaDesde;
+      var matchHasta = !f.fechaHasta || p.fechaFacturaClientePedido <= f.fechaHasta;
+      if (matchCli && matchEst && matchDesde && matchHasta) {
+        filtrados.push(p);
+        totUsd += parseFloat(p.TotalClienteUSD) || 0;
+        if (p.StatusPedido === 'Pendiente') pendientes++;
+      }
+    }
+
+    this.pedidosFiltrados = filtrados;
+    var stTot = document.getElementById('statTotalPedidos'); if (stTot) stTot.innerText = filtrados.length;
+    var stMon = document.getElementById('statMontoTotal'); if (stMon) stMon.innerText = '$' + totUsd.toFixed(2);
+    var stBs = document.getElementById('statMontoTotalBs'); if (stBs) stBs.innerText = 'Bs ' + (totUsd * this.data.tasa).toFixed(2);
+    var stPen = document.getElementById('statPendientes'); if (stPen) stPen.innerText = pendientes;
+
+    var grid = document.getElementById('pedidosGrid');
+    var sin = document.getElementById('sinResultados');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    if (filtrados.length === 0) {
+      if (sin) sin.style.display = 'block';
+      return;
+    }
+    if (sin) sin.style.display = 'none';
+
+    var self = this;
+    var esc = _notificarPOS.escapeHtml;
+
+    for (var k = 0; k < filtrados.length; k++) {
+      var p2 = filtrados[k];
+      var st = p2.StatusPedido || 'Pendiente';
+      var stClass = st.toLowerCase();
+      var badgeClass = st === 'Procesado' ? 'bg-success' : (st === 'Cancelado' ? 'bg-danger' : 'bg-warning');
+      var totalUsd = (parseFloat(p2.TotalClienteUSD) || 0).toFixed(2);
+      var tasaP = parseFloat(p2.TasaClientePedido) || this.data.tasa || 1;
+      var totalBs = ((parseFloat(p2.TotalClienteUSD) || 0) * tasaP).toFixed(2);
+
+      var card = document.createElement('div');
+      card.className = 'order-appsheet-card ' + stClass;
+
+      var html = '<div class="d-flex justify-content-between align-items-start">' +
+          '<span class="fw-bold small">Pedido #' + esc(p2.idPedido) + '</span>' +
+          '<span class="badge ' + badgeClass + '" style="font-size:0.65rem;">' + esc(st) + '</span>' +
+        '</div>' +
+        '<div class="text-truncate fw-medium small mt-1">' + esc(p2.nombreClientePedido || 'Sin Cliente') + '</div>' +
+        '<small class="text-muted d-block">' + esc(p2.fechaFacturaClientePedido || 'Sin Fecha') + '</small>' +
+        '<div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top border-secondary">' +
+          '<div>' +
+            '<span class="fw-bold text-success fs-6 d-block">$' + totalUsd + '</span>' +
+            '<span class="fw-bold text-info" style="font-size:0.7rem;">Bs ' + totalBs + '</span>' +
+          '</div>' +
+          '<div class="d-flex gap-1 flex-wrap justify-content-end">' +
+            '<button class="btn btn-sm btn-outline-primary py-0 px-2 btn-act" data-act="ver" data-id="' + esc(p2.idPedido) + '" title="Ver"><i class="bi bi-eye"></i></button>';
+
+      if (st === 'Pendiente') {
+        html += '<button class="btn btn-sm btn-outline-warning py-0 px-2 btn-act" data-act="editar" data-id="' + esc(p2.idPedido) + '" title="Editar"><i class="bi bi-pencil"></i></button>' +
+                '<button class="btn btn-sm btn-outline-danger py-0 px-2 btn-act" data-act="eliminar" data-id="' + esc(p2.idPedido) + '" title="Eliminar"><i class="bi bi-trash3"></i></button>' +
+                '<button class="btn btn-sm btn-success py-0 px-2 btn-act" data-act="facturar" data-id="' + esc(p2.idPedido) + '" title="Facturar"><i class="bi bi-check2-circle me-1"></i>Facturar</button>';
+      } else if (st === 'Procesado') {
+        html += '<button class="btn btn-sm btn-outline-danger py-0 px-2 btn-act" data-act="anular" data-id="' + esc(p2.idPedido) + '" title="Anular factura"><i class="bi bi-x-circle me-1"></i>Anular</button>';
+      }
+      html += '</div></div>';
+
+      card.innerHTML = html;
+      grid.appendChild(card);
+    }
+
+    grid.querySelectorAll('.btn-act').forEach(function(btn) {
+      btn.onclick = function(e) {
+        e.stopPropagation();
+        var act = this.getAttribute('data-act');
+        var id = parseInt(this.getAttribute('data-id'));
+        if (act === 'ver') self.verTicket(id);
+        else if (act === 'editar') self.confEd(id);
+        else if (act === 'eliminar') self.confDel(id);
+        else if (act === 'facturar') self.confOk(id);
+        else if (act === 'anular') self.confAnular(id);
+      };
+    });
+  },
+
+  verTicket: function(id) {
+    var self = this;
+    if (this.procesandoAccion) return;
+    this.procesandoAccion = true;
+
+    var idEmpresa = getIdEmpresaActivaPOS();
+
+    if (typeof google !== 'undefined' && google.script && google.script.run && typeof google.script.run.cargarPedidoParaEdicion === 'function') {
+      google.script.run
+        .withSuccessHandler(function(res) {
+          self.procesandoAccion = false;
+          if (!res || res.status === 'error') {
+            _notificarPOS.error((res && res.message) || 'Error al cargar pedido');
+            return;
+          }
+          var p = res.pedido || {};
+          var carrito = res.carrito || [];
+          var esc = _notificarPOS.escapeHtml;
+          var totalUsd = parseFloat(p.TotalClienteUSD) || 0;
+          var tasa = parseFloat(p.TasaClientePedido || p.tasa) || self.data.tasa || 1;
+          var totalBs = totalUsd * tasa;
+
+          var html = '<div class="text-center mb-2">' +
+              '<h6 class="fw-bold mb-0">COMPROBANTE DE PEDIDO</h6>' +
+              '<small>Pedido #' + esc(id) + '</small>' +
+            '</div>' +
+            '<div class="border-top border-bottom py-2 my-2">' +
+              '<div><strong>Cliente:</strong> ' + esc(p.nombreClientePedido || p.clienteNombre || 'General') + '</div>' +
+              (p.rifClientePedido || p.rif ? '<div><strong>RIF:</strong> ' + esc(p.rifClientePedido || p.rif) + '</div>' : '') +
+              '<div><strong>Fecha:</strong> ' + esc(p.fechaFacturaClientePedido || p.fecha || '') + '</div>' +
+            '</div>' +
+            '<table style="width:100%;font-size:0.7rem;border-collapse:collapse;">' +
+              '<thead><tr style="border-bottom:1px solid #ccc;"><th style="text-align:left;">Cant</th><th style="text-align:left;">Prod</th><th style="text-align:right;">P.U</th><th style="text-align:right;">Total</th></tr></thead><tbody>';
+
+          for (var i = 0; i < carrito.length; i++) {
+            var it = carrito[i];
+            var tot = (parseInt(it.cantidad) || 0) * (parseFloat(it.precio) || 0);
+            html += '<tr>' +
+              '<td>' + (parseInt(it.cantidad) || 0) + '</td>' +
+              '<td>' + esc(it.nombre || it.producto || '') + '</td>' +
+              '<td style="text-align:right;">$' + (parseFloat(it.precio) || 0).toFixed(2) + '</td>' +
+              '<td style="text-align:right;">$' + tot.toFixed(2) + '</td>' +
+            '</tr>';
+          }
+
+          html += '</tbody></table>' +
+            '<div class="d-flex justify-content-between fw-bold fs-6 mt-3 pt-2 border-top">' +
+              '<span>TOTAL USD:</span><span>$' + totalUsd.toFixed(2) + '</span>' +
+            '</div>' +
+            '<div class="d-flex justify-content-between fw-bold text-info" style="font-size:0.8rem;">' +
+              '<span>TOTAL Bs:</span><span>Bs ' + totalBs.toFixed(2) + '</span>' +
+            '</div>';
+
+          var cnt = document.getElementById('ticketContent');
+          if (cnt) cnt.innerHTML = html;
+          var modalEl = document.getElementById('modalTicketCompacto');
+          if (modalEl && window.bootstrap && window.bootstrap.Modal) {
+            new bootstrap.Modal(modalEl).show();
+          }
+        })
+        .withFailureHandler(function(err) {
+          self.procesandoAccion = false;
+          _notificarPOS.error('Error: ' + (err && err.message ? err.message : ''));
+        })
+        .cargarPedidoParaEdicion(id, idEmpresa);
+    } else {
+      this.procesandoAccion = false;
+      _notificarPOS.info("Modo Demo: Vista previa de ticket");
+    }
+  },
+
+  imprimirTicket: function() {
+    var cnt = document.getElementById('ticketContent');
+    var contenido = cnt ? cnt.innerHTML : '';
+    var ventana = window.open('', '_blank', 'width=400,height=600');
+    if (!ventana) { _notificarPOS.error('Bloqueador de ventanas activo'); return; }
+    ventana.document.open();
+    ventana.document.write('<!DOCTYPE html><html><head><title>Ticket</title><style>body{font-family:monospace;padding:15px;font-size:12px;}</style></head><body onload="window.print();">' + contenido + '</body></html>');
+    ventana.document.close();
+  },
+
+  confDel: function(id) {
+    var self = this;
+    if (this.procesandoAccion) return;
+    
+    this.mostrarConfirmacionUnica('¿Eliminar el pedido #' + id + '? Esta acción no se puede deshacer.', 'error', 'Eliminar', 'Cancelar', function(ok) {
+      if (!ok) return;
+      self.procesandoAccion = true;
+      var idEmpresa = getIdEmpresaActivaPOS();
+
+      if (typeof google !== 'undefined' && google.script && google.script.run && typeof google.script.run.eliminarPedido === 'function') {
+        _notificarPOS.info("Eliminando pedido...");
+        google.script.run
+          .withSuccessHandler(function(res) {
+            self.procesandoAccion = false;
+            if (res && res.status === 'success') {
+              _notificarPOS.exito('Pedido #' + id + ' eliminado');
+              self.cargarHistorial();
+            } else {
+              _notificarPOS.error((res && res.message) || 'Error al eliminar');
+            }
+          })
+          .withFailureHandler(function(err) {
+            self.procesandoAccion = false;
+            _notificarPOS.error('Error: ' + (err && err.message ? err.message : ''));
+          })
+          .eliminarPedido(id, idEmpresa);
+      } else {
+        self.procesandoAccion = false;
+        _notificarPOS.exito('Pedido #' + id + ' eliminado (demo)');
+      }
+    });
+  },
+
+  confEd: function(id) {
+    var self = this;
+    if (this.procesandoAccion) return;
+    
+    this.mostrarConfirmacionUnica('¿Editar el pedido #' + id + '?', 'warning', 'Editar', 'Cancelar', function(ok) {
+      if (!ok) return;
+      self.procesandoAccion = true;
+      _notificarPOS.info("Cargando pedido #" + id + "...");
+      var idEmpresa = getIdEmpresaActivaPOS();
+
+      if (typeof google !== 'undefined' && google.script && google.script.run && typeof google.script.run.cargarPedidoParaEdicion === 'function') {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            self.procesandoAccion = false;
+            if (!res || res.status !== 'success') {
+              _notificarPOS.error((res && res.message) || 'Error al cargar pedido');
+              return;
+            }
+            var ped = res.pedido || {};
+            self.data.editing = true;
+            self.data.id = id;
+            self.data.tasa = parseFloat(ped.TasaClientePedido || ped.tasa) || self.data.tasa || 1;
+
+            self.data.cart = [];
+            var carritoRaw = res.carrito || [];
+            for (var i = 0; i < carritoRaw.length; i++) {
+              var it = carritoRaw[i];
+              var stockProd = null;
+              for (var p = 0; p < self.data.prods.length; p++) {
+                if (String(self.data.prods[p].id) === String(it.idProducto)) {
+                  stockProd = parseInt(self.data.prods[p].stock) || 0;
+                  break;
+                }
+              }
+              if (stockProd === null) stockProd = parseInt(it.cantidad) || 1;
+              self.data.cart.push({
+                id: it.idProducto,
+                nombre: it.nombre || it.producto || 'Producto',
+                precio: parseFloat(it.precio) || 0,
+                cantidad: parseInt(it.cantidad) || 1,
+                stock: stockProd
+              });
+            }
+            self.renderUI();
+
+            var selC = document.getElementById('selCliente');
+            var targetId = ped.idCliente || ped.clienteId || '';
+            if (selC && targetId) {
+              for (var c = 0; c < selC.options.length; c++) {
+                if (String(selC.options[c].value) === String(targetId)) {
+                  selC.selectedIndex = c;
+                  break;
+                }
+              }
+            }
+
+            var inpRif = document.getElementById('inpRif');
+            if (inpRif) inpRif.value = ped.rifClientePedido || ped.rif || '';
+
+            var inpFecha = document.getElementById('inpFecha');
+            if (inpFecha && (ped.fechaFacturaClientePedido || ped.fecha)) {
+              inpFecha.value = String(ped.fechaFacturaClientePedido || ped.fecha).split('T')[0];
+            }
+
+            self.toggleHistorialPC(false);
+            self.switchTabMobile('cart');
+            var btn = document.getElementById('btnProcesar');
+            if (btn) {
+              btn.classList.remove('btn-success');
+              btn.classList.add('btn-warning');
+              btn.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i>ACTUALIZAR PEDIDO';
+            }
+            _notificarPOS.advertencia("Modo Edición activado: Pedido #" + id);
+          })
+          .withFailureHandler(function(err) {
+            self.procesandoAccion = false;
+            _notificarPOS.error('Error: ' + (err && err.message ? err.message : ''));
+          })
+          .cargarPedidoParaEdicion(id, idEmpresa);
+      } else {
+        self.procesandoAccion = false;
+        _notificarPOS.info("Modo Demo: Edición cargada");
+      }
+    });
+  },
+
+  confOk: function(id) {
+    var self = this;
+    if (this.procesandoAccion) return;
+    
+    this.mostrarConfirmacionUnica('¿Deseas procesar y facturar el Pedido #' + id + '?', 'info', 'Facturar', 'Cancelar', function(ok) {
+      if (!ok) return;
+      self.procesandoAccion = true;
+      _notificarPOS.info("Preparando datos de facturación...");
+      var idEmpresa = getIdEmpresaActivaPOS();
+
+      if (typeof google !== 'undefined' && google.script && google.script.run && typeof google.script.run.cargarPedidoParaEdicion === 'function') {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            self.procesandoAccion = false;
+            if (res && (res.status === 'success' || res.pedido)) {
+              var pedido = res.pedido || {};
+              var carrito = res.carrito || [];
+
+              var paquete = {
+                idPedidoOrigen: id,
+                idCliente: pedido.idCliente || pedido.clienteId || '',
+                clienteNombre: pedido.nombreClientePedido || pedido.clienteNombre || '',
+                clienteRif: pedido.rifClientePedido || pedido.rifCliente || pedido.rif || '',
+                clienteDireccion: pedido.direccionClientePedido || pedido.direccion || '',
+                fechaPedido: pedido.fechaFacturaClientePedido || pedido.fecha || new Date().toISOString().split('T')[0],
+                tasaPedido: parseFloat(pedido.TasaClientePedido || pedido.tasa) || self.data.tasa || 1,
+                items: carrito.map(function(it) {
+                  return {
+                    idProducto: it.idProducto || '',
+                    nombre: it.nombre || it.producto || 'Producto',
+                    producto: it.nombre || it.producto || 'Producto',
+                    cantidad: parseFloat(it.cantidad) || 1,
+                    precio: parseFloat(it.precio) || 0,
+                    tasaIva: parseFloat(it.tasaIva) || 0,
+                    cuentaContable: it.cuentaContable || '',
+                    categoria: it.categoria || ''
+                  };
+                })
+              };
+
+              try { localStorage.setItem('pedidoPendienteFacturacion', JSON.stringify(paquete)); } catch(e) {}
+
+              if (typeof window.changePage === 'function') {
+                window.changePage('pFacturasVentas');
+                _notificarPOS.exito("Pedido #" + id + " enviado a facturación.");
+              } else {
+                _notificarPOS.advertencia("Pedido listo. Dirígete a Facturas de Ventas.");
+              }
+            } else {
+              _notificarPOS.error((res && res.message) || "Error al leer pedido");
+            }
+          })
+          .withFailureHandler(function(err) {
+            self.procesandoAccion = false;
+            _notificarPOS.error('Error: ' + (err && err.message ? err.message : ''));
+          })
+          .cargarPedidoParaEdicion(id, idEmpresa);
+      } else {
+        self.procesandoAccion = false;
+        _notificarPOS.info("Modo Demo: Pedido facturado");
+      }
+    });
+  },
+
+  confAnular: function(id) {
+    var self = this;
+    if (this.procesandoAccion) return;
+    
+    this.mostrarConfirmacionUnica('¿Anular el pedido #' + id + '? Esta acción no se puede deshacer.', 'error', 'Anular', 'Cancelar', function(ok) {
+      if (!ok) return;
+      self.procesandoAccion = true;
+      _notificarPOS.info("Anulando pedido #" + id + "...");
+      var idEmpresa = getIdEmpresaActivaPOS();
+
+      if (typeof google !== 'undefined' && google.script && google.script.run && typeof google.script.run.cambiarEstado === 'function') {
+        google.script.run
+          .withSuccessHandler(function(res) {
+            self.procesandoAccion = false;
+            if (res && res.status === 'success') {
+              _notificarPOS.exito('Pedido #' + id + ' anulado correctamente');
+              self.cargarHistorial();
+            } else {
+              _notificarPOS.error((res && res.message) || 'Error al anular');
+            }
+          })
+          .withFailureHandler(function(err) {
+            self.procesandoAccion = false;
+            _notificarPOS.error('Error: ' + (err && err.message ? err.message : ''));
+          })
+          .cambiarEstado(id, 'Cancelado', idEmpresa);
+      } else {
+        self.procesandoAccion = false;
+        _notificarPOS.exito('Pedido #' + id + ' anulado (demo)');
+      }
+    });
+  },
+
+  cerrarConfirmacionActiva: function() {
+    if (this.confirmacionActiva && this.confirmacionActiva.parentElement) {
+      this.confirmacionActiva.parentElement.removeChild(this.confirmacionActiva);
+    }
+    this.confirmacionActiva = null;
+  },
+
+  mostrarConfirmacionUnica: function(mensaje, tipo, txtSi, txtNo, callback) {
+    this.cerrarConfirmacionActiva();
+    var self = this;
+
+    var iconClass = 'bi-question-circle text-primary';
+    var btnSiClass = 'btn-primary';
+    if (tipo === 'error' || tipo === 'danger') {
+      iconClass = 'bi-exclamation-triangle text-danger';
+      btnSiClass = 'btn-danger';
+    } else if (tipo === 'warning') {
+      iconClass = 'bi-exclamation-circle text-warning';
+      btnSiClass = 'btn-warning';
+    } else if (tipo === 'info' || tipo === 'success') {
+      iconClass = 'bi-check2-circle text-success';
+      btnSiClass = 'btn-success';
+    }
+
+    var esc = _notificarPOS.escapeHtml;
+
+    var overlay = document.createElement('div');
+    overlay.className = 'pos-confirm-overlay';
+    overlay.innerHTML =
+      '<div class="pos-confirm-dialog">' +
+        '<div class="mb-3"><i class="bi ' + iconClass + '" style="font-size: 2.8rem;"></i></div>' +
+        '<div class="fw-bold mb-4 fs-6 text-light">' + esc(mensaje) + '</div>' +
+        '<div class="d-flex gap-2 justify-content-center">' +
+          '<button class="btn btn-secondary px-3 btn-confirm-no" style="min-width: 100px;">' + esc(txtNo || 'Cancelar') + '</button>' +
+          '<button class="btn ' + btnSiClass + ' px-3 fw-bold btn-confirm-si" style="min-width: 100px;">' + esc(txtSi || 'Aceptar') + '</button>' +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+    this.confirmacionActiva = overlay;
+
+    var btnSi = overlay.querySelector('.btn-confirm-si');
+    var btnNo = overlay.querySelector('.btn-confirm-no');
+
+    btnSi.onclick = function(e) {
+      e.stopPropagation();
+      self.cerrarConfirmacionActiva();
+      if (callback) callback(true);
+    };
+
+    btnNo.onclick = function(e) {
+      e.stopPropagation();
+      self.cerrarConfirmacionActiva();
+      if (callback) callback(false);
+    };
+  },
+
+  // ==================== GUARDAR PEDIDO (MULTIEMPRESA) ====================
+  procesar: function() {
+    if (this.procesandoVenta) return;
+    if (this.data.cart.length === 0) { _notificarPOS.advertencia("El carrito está vacío"); return; }
+    var cli = document.getElementById('selCliente');
+    if (!cli || !cli.value) { _notificarPOS.advertencia("Seleccione un cliente para facturar"); return; }
+
+    var inpVend = document.getElementById('inpVendedor');
+    var vendedorFinal = (inpVend && inpVend.value) ? inpVend.value.trim() : '';
+    if (!vendedorFinal || vendedorFinal === 'Cargando...') {
+      _notificarPOS.advertencia("Debe indicar el vendedor del pedido");
+      if (inpVend) inpVend.focus();
+      return;
+    }
+
+    var self = this;
+
+    this.mostrarConfirmacionUnica(
+      '¿Guardar el pedido para ' + cli.options[cli.selectedIndex].text + '?',
+      'info',
+      'Guardar',
+      'Cancelar',
+      function(ok) {
+        if (!ok) return;
+
+        self.procesandoVenta = true;
+
+        var token = '';
+        try {
+          var uData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+          token = uData.token || '';
+        } catch(e) {}
+
+        var payload = {
+          idSpreadsheet: getIdEmpresaActivaPOS(), // 👈 Adjunta la empresa activa
+          idPedido: self.data.editing ? self.data.id : null,
+          token: token,
+          cliente: {
+            id: cli.value,
+            nombre: cli.options[cli.selectedIndex].text,
+            rif: document.getElementById('inpRif').value
+          },
+          fecha: document.getElementById('inpFecha').value,
+          tasa: self.data.tasa,
+          vendedor: vendedorFinal,
+          carrito: self.data.cart
+        };
+
+        var btn = document.getElementById('btnProcesar');
+        var txtOriginal = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Guardando...';
+
+        if (typeof google !== 'undefined' && google.script && google.script.run && typeof google.script.run.guardarPedido === 'function') {
+          google.script.run
+            .withSuccessHandler(function(res) {
+              btn.disabled = false;
+              btn.innerHTML = txtOriginal;
+              self.procesandoVenta = false;
+
+              if (!res || res.status !== 'success') {
+                _notificarPOS.error((res && res.message) || 'Error al guardar pedido');
+                return;
+              }
+
+              _notificarPOS.exito("Pedido " + (self.data.editing ? "actualizado" : "registrado") + " exitosamente");
+              self.nuevoPedido(true);
+            })
+            .withFailureHandler(function(err) {
+              btn.disabled = false;
+              btn.innerHTML = txtOriginal;
+              self.procesandoVenta = false;
+              _notificarPOS.error("Error: " + (err && err.message ? err.message : ''));
+            })
+            .guardarPedido(payload);
+        } else {
+          setTimeout(function() {
+            btn.disabled = false;
+            btn.innerHTML = txtOriginal;
+            self.procesandoVenta = false;
+            _notificarPOS.exito("Modo Demo: Pedido guardado");
+            self.nuevoPedido(true);
+          }, 800);
+        }
+      }
+    );
+  }
+};
+
+// ============================================================
+// CONEXIÓN CON EL CICLO DE VIDA DEL SPA (INDEX)
+// ============================================================
+window.ModuloPedidos = {
+  mount: function() {
+    window.posManager.init();
+  },
+  unmount: function() {
+    window.posManager.reset();
+  }
+};
+
+window.initPedidos = function() { window.ModuloPedidos.mount(); };
+window.montarModuloPedidos = function() { window.ModuloPedidos.mount(); };
+window.desmontarModuloPedidos = function() { window.ModuloPedidos.unmount(); };
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('gridProd')) window.ModuloPedidos.mount();
+  });
+} else {
+  if (document.getElementById('gridProd')) window.ModuloPedidos.mount();
+}
+</script>

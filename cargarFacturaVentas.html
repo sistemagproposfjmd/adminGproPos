@@ -1,0 +1,2138 @@
+<!-- ============================================================
+     MÓDULO: CARGAR FACTURA DE VENTAS (HTML PURO - MULTIEMPRESA)
+     Arquitectura orientada a Estado (State-Driven UI) - UNIFICADO SPA
+     Scope: #pFacturasVentas
+     ============================================================ -->
+
+<style>
+/* ==================== 1. VARIABLES DE TEMA (DARK / LIGHT) ==================== */
+#pFacturasVentas {
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --primary-light: #60a5fa;
+  --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  --bg-page: #0b1329;
+  --bg-card: rgba(30, 41, 59, 0.7);
+  --bg-card-hover: rgba(51, 65, 85, 0.8);
+  --input-bg: rgba(15, 23, 42, 0.75);
+  --input-border: rgba(255, 255, 255, 0.12);
+  --input-disabled: rgba(15, 23, 42, 0.45);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --table-header: rgba(15, 23, 42, 0.95);
+  --dropdown-bg: #1e293b;
+  --dropdown-hover: rgba(59, 130, 246, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(16px);
+  --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --purple: #a855f7;
+  color: var(--text-main);
+  padding-bottom: 60px;
+}
+
+[data-bs-theme="light"] #pFacturasVentas {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #3b82f6;
+  --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --input-bg: #f8fafc;
+  --input-border: #cbd5e1;
+  --input-disabled: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --table-header: #f1f5f9;
+  --dropdown-bg: #ffffff;
+  --dropdown-hover: #eff6ff;
+  --glass-border: #cbd5e1;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+#pFacturasVentas * { box-sizing: border-box; }
+
+#pFacturasVentas .page-header {
+  background: var(--primary-gradient);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  padding: 1rem 1.4rem;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+#pFacturasVentas .page-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+#pFacturasVentas .header-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+#pFacturasVentas .header-actions .btn {
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+#pFacturasVentas .header-actions .btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  color: #ffffff;
+}
+
+#pFacturasVentas .header-actions .btn.btn-primary {
+  background: #ffffff;
+  color: var(--primary-dark);
+  border-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#pFacturasVentas .card {
+  background-color: var(--bg-card) !important;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 1rem;
+  overflow: visible;
+}
+
+#pFacturasVentas .card-header {
+  background: transparent;
+  border-bottom: 1px solid var(--glass-border);
+  padding: 0.9rem 1.25rem;
+  border-radius: 16px 16px 0 0 !important;
+}
+
+#pFacturasVentas .card-header h5 {
+  font-weight: 600;
+  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--text-main);
+}
+
+#pFacturasVentas .card-body { padding: 1rem 1.25rem; }
+
+#pFacturasVentas .form-label {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+  display: block;
+}
+
+#pFacturasVentas .form-control,
+#pFacturasVentas .form-select {
+  background-color: var(--input-bg) !important;
+  border: 1.5px solid var(--input-border) !important;
+  border-radius: 10px;
+  color: var(--text-main) !important;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.85rem;
+  height: 40px;
+  transition: all 0.2s ease;
+}
+
+#pFacturasVentas .form-control:focus,
+#pFacturasVentas .form-select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important;
+  outline: none;
+}
+
+#pFacturasVentas .form-control:disabled,
+#pFacturasVentas .form-control[readonly],
+#pFacturasVentas .form-select:disabled {
+  background-color: var(--input-disabled) !important;
+  color: var(--text-muted) !important;
+  opacity: 0.9;
+  cursor: not-allowed;
+}
+
+#pFacturasVentas .input-group-text {
+  background-color: var(--input-bg) !important;
+  border: 1.5px solid var(--input-border) !important;
+  border-right: none !important;
+  color: var(--text-muted) !important;
+  border-radius: 10px 0 0 10px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+#pFacturasVentas .input-group .form-control {
+  border-left: none !important;
+  border-radius: 0 10px 10px 0;
+}
+
+#pFacturasVentas .border-warning { border-color: rgba(245, 158, 11, 0.6) !important; }
+#pFacturasVentas .border-info { border-color: rgba(14, 165, 233, 0.6) !important; }
+
+#pFacturasVentas .custom-dropdown-wrapper {
+  position: relative;
+  width: 100%;
+  z-index: 500;
+}
+
+#pFacturasVentas .custom-dropdown-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background-color: var(--dropdown-bg);
+  border: 1px solid var(--primary);
+  border-radius: 12px;
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 2000;
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.7);
+  display: none;
+  padding: 4px 0;
+}
+
+#pFacturasVentas .custom-dropdown-results.show { display: block; animation: dropFadeIn 0.15s ease-out; }
+
+@keyframes dropFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#pFacturasVentas .custom-result-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-main);
+  font-size: 0.82rem;
+  transition: background-color 0.15s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#pFacturasVentas .custom-result-item:hover {
+  background-color: var(--dropdown-hover);
+  color: var(--primary-light);
+}
+
+#pFacturasVentas .table-scrollable {
+  max-height: 380px;
+  overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#pFacturasVentas .table {
+  color: var(--text-main);
+  margin-bottom: 0;
+  font-size: 0.8rem;
+}
+
+#pFacturasVentas .table thead th {
+  background-color: var(--table-header) !important;
+  border: none;
+  color: var(--text-muted) !important;
+  font-weight: 700;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  padding: 0.6rem 0.8rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+#pFacturasVentas .table tbody tr {
+  border-bottom: 1px solid var(--glass-border);
+  transition: background-color 0.15s ease;
+}
+
+#pFacturasVentas .table td {
+  border: none;
+  padding: 0.6rem 0.8rem;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+#pFacturasVentas .btn {
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+#pFacturasVentas .btn-primary {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+#pFacturasVentas .btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+#pFacturasVentas .btn-table {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#pFacturasVentas .totales-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+#pFacturasVentas .totales-card {
+  background-color: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+#pFacturasVentas .totales-card.bs::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+#pFacturasVentas .totales-card.divisa::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+}
+
+#pFacturasVentas .totales-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+#pFacturasVentas .totales-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--primary);
+  font-size: 1rem;
+}
+
+#pFacturasVentas .totales-title { font-weight: 700; font-size: 0.85rem; color: var(--text-main); }
+#pFacturasVentas .totales-subtitle { font-size: 0.68rem; color: var(--text-muted); }
+
+#pFacturasVentas .linea-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--glass-border);
+  font-size: 0.78rem;
+}
+
+#pFacturasVentas .linea-total.grand-total {
+  background-color: rgba(59, 130, 246, 0.08);
+  margin: 0.5rem -1.2rem -1rem -1.2rem;
+  padding: 0.8rem 1.2rem;
+  border-top: 2px solid var(--success);
+  border-bottom: none;
+  border-radius: 0 0 16px 16px;
+}
+
+#pFacturasVentas .linea-valor {
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+#pFacturasVentas .linea-total.grand-total .linea-valor {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--success);
+}
+
+#pFacturasVentas .botonera-flotante {
+  position: fixed;
+  right: 18px;
+  top: auto;
+  bottom: 30px; /* ✅ FIX: Ahora se ancla abajo a la derecha, no en el medio */
+  transform: none;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+  background-color: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  padding: 10px;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow);
+}
+
+#pFacturasVentas .botonera-flotante.show { display: flex !important; }
+
+#pFacturasVentas .botonera-flotante .total-badge {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--primary);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--glass-border);
+  font-family: monospace;
+}
+
+#pFacturasVentas .botonera-flotante .btn {
+  min-width: 110px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 12px;
+  font-size: 0.75rem;
+  gap: 8px;
+}
+
+@media (max-width: 1024px) {
+  #pFacturasVentas .botonera-flotante {
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: 12px;
+    transform: none;
+    flex-direction: row;
+    border-radius: 20px;
+    padding: 8px 12px;
+  }
+  #pFacturasVentas .botonera-flotante .btn { flex: 1; justify-content: center; }
+}
+
+@media (max-width: 768px) {
+  #pFacturasVentas .totales-section { grid-template-columns: 1fr; }
+  #pFacturasVentas .page-header { flex-direction: column; align-items: flex-start; }
+}
+</style>
+
+<div id="pFacturasVentas" class="modulo-facturas-ventas">
+  <div class="container-fluid py-2 px-0">
+
+    <!-- ===== 1. HEADER Y NAVEGACIÓN ===== -->
+    <header class="page-header">
+      <div class="d-flex align-items-center gap-2">
+        <h3 id="page-title" class="m-0"><i class="fas fa-file-invoice-dollar"></i> Cargar Ventas</h3>
+        <span id="badgeEmpresaVentas" class="badge bg-warning text-dark fw-bold ms-2" style="font-size:0.75rem;">
+          <i class="fas fa-building me-1"></i><span id="lblEmpresaVentasNombre">Cargando empresa...</span>
+        </span>
+      </div>
+      <nav class="header-actions">
+        <a href="javascript:void(0);" onclick="if(window.changePage) window.changePage('pClientesLista'); return false;" class="btn btn-sm shadow-sm">
+          <i class="fas fa-user-plus"></i><span> Cliente</span>
+        </a>
+        <a href="javascript:void(0);" onclick="if(window.changePage) window.changePage('pFacturasListaVentas', null, 'Venta'); return false;" class="btn btn-sm shadow-sm">
+          <i class="fas fa-list-alt"></i><span> Lista</span>
+        </a>
+        <a href="javascript:void(0);" id="btnNavConsultar" onclick="window.ModuloVentas.cambiarVista('consultar'); return false;" class="btn btn-sm shadow-sm">
+          <i class="fas fa-search"></i><span> Consultar</span>
+        </a>
+        <a href="javascript:void(0);" id="btnNavLibro" onclick="window.ModuloVentas.cambiarVista('libro'); return false;" class="btn btn-sm shadow-sm">
+          <i class="fas fa-book"></i><span> Libro Ventas</span>
+        </a>
+        <a href="javascript:void(0);" id="btnNavCrear" onclick="window.ModuloVentas.cambiarVista('crear'); return false;" class="btn btn-sm btn-primary d-none">
+          <i class="fas fa-plus"></i><span> Crear Factura</span>
+        </a>
+      </nav>
+    </header>
+
+    <!-- ===== 2. VISTA: CREAR FACTURA ===== -->
+    <div id="container-crear-factura">
+      <div class="row g-3">
+        
+        <!-- COLUMNA IZQUIERDA: DATOS DEL CLIENTE Y PRODUCTOS -->
+        <div class="col-xl-4 col-lg-5 col-md-12 d-flex flex-column gap-3">
+          
+          <div class="card h-100" id="detalleFactVenta">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5><i class="fas fa-file-invoice"></i> Datos del Documento</h5>
+              <span class="badge rounded-pill bg-primary" id="badgeEstadoDoc">Nueva</span>
+            </div>
+            <div class="card-body">
+              <div class="row g-2">
+                
+                <div class="col-12 custom-dropdown-wrapper">
+                  <label class="form-label" for="txtBuscarCliente">Cliente <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" id="txtBuscarCliente" class="form-control" placeholder="Buscar por nombre o RIF..." autocomplete="off">
+                  </div>
+                  <div id="dropdownClientes" class="custom-dropdown-results" role="listbox"></div>
+                </div>
+
+                <div class="col-sm-5 col-12">
+                  <label class="form-label" for="txtRifCliente">RIF</label>
+                  <input type="text" id="txtRifCliente" class="form-control" readonly placeholder="J-00000000-0">
+                </div>
+
+                <div class="col-sm-7 col-12">
+                  <label class="form-label" for="txtDireccionCliente">Dirección Fiscal</label>
+                  <input type="text" id="txtDireccionCliente" class="form-control" readonly placeholder="Dirección del cliente">
+                </div>
+
+                <div class="col-sm-5 col-6">
+                  <label class="form-label" for="selectMonedaVenta">Moneda</label>
+                  <select id="selectMonedaVenta" class="form-select"></select>
+                </div>
+
+                <div class="col-sm-7 col-6">
+                  <label class="form-label" for="txtTasaCambio">Tasa de Cambio</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-exchange-alt"></i></span>
+                    <input type="number" id="txtTasaCambio" class="form-control text-end fw-bold text-success" step="0.0001" placeholder="1.0000">
+                  </div>
+                </div>
+
+                <div class="col-12"><hr class="my-2" style="border-color: var(--input-border);"></div>
+
+                <div class="col-sm-4 col-12">
+                  <label class="form-label" for="selectTipoDoc">Tipo Doc</label>
+                  <select id="selectTipoDoc" class="form-select">
+                    <option value="Factura" selected>Factura</option>
+                    <option value="NC">Nota Crédito</option>
+                    <option value="ND">Nota Débito</option>
+                    <option value="NE">Nota Entrega</option>
+                  </select>
+                </div>
+
+                <div class="col-sm-4 col-6">
+                  <label class="form-label" for="txtNroFactura">N° Factura</label>
+                  <input type="text" id="txtNroFactura" class="form-control fw-bold" readonly placeholder="Cargando...">
+                </div>
+
+                <div class="col-sm-4 col-6">
+                  <label class="form-label text-warning" for="txtNroControl">N° Control <span class="text-danger">*</span></label>
+                  <input type="text" id="txtNroControl" class="form-control border-warning" placeholder="00-000000" autocomplete="off">
+                </div>
+
+                <div class="col-12" id="boxFacturaAfectada" style="display: none;">
+                  <label class="form-label text-info" for="txtFacturaAfectada">Factura Afectada / Modificada <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-link"></i></span>
+                    <input type="text" id="txtFacturaAfectada" class="form-control border-info" placeholder="N° de factura original que modifica">
+                  </div>
+                  <div class="col-12" id="boxDevuelveStock" style="display: none;">
+                    <div class="form-check form-switch mt-1">
+                      <input class="form-check-input" type="checkbox" id="chkDevuelveStock" checked>
+                      <label class="form-check-label" for="chkDevuelveStock" style="font-size: 0.8rem; color: var(--text-main);">
+                        ¿Devuelve mercancía? (suma stock)
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-4 col-6">
+                  <label class="form-label" for="txtFechaEmision">F. Emisión</label>
+                  <input type="date" id="txtFechaEmision" class="form-control">
+                </div>
+                <div class="col-sm-4 col-6">
+                  <label class="form-label" for="txtFechaRegistro">F. Registro</label>
+                  <input type="date" id="txtFechaRegistro" class="form-control">
+                </div>
+
+                <div class="col-sm-4 col-12">
+                  <label class="form-label" for="selectCondPago">Cond. Pago</label>
+                  <select id="selectCondPago" class="form-select">
+                    <option value="Contado" selected>Contado</option>
+                    <option value="Credito15">15 días</option>
+                    <option value="Credito30">30 días</option>
+                    <option value="Credito45">45 días</option>
+                  </select>
+                </div>
+
+                <div class="col-12 mt-1">
+                  <label class="form-label" for="txtDescripcion">Descripción / Concepto</label>
+                  <div class="input-group">
+                    <input type="text" id="txtDescripcion" class="form-control" placeholder="Concepto de la venta...">
+                    <button type="button" class="btn btn-table" id="btnAutoDesc" title="Generar automáticamente">
+                      <i class="fas fa-magic"></i>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- TARJETA: AGREGAR PRODUCTOS -->
+          <div class="card items-section" id="cardProductos">
+            <div class="card-header border-bottom">
+              <h5><i class="fas fa-boxes text-success"></i> Agregar Producto o Servicio</h5>
+            </div>
+            <div class="card-body p-3">
+              <div class="row g-2">
+                
+                <div class="col-12 custom-dropdown-wrapper">
+                  <label class="form-label" for="txtBuscarProducto">Buscar Código o Descripción</label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-barcode"></i></span>
+                    <input type="text" id="txtBuscarProducto" class="form-control" placeholder="Escriba para buscar en inventario..." autocomplete="off">
+                  </div>
+                  <div id="dropdownProductos" class="custom-dropdown-results" role="listbox"></div>
+                </div>
+
+                <div class="col-sm-4 col-12">
+                  <label class="form-label" for="txtCantidad">Cantidad</label>
+                  <div style="position: relative;">
+                    <input type="number" id="txtCantidad" class="form-control text-end fw-bold" placeholder="1" min="0.01" step="any">
+                    <div id="badgeStockVisual" style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.65rem; font-weight: 600; display: none; pointer-events: none; z-index: 10;"></div>
+                  </div>
+                </div>
+
+                <div class="col-sm-4 col-6">
+                  <label class="form-label" for="txtPrecioUnitario">Precio Unit. (<span class="lblSimboloMoneda">$</span>)</label>
+                  <input type="number" id="txtPrecioUnitario" class="form-control text-end fw-bold" placeholder="0.00" step="any">
+                </div>
+
+                <div class="col-sm-4 col-6">
+                  <label class="form-label" for="selectIvaItem">% IVA</label>
+                  <select id="selectIvaItem" class="form-select">
+                    <option value="16" selected>16%</option>
+                    <option value="8">8% (Reducido)</option>
+                    <option value="0">0% (Exento)</option>
+                  </select>
+                </div>
+
+                <div class="col-12 mt-3">
+                  <button type="button" id="btnAgregarItem" class="btn btn-success w-100 py-2 d-flex justify-content-center align-items-center gap-2">
+                    <i class="fas fa-plus-circle"></i> AGREGAR A LA FACTURA
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLUMNA DERECHA: TABLA DE ITEMS Y TOTALES -->
+        <div class="col-xl-8 col-lg-7 col-md-12 d-flex flex-column gap-3">
+          
+          <div class="card flex-grow-1 d-flex flex-column mb-0">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5><i class="fas fa-list-alt"></i> Productos en Factura</h5>
+              <div class="d-flex gap-3" style="font-size: 0.8rem; color: var(--success); font-weight: 600;">
+                <span id="lblTotalRenglones"><i class="fas fa-cubes"></i> Items: 0</span>
+                <span id="lblTotalMontoBruto"><i class="fas fa-coins"></i> Total: 0.00</span>
+              </div>
+            </div>
+            <div class="card-body p-0 d-flex flex-column h-100">
+              <div class="table-scrollable flex-grow-1">
+                <table id="tablaDetalleVenta" class="table table-hover mb-0">
+                  <thead>
+                    <tr>
+                      <th class="ps-3">Código</th>
+                      <th>Descripción del Producto</th>
+                      <th class="text-end">Cant.</th>
+                      <th class="text-end">Precio Unit.</th>
+                      <th class="text-end">Neto</th>
+                      <th class="text-center">% IVA</th>
+                      <th class="text-end">Monto IVA</th>
+                      <th class="text-end">Total Renglón</th>
+                      <th class="text-center" style="width: 80px;">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodyDetalleVenta"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TOTALES DUALES -->
+          <div>
+            <div class="totales-section mt-0">
+              
+              <div class="totales-card bs">
+                <div class="totales-header">
+                  <div class="totales-icon"><i class="fas fa-coins"></i></div>
+                  <div><div class="totales-title">Bolívares (Bs)</div><div class="totales-subtitle">Moneda de Curso Legal</div></div>
+                </div>
+                <div class="linea-total">
+                  <span class="linea-label">Sub-Total</span>
+                  <span class="linea-valor" id="lblSubTotalBs">0.00</span>
+                </div>
+                <div class="linea-total">
+                  <span class="linea-label">Total Exento</span>
+                  <span class="linea-valor" id="lblExentoBs">0.00</span>
+                </div>
+                <div class="linea-total">
+                  <span class="linea-label">IVA Facturado</span>
+                  <span class="linea-valor" id="lblIvaBs">0.00</span>
+                </div>
+                <div class="linea-total grand-total">
+                  <span class="linea-label">TOTAL FACTURA</span>
+                  <span class="linea-valor" id="lblGranTotalBs">0.00</span>
+                </div>
+              </div>
+
+              <div class="totales-card divisa">
+                <div class="totales-header">
+                  <div class="totales-icon"><i class="fas fa-dollar-sign"></i></div>
+                  <div><div class="totales-title">Divisa (<span class="lblSimboloMoneda">$</span>)</div><div class="totales-subtitle">Moneda de Referencia</div></div>
+                </div>
+                <div class="linea-total">
+                  <span class="linea-label">Sub-Total</span>
+                  <span class="linea-valor" id="lblSubTotalUSD">0.00</span>
+                </div>
+                <div class="linea-total">
+                  <span class="linea-label">Total Exento</span>
+                  <span class="linea-valor" id="lblExentoUSD">0.00</span>
+                </div>
+                <div class="linea-total">
+                  <span class="linea-label">IVA Facturado</span>
+                  <span class="linea-valor" id="lblIvaUSD">0.00</span>
+                </div>
+                <div class="linea-total grand-total">
+                  <span class="linea-label">TOTAL FACTURA</span>
+                  <span class="linea-valor" id="lblGranTotalUSD">0.00</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===== 3. VISTA: CONSULTAR FACTURAS ===== -->
+    <div id="container-consultar-factura" class="d-none">
+      <div class="card mb-3">
+        <div class="card-body">
+          <form id="formBusquedaFacturas" class="row g-3">
+            <div class="col-md-5">
+              <label class="form-label" for="busquedaCliente">Nombre o RIF del Cliente</label>
+              <input type="text" id="busquedaCliente" class="form-control" placeholder="Dejar en blanco para buscar todos">
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="busquedaNroFactura">Número de Factura</label>
+              <input type="text" id="busquedaNroFactura" class="form-control" placeholder="Ej: 000005">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="submit" class="btn btn-primary w-100"><i class="fas fa-search"></i> Buscar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div id="resultadosBusquedaContainer" class="card d-none col-12">
+          <div class="card-header"><h5><i class="fas fa-list"></i> Resultados de Búsqueda</h5></div>
+          <div class="card-body p-0">
+            <table class="table mb-0" id="tablaResultadosBusqueda">
+              <thead>
+                <tr>
+                  <th>N° Factura</th>
+                  <th>Cliente</th>
+                  <th>Fecha</th>
+                  <th class="text-center">Estado</th>
+                  <th class="text-end">Monto Total</th>
+                  <th class="text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="bodyResultadosBusqueda"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="vistaPreviaFacturaContainer" class="card d-none col-12 mt-3">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5><i class="fas fa-eye"></i> Vista Previa del Comprobante</h5>
+            <div id="accionesVistaPrevia">
+              <button class="btn btn-table me-1" id="btnImprimirVistaPrevia"><i class="fas fa-print"></i><span> Imprimir</span></button>
+            </div>
+          </div>
+          <div class="card-body p-2">
+            <iframe id="iframeVistaPrevia" style="width: 100%; height: 60vh; border: 1px solid var(--input-border); border-radius: 8px; background: white;"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 4. VISTA: LIBRO DE VENTAS ===== -->
+    <div id="container-libro-ventas" class="d-none">
+      <div class="card mb-3">
+        <div class="card-header"><h5><i class="fas fa-calendar-alt"></i> Rango de Fechas - Libro de Ventas</h5></div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-3 col-6">
+              <label for="fechaDesdeLibro" class="form-label">Desde:</label>
+              <input type="date" id="fechaDesdeLibro" class="form-control">
+            </div>
+            <div class="col-md-3 col-6">
+              <label for="fechaHastaLibro" class="form-label">Hasta:</label>
+              <input type="date" id="fechaHastaLibro" class="form-control">
+            </div>
+            <div class="col-md-3 col-12">
+              <label for="filtroClienteLibro" class="form-label">Cliente (opcional):</label>
+              <input type="text" id="filtroClienteLibro" class="form-control" placeholder="Nombre o RIF...">
+            </div>
+            <div class="col-md-3 col-12 d-flex align-items-end gap-2">
+              <button type="button" class="btn btn-primary" id="btnGenerarLibroVentas"><i class="fas fa-search"></i> Generar</button>
+              <button type="button" class="btn btn-table" onclick="window.ModuloVentas.cambiarVista('crear')"><i class="fas fa-arrow-left"></i> Volver</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tabla-libro-container" class="card d-none">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5><i class="fas fa-table"></i> Detalle de Operaciones Gravadas</h5>
+          <button class="btn btn-table" id="btnImprimirLibroVentas"><i class="fas fa-print"></i><span> Imprimir</span></button>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-scrollable">
+            <table id="tablaLibroVentas" class="table table-hover mb-0" style="font-size: 0.72rem;">
+              <thead>
+                <tr class="table-header-custom">
+                  <th class="text-center align-middle">N°</th>
+                  <th class="text-center align-middle">Fecha</th>
+                  <th class="text-center align-middle">RIF</th>
+                  <th class="align-middle">Razón Social Cliente</th>
+                  <th class="text-center align-middle">Tipo</th>
+                  <th class="text-center align-middle">N° Fact</th>
+                  <th class="text-center align-middle">N° Control</th>
+                  <th class="text-end align-middle">Total Facturado</th>
+                  <th class="text-end align-middle">Exento</th>
+                  <th class="text-end align-middle">Base Imponible</th>
+                  <th class="text-end align-middle">I.V.A.</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyLibroVentas"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 5. BOTONERA FLOTANTE ACCIONABLE ===== -->
+    <aside class="botonera-flotante" id="floatingActionBar">
+      <div id="floatingTotalAmount" class="total-badge">$ 0.00</div>
+      <button type="button" class="btn btn-success" id="btnGuardarFacturaFloating">
+        <i class="fas fa-save"></i><span>Guardar</span>
+      </button>
+      <button type="button" class="btn btn-table" id="btnCancelarFacturaFloating">
+        <i class="fas fa-eraser"></i><span>Limpiar</span>
+      </button>
+    </aside>
+
+  </div>
+</div>
+
+<script>
+(function(window) {
+  'use strict';
+
+  // =========================================================================
+  // 1. UTILIDADES MULTIEMPRESA & UI
+  // =========================================================================
+  function getEmpresaActiva() {
+    try {
+      const raw = sessionStorage.getItem('empresaActiva');
+      return raw ? JSON.parse(raw) : null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  function getIdSpreadsheetActiva() {
+    const emp = getEmpresaActiva();
+    return emp ? (emp.idSpreadsheet || emp.idSpreadsheetData || emp.spreadsheetId || emp.idEmpresa || '') : '';
+  }
+
+  function actualizarBadgeEmpresa() {
+    const emp = getEmpresaActiva();
+    const lbl = document.getElementById('lblEmpresaVentasNombre');
+    if (lbl) {
+      lbl.textContent = emp ? (emp.nombreEmpresa || emp.nombre || 'Empresa Activa') : 'Sin empresa seleccionada';
+    }
+  }
+
+  const UI = {
+    loading: function(titulo, subtitulo) {
+      if (window.GProUI && window.GProUI.mostrarLoading) {
+        window.GProUI.mostrarLoading(titulo, subtitulo || 'Procesando...', 45);
+      } else if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          title: titulo,
+          text: subtitulo || 'Por favor espere...',
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading()
+        });
+      }
+    },
+    ocultarLoading: function() {
+      if (window.GProUI && window.GProUI.ocultarLoading) {
+        window.GProUI.ocultarLoading();
+      } else if (typeof Swal !== 'undefined' && Swal.isVisible()) {
+        Swal.close();
+      }
+    },
+    toast: {
+      exito: msg => (window.GProUI && window.GProUI.toast ? window.GProUI.toast.exito(msg) : alert(msg)),
+      error: msg => (window.GProUI && window.GProUI.toast ? window.GProUI.toast.error(msg) : alert('Error: ' + msg)),
+      advertencia: msg => (window.GProUI && window.GProUI.toast ? window.GProUI.toast.advertencia(msg) : alert(msg)),
+      info: msg => (window.GProUI && window.GProUI.toast ? window.GProUI.toast.info(msg) : console.info(msg)),
+      confirmar: (msg, cb) => {
+        if (window.GProUI && window.GProUI.toast && window.GProUI.toast.confirmar) {
+          window.GProUI.toast.confirmar(msg, 'warning', 'Sí, continuar', 'Cancelar', cb);
+        } else if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            title: '¿Confirmar acción?',
+            text: msg,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, continuar',
+            cancelButtonText: 'Cancelar'
+          }).then(res => cb(res.isConfirmed));
+        } else {
+          cb(confirm(msg));
+        }
+      }
+    }
+  };
+
+  function getToken() {
+    try {
+      const u = JSON.parse(sessionStorage.getItem('userData') || '{}');
+      return u.token || '';
+    } catch(e) { return ''; }
+  }
+
+  // =========================================================================
+  // 2. ESTADO CENTRALIZADO DE VENTAS
+  // =========================================================================
+  const estadoInicial = () => ({
+    vistaActiva: 'crear',
+    cliente: { nombre: '', rif: '', direccion: '' },
+    moneda: 'Dolares',
+    tasa: 1.0000,
+    tipoDoc: 'Factura',
+    nroFactura: '',
+    nroControl: '',
+    facturaAfectada: '',
+    fechaEmision: new Date().toISOString().split('T')[0],
+    fechaRegistro: new Date().toISOString().split('T')[0],
+    condPago: 'Contado',
+    descripcion: '',
+    idPedidoOrigen: null,
+    itemBorrador: null,
+    items: [],
+    totales: {
+      baseBs: 0, exentoBs: 0, ivaBs: 0, totalBs: 0,
+      baseUSD: 0, exentoUSD: 0, ivaUSD: 0, totalUSD: 0
+    }
+  });
+
+  let estado = estadoInicial();
+  let catalogoClientes = [];
+  let catalogoProductos = [];
+  let catalogoMonedas = [];
+  let datosLibroVentas = [];
+  let isMounted = false;
+  let eventsBound = false;
+
+  function round2(num) {
+    return Math.round((Number(num) + Number.EPSILON) * 100) / 100;
+  }
+
+  function parseNumero(val) {
+    if (val === null || val === undefined || val === '') return 0;
+    if (typeof val === 'number') return isNaN(val) ? 0 : val;
+    let str = String(val).trim();
+    if (str.includes('.') && str.includes(',')) {
+      str = str.replace(/\./g, '').replace(',', '.');
+    } else if (str.includes(',')) {
+      str = str.replace(',', '.');
+    }
+    const num = parseFloat(str);
+    return isNaN(num) ? 0 : num;
+  }
+
+  function formatMoney(num, simbolo = '') {
+    const n = round2(num);
+    const formatted = n.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return simbolo ? `${formatted} ${simbolo}`.trim() : formatted;
+  }
+
+  function getStockDisponible(codigoProducto, stockRealCatalogo) {
+    const cantidadEnFactura = estado.items
+      .filter(it => it.codigo === codigoProducto && !it.esServicio)
+      .reduce((acc, it) => acc + it.cantidad, 0);
+
+    return Math.max(0, stockRealCatalogo - cantidadEnFactura);
+  }
+
+  function recalcularTotales() {
+    let baseUSD = 0, exentoUSD = 0, ivaUSD = 0;
+    let baseBs = 0, exentoBs = 0, ivaBs = 0;
+
+    const tasa = estado.tasa > 0 ? estado.tasa : 1;
+    const esNotaEntrega = estado.tipoDoc === 'NE';
+
+    estado.items.forEach(item => {
+      const cant = item.cantidad;
+      const pUSD = item.precioUSD;
+      const tasaIva = esNotaEntrega ? 0 : item.tasaIva;
+
+      const renglonUSD = round2(pUSD * cant);
+      const renglonBs = round2(renglonUSD * tasa);
+
+      if (tasaIva === 0) {
+        exentoUSD = round2(exentoUSD + renglonUSD);
+        exentoBs = round2(exentoBs + renglonBs);
+      } else {
+        const itemIvaUSD = round2(renglonUSD * (tasaIva / 100));
+        const itemIvaBs = round2(renglonBs * (tasaIva / 100));
+
+        baseUSD = round2(baseUSD + renglonUSD);
+        ivaUSD = round2(ivaUSD + itemIvaUSD);
+
+        baseBs = round2(baseBs + renglonBs);
+        ivaBs = round2(ivaBs + itemIvaBs);
+      }
+    });
+
+    const totalBs = round2(baseBs + exentoBs + ivaBs);
+    const totalUSD = round2(baseUSD + exentoUSD + ivaUSD);
+
+    estado.totales = {
+      baseBs, exentoBs, ivaBs, totalBs,
+      baseUSD, exentoUSD, ivaUSD, totalUSD
+    };
+  }
+
+  function render() {
+    if (!isMounted) return;
+
+    const doc = document;
+    const tieneItems = estado.items.length > 0;
+    const esNC_ND = estado.tipoDoc === 'NC' || estado.tipoDoc === 'ND';
+
+    const boxFacturaAfectada = doc.getElementById('boxFacturaAfectada');
+    if (boxFacturaAfectada) boxFacturaAfectada.style.display = esNC_ND ? 'block' : 'none';
+
+    const boxDevuelveStock = doc.getElementById('boxDevuelveStock');
+    if (boxDevuelveStock) {
+      boxDevuelveStock.style.display = (estado.tipoDoc === 'NC') ? 'block' : 'none';
+    }
+
+    const barraFlotante = doc.getElementById('floatingActionBar');
+    if (barraFlotante) {
+      if (tieneItems) barraFlotante.classList.add('show');
+      else barraFlotante.classList.remove('show');
+    }
+
+    const simbolo = estado.moneda === 'Bolivares' ? 'Bs' : '$';
+    doc.querySelectorAll('.lblSimboloMoneda').forEach(el => el.textContent = simbolo);
+
+    const tbody = doc.getElementById('tbodyDetalleVenta');
+    if (tbody) {
+      if (!tieneItems) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center py-3 text-muted">No hay productos agregados a la factura</td></tr>';
+      } else {
+        const tasa = estado.tasa > 0 ? estado.tasa : 1;
+        tbody.innerHTML = estado.items.map((it, idx) => {
+          const precioEnMoneda = estado.moneda === 'Bolivares' ? round2(it.precioUSD * tasa) : it.precioUSD;
+          const netoEnMoneda = round2(precioEnMoneda * it.cantidad);
+          const ivaEfectivo = estado.tipoDoc === 'NE' ? 0 : it.tasaIva;
+          const ivaEnMoneda = round2(netoEnMoneda * (ivaEfectivo / 100));
+          const totalEnMoneda = round2(netoEnMoneda + ivaEnMoneda);
+
+          return `
+            <tr>
+              <td class="ps-3 font-monospace text-muted" style="font-size:0.75rem;">${it.codigo}</td>
+              <td class="fw-semibold">${it.nombre}</td>
+              <td class="text-end fw-bold">${it.cantidad}</td>
+              <td class="text-end">${formatMoney(precioEnMoneda)}</td>
+              <td class="text-end">${formatMoney(netoEnMoneda)}</td>
+              <td class="text-center"><span class="badge ${ivaEfectivo === 0 ? 'bg-secondary' : 'bg-primary'}">${ivaEfectivo}%</span></td>
+              <td class="text-end">${formatMoney(ivaEnMoneda)}</td>
+              <td class="text-end fw-bold text-success">${formatMoney(totalEnMoneda)}</td>
+              <td class="text-center">
+                <button type="button" class="btn-table me-1" onclick="window.ModuloVentas.editarItem(${idx})" title="Editar"><i class="fas fa-edit"></i></button>
+                <button type="button" class="btn-table text-danger" onclick="window.ModuloVentas.eliminarItem(${idx})" title="Eliminar"><i class="fas fa-trash"></i></button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    const tot = estado.totales;
+    const lblItems = doc.getElementById('lblTotalRenglones');
+    const lblTotalMonto = doc.getElementById('lblTotalMontoBruto');
+    if (lblItems) lblItems.innerHTML = `<i class="fas fa-cubes"></i> Items: ${estado.items.length}`;
+    if (lblTotalMonto) lblTotalMonto.innerHTML = `<i class="fas fa-coins"></i> Total: ${formatMoney(tot.totalBs, 'Bs')}`;
+
+    const subBs = doc.getElementById('lblSubTotalBs');
+    const exeBs = doc.getElementById('lblExentoBs');
+    const ivaBs = doc.getElementById('lblIvaBs');
+    const granBs = doc.getElementById('lblGranTotalBs');
+    if (subBs) subBs.textContent = formatMoney(tot.baseBs);
+    if (exeBs) exeBs.textContent = formatMoney(tot.exentoBs);
+    if (ivaBs) ivaBs.textContent = formatMoney(tot.ivaBs);
+    if (granBs) granBs.textContent = formatMoney(tot.totalBs);
+
+    const subUSD = doc.getElementById('lblSubTotalUSD');
+    const exeUSD = doc.getElementById('lblExentoUSD');
+    const ivaUSD = doc.getElementById('lblIvaUSD');
+    const granUSD = doc.getElementById('lblGranTotalUSD');
+    if (subUSD) subUSD.textContent = formatMoney(tot.baseUSD);
+    if (exeUSD) exeUSD.textContent = formatMoney(tot.exentoUSD);
+    if (ivaUSD) ivaUSD.textContent = formatMoney(tot.ivaUSD);
+    if (granUSD) granUSD.textContent = formatMoney(tot.totalUSD);
+
+    const floatingTotal = doc.getElementById('floatingTotalAmount');
+    if (floatingTotal) {
+      floatingTotal.textContent = estado.moneda === 'Bolivares' ? formatMoney(tot.totalBs, 'Bs') : formatMoney(tot.totalUSD, '$');
+    }
+  }
+
+  function normalizarListaClientes(data) {
+    if (!Array.isArray(data)) return [];
+    return data.filter((c, idx) => {
+      if (idx === 0 && String(c[1] || '').toLowerCase() === 'nombre') return false;
+      return !!c;
+    }).map(c => {
+      if (Array.isArray(c)) {
+        return { nombre: String(c[1] || c[0] || '').trim(), rif: String(c[2] || c[1] || '').trim(), dir: String(c[3] || c[2] || '').trim() };
+      }
+      return {
+        nombre: String(c.nombre || c.Nombre || '').trim(),
+        rif: String(c.rif || c.Rif || '').trim(),
+        dir: String(c.direccion || c.Direccion || '').trim()
+      };
+    }).filter(c => c.nombre.length > 0);
+  }
+
+  function normalizarListaProductos(data) {
+    if (!Array.isArray(data)) return [];
+    return data.filter((p, idx) => {
+      if (idx === 0 && (String(p[0] || '').toLowerCase().includes('codigo') || String(p[1] || '').toLowerCase().includes('nombre'))) return false;
+      return !!p;
+    }).map(p => {
+      if (Array.isArray(p)) {
+        const codigo = String(p[0] || '').trim();
+        const categoria = String(p[11] || '').trim();
+        const esServicio = codigo.toUpperCase().startsWith('S') || categoria.toUpperCase().startsWith('S');
+        return {
+          codigo: codigo,
+          nombre: String(p[1] || '').trim(),
+          precioUSD: parseNumero(p[3] || p[2]),
+          precioCompraUSD: parseNumero(p[2]),
+          tasaIva: parseNumero(p[4] !== undefined ? p[4] : 16),
+          stock: parseNumero(p[5]),
+          categoria: categoria,
+          cuentaContable: String(p[7] || '').trim(),
+          nombreCuenta: String(p[8] || '').trim(),
+          esServicio: esServicio
+        };
+      }
+      const cod = String(p.codigo || p.Codigo || '').trim();
+      const cat = String(p.categoria || p.Categoria || '').trim();
+      return {
+        codigo: cod,
+        nombre: String(p.nombre || p.Nombre || '').trim(),
+        precioUSD: parseNumero(p.precioUSD || p.precioVenta || p.precio),
+        precioCompraUSD: parseNumero(p.precioCompraUSD || p.costo),
+        tasaIva: parseNumero(p.tasaIva !== undefined ? p.tasaIva : 16),
+        stock: parseNumero(p.stock || 0),
+        categoria: cat,
+        cuentaContable: String(p.cuentaContable || '').trim(),
+        nombreCuenta: String(p.nombreCuenta || '').trim(),
+        esServicio: cod.toUpperCase().startsWith('S') || cat.toUpperCase().startsWith('S')
+      };
+    }).filter(p => p.nombre.length > 0);
+  }
+
+  function renderDropdownClientes(lista) {
+    const dropdown = document.getElementById('dropdownClientes');
+    if (!dropdown) return;
+
+    if (lista.length === 0) {
+      dropdown.innerHTML = '<div class="custom-result-item text-muted">No se encontraron clientes</div>';
+    } else {
+      dropdown.innerHTML = lista.map(c => `
+        <div class="custom-result-item" data-nombre="${c.nombre}" data-rif="${c.rif}" data-dir="${c.dir}">
+          <div>
+            <div class="fw-bold">${c.nombre}</div>
+            <div class="small text-muted">${c.rif}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    dropdown.classList.add('show');
+  }
+
+  function setupAutocompleteClientes() {
+    const input = document.getElementById('txtBuscarCliente');
+    const dropdown = document.getElementById('dropdownClientes');
+    if (!input || !dropdown) return;
+
+    const filtrar = () => {
+      const q = input.value.toLowerCase().trim();
+      const matches = q === '' 
+        ? catalogoClientes.slice(0, 15)
+        : catalogoClientes.filter(c => c.nombre.toLowerCase().includes(q) || c.rif.toLowerCase().includes(q)).slice(0, 15);
+      renderDropdownClientes(matches);
+    };
+
+    input.oninput = filtrar;
+    input.onfocus = filtrar;
+    input.onclick = filtrar;
+
+    dropdown.onclick = function(e) {
+      const opt = e.target.closest('.custom-result-item');
+      if (opt && opt.dataset.nombre) {
+        estado.cliente.nombre = opt.dataset.nombre;
+        estado.cliente.rif = opt.dataset.rif;
+        estado.cliente.direccion = opt.dataset.dir;
+
+        input.value = estado.cliente.nombre;
+        document.getElementById('txtRifCliente').value = estado.cliente.rif;
+        document.getElementById('txtDireccionCliente').value = estado.cliente.direccion;
+
+        dropdown.classList.remove('show');
+        sugerirDescripcion();
+        render();
+      }
+    };
+  }
+
+  function renderDropdownProductos(lista) {
+    const dropdown = document.getElementById('dropdownProductos');
+    if (!dropdown) return;
+
+    if (lista.length === 0) {
+      dropdown.innerHTML = '<div class="custom-result-item text-muted">No hay productos disponibles</div>';
+    } else {
+      dropdown.innerHTML = lista.map(p => {
+        const stockDisp = getStockDisponible(p.codigo, p.stock);
+        const badgeStock = p.esServicio
+          ? '<span class="badge bg-info">Servicio</span>'
+          : `<span class="badge ${stockDisp <= 5 ? 'bg-warning' : 'bg-success'}">Stock: ${stockDisp}</span>`;
+
+        return `
+          <div class="custom-result-item" 
+               data-codigo="${p.codigo}" 
+               data-nombre="${p.nombre}" 
+               data-precio="${p.precioUSD}" 
+               data-iva="${p.tasaIva}" 
+               data-stock="${stockDisp}" 
+               data-cat="${p.categoria}"
+               data-servicio="${p.esServicio}">
+            <div>
+              <div class="fw-bold">${p.nombre}</div>
+              <div class="small text-muted font-monospace">${p.codigo}</div>
+            </div>
+            <div class="text-end">
+              ${badgeStock}
+              <div class="fw-bold text-success mt-1">$ ${p.precioUSD.toFixed(2)}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    dropdown.classList.add('show');
+  }
+
+  function setupAutocompleteProductos() {
+    const input = document.getElementById('txtBuscarProducto');
+    const dropdown = document.getElementById('dropdownProductos');
+    if (!input || !dropdown) return;
+
+    const filtrar = () => {
+      const q = input.value.toLowerCase().trim();
+      const matches = q === ''
+        ? catalogoProductos.slice(0, 15)
+        : catalogoProductos.filter(p => p.codigo.toLowerCase().includes(q) || p.nombre.toLowerCase().includes(q)).slice(0, 15);
+      renderDropdownProductos(matches);
+    };
+
+    input.oninput = filtrar;
+    input.onfocus = filtrar;
+    input.onclick = filtrar;
+
+    dropdown.onclick = function(e) {
+      const opt = e.target.closest('.custom-result-item');
+      if (opt && opt.dataset.codigo) {
+        const esServicio = opt.dataset.servicio === 'true';
+        const stockDisponible = parseNumero(opt.dataset.stock);
+
+        if (!esServicio && stockDisponible <= 0) {
+          UI.toast.advertencia('Este producto no tiene stock disponible.');
+          return;
+        }
+
+        estado.itemBorrador = {
+          codigo: opt.dataset.codigo,
+          nombre: opt.dataset.nombre,
+          precioUSD: parseNumero(opt.dataset.precio),
+          tasaIva: parseNumero(opt.dataset.iva),
+          stock: stockDisponible,
+          esServicio: esServicio,
+          categoria: opt.dataset.cat
+        };
+
+        input.value = estado.itemBorrador.nombre;
+        document.getElementById('txtPrecioUnitario').value = estado.itemBorrador.precioUSD;
+        document.getElementById('selectIvaItem').value = estado.itemBorrador.tasaIva;
+
+        const badgeStock = document.getElementById('badgeStockVisual');
+        if (badgeStock) {
+          badgeStock.style.display = 'block';
+          badgeStock.className = esServicio ? 'badge bg-info' : (stockDisponible <= 5 ? 'badge bg-warning' : 'badge bg-success');
+          badgeStock.textContent = esServicio ? 'Servicio' : `Stock: ${stockDisponible}`;
+        }
+
+        dropdown.classList.remove('show');
+        const inputCant = document.getElementById('txtCantidad');
+        inputCant.value = '1';
+        inputCant.disabled = esServicio;
+        inputCant.focus();
+        inputCant.select();
+      }
+    };
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.custom-dropdown-wrapper')) {
+        dropdown.classList.remove('show');
+        document.getElementById('dropdownClientes')?.classList.remove('show');
+      }
+    });
+  }
+
+  function aplicarMonedaYTasa() {
+    const sel = document.getElementById('selectMonedaVenta');
+    const inputTasa = document.getElementById('txtTasaCambio');
+    if (!sel || !inputTasa) return;
+
+    const opt = sel.selectedOptions[0];
+    estado.moneda = sel.value || 'Dolares';
+
+    let tasaNum = 1.0000;
+    if (opt && opt.dataset.tasa) {
+      tasaNum = parseNumero(opt.dataset.tasa) || 1.0000;
+    } else {
+      const mObj = catalogoMonedas.find(m => (m.nombre || m) === estado.moneda);
+      if (mObj) tasaNum = parseNumero(mObj.tasa) || 1.0000;
+    }
+
+    estado.tasa = tasaNum;
+    inputTasa.value = tasaNum.toFixed(4);
+    inputTasa.disabled = (estado.moneda === 'Bolivares');
+
+    recalcularTotales();
+    render();
+  }
+
+  function actualizarNumeroFactura() {
+    const inputNro = document.getElementById('txtNroFactura');
+    if (!inputNro) return;
+
+    // ✅ FIX: Si es NC o ND, avisar que se generará un correlativo nuevo
+    if (estado.tipoDoc === 'NC' || estado.tipoDoc === 'ND') {
+       estado.nroFactura = '';
+       inputNro.placeholder = "Calculando...";
+    }
+
+    if (typeof google === 'undefined' || !google.script || !google.script.run) {
+      estado.nroFactura = '000001';
+      inputNro.value = '000001';
+      sugerirDescripcion();
+      render();
+      return;
+    }
+
+    inputNro.placeholder = "Cargando...";
+    const idSpreadsheet = getIdSpreadsheetActiva();
+
+    google.script.run
+      .withSuccessHandler(nro => {
+        const limpio = String(nro || '').trim();
+        estado.nroFactura = (limpio && !limpio.toLowerCase().includes('error')) ? limpio : '000001';
+        inputNro.value = estado.nroFactura;
+        sugerirDescripcion();
+        render();
+      })
+      .withFailureHandler(() => {
+        estado.nroFactura = '000001';
+        inputNro.value = '000001';
+        sugerirDescripcion();
+        render();
+      })
+      .obtenerSiguienteNumeroFactura(estado.tipoDoc || 'Factura', 'Ventas', idSpreadsheet);
+  }
+
+  function limpiarFormulario(confirmar = true) {
+    const reset = () => {
+      estado = estadoInicial();
+      const doc = document;
+      const bCliente = doc.getElementById('txtBuscarCliente');
+      const rCliente = doc.getElementById('txtRifCliente');
+      const dCliente = doc.getElementById('txtDireccionCliente');
+      const nControl = doc.getElementById('txtNroControl');
+      const fAfectada = doc.getElementById('txtFacturaAfectada');
+      const desc = doc.getElementById('txtDescripcion');
+      const bProd = doc.getElementById('txtBuscarProducto');
+      const badgeSt = doc.getElementById('badgeStockVisual');
+      const bEstado = doc.getElementById('badgeEstadoDoc');
+      const selectMoneda = doc.getElementById('selectMonedaVenta');
+      const selectTipo = doc.getElementById('selectTipoDoc');
+
+      // ✅ FIX: Limpiar todo el DOM explícitamente
+      if (bCliente) bCliente.value = '';
+      if (rCliente) rCliente.value = '';
+      if (dCliente) dCliente.value = '';
+      if (nControl) nControl.value = '';
+      if (fAfectada) fAfectada.value = '';
+      if (desc) desc.value = '';
+      if (bProd) bProd.value = '';
+      if (badgeSt) badgeSt.style.display = 'none';
+      if (bEstado) bEstado.textContent = 'Nueva';
+      
+      // Resetear selects
+      if (selectTipo) selectTipo.value = 'Factura';
+      if (selectMoneda) selectMoneda.value = 'Dolares';
+
+      const chkDev = doc.getElementById('chkDevuelveStock');
+      if (chkDev) chkDev.checked = true;
+
+      // Inicializar fechas con hoy
+      const hoy = new Date().toISOString().split('T')[0];
+      const fEmision = doc.getElementById('txtFechaEmision');
+      const fRegistro = doc.getElementById('txtFechaRegistro');
+      if (fEmision) fEmision.value = hoy;
+      if (fRegistro) fRegistro.value = hoy;
+
+      actualizarBadgeEmpresa();
+      aplicarMonedaYTasa();
+      actualizarNumeroFactura();
+      recalcularTotales();
+      render();
+    };
+
+    if (confirmar) {
+      UI.toast.confirmar('¿Desea limpiar el formulario y los productos?', ok => {
+        if (ok) {
+          reset();
+          UI.toast.info('Formulario reiniciado');
+        }
+      });
+    } else {
+      reset();
+    }
+  }
+
+  function sugerirDescripcion() {
+    const txtDesc = document.getElementById('txtDescripcion');
+    if (txtDesc && !txtDesc.value.trim()) {
+      if (estado.idPedidoOrigen) {
+        txtDesc.value = `${estado.tipoDoc} Venta N° ${estado.nroFactura || '...'} (Pedido #${estado.idPedidoOrigen}) - ${estado.cliente.nombre || ''}`;
+      } else if (estado.cliente.nombre) {
+        txtDesc.value = `${estado.tipoDoc} de Venta N° ${estado.nroFactura || '...'} - ${estado.cliente.nombre}`;
+      }
+      estado.descripcion = txtDesc.value;
+    }
+  }
+
+  function agregarItem() {
+    if (!estado.itemBorrador) {
+      UI.toast.advertencia('Seleccione un producto o servicio de la lista.');
+      document.getElementById('txtBuscarProducto')?.focus();
+      return;
+    }
+
+    const inputCant = document.getElementById('txtCantidad');
+    const inputPrecio = document.getElementById('txtPrecioUnitario');
+    const selectIva = document.getElementById('selectIvaItem');
+
+    const cantidad = parseNumero(inputCant.value);
+    const precioUSD = parseNumero(inputPrecio.value);
+    const tasaIva = parseNumero(selectIva.value);
+
+    if (cantidad <= 0) {
+      UI.toast.advertencia('La cantidad debe ser mayor a 0.');
+      inputCant.focus();
+      return;
+    }
+
+    if (!estado.itemBorrador.esServicio) {
+      const stockDisp = getStockDisponible(estado.itemBorrador.codigo, estado.itemBorrador.stock);
+      if (cantidad > stockDisp) {
+        UI.toast.advertencia(`Stock insuficiente. Disponible: ${stockDisp}, Solicitado: ${cantidad}`);
+        inputCant.focus();
+        return;
+      }
+    }
+
+    const indexExistente = estado.items.findIndex(it => it.codigo === estado.itemBorrador.codigo);
+    if (indexExistente !== -1 && !estado.itemBorrador.esServicio) {
+      estado.items[indexExistente].cantidad += cantidad;
+      estado.items[indexExistente].precioUSD = precioUSD;
+      estado.items[indexExistente].tasaIva = tasaIva;
+    } else {
+      estado.items.push({
+        ...estado.itemBorrador,
+        cantidad,
+        precioUSD,
+        tasaIva
+      });
+    }
+
+    estado.itemBorrador = null;
+    document.getElementById('txtBuscarProducto').value = '';
+    const badgeStock = document.getElementById('badgeStockVisual');
+    if (badgeStock) badgeStock.style.display = 'none';
+    inputCant.value = '1';
+    inputCant.disabled = false;
+    inputPrecio.value = '0.00';
+
+    recalcularTotales();
+    render();
+    document.getElementById('txtBuscarProducto').focus();
+    UI.toast.exito('Producto agregado al detalle');
+  }
+
+  function eliminarItem(idx) {
+    if (idx >= 0 && idx < estado.items.length) {
+      estado.items.splice(idx, 1);
+      recalcularTotales();
+      render();
+      UI.toast.info('Renglón eliminado');
+    }
+  }
+
+  function editarItem(idx) {
+    if (idx >= 0 && idx < estado.items.length) {
+      const it = estado.items[idx];
+      estado.itemBorrador = { ...it };
+
+      document.getElementById('txtBuscarProducto').value = it.nombre;
+      document.getElementById('txtCantidad').value = it.cantidad;
+      document.getElementById('txtPrecioUnitario').value = it.precioUSD;
+      document.getElementById('selectIvaItem').value = it.tasaIva;
+
+      eliminarItem(idx);
+      document.getElementById('txtCantidad').focus();
+    }
+  }
+
+  // =========================================================================
+  // GUARDAR FACTURA MULTIEMPRESA
+  // =========================================================================
+  function guardarFactura() {
+    if (!estado.cliente.nombre) {
+      UI.toast.advertencia('Seleccione un cliente.');
+      document.getElementById('txtBuscarCliente')?.focus();
+      return;
+    }
+    if (!estado.nroFactura) {
+      UI.toast.error('No se ha asignado un número de factura.');
+      return;
+    }
+    if (!estado.nroControl.trim()) {
+      UI.toast.advertencia('El Número de Control es obligatorio.');
+      document.getElementById('txtNroControl')?.focus();
+      return;
+    }
+    if ((estado.tipoDoc === 'NC' || estado.tipoDoc === 'ND') && !estado.facturaAfectada.trim()) {
+      UI.toast.advertencia('Indique la factura que modifica.');
+      document.getElementById('txtFacturaAfectada')?.focus();
+      return;
+    }
+    if (estado.items.length === 0) {
+      UI.toast.advertencia('Agregue al menos un producto a la factura.');
+      return;
+    }
+
+    const idSpreadsheet = getIdSpreadsheetActiva();
+    if (!idSpreadsheet) {
+      UI.toast.error('No se ha detectado una empresa activa. Seleccione una empresa en el menú principal.');
+      return;
+    }
+
+    const esNC = estado.tipoDoc === 'NC';
+    let devuelveStock = true;
+    if (esNC) {
+      const chk = document.getElementById('chkDevuelveStock');
+      devuelveStock = chk ? !!chk.checked : true;
+    }
+
+    UI.loading('Guardando Venta...', 'Actualizando inventario y cuentas por cobrar en la empresa activa.');
+
+    const esNotaEntrega = estado.tipoDoc === 'NE';
+
+    const payload = {
+      idSpreadsheet: idSpreadsheet,
+      idEmpresa: idSpreadsheet,
+      empresaId: idSpreadsheet,
+      token: getToken(),
+      nombreCliente: estado.cliente.nombre,
+      rifCliente: estado.cliente.rif,
+      direccionCliente: estado.cliente.direccion,
+      fechaFacturaCliente: estado.fechaEmision,
+      fechaRegistro: estado.fechaRegistro,
+      tipoFacturaCliente: estado.tipoDoc,
+      nroFacturaCliente: estado.nroFactura,
+      nroControlCliente: estado.nroControl,
+      nroFacturaAfectada: estado.facturaAfectada || '',
+      selectMonedaVenta: estado.moneda,
+      monedaTasaVenta: estado.tasa,
+      condPago: estado.condPago,
+      subTotal: estado.totales.baseBs,
+      totalExento: estado.totales.exentoBs,
+      iva: estado.totales.ivaBs,
+      total: estado.totales.totalBs,
+      saldoCliente: estado.totales.totalBs,
+      totalClienteUSD: estado.totales.totalUSD,
+      saldoClienteUSD: estado.totales.totalUSD,
+      tipoTransaccion: 'Venta',
+      cobradaPagada: estado.condPago === 'Contado' ? 'Cobrada' : 'porCobrar',
+      descripcionVenta: estado.descripcion,
+      idPedidoOrigen: estado.idPedidoOrigen,
+      devuelveStock: devuelveStock,
+
+      items: estado.items.map(it => {
+        const tasaEfectiva = esNotaEntrega ? 0 : it.tasaIva;
+        const precioUnitarioBs = round2(it.precioUSD * estado.tasa);
+        const netoBs = round2(precioUnitarioBs * it.cantidad);
+        const ivaBs = round2(netoBs * (tasaEfectiva / 100));
+        const totalBs = round2(netoBs + ivaBs);
+
+        const netoUSD = round2(it.precioUSD * it.cantidad);
+        const ivaUSD = round2(netoUSD * (tasaEfectiva / 100));
+        const totalUSD = round2(netoUSD + ivaUSD);
+
+        return {
+          id: it.codigo,
+          codigo: it.codigo,
+          nombre: it.nombre,
+          producto: it.nombre,
+          categoria: it.categoria || '',
+          cantidad: it.cantidad,
+          precio: precioUnitarioBs,
+          precioUSD: it.precioUSD,
+          precioCompraUSD: it.precioCompraUSD || 0,
+          tasaIva: tasaEfectiva,
+          montoIva: ivaBs,
+          precioTotal: totalBs,
+          montoIVAUSD: ivaUSD,
+          precioTotalUSD: totalUSD,
+          cuentaContable: it.cuentaContable || '',
+          nombreCuenta: it.nombreCuenta || ''
+        };
+      })
+    };
+
+    if (typeof google !== 'undefined' && google.script && google.script.run) {
+      google.script.run
+        .withSuccessHandler(res => {
+          UI.ocultarLoading();
+          if (res && res.status === 'success') {
+            UI.toast.exito(res.message || 'Factura guardada correctamente.');
+            const nroGuardado = estado.nroFactura;
+            limpiarFormulario(false);
+            if (nroGuardado) cargarVistaPrevia(nroGuardado);
+          } else {
+            UI.toast.error(res?.message || 'Error al guardar la factura');
+          }
+        })
+        .withFailureHandler(err => {
+          UI.ocultarLoading();
+          UI.toast.error('Error en el servidor: ' + (err.message || err));
+        })
+        .guardarDatosFacturaVentas(payload);
+    } else {
+      UI.ocultarLoading();
+      UI.toast.exito('Modo Demo: Factura guardada');
+      limpiarFormulario(false);
+    }
+  }
+
+  function realizarBusquedaFacturas() {
+    const cliente = document.getElementById('busquedaCliente')?.value.trim() || '';
+    const nro = document.getElementById('busquedaNroFactura')?.value.trim() || '';
+    const idSpreadsheet = getIdSpreadsheetActiva();
+
+    UI.loading('Buscando facturas...', 'Consultando en la base de datos de la empresa activa.');
+
+    google.script.run
+      .withSuccessHandler(resultados => {
+        UI.ocultarLoading();
+        const tbody = document.getElementById('bodyResultadosBusqueda');
+        const container = document.getElementById('resultadosBusquedaContainer');
+        if (container) container.classList.remove('d-none');
+
+        if (!resultados || resultados.length === 0) {
+          if (tbody) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted"><i class="fas fa-search me-2"></i>No se encontraron facturas coincidentes</td></tr>';
+          }
+          return;
+        }
+
+        if (tbody) {
+          tbody.innerHTML = resultados.map(f => {
+            const montoTotal = Number(f.total) || 0;
+            const estadoDoc = f.status || 'Activa';
+            const esAnulada = estadoDoc.toLowerCase() === 'anulada';
+            const badgeEstado = esAnulada 
+              ? '<span class="badge bg-danger">Anulada</span>' 
+              : '<span class="badge bg-success">Activa</span>';
+
+            const btnAnular = !esAnulada 
+              ? `<button class="btn btn-table text-danger" onclick="window.ModuloVentas.solicitarAnulacion('${f.nroFacturaCliente}')" title="Anular Factura"><i class="fas fa-ban"></i></button>` 
+              : '';
+
+            return `
+              <tr>
+                <td class="fw-bold font-monospace text-primary">${f.nroFacturaCliente}</td>
+                <td class="fw-semibold">${f.nombreCliente || 'N/A'}</td>
+                <td class="text-muted font-monospace">${f.fechaFacturaCliente || '-'}</td>
+                <td class="text-center">${badgeEstado}</td>
+                <td class="text-end fw-bold text-success">${formatMoney(montoTotal, 'Bs')}</td>
+                <td class="text-center">
+                  <button class="btn btn-table me-1" onclick="window.ModuloVentas.cargarVistaPrevia('${f.nroFacturaCliente}')" title="Ver Comprobante"><i class="fas fa-eye"></i></button>
+                  ${btnAnular}
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      })
+      .withFailureHandler(err => {
+        UI.ocultarLoading();
+        UI.toast.error('Error en la búsqueda: ' + err.message);
+      })
+      .buscarFacturas(cliente, nro, idSpreadsheet);
+  }
+
+  function cargarVistaPrevia(nroFactura) {
+    UI.loading('Cargando Comprobante...', `Factura N° ${nroFactura}`);
+    const idSpreadsheet = getIdSpreadsheetActiva();
+
+    google.script.run
+      .withSuccessHandler(data => {
+        UI.ocultarLoading();
+        if (!data) return;
+
+        const html = generarHtmlFactura(data);
+        const iframe = document.getElementById('iframeVistaPrevia');
+        const cont = document.getElementById('vistaPreviaFacturaContainer');
+
+        if (iframe) iframe.srcdoc = html;
+        if (cont) cont.classList.remove('d-none');
+        cambiarVista('consultar');
+      })
+      .withFailureHandler(err => {
+        UI.ocultarLoading();
+        UI.toast.error(err.message);
+      })
+      .obtenerDatosCompletosFactura(nroFactura, idSpreadsheet);
+  }
+
+  function solicitarAnulacion(nroFactura) {
+    const idSpreadsheet = getIdSpreadsheetActiva();
+    UI.toast.confirmar(`¿Desea anular la factura N° ${nroFactura}? Se restaurará el inventario vendido en la empresa activa.`, ok => {
+      if (ok) {
+        UI.loading('Anulando factura...');
+        google.script.run
+          .withSuccessHandler(res => {
+            UI.ocultarLoading();
+            UI.toast.exito(res?.message || 'Factura anulada.');
+            realizarBusquedaFacturas();
+          })
+          .withFailureHandler(err => {
+            UI.ocultarLoading();
+            UI.toast.error(err.message);
+          })
+          .anularFacturaVenta(nroFactura, idSpreadsheet);
+      }
+    });
+  }
+
+  function generarHtmlFactura(data) {
+    const items = Array.isArray(data.items) ? data.items : [];
+    const emp = getEmpresaActiva() || {};
+    const nombreEmp = emp.nombreEmpresa || emp.nombre || data.empresaData?.nombre || 'MI EMPRESA';
+    const rifEmp = emp.rifEmpresa || emp.rif || data.empresaData?.rif || 'J-00000000-0';
+    const dirEmp = emp.direccion || data.empresaData?.direccion || '';
+
+    const filasHtml = items.map(it => `
+      <tr>
+        <td style="text-align:center;">${it.cantidad}</td>
+        <td>${it.producto || it.nombre}</td>
+        <td style="text-align:center;">${it.tasaIva}%</td>
+        <td style="text-align:right;">${formatMoney(it.precio)}</td>
+        <td style="text-align:right;">${formatMoney(it.precioTotal)}</td>
+      </tr>
+    `).join('');
+
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: Arial, sans-serif; font-size: 11px; padding: 20px; color: #333; }
+          .header { display: flex; justify-content: space-between; border-bottom: 2px solid #2563eb; padding-bottom: 10px; }
+          table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+          th { background: #f1f5f9; padding: 6px; border-bottom: 1px solid #cbd5e1; text-align: left; }
+          td { padding: 6px; border-bottom: 1px solid #e2e8f0; }
+          .totales { margin-top: 15px; text-align: right; }
+          .total-p { font-size: 14px; font-weight: bold; color: #2563eb; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <h2 style="margin:0; color:#2563eb;">${nombreEmp}</h2>
+            <p style="margin:2px 0;">RIF: ${rifEmp}</p>
+            <p style="margin:2px 0;">${dirEmp}</p>
+          </div>
+          <div style="text-align:right;">
+            <h3 style="margin:0;">${data.tipoFacturaCliente || 'FACTURA'}</h3>
+            <p style="margin:2px 0; font-weight:bold;">N° ${data.nroFacturaCliente}</p>
+            <p style="margin:2px 0;">Control: ${data.nroControlCliente || '-'}</p>
+          </div>
+        </div>
+        <div style="margin-top:15px; padding:8px; background:#f8fafc; border-radius:6px;">
+          <p style="margin:2px 0;"><strong>Cliente:</strong> ${data.nombreCliente}</p>
+          <p style="margin:2px 0;"><strong>RIF:</strong> ${data.rifCliente}</p>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Cant</th><th>Descripción</th><th>IVA</th><th style="text-align:right;">Precio</th><th style="text-align:right;">Total Bs</th></tr>
+          </thead>
+          <tbody>${filasHtml}</tbody>
+        </table>
+        <div class="totales">
+          <p>Base Imponible: ${formatMoney(data.subTotal)} Bs</p>
+          <p>Exento: ${formatMoney(data.totalExento)} Bs</p>
+          <p>IVA: ${formatMoney(data.iva)} Bs</p>
+          <p class="total-p">TOTAL: ${formatMoney(data.total)} Bs</p>
+        </div>
+      </body>
+      </html>
+    `;
+  }
+
+  function generarLibroVentas() {
+    const desde = document.getElementById('fechaDesdeLibro').value;
+    const hasta = document.getElementById('fechaHastaLibro').value;
+    const filtro = document.getElementById('filtroClienteLibro').value.trim();
+    const idSpreadsheet = getIdSpreadsheetActiva();
+
+    if (!desde || !hasta) {
+      UI.toast.advertencia('Seleccione ambas fechas.');
+      return;
+    }
+
+    UI.loading('Generando Libro de Ventas...');
+
+    google.script.run
+      .withSuccessHandler(data => {
+        UI.ocultarLoading();
+        datosLibroVentas = Array.isArray(data) ? data : [];
+        renderTablaLibro();
+      })
+      .withFailureHandler(err => {
+        UI.ocultarLoading();
+        UI.toast.error(err.message);
+      })
+      .obtenerLibroVentas(desde, hasta, filtro, idSpreadsheet);
+  }
+
+  function renderTablaLibro() {
+    const tbody = document.getElementById('tbodyLibroVentas');
+    const tablaCont = document.getElementById('tabla-libro-container');
+
+    if (datosLibroVentas.length === 0) {
+      UI.toast.advertencia('No hay registros en el período.');
+      tablaCont?.classList.add('d-none');
+      return;
+    }
+
+    tablaCont?.classList.remove('d-none');
+    tbody.innerHTML = datosLibroVentas.map((f, i) => `
+      <tr>
+        <td class="text-center font-monospace">${i + 1}</td>
+        <td class="text-center">${f.fechaFacturaCliente}</td>
+        <td class="text-center font-monospace">${f.rifCliente}</td>
+        <td>${f.nombreCliente}</td>
+        <td class="text-center"><span class="badge bg-primary">${f.tipoFacturaCliente}</span></td>
+        <td class="text-center fw-bold">${f.nroFacturaCliente}</td>
+        <td class="text-center font-monospace">${f.nroControlCliente || '-'}</td>
+        <td class="text-end fw-bold">${formatMoney(f.total)}</td>
+        <td class="text-end">${formatMoney(f.totalExento)}</td>
+        <td class="text-end">${formatMoney(f.subTotal)}</td>
+        <td class="text-end">${formatMoney(f.iva)}</td>
+      </tr>
+    `).join('');
+  }
+
+  function cambiarVista(vista) {
+    const iframePrev = document.getElementById('iframeVistaPrevia');
+    if (iframePrev && vista !== 'consultar') {
+      iframePrev.srcdoc = '';
+      document.getElementById('vistaPreviaFacturaContainer')?.classList.add('d-none');
+    }
+
+    estado.vistaActiva = vista;
+    const vCrear = document.getElementById('container-crear-factura');
+    const vConsultar = document.getElementById('container-consultar-factura');
+    const vLibro = document.getElementById('container-libro-ventas');
+    const btnCrear = document.getElementById('btnNavCrear');
+    const btnConsultar = document.getElementById('btnNavConsultar');
+    const btnLibro = document.getElementById('btnNavLibro');
+    const pageTitle = document.getElementById('page-title');
+
+    vCrear?.classList.add('d-none');
+    vConsultar?.classList.add('d-none');
+    vLibro?.classList.add('d-none');
+    btnCrear?.classList.remove('d-none');
+    btnConsultar?.classList.remove('d-none');
+    btnLibro?.classList.remove('d-none');
+
+    if (vista === 'crear') {
+      vCrear?.classList.remove('d-none');
+      btnCrear?.classList.add('d-none');
+      if (pageTitle) pageTitle.innerHTML = '<i class="fas fa-file-invoice-dollar"></i> Cargar Ventas';
+      render();
+    } else if (vista === 'consultar') {
+      vConsultar?.classList.remove('d-none');
+      btnConsultar?.classList.add('d-none');
+      if (pageTitle) pageTitle.innerHTML = '<i class="fas fa-search"></i> Consultar Facturas de Venta';
+    } else if (vista === 'libro') {
+      vLibro?.classList.remove('d-none');
+      btnLibro?.classList.add('d-none');
+      if (pageTitle) pageTitle.innerHTML = '<i class="fas fa-book"></i> Libro de Ventas';
+    }
+  }
+
+  function cargarCatalogos() {
+    if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+    const idSpreadsheet = getIdSpreadsheetActiva();
+
+    let pendientes = 3;
+    const fin = () => {
+      pendientes--;
+      if (pendientes <= 0) UI.ocultarLoading();
+    };
+
+    google.script.run
+      .withSuccessHandler(data => {
+        catalogoClientes = normalizarListaClientes(data);
+        fin();
+      })
+      .withFailureHandler(() => fin())
+      .getDataClientesActivos(idSpreadsheet);
+
+    google.script.run
+      .withSuccessHandler(data => {
+        catalogoProductos = normalizarListaProductos(data);
+        fin();
+      })
+      .withFailureHandler(() => fin())
+      .getDataProductos(idSpreadsheet);
+
+    google.script.run
+      .withSuccessHandler(data => {
+        catalogoMonedas = Array.isArray(data) ? data : [{ nombre: 'Dolares', tasa: 1 }, { nombre: 'Bolivares', tasa: 1 }];
+        const sel = document.getElementById('selectMonedaVenta');
+        if (sel) {
+          sel.innerHTML = catalogoMonedas.map(m => {
+            const nom = m.nombre || m;
+            let tasa = parseNumero(m.tasa) || 1;
+            return `<option value="${nom}" data-tasa="${tasa}">${nom}</option>`;
+          }).join('');
+
+          sel.value = 'Dolares';
+          aplicarMonedaYTasa();
+        }
+        fin();
+      })
+      .withFailureHandler(() => fin())
+      .getDataMoneda();
+  }
+
+  function bindEvents() {
+    if (eventsBound) return;
+    eventsBound = true;
+
+    const doc = document;
+
+    doc.getElementById('selectTipoDoc')?.addEventListener('change', e => {
+      estado.tipoDoc = e.target.value;
+      actualizarNumeroFactura();
+      recalcularTotales();
+      render();
+    });
+
+    doc.getElementById('txtNroControl')?.addEventListener('input', e => {
+      estado.nroControl = e.target.value.trim();
+      render();
+    });
+
+    doc.getElementById('txtFacturaAfectada')?.addEventListener('input', e => {
+      estado.facturaAfectada = e.target.value.trim();
+    });
+
+    doc.getElementById('selectMonedaVenta')?.addEventListener('change', aplicarMonedaYTasa);
+
+    doc.getElementById('txtTasaCambio')?.addEventListener('input', e => {
+      estado.tasa = parseNumero(e.target.value) || 1;
+      recalcularTotales();
+      render();
+    });
+
+    doc.getElementById('selectCondPago')?.addEventListener('change', e => {
+      estado.condPago = e.target.value;
+    });
+
+    doc.getElementById('txtFechaEmision')?.addEventListener('change', e => { estado.fechaEmision = e.target.value; });
+    doc.getElementById('txtFechaRegistro')?.addEventListener('change', e => { estado.fechaRegistro = e.target.value; });
+    doc.getElementById('txtDescripcion')?.addEventListener('input', e => { estado.descripcion = e.target.value; });
+
+    doc.getElementById('btnAutoDesc')?.addEventListener('click', sugerirDescripcion);
+    doc.getElementById('btnAgregarItem')?.addEventListener('click', agregarItem);
+    doc.getElementById('btnGuardarFacturaFloating')?.addEventListener('click', guardarFactura);
+    doc.getElementById('btnCancelarFacturaFloating')?.addEventListener('click', () => limpiarFormulario(true));
+
+    doc.getElementById('formBusquedaFacturas')?.addEventListener('submit', e => {
+      e.preventDefault();
+      realizarBusquedaFacturas();
+    });
+
+    doc.getElementById('btnImprimirVistaPrevia')?.addEventListener('click', () => {
+      const iframe = doc.getElementById('iframeVistaPrevia');
+      iframe?.contentWindow?.print();
+    });
+
+    doc.getElementById('btnGenerarLibroVentas')?.addEventListener('click', generarLibroVentas);
+
+    setupAutocompleteClientes();
+    setupAutocompleteProductos();
+
+    // ✅ FIX: Cierre global de dropdowns
+    doc.addEventListener('click', cerrarDropdownsFuera);
+  }
+
+  function cerrarDropdownsFuera(e) {
+    if (!e.target.closest('.custom-dropdown-wrapper')) {
+      document.getElementById('dropdownClientes')?.classList.remove('show');
+      document.getElementById('dropdownProductos')?.classList.remove('show');
+    }
+  }
+
+  function unmount() {
+    isMounted = false;
+    document.getElementById('dropdownClientes')?.classList.remove('show');
+    document.getElementById('dropdownProductos')?.classList.remove('show');
+    
+    // ✅ FIX: Remover el listener global
+    document.removeEventListener('click', cerrarDropdownsFuera);
+    
+    limpiarFormulario(false);
+  }
+
+  function mount() {
+    isMounted = true;
+    bindEvents();
+    actualizarBadgeEmpresa();
+    limpiarFormulario(false);
+    cargarCatalogos();
+    actualizarNumeroFactura();
+    render();
+    console.log('✅ [ModuloVentas] Conectado dinámicamente a la empresa activa:', getIdSpreadsheetActiva());
+  }
+
+  window.ModuloVentas = {
+    mount,
+    unmount,
+    cambiarVista,
+    agregarItem,
+    eliminarItem,
+    editarItem,
+    limpiarFormulario,
+    guardarFactura,
+    cargarVistaPrevia,
+    solicitarAnulacion
+  };
+
+  window.initFacturasVentas = function() {
+    if (window.ModuloVentas && typeof window.ModuloVentas.mount === 'function') {
+      window.ModuloVentas.mount();
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mount);
+  } else {
+    mount();
+  }
+
+})(window);
+</script>

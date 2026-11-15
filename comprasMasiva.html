@@ -1,0 +1,1865 @@
+<!-- CARGA MASIVA DE COMPRAS CON OCR - ADAPTADO A SPA Y RESETEO LIMPIO -->
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carga Masiva de Facturas</title>
+
+<style>
+:root{--primary:#f97316;--primary-dark:#ea580c;--primary-light:#fb923c;--bg-body:#0a0a0f;--bg-card:rgba(255,255,255,0.06);--text-main:#f1f5f9;--text-light:#94a3b8;--glass-border:rgba(255,255,255,0.12);--glass-blur:blur(16px);--danger:#ef4444;--success:#10b981;--warning:#f59e0b;--info:#3b82f6;--shadow:0 8px 32px rgba(0,0,0,0.4);--ocr-bg:#0f172a;--dropdown-bg:#1a1a2e;--dropdown-hover:rgba(249,115,22,0.15)}*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',-apple-system,'Segoe UI',Roboto,sans-serif;background:transparent;color:var(--text-main);font-size:13px;min-height:100vh}body.overlay-activo{overflow:hidden}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.appsheet-tabs-container{display:flex;background:rgba(26,26,46,0.95);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:14px;padding:4px;margin-bottom:14px;position:sticky;top:10px;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.5)}.appsheet-tab-btn{flex:1;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;background:transparent;border:none;color:var(--text-light);font-size:12px;font-weight:700;padding:10px 6px;border-radius:10px;cursor:pointer;transition:all 0.2s ease}.appsheet-tab-btn.active{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#fff;box-shadow:0 2px 10px rgba(249,115,22,0.4)}.appsheet-tab-btn i{font-size:14px}.badge-tab-count{background:rgba(0,0,0,0.4);font-size:10px;padding:2px 6px;border-radius:8px}.card{background:var(--bg-card)!important;backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border)!important;border-radius:16px!important;box-shadow:var(--shadow);margin-bottom:16px;overflow:visible!important}.card-header{background:transparent!important;border-bottom:1px solid var(--glass-border)!important;padding:12px 18px}.card-header h5{font-weight:600;font-size:14px;color:var(--text-main);display:flex;align-items:center;gap:8px;margin:0}.card-header h5 i{color:var(--primary)}.card-body{padding:14px 18px}.form-label{color:var(--text-light);font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}.form-control,.form-select{background:rgba(255,255,255,0.08)!important;border:1.5px solid var(--glass-border)!important;border-radius:10px!important;color:var(--text-main)!important;padding:6px 12px;font-size:13px;height:38px}.form-control:focus,.form-select:focus{border-color:var(--primary)!important;box-shadow:0 0 0 3px rgba(249,115,22,0.15)!important}.form-control.is-invalid,.form-select.is-invalid{border-color:var(--danger)!important;box-shadow:0 0 0 3px rgba(239,68,68,0.15)!important}.form-control.is-warning,.form-select.is-warning{border-color:var(--warning)!important;box-shadow:0 0 0 3px rgba(245,158,11,0.15)!important}.btn-primary{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%)!important;border:none!important;color:#fff!important;border-radius:10px!important}.btn-primary:hover{background:linear-gradient(135deg,var(--primary-light) 0%,var(--primary) 100%)!important}.btn-primary:disabled{background:rgba(255,255,255,0.08)!important;color:var(--text-light)!important;opacity:.6}.btn-info{background:rgba(59,130,246,0.2)!important;border:1px solid rgba(59,130,246,0.4)!important;color:#93c5fd!important;border-radius:10px!important}.btn-info:hover{background:rgba(59,130,246,0.35)!important;color:#fff!important}.btn-dynamic{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);color:var(--text-main);border-radius:10px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s ease}.btn-dynamic:hover{border-color:var(--primary);background:rgba(249,115,22,0.15)}.btn-dynamic.aceptar{border-color:rgba(16,185,129,0.3)}.btn-dynamic.aceptar:hover{background:rgba(16,185,129,0.2);color:var(--success)}.btn-dynamic.advertencia{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);color:#fff;border:none}.dropzone-ocr{position:relative;border:2px dashed rgba(249,115,22,0.35);background:rgba(249,115,22,0.03);border-radius:14px;min-height:120px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;overflow:hidden}.dropzone-ocr.dragover{border-color:var(--primary);background:rgba(249,115,22,0.1)}.dropzone-file-input{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:10}.dropzone-content{pointer-events:none;z-index:1}.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px;margin-top:10px}.preview-thumb{position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--glass-border);aspect-ratio:3/4;background:var(--ocr-bg)}.preview-thumb img{width:100%;height:100%;object-fit:cover}.preview-thumb .btn-remove{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:rgba(239,68,68,0.9);color:#fff;border:none;font-size:10px;display:flex;align-items:center;justify-content:center;z-index:15}.resumen-badge{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:14px;padding:10px 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(75px,1fr));gap:8px;align-items:center;margin-bottom:14px}.resumen-item{text-align:center}.resumen-label{font-size:9px;text-transform:uppercase;color:var(--text-light);font-weight:600}.resumen-valor{font-size:14px;font-weight:800;color:var(--text-main)}.dropdown-container{position:relative;z-index:100}.custom-dropdown{position:absolute;top:100%;left:0;right:0;background:#1a1a2e!important;backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:12px;max-height:220px;overflow-y:auto;z-index:1050;box-shadow:0 20px 60px rgba(0,0,0,0.8);display:none;margin-top:4px;padding:4px 0}.dropdown-option{padding:10px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;color:var(--text-main);font-size:13px}.dropdown-option:hover,.dropdown-option.activo{background:rgba(249,115,22,0.15)!important}.dropdown-empty{padding:10px 14px;color:var(--text-light);font-size:12px;text-align:center}.badge-estado{padding:3px 7px;border-radius:10px;font-size:9.5px;font-weight:700}.badge-pendiente{background:rgba(245,158,11,0.2);color:var(--warning)}.badge-validado{background:rgba(16,185,129,0.2);color:var(--success)}.badge-error{background:rgba(239,68,68,0.2);color:var(--danger)}.badge-duplicado{background:rgba(239,68,68,0.25);color:#fca5a5;border:1px solid rgba(239,68,68,0.4)}.ocr-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center}.ocr-overlay.active{display:flex}.ocr-spinner{width:45px;height:45px;border:3px solid rgba(249,115,22,0.2);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}#overlay{backdrop-filter:blur(10px);background:rgba(0,0,0,0.6);position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:none;justify-content:center;align-items:center}.spinner-modern{width:48px;height:48px;border:3px solid rgba(249,115,22,0.15);border-top-color:var(--primary);border-radius:50%;animation:spin .9s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.validation-message{font-size:11px;padding:6px 10px;border-radius:6px;margin-top:4px;display:none}.validation-message.error{display:block;background:rgba(239,68,68,0.15);color:var(--danger);border:1px solid rgba(239,68,68,0.3)}.validation-message.success{display:block;background:rgba(16,185,129,0.15);color:var(--success);border:1px solid rgba(16,185,129,0.3)}.validation-message.warning{display:block;background:rgba(245,158,11,0.15);color:var(--warning);border:1px solid rgba(245,158,11,0.3)}.panel-bs{background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.3);padding:8px;border-radius:8px}.panel-concepto{background:rgba(249,115,22,0.05);border:1px solid rgba(249,115,22,0.2);padding:8px;border-radius:8px}.panel-usd{background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);padding:8px;border-radius:8px}.tasa-global-container{background:linear-gradient(135deg,rgba(249,115,22,0.12) 0%,rgba(249,115,22,0.05) 100%);border:1px solid rgba(249,115,22,0.35);border-radius:12px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.tasa-global-container label{font-size:11px;font-weight:700;text-transform:uppercase;color:var(--warning);margin:0;white-space:nowrap}.tasa-global-container input{max-width:140px;height:36px!important;font-size:14px!important;font-weight:700;text-align:right;color:var(--warning)!important}.tasa-global-container .tasa-hint{font-size:10.5px;color:var(--text-light);flex:1;min-width:120px}.badge-ocr{display:inline-flex;align-items:center;gap:3px;font-size:9px;padding:2px 5px;border-radius:6px;font-weight:600}.badge-ocr.ok{background:rgba(16,185,129,0.2);color:var(--success)}.badge-ocr.fail{background:rgba(239,68,68,0.2);color:var(--danger)}.badge-ocr.warn{background:rgba(245,158,11,0.2);color:var(--warning)}.table-precarga tbody tr{cursor:pointer}.modal-resultado{max-height:70vh;overflow-y:auto;text-align:left}@media (min-width:769px){.appsheet-tabs-container{display:none!important}.seccion-app{display:block!important}.table-precarga thead th{position:sticky;top:0;background:rgba(249,115,22,0.12);padding:9px 8px;font-size:11px}.table-precarga tbody tr{border-bottom:1px solid var(--glass-border)}.table-precarga tbody tr:hover,.table-precarga tbody tr.tr-selected{background:rgba(249,115,22,0.15)!important}}@media (max-width:768px){body{padding-bottom:30px}.container-fluid{padding-left:10px;padding-right:10px}.form-control,.form-select{font-size:16px!important;height:42px!important}.mobile-hide{display:none!important}.tasa-global-container{flex-direction:column;align-items:stretch}.tasa-global-container input{max-width:100%}.table-precarga{overflow:visible!important}.table-precarga table,.table-precarga thead,.table-precarga tbody,.table-precarga th,.table-precarga td,.table-precarga tr{display:block;width:100%}.table-precarga thead{display:none}.table-precarga tbody tr{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:14px;padding:12px 14px;margin-bottom:12px;position:relative;box-shadow:0 4px 15px rgba(0,0,0,0.25);transition:transform 0.15s ease}.table-precarga tbody tr:active{transform:scale(0.98)}.table-precarga tbody tr.tr-selected{border-color:var(--primary)!important;background:rgba(249,115,22,0.1)!important}.table-precarga tbody tr.tr-validado{border-left:4px solid var(--success)!important}.table-precarga tbody tr.tr-pendiente{border-left:4px solid var(--warning)!important}.table-precarga tbody tr.tr-error{border-left:4px solid var(--danger)!important}.table-precarga tbody tr.tr-duplicado{border-left:4px solid var(--danger)!important;background:rgba(239,68,68,0.08)!important}.table-precarga td{padding:3px 0!important;border:none!important}}
+</style>
+</head>
+<body>
+
+<h1 class="sr-only">Carga Masiva de Facturas de Compras</h1>
+
+<!-- SPINNER LOCAL CON MENSAJE -->
+<div id="overlay" role="status" aria-live="polite" aria-hidden="true">
+  <div style="text-align:center;">
+    <div class="spinner-modern" style="margin: 0 auto 16px;"></div>
+    <div id="overlayMensaje" style="color: var(--text-light); font-weight:600; letter-spacing:0.1em; text-transform:uppercase; font-size:13px;">Cargando datos...</div>
+  </div>
+</div>
+
+<!-- OVERLAY OCR -->
+<div id="ocrOverlay" class="ocr-overlay" role="status" aria-live="polite" aria-hidden="true">
+  <div class="ocr-spinner"></div>
+  <h5 style="color:var(--text-main);" id="ocrOverlayTitle">Procesando Factura...</h5>
+  <p style="color:var(--text-light);font-size:12px;" id="ocrOverlayText">Analizando documento fiscal...</p>
+  <p style="color:var(--text-light);font-size:11px;margin-top:8px;" id="ocrProgreso"></p>
+</div>
+
+<div class="container-fluid py-2">
+  
+  <div class="appsheet-tabs-container" role="tablist" aria-label="Navegación de secciones">
+    <button class="appsheet-tab-btn active" id="tabBtnCaptura" role="tab" aria-selected="true" aria-controls="secCaptura" onclick="cambiarTabAppSheet('captura')">
+      <i class="fas fa-camera" aria-hidden="true"></i>
+      <span>Captura</span>
+    </button>
+    <button class="appsheet-tab-btn" id="tabBtnFacturas" role="tab" aria-selected="false" aria-controls="secFacturas" onclick="cambiarTabAppSheet('facturas')">
+      <i class="fas fa-list-alt" aria-hidden="true"></i>
+      <span>Facturas <span class="badge-tab-count" id="tabCountBadge">0</span></span>
+    </button>
+    <button class="appsheet-tab-btn" id="tabBtnEditor" role="tab" aria-selected="false" aria-controls="secEditor" onclick="cambiarTabAppSheet('editor')">
+      <i class="fas fa-edit" aria-hidden="true"></i>
+      <span>Detalle</span>
+    </button>
+  </div>
+
+  <!-- TASA GLOBAL -->
+  <div class="tasa-global-container">
+    <label for="tasaGlobal"><i class="fas fa-exchange-alt" aria-hidden="true"></i> Tasa BCV (Bs/USD)</label>
+    <input type="number" step="0.0001" id="tasaGlobal" class="form-control" placeholder="0.0000" autocomplete="off" onchange="aplicarTasaGlobal()">
+    <span class="tasa-hint" id="tasaHint">Se aplica a todas las facturas. Cambiarla recalcula los equivalentes en USD.</span>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-xl-4 col-lg-5 col-md-12">
+      
+      <div class="card seccion-app" id="secCaptura">
+        <div class="card-header"><h2 class="h5 m-0"><i class="fas fa-camera" aria-hidden="true"></i> 1. Captura de Documentos</h2></div>
+        <div class="card-body">
+          <div class="dropzone-ocr" id="dropzoneOcr">
+            <input type="file" id="fileInputOcr" multiple accept="image/*,application/pdf" capture="environment" aria-label="Subir o tomar fotos de facturas" class="dropzone-file-input">
+            <div class="dropzone-content p-3">
+              <i class="fas fa-cloud-upload-alt display-6 text-warning mb-2" aria-hidden="true"></i>
+              <h3 class="h6">Toca o arrastra tus facturas</h3>
+              <p class="mb-0 text-muted small">Cámara, fotos o archivos PDF</p>
+            </div>
+          </div>
+          <div id="previewGrid" class="preview-grid" aria-live="polite"></div>
+          <button type="button" class="btn btn-primary w-100 mt-3 py-2 fw-bold" id="btnProcesarOcr" onclick="procesarLoteOcr()" disabled>
+            <i class="fas fa-microchip me-1" aria-hidden="true"></i> <span id="btnProcText">Procesar Documentos</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card seccion-app" id="secEditor">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2 class="h5 m-0"><i class="fas fa-edit" aria-hidden="true"></i> 2. Detalle de Factura</h2>
+          <span class="badge bg-secondary" id="lblFilaSeleccionada">Ninguna</span>
+        </div>
+        <div class="card-body">
+          <div id="validationSummary" class="validation-message" role="alert" aria-live="polite"></div>
+          
+          <form id="formEditorFactura" novalidate onsubmit="event.preventDefault(); aplicarCambiosEditor();">
+            <input type="hidden" id="editFilaId">
+            
+            <div class="mb-2 dropdown-container">
+              <label class="form-label" for="editProveedorNombre">Proveedor <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <input type="text" id="editProveedorNombre" class="form-control" placeholder="Nombre Comercial" autocomplete="off">
+                <button class="btn btn-info px-3" type="button" onclick="abrirModalNuevoProveedor()" title="Agregar nuevo proveedor" aria-label="Agregar nuevo proveedor"><i class="fas fa-plus" aria-hidden="true"></i></button>
+              </div>
+              <div id="dropdownProv" class="custom-dropdown" role="listbox" aria-label="Sugerencias de proveedores"></div>
+            </div>
+            
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <label class="form-label" for="editProveedorRif">RIF Proveedor <span class="text-danger">*</span></label>
+                <input type="text" id="editProveedorRif" class="form-control" placeholder="J-00000000-0" autocomplete="off">
+                <small id="hintRif" class="d-block mt-1" style="font-size:10px;"></small>
+              </div>
+              <div class="col-6">
+                <label class="form-label" for="editTipoDoc">Tipo Doc.</label>
+                <select id="editTipoDoc" class="form-select">
+                  <option value="factura">Factura</option>
+                  <option value="nota_credito">Nota Crédito</option>
+                  <option value="nota_debito">Nota Débito</option>
+                </select>
+              </div>
+            </div>
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <label class="form-label" for="editNroFactura">N° Factura <span class="text-danger">*</span></label>
+                <input type="text" id="editNroFactura" class="form-control" placeholder="000000" autocomplete="off">
+              </div>
+              <div class="col-6">
+                <label class="form-label" for="editNroControl">N° Control <span class="text-danger">*</span></label>
+                <input type="text" id="editNroControl" class="form-control" placeholder="00-000000" autocomplete="off">
+              </div>
+            </div>
+            <div class="row g-2 mb-2">
+              <div class="col-6">
+                <label class="form-label" for="editFecha">Fecha <span class="text-danger">*</span></label>
+                <input type="date" id="editFecha" class="form-control" autocomplete="off">
+              </div>
+              <div class="col-6">
+                <label class="form-label" for="editTasaCambio">Tasa Cambio</label>
+                <input type="number" step="0.0001" id="editTasaCambio" class="form-control text-end" placeholder="0.00" autocomplete="off" oninput="recalcularDesdeBs()">
+              </div>
+            </div>
+
+            <div id="ocrDetalles" class="mb-2"></div>
+
+            <div class="panel-concepto mb-2">
+              <label class="form-label" for="editConceptoGasto"><i class="fas fa-tag" aria-hidden="true"></i> Concepto de Gasto <span class="text-danger">*</span></label>
+              <input type="text" id="editConceptoGasto" class="form-control mb-2" placeholder="Ej: Compra de Mercancía" value="COMPRA DIVERSA" autocomplete="off">
+              
+              <div class="dropdown-container">
+                <label class="form-label" for="editCuentaContable"><i class="fas fa-book" aria-hidden="true"></i> Cuenta Contable <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <input type="text" id="editCuentaContable" class="form-control" placeholder="Buscar cuenta..." autocomplete="off">
+                  <button class="btn btn-info px-3" type="button" onclick="abrirModalCuentaContable()" aria-label="Ver lista de cuentas contables"><i class="fas fa-list" aria-hidden="true"></i></button>
+                </div>
+                <div id="dropdownCuentas" class="custom-dropdown cuenta-contable-select" role="listbox" aria-label="Sugerencias de cuentas contables"></div>
+              </div>
+            </div>
+
+            <div class="panel-bs mb-2">
+              <span class="text-xs fw-bold text-warning d-block mb-1"><i class="fas fa-coins me-1" aria-hidden="true"></i> Montos en Bolívares (Bs)</span>
+              <div class="row g-2">
+                <div class="col-4">
+                  <label class="form-label" for="editSubtotalBs">Subtotal</label>
+                  <input type="number" step="0.01" id="editSubtotalBs" class="form-control text-end" autocomplete="off" oninput="recalcularDesdeBs()">
+                </div>
+                <div class="col-4">
+                  <label class="form-label" for="editIvaBs">IVA (Bs)</label>
+                  <input type="number" step="0.01" id="editIvaBs" class="form-control text-end" autocomplete="off" oninput="recalcularDesdeIvaBs()">
+                </div>
+                <div class="col-4">
+                  <label class="form-label" for="editTotalBs">Total (Bs) <span class="text-danger">*</span></label>
+                  <input type="number" step="0.01" id="editTotalBs" class="form-control text-end fw-bold text-warning" autocomplete="off" oninput="recalcularDesdeTotalBs()">
+                </div>
+              </div>
+              <div class="row g-2 mt-1">
+                <div class="col-4">
+                  <label class="form-label" for="editIvaPorc">% IVA</label>
+                  <input type="number" id="editIvaPorc" class="form-control text-end" value="16" autocomplete="off" oninput="recalcularDesdeBs()">
+                </div>
+                <div class="col-8">
+                  <label class="form-label">Verificación</label>
+                  <div id="checkMat" style="font-size:11px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);height:38px;display:flex;align-items:center;color:var(--text-light);">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-usd mb-3">
+              <span class="text-xs fw-bold text-success d-block mb-1"><i class="fas fa-dollar-sign me-1" aria-hidden="true"></i> Equivalente en Dólares (USD)</span>
+              <div class="row g-2">
+                <div class="col-4">
+                  <label class="form-label" for="editSubtotalUSD">Subtotal ($)</label>
+                  <input type="number" step="0.01" id="editSubtotalUSD" class="form-control text-end" autocomplete="off" oninput="recalcularDesdeUSD()">
+                </div>
+                <div class="col-4">
+                  <label class="form-label" for="editIvaUSD">IVA ($)</label>
+                  <input type="number" step="0.01" id="editIvaUSD" class="form-control text-end" autocomplete="off" readonly>
+                </div>
+                <div class="col-4">
+                  <label class="form-label" for="editTotalUSD">Total ($)</label>
+                  <input type="number" step="0.01" id="editTotalUSD" class="form-control text-end fw-bold text-success" autocomplete="off" oninput="recalcularDesdeTotalUSD()">
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold" id="btnAplicarEdicion" disabled>
+              <i class="fas fa-check-circle me-1" aria-hidden="true"></i> Aplicar y Validar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-8 col-lg-7 col-md-12 seccion-app" id="secFacturas">
+      
+      <div class="resumen-badge">
+        <div class="resumen-item"><div class="resumen-label">Facturas</div><div class="resumen-valor" id="resCantidad">0</div></div>
+        <div class="resumen-item"><div class="resumen-label">Total (Bs)</div><div class="resumen-valor text-warning" id="resTotalBs">Bs 0,00</div></div>
+        <div class="resumen-item"><div class="resumen-label">Total ($)</div><div class="resumen-valor text-success" id="resTotalUSD">$ 0,00</div></div>
+        <div class="resumen-item"><div class="resumen-label">Pendientes</div><div class="resumen-valor text-danger" id="resPendientes">0</div></div>
+        <div class="resumen-item"><div class="resumen-label">Duplicados</div><div class="resumen-valor text-danger" id="resDuplicados">0</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <h2 class="h5 m-0"><i class="fas fa-list-alt" aria-hidden="true"></i> Facturas Precargadas</h2>
+          <div class="d-flex gap-2 flex-wrap">
+            <input type="text" id="buscarFactura" class="form-control form-control-sm" placeholder="Buscar..." autocomplete="off" style="max-width:160px;height:34px;" oninput="debounceBuscar()">
+            <button type="button" class="btn-dynamic aceptar" onclick="limpiarTodo()"><i class="fas fa-eraser" aria-hidden="true"></i><span>Limpiar</span></button>
+            <button type="button" class="btn-dynamic aceptar" onclick="forzarValidarTodo()"><i class="fas fa-check-double" aria-hidden="true"></i><span>Validar todo</span></button>
+            <button type="button" class="btn-dynamic advertencia" onclick="guardarLote()"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><span>Guardar</span></button>
+          </div>
+        </div>
+        <div class="card-body p-2 p-md-0">
+          <div class="table-precarga">
+            <table class="table table-hover mb-0" id="tablaFacturas">
+              <caption class="sr-only">Listado de facturas precargadas para revisión y validación</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Proveedor / RIF</th>
+                  <th scope="col">N° Factura</th>
+                  <th scope="col">N° Control</th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col" class="text-end" style="color:var(--warning);">Total (Bs)</th>
+                  <th scope="col" class="text-end" style="color:var(--success);">Total ($)</th>
+                  <th scope="col" class="text-center">Estado</th>
+                  <th scope="col" style="width: 40px;"><span class="sr-only">Acciones</span></th>
+                </tr>
+              </thead>
+              <tbody id="tbodyPrecarga" aria-live="polite">
+                <tr id="emptyRow">
+                  <td colspan="8" class="text-center py-5 text-muted">
+                    <i class="fas fa-folder-open display-6 mb-2 text-warning d-block" aria-hidden="true"></i>No hay facturas cargadas.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="paginador" class="d-flex justify-content-between align-items-center p-2 flex-wrap gap-2"></div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2 mt-2 flex-wrap">
+        <button type="button" class="btn-dynamic" onclick="mostrarAyuda()"><i class="fas fa-question-circle" aria-hidden="true"></i><span>Ayuda y Guía</span></button>
+        <button type="button" class="btn-dynamic" onclick="exportarJSON()"><i class="fas fa-file-export" aria-hidden="true"></i><span>Exportar JSON</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(window){
+'use strict';
+
+// ============================================================
+// OBJETO DE NOTIFICACIÓN CONECTADO A GProUI
+// ============================================================
+var notificar = {
+  exito: function(msg, dur) {
+    if (window.GProUI && window.GProUI.toast) return window.GProUI.toast.exito(msg, dur);
+    if (window.notificar && typeof window.notificar.exito === 'function') return window.notificar.exito(msg, dur);
+    if (window.Swal) return Swal.fire({ icon: 'success', title: msg, timer: dur || 2500, toast: true, position: 'top-end', showConfirmButton: false });
+  },
+  error: function(msg, dur) {
+    if (window.GProUI && window.GProUI.toast) return window.GProUI.toast.error(msg, dur);
+    if (window.notificar && typeof window.notificar.error === 'function') return window.notificar.error(msg, dur);
+    if (window.Swal) return Swal.fire({ icon: 'error', title: 'Error', text: msg });
+  },
+  advertencia: function(msg, dur) {
+    if (window.GProUI && window.GProUI.toast) return window.GProUI.toast.advertencia(msg, dur);
+    if (window.notificar && typeof window.notificar.advertencia === 'function') return window.notificar.advertencia(msg, dur);
+    if (window.Swal) return Swal.fire({ icon: 'warning', title: 'Atención', text: msg });
+  },
+  info: function(msg, dur) {
+    if (window.GProUI && window.GProUI.toast) return window.GProUI.toast.info(msg, dur);
+    if (window.notificar && typeof window.notificar.info === 'function') return window.notificar.info(msg, dur);
+  },
+  confirmar: function(mensaje, tipo, txtSi, txtNo, callback) {
+    if (window.GProUI && window.GProUI.toast && typeof window.GProUI.toast.confirmar === 'function') {
+      return window.GProUI.toast.confirmar(mensaje, tipo, txtSi, txtNo, callback);
+    }
+    if (window.notificar && typeof window.notificar.confirmar === 'function') {
+      return window.notificar.confirmar(mensaje, tipo, txtSi, txtNo, callback);
+    }
+    if (window.Swal) {
+      Swal.fire({
+        title: 'Confirmación',
+        text: mensaje,
+        icon: tipo === 'warning' ? 'warning' : 'question',
+        showCancelButton: true,
+        confirmButtonText: txtSi || 'Sí',
+        cancelButtonText: txtNo || 'Cancelar',
+        confirmButtonColor: '#f97316'
+      }).then(function(res){
+        if (callback) callback(res.isConfirmed);
+      });
+      return;
+    }
+    if (callback) callback(window.confirm(mensaje));
+  }
+};
+
+// ============================================================
+// 1. ESTADO GLOBAL
+// ============================================================
+var proveedoresData = [];
+var imagenesPendientes = [];
+var facturasPrecargadas = [];
+var idContador = 0;
+var cuentasContables = [];
+var TASA_DEFAULT = 36.50;
+var tasaGlobalValor = null;
+var paginaActual = 1;
+var POR_PAGINA = 25;
+var busquedaActual = '';
+var timerBuscar = null;
+var facturaSeleccionadaId = null;
+var listenersInicializados = false;
+
+// ============================================================
+// 2. UTILIDADES
+// ============================================================
+function escapar(s){
+  return String(s==null?'':s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function formatNumber(n){
+  return parseFloat(n||0).toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function debounce(fn, ms){
+  var t;
+  return function(){
+    var args=arguments, ctx=this;
+    clearTimeout(t);
+    t=setTimeout(function(){ fn.apply(ctx,args); }, ms);
+  };
+}
+
+function debounceBuscar(){
+  clearTimeout(timerBuscar);
+  timerBuscar=setTimeout(function(){
+    var inp = document.getElementById('buscarFactura');
+    busquedaActual = inp ? inp.value.toLowerCase().trim() : '';
+    paginaActual=1;
+    renderTabla();
+  }, 250);
+}
+
+function normalizarRIF(rif){
+  if(!rif) return '';
+  var clean = String(rif).toUpperCase().replace(/[^JVGE0-9]/g,'');
+  var m = clean.match(/^([JVGE])(\d{8,9})$/);
+  if(!m) return String(rif).toUpperCase();
+  var letra = m[1], digitos = m[2];
+  if(digitos.length===9){
+    return letra+'-'+digitos.slice(0,8)+'-'+digitos.slice(8);
+  }
+  return letra+'-'+digitos.slice(0,7)+'-'+digitos.slice(7);
+}
+
+function validarRIF(rif){
+  var c = String(rif||'').toUpperCase().replace(/[^JVGE0-9]/g,'');
+  return /^[JVGE]\d{8,9}$/.test(c);
+}
+
+function normalizarFecha(s){
+  if(!s) return new Date().toISOString().split('T')[0];
+  if(s instanceof Date) return s.toISOString().split('T')[0];
+  var p = String(s).replace(/\s/g,'').split(/[\/\-\.]/);
+  if(p.length===3){
+    var a=parseInt(p[0],10), b=parseInt(p[1],10), c=parseInt(p[2],10);
+    var d, m, y;
+    if(a > 31){ y = a; m = b; d = c; }
+    else { d = a; m = b; y = c; }
+    if(y < 100) y = 2000 + y;
+    if(m > 12 && d <= 12){ var t = d; d = m; m = t; }
+    if(m<1 || m>12 || d<1 || d>31) return new Date().toISOString().split('T')[0];
+    return y + '-' + String(m).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+  }
+  return new Date().toISOString().split('T')[0];
+}
+
+function fechaISOaDDMMYYYY(iso){
+  if(!iso) return '';
+  var p = String(iso).split('-');
+  if(p.length===3) return p[2]+'/'+p[1]+'/'+p[0];
+  return iso;
+}
+
+// ============================================================
+// 3. NAVEGACIÓN MÓVIL (TABS INTERNAS)
+// ============================================================
+function cambiarTabAppSheet(tab){
+  if(window.innerWidth>768) return;
+  document.querySelectorAll('.appsheet-tab-btn').forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+  var secs = { captura: document.getElementById('secCaptura'), editor: document.getElementById('secEditor'), facturas: document.getElementById('secFacturas') };
+  Object.values(secs).forEach(function(s){ if(s) s.classList.add('mobile-hide'); });
+  var btnMap = { captura:'tabBtnCaptura', editor:'tabBtnEditor', facturas:'tabBtnFacturas' };
+  if(secs[tab]){ 
+    secs[tab].classList.remove('mobile-hide'); 
+    var b=document.getElementById(btnMap[tab]); 
+    if(b){ b.classList.add('active'); b.setAttribute('aria-selected','true'); } 
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+window.addEventListener('resize', function(){
+  if(window.innerWidth>768){ 
+    document.querySelectorAll('.seccion-app').forEach(el=>el.classList.remove('mobile-hide')); 
+  } else { 
+    var a=document.querySelector('.appsheet-tab-btn.active'); 
+    if(a){ 
+      if(a.id==='tabBtnCaptura') cambiarTabAppSheet('captura'); 
+      else if(a.id==='tabBtnEditor') cambiarTabAppSheet('editor'); 
+      else cambiarTabAppSheet('facturas'); 
+    } else {
+      cambiarTabAppSheet('captura'); 
+    }
+  }
+});
+
+// ============================================================
+// 4. INICIALIZACIÓN
+// ============================================================
+function initCargaMasiva(){
+  if (!listenersInicializados) {
+    listenersInicializados = true;
+    initDropzone();
+    initDropdownProveedor();
+    initDropdownCuentas();
+    initListenersEditor();
+  }
+  
+  // Tasa global desde sesión o variable global
+  if(window.tasaUSDGlobal && window.tasaUSDGlobal > 0){
+    tasaGlobalValor = window.tasaUSDGlobal;
+    var inp = document.getElementById('tasaGlobal');
+    if(inp) inp.value = window.tasaUSDGlobal;
+  } else if(typeof google !== 'undefined' && google.script && google.script.run && typeof google.script.run.obtenerTasaCambioActual === 'function'){
+    google.script.run.withSuccessHandler(function(data){
+      if(data && (data.tasaUSD > 0 || data.usd > 0)){
+        var t = parseFloat(data.tasaUSD || data.usd);
+        tasaGlobalValor = t;
+        var inp2 = document.getElementById('tasaGlobal');
+        if(inp2) inp2.value = t;
+      }
+    }).obtenerTasaCambioActual();
+  }
+
+  cargarDatosIniciales();
+  asegurarLibreriasCargadas().catch(console.error);
+
+  if(window.innerWidth<=768) cambiarTabAppSheet('captura');
+}
+
+function cargarScript(url){
+  return new Promise(function(resolve,reject){
+    if(document.querySelector('script[src="'+url+'"]')) return resolve();
+    var s=document.createElement('script'); s.src=url; s.onload=resolve; s.onerror=reject;
+    document.head.appendChild(s);
+  });
+}
+
+async function asegurarLibreriasCargadas(){
+  if(typeof pdfjsLib==='undefined'){ await cargarScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'); }
+  if(typeof pdfjsLib!=='undefined' && pdfjsLib.GlobalWorkerOptions){ pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; }
+}
+
+function cargarDatosIniciales(){
+  if(typeof google==='undefined' || !google.script || !google.script.run){
+    proveedoresData = [
+      { id: '1', nombre: 'TECNOFARMA B. C.A.', rif: 'J-503360160', direccion: 'AV PRINCIPAL RUIZ PINEDA' },
+      { id: '2', nombre: 'COMERCIAL SUPER MARKET 888 C.A', rif: 'J-506614219', direccion: 'ESQ DE CARMEN A MAMEY' }
+    ];
+    actualizarOptionsDropdown(proveedoresData);
+    cuentasContables = [
+      { codigo:'120505001', nombre:'INVENTARIO DE SUMINISTROS' },
+      { codigo:'401-01', nombre:'COMPRAS DE MERCANCÍAS' }
+    ];
+    actualizarDropdownCuentas(cuentasContables);
+    return;
+  }
+
+  if (typeof google.script.run.getDataProveedores === 'function') {
+    google.script.run.withSuccessHandler(function(data){
+      proveedoresData = Array.isArray(data) ? data : [];
+      actualizarOptionsDropdown(proveedoresData);
+    }).getDataProveedores();
+  }
+
+  if (typeof google.script.run.getListaCuentasContables === 'function') {
+    google.script.run.withSuccessHandler(function(data){
+      cuentasContables = Array.isArray(data) ? data : [];
+      actualizarDropdownCuentas(cuentasContables);
+    }).getListaCuentasContables();
+  }
+}
+
+// ============================================================
+// 5. DROPDOWNS
+// ============================================================
+function initDropdownProveedor(){
+  var input = document.getElementById('editProveedorNombre');
+  var dropdown = document.getElementById('dropdownProv');
+  if(!input||!dropdown) return;
+  var filtrar = debounce(function(){
+    var term = input.value.toLowerCase();
+    var hay = false;
+    dropdown.querySelectorAll('.dropdown-option').forEach(function(op){
+      var n=(op.dataset.nombre||'').toLowerCase(), r=(op.dataset.rif||'').toLowerCase();
+      var show = n.indexOf(term)!==-1 || r.indexOf(term)!==-1;
+      op.style.display = show?'flex':'none';
+      if(show) hay=true;
+    });
+    dropdown.style.display = hay?'block':'none';
+  }, 150);
+  input.addEventListener('input', function(){ filtrar(); validarCamposEditor(); });
+  input.addEventListener('focus', function(){
+    dropdown.querySelectorAll('.dropdown-option').forEach(function(op){ op.style.display='flex'; });
+    dropdown.style.display='block';
+  });
+  dropdown.addEventListener('mousedown', function(e){
+    var op=e.target.closest('.dropdown-option'); if(!op||!op.dataset.nombre) return;
+    document.getElementById('editProveedorNombre').value = op.dataset.nombre;
+    document.getElementById('editProveedorRif').value = op.dataset.rif;
+    dropdown.style.display='none';
+    actualizarHintRIF();
+    validarCamposEditor();
+  });
+  document.addEventListener('click', function(e){
+    if(!input.contains(e.target) && !dropdown.contains(e.target)) dropdown.style.display='none';
+  });
+}
+
+function actualizarOptionsDropdown(lista){
+  var d=document.getElementById('dropdownProv'); if(!d) return;
+  if(!lista.length){ d.innerHTML='<div class="dropdown-empty">No hay proveedores</div>'; return; }
+  var html='';
+  for(var i=0;i<lista.length;i++){
+    var p = lista[i];
+    var nombre, rif, dir;
+    if(Array.isArray(p)){ nombre = p[1]||''; rif = p[2]||''; dir = p[3]||''; }
+    else { nombre = p.nombre||''; rif = p.rif||''; dir = p.direccion||''; }
+    html += '<div class="dropdown-option" role="option" data-nombre="'+escapar(nombre)+'" data-rif="'+escapar(rif)+'" data-direccion="'+escapar(dir)+'"><span>'+escapar(nombre)+'</span><small class="text-muted">'+escapar(rif)+'</small></div>';
+  }
+  d.innerHTML=html;
+}
+
+function initDropdownCuentas(){
+  var input=document.getElementById('editCuentaContable');
+  var dropdown=document.getElementById('dropdownCuentas');
+  if(!input||!dropdown) return;
+  var filtrar = debounce(function(){
+    var term=input.value.toLowerCase();
+    var hay=false;
+    dropdown.querySelectorAll('.dropdown-option').forEach(function(op){
+      var c=(op.dataset.codigo||'').toLowerCase(), n=(op.dataset.nombre||'').toLowerCase();
+      var show = c.indexOf(term)!==-1 || n.indexOf(term)!==-1;
+      op.style.display = show?'flex':'none';
+      if(show) hay=true;
+    });
+    dropdown.style.display = hay?'block':'none';
+  }, 150);
+  input.addEventListener('input', function(){ filtrar(); validarCamposEditor(); });
+  input.addEventListener('focus', function(){
+    dropdown.querySelectorAll('.dropdown-option').forEach(function(op){ op.style.display='flex'; });
+    dropdown.style.display='block';
+  });
+  dropdown.addEventListener('mousedown', function(e){
+    var op=e.target.closest('.dropdown-option'); if(!op||!op.dataset.codigo) return;
+    document.getElementById('editCuentaContable').value = op.dataset.codigo+' - '+op.dataset.nombre;
+    dropdown.style.display='none';
+    validarCamposEditor();
+  });
+  document.addEventListener('click', function(e){
+    if(!input.contains(e.target) && !dropdown.contains(e.target)) dropdown.style.display='none';
+  });
+}
+
+function actualizarDropdownCuentas(lista){
+  var d=document.getElementById('dropdownCuentas'); if(!d) return;
+  if(!lista.length){ d.innerHTML='<div class="dropdown-empty">No hay cuentas</div>'; return; }
+  var html='';
+  for(var i=0;i<lista.length;i++){
+    var c=lista[i];
+    var cod = c.codigo || c[0] || '';
+    var nom = c.nombre || c[1] || '';
+    html += '<div class="dropdown-option" role="option" data-codigo="'+escapar(cod)+'" data-nombre="'+escapar(nom)+'"><span class="codigo-cuenta fw-bold text-warning">'+escapar(cod)+'</span><span>'+escapar(nom)+'</span></div>';
+  }
+  d.innerHTML=html;
+}
+
+function abrirModalCuentaContable(){
+  if (!window.Swal) return;
+  Swal.fire({
+    title:'Seleccionar Cuenta',
+    html:'<input type="text" id="swalBuscarCuenta" class="swal2-input" placeholder="Buscar..."><div id="swalListaCuentas" class="modal-resultado" style="padding:8px;background:rgba(255,255,255,0.05);border-radius:8px;font-size:13px;">'+
+      cuentasContables.map(function(c){
+        return '<div data-codigo="'+escapar(c.codigo)+'" data-nombre="'+escapar(c.nombre)+'" style="padding:8px 10px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;gap:10px;" class="swal-cuenta-item"><span style="color:#f97316;font-weight:700;">'+escapar(c.codigo)+'</span><span>'+escapar(c.nombre)+'</span></div>';
+      }).join('')+
+    '</div>',
+    background:'#1a1a2e', color:'#f1f5f9', confirmButtonText:'Cerrar', confirmButtonColor:'#f97316',
+    didOpen:function(){
+      var cont=document.getElementById('swalListaCuentas');
+      cont.addEventListener('click', function(e){
+        var it=e.target.closest('.swal-cuenta-item'); if(!it) return;
+        document.getElementById('editCuentaContable').value = it.dataset.codigo+' - '+it.dataset.nombre;
+        Swal.close(); validarCamposEditor();
+      });
+      var inp=document.getElementById('swalBuscarCuenta');
+      inp.addEventListener('input', function(){
+        var term=this.value.toLowerCase();
+        cont.querySelectorAll('.swal-cuenta-item').forEach(function(item){
+          item.style.display = item.textContent.toLowerCase().indexOf(term)!==-1 ? 'flex':'none';
+        });
+      });
+    }
+  });
+}
+
+function abrirModalNuevoProveedor(){
+  if (!window.Swal) return;
+  Swal.fire({
+    title:'Nuevo Proveedor',
+    html:'<input id="swalNuevoNombre" class="swal2-input" placeholder="Nombre comercial"><input id="swalNuevoRif" class="swal2-input" placeholder="RIF (J-12345678-9)">',
+    background:'#1a1a2e', color:'#f1f5f9', confirmButtonText:'Guardar', confirmButtonColor:'#f97316', showCancelButton:true, cancelButtonText:'Cancelar',
+    preConfirm:function(){
+      var nombre=document.getElementById('swalNuevoNombre').value.trim();
+      var rif=document.getElementById('swalNuevoRif').value.trim();
+      if(!nombre||!rif){ Swal.showValidationMessage('Todos los campos son requeridos'); return false; }
+      if(!validarRIF(rif)){ Swal.showValidationMessage('RIF inválido (formato incorrecto)'); return false; }
+      return { nombre:nombre, rif:normalizarRIF(rif) };
+    }
+  }).then(function(r){
+    if(r.isConfirmed){
+      document.getElementById('editProveedorNombre').value = r.value.nombre;
+      document.getElementById('editProveedorRif').value = r.value.rif;
+      actualizarHintRIF();
+      validarCamposEditor();
+    }
+  });
+}
+
+// ============================================================
+// 6. VALIDACIÓN DEL EDITOR
+// ============================================================
+function actualizarHintRIF(){
+  var el=document.getElementById('hintRif'); if(!el) return;
+  var rif=document.getElementById('editProveedorRif').value.trim();
+  if(!rif){ el.textContent=''; el.style.color=''; return; }
+  var norm=normalizarRIF(rif);
+  if(!/^[JVGE]-\d{7,8}-\d$/.test(norm)){
+    el.textContent='Formato inválido';
+    el.style.color='var(--danger)';
+    return;
+  }
+  el.innerHTML='<i class="fas fa-check-circle"></i> RIF válido';
+  el.style.color='var(--success)';
+}
+
+function validarCamposEditor(){
+  var id=document.getElementById('editFilaId').value;
+  if(!id){ 
+    var btnAp = document.getElementById('btnAplicarEdicion');
+    if (btnAp) btnAp.disabled=true; 
+    var vSum = document.getElementById('validationSummary');
+    if (vSum) vSum.style.display='none'; 
+    return; 
+  }
+  var proveedor=document.getElementById('editProveedorNombre').value.trim();
+  var rif=document.getElementById('editProveedorRif').value.trim();
+  var nroFactura=document.getElementById('editNroFactura').value.trim();
+  var nroControl=document.getElementById('editNroControl').value.trim();
+  var fecha=document.getElementById('editFecha').value;
+  var totalBs=parseFloat(document.getElementById('editTotalBs').value)||0;
+  var subBs=parseFloat(document.getElementById('editSubtotalBs').value)||0;
+  var ivaBs=parseFloat(document.getElementById('editIvaBs').value)||0;
+  var concepto=document.getElementById('editConceptoGasto').value.trim();
+  var cuenta=document.getElementById('editCuentaContable').value.trim();
+  var errores=[]; var avisos=[];
+
+  if(!proveedor||proveedor==='⚠️ Sin Proveedor') errores.push('Proveedor');
+  if(!rif||rif==='J-00000000-0') errores.push('RIF');
+  else { var rifN=normalizarRIF(rif); if(!/^[JVGE]-\d{7,8}-\d$/.test(rifN)) errores.push('RIF formato'); }
+  if(!nroFactura||nroFactura==='S/N') errores.push('N° Factura');
+  if(!nroControl) errores.push('N° Control');
+  if(!fecha) errores.push('Fecha');
+  if(totalBs<=0) errores.push('Total Bs');
+  if(!concepto) errores.push('Concepto');
+  if(!cuenta) errores.push('Cuenta');
+  if(subBs>0 && ivaBs>=0 && Math.abs(subBs+ivaBs-totalBs)>0.05) avisos.push('Suma Subtotal+IVA ≠ Total');
+  var esDuplicado = id && detectarDuplicado(id);
+  if(esDuplicado) errores.push('Factura duplicada');
+
+  var summary=document.getElementById('validationSummary');
+  if (!summary) return;
+  if(errores.length===0 && avisos.length===0){
+    summary.className='validation-message success';
+    summary.innerHTML='<i class="fas fa-check-circle me-1"></i> Datos completos. Listo para validar.';
+  } else if(errores.length===0 && avisos.length>0){
+    summary.className='validation-message warning';
+    summary.innerHTML='<i class="fas fa-exclamation-triangle me-1"></i> Avisos: <b>'+avisos.join(', ')+'</b>. Se puede guardar.';
+  } else {
+    summary.className='validation-message error';
+    summary.innerHTML='<i class="fas fa-exclamation-circle me-1"></i> Faltan: <b>'+errores.join(', ')+'</b>'+(avisos.length?'<br><small>Avisos: '+avisos.join(', ')+'</small>':'');
+  }
+  summary.style.display='block';
+  var btnAplicar = document.getElementById('btnAplicarEdicion');
+  if (btnAplicar) btnAplicar.disabled = errores.length>0;
+}
+
+function detectarDuplicado(idExcluir){
+  var id=idExcluir||document.getElementById('editFilaId').value;
+  var rifInput = document.getElementById('editProveedorRif');
+  var facInput = document.getElementById('editNroFactura');
+  var ctrlInput = document.getElementById('editNroControl');
+  var rif=normalizarRIF(rifInput ? rifInput.value.trim() : '');
+  var nroFac=facInput ? facInput.value.trim() : '';
+  var nroCtrl=ctrlInput ? ctrlInput.value.trim() : '';
+  if(!rif||!nroFac) return false;
+  return facturasPrecargadas.some(function(f){
+    if(f.id===id) return false;
+    if(normalizarRIF(f.proveedorRif)!==rif) return false;
+    if(nroCtrl && f.nroControl && nroCtrl===f.nroControl) return true;
+    return f.nroFactura===nroFac;
+  });
+}
+
+// ============================================================
+// 7. DROPZONE Y ARCHIVOS
+// ============================================================
+function initDropzone(){
+  var dz=document.getElementById('dropzoneOcr'); var fi=document.getElementById('fileInputOcr');
+  if(!dz||!fi) return;
+  fi.addEventListener('change', function(){
+    if(this.files&&this.files.length>0){
+      var files=Array.from(this.files).filter(esArchivoValido);
+      if(files.length>0) agregarImagenes(files);
+      this.value='';
+    }
+  });
+  ['dragenter','dragover'].forEach(function(evt){ dz.addEventListener(evt,function(e){ e.preventDefault(); dz.classList.add('dragover'); }); });
+  ['dragleave','drop'].forEach(function(evt){ dz.addEventListener(evt,function(e){ e.preventDefault(); dz.classList.remove('dragover'); }); });
+  dz.addEventListener('drop', function(e){
+    if(e.dataTransfer&&e.dataTransfer.files){
+      var files=Array.from(e.dataTransfer.files).filter(esArchivoValido);
+      if(files.length>0) agregarImagenes(files);
+    }
+  });
+}
+
+function esArchivoValido(file){
+  if(!file) return false;
+  var name=file.name.toLowerCase();
+  var type=(file.type||'').toLowerCase();
+  return type.indexOf('image/')===0 || type.indexOf('pdf')!==-1 || /\.(pdf|png|jpg|jpeg)$/.test(name);
+}
+
+async function optimizarImagenBase64(file){
+  return new Promise(function(resolve,reject){
+    var reader=new FileReader();
+    reader.onerror=reject;
+    reader.onload=function(e){
+      var img=new Image();
+      img.onerror=reject;
+      img.onload=function(){
+        var canvas=document.createElement('canvas');
+        var MAX=1400;
+        var scale=(img.width>MAX)?(MAX/img.width):1;
+        canvas.width=img.width*scale;
+        canvas.height=img.height*scale;
+        canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL('image/jpeg',0.85));
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function agregarImagenes(files){
+  mostrarOverlayOcr(true,'Leyendo archivos...');
+  try{
+    for(var i=0;i<files.length;i++){
+      var file=files[i];
+      if(file.type.indexOf('pdf')!==-1 || file.name.toLowerCase().endsWith('.pdf')){
+        var pags=await procesarArchivoPDF(file);
+        pags.forEach(function(p){ idContador++; imagenesPendientes.push({ id:idContador, base64:p.base64, textoDirecto:p.textoDirecto, nombre:file.name }); });
+      } else {
+        var b64=await optimizarImagenBase64(file);
+        idContador++;
+        imagenesPendientes.push({ id:idContador, base64:b64, textoDirecto:null, nombre:file.name });
+      }
+    }
+  } catch(err){ notificar.error('Error al leer archivo: '+err.message); }
+  finally{ mostrarOverlayOcr(false); renderPreview(); }
+}
+
+async function procesarArchivoPDF(file){
+  await asegurarLibreriasCargadas();
+  var typed=new Uint8Array(await file.arrayBuffer());
+  var pdf=await pdfjsLib.getDocument({data:typed}).promise;
+  var res=[];
+  for(var i=1;i<=pdf.numPages;i++){
+    var page=await pdf.getPage(i);
+    var tc=await page.getTextContent();
+    var texto=tc.items.map(function(it){ return it.str; }).join(' ');
+    if(texto.trim().length>60){ res.push({ textoDirecto:texto, base64:null }); }
+    else{
+      var vp=page.getViewport({scale:2.0});
+      var c=document.createElement('canvas'); var ctx=c.getContext('2d');
+      c.height=vp.height; c.width=vp.width;
+      await page.render({canvasContext:ctx,viewport:vp}).promise;
+      res.push({ textoDirecto:null, base64:c.toDataURL('image/jpeg',0.85) });
+    }
+  }
+  return res;
+}
+
+function renderPreview(){
+  var grid=document.getElementById('previewGrid'); if(!grid) return;
+  var html='';
+  for(var i=0;i<imagenesPendientes.length;i++){
+    var img=imagenesPendientes[i];
+    var imgHtml = img.base64
+      ? '<img src="'+img.base64+'" alt="Vista previa">'
+      : '<div class="d-flex align-items-center justify-content-center h-100 text-warning"><i class="fas fa-file-pdf fa-2x" aria-hidden="true"></i></div>';
+    html += '<div class="preview-thumb">'+imgHtml+'<button type="button" class="btn-remove" aria-label="Eliminar imagen" onclick="removerImagen('+img.id+')"><i class="fas fa-times" aria-hidden="true"></i></button></div>';
+  }
+  grid.innerHTML=html;
+  var btn=document.getElementById('btnProcesarOcr');
+  if(btn){
+    btn.disabled=(imagenesPendientes.length===0);
+    document.getElementById('btnProcText').textContent='Procesar ('+imagenesPendientes.length+')';
+  }
+}
+
+function removerImagen(id){
+  imagenesPendientes=imagenesPendientes.filter(function(i){ return i.id!==id; });
+  renderPreview();
+}
+
+// ============================================================
+// 8. PARSER OCR Y MONTOS
+// ============================================================
+function normalizarTextoOCR(txt){
+  if(!txt) return '';
+  return String(txt)
+    .replace(/\r/g,'\n')
+    .replace(/[ \t]+/g,' ')
+    .replace(/\n{3,}/g,'\n\n')
+    .replace(/(?<=\d)[Oo](?=\d)/g,'0')
+    .replace(/(?<=\d)[lI](?=\d)/g,'1')
+    .replace(/(?<=\d)[Ss](?=\d)/g,'5')
+    .replace(/(?<=\d)[Bb](?=\d)/g,'8')
+    .trim();
+}
+
+function parsearMontoUniversal(str){
+  if(str==null) return 0;
+  var s = String(str).trim();
+  s = s.replace(/Bs\.?|USD|EUR|\$|Efectivo|EFECTIVO|TOTAL|SUBTTL|SUBTOTAL|IVA|GRAV|EXENTO|G|%|N[°º]/gi,' ').replace(/\s+/g,'').trim();
+  if(!s) return 0;
+  s = s.replace(/[^0-9.,\-]/g,'');
+  if(!s) return 0;
+
+  var neg = s.charAt(0) === '-';
+  if(neg) s = s.substring(1);
+
+  var puntos = (s.match(/\./g) || []).length;
+  var comas  = (s.match(/,/g) || []).length;
+  var limpio;
+
+  if(puntos > 1 && comas === 0){
+    var partes = s.split('.');
+    var decimal = partes.pop();
+    limpio = partes.join('') + '.' + decimal;
+  } else if(comas > 1 && puntos === 0){
+    var partes2 = s.split(',');
+    var decimal2 = partes2.pop();
+    limpio = partes2.join('') + '.' + decimal2;
+  } else if(puntos >= 1 && comas >= 1){
+    var ultimoPunto = s.lastIndexOf('.');
+    var ultimaComa  = s.lastIndexOf(',');
+    if(ultimaComa > ultimoPunto){
+      limpio = s.replace(/\./g,'').replace(/,/g,'.');
+    } else {
+      limpio = s.replace(/,/g,'');
+    }
+  } else if(puntos === 1){
+    var partes3 = s.split('.');
+    if(partes3[1].length === 3) limpio = partes3.join('');
+    else limpio = s;
+  } else if(comas === 1){
+    var partes4 = s.split(',');
+    if(partes4[1].length === 3) limpio = partes4.join('');
+    else limpio = s.replace(',','.');
+  } else {
+    limpio = s;
+  }
+
+  var n = parseFloat(limpio);
+  if(isNaN(n)) return 0;
+  return neg ? -n : n;
+}
+
+function extraerMontoDeLinea(linea){
+  if(!linea) return 0;
+  var matches = linea.match(/(\d{1,3}(?:[\.\s]\d{3})*[\,\.]\d{2}|\d+[\,\.]\d{2})/g);
+  if(!matches||!matches.length) return 0;
+  var validos = matches.filter(function(m){
+    var clean=m.replace(/[.,\s]/g,'');
+    if(clean.length<4) return false;
+    if(/^9999/.test(clean)) return false;
+    if(/^04(12|14|16|24|26)/.test(clean) && clean.length>=10) return false;
+    return true;
+  });
+  if(!validos.length) return 0;
+  return parsearMontoUniversal(validos[validos.length-1]);
+}
+
+function extraerTodosLosMontos(linea){
+  if(!linea) return [];
+  var matches = linea.match(/(\d{1,3}(?:[\.\s]\d{3})*[\,\.]\d{2}|\d+[\,\.]\d{2})/g)||[];
+  return matches.map(parsearMontoUniversal).filter(function(n){ return n>0; });
+}
+
+function buscarMontoEnLineas(lines, patrones){
+  if(!lines||!lines.length) return 0;
+  for(var i=0;i<lines.length;i++){
+    for(var j=0;j<patrones.length;j++){
+      if(new RegExp(patrones[j],'i').test(lines[i])){
+        var ms=extraerTodosLosMontos(lines[i]);
+        if(ms.length) return ms[ms.length-1];
+        if(i+1<lines.length){ var nx=extraerMontoDeLinea(lines[i+1]); if(nx>0) return nx; }
+        break;
+      }
+    }
+  }
+  return 0;
+}
+
+function detectarExento(lines){
+  for(var i=0;i<lines.length;i++){
+    var l = lines[i].toUpperCase();
+    if(/(EXENTO|EXONERADO|NO\s+GRAVADO)/.test(l)){
+      if(/\d+[.,]\d{2}/.test(l)) return true;
+      if(i+1<lines.length && /\d+[.,]\d{2}/.test(lines[i+1])) return true;
+    }
+    if(/IVA.*[\s:]\s*0[.,]0{1,2}\b/.test(l)) return true;
+  }
+  return false;
+}
+
+function extraerTasaBCV(texto){
+  var m = texto.match(/tasa\s*(?:bcv|cambio)?\s*[:\-]?\s*([\d.,]{4,15})/i);
+  if(m){ var v=parsearMontoUniversal(m[1]); if(v>1&&v<10000) return v; }
+  return null;
+}
+
+function parsearTextoOCR(raw){
+  raw = normalizarTextoOCR(raw||'');
+  var textClean = raw.replace(/\n+/g,' ').replace(/\s+/g,' ').trim();
+  var lines = raw.split('\n').map(function(l){ return l.trim(); }).filter(function(l){ return l.length>0; });
+
+  var proveedor='', rif='', nroFac='', nroCtrl='', fecha='';
+  var totalBs=0, subBs=0, ivaBs=0, ivaPorc=16, exento=false;
+
+  var tasaExtraida = extraerTasaBCV(textClean);
+  var tasaInput = parseFloat(document.getElementById('editTasaCambio').value);
+  var tasa = tasaExtraida || tasaInput || tasaGlobalValor || TASA_DEFAULT;
+
+  // RIF
+  for(var j=0;j<Math.min(lines.length,15);j++){
+    var l = lines[j];
+    if(/RIF\s*\/\s*C\.?\s*I\.?/i.test(l)) continue;
+    if(/RAZ[OÓ]N\s+SOCIAL/i.test(l)) continue;
+    var mR = l.match(/([JVGEjvge])\s*[\-\s]?\s*(\d{7,9})\s*[\-\s]?\s*(\d)?/);
+    if(mR && !rif){
+      var digitos = mR[2] + (mR[3] || '');
+      if(digitos.length >= 8 && digitos.length <= 9){
+        rif = normalizarRIF(mR[1] + digitos);
+        var cand = l.replace(mR[0],'').replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ0-9.,&\s]/g,'').trim();
+        if(cand.length > 3 && !/^(AV|AVENIDA|CALLE|CARRERA|EDIF|ESQ|SECTOR|URB|ZONA|TELF)/i.test(cand)){
+          proveedor = cand;
+        } else {
+          for(var k=1;k<=3 && j+k<lines.length;k++){
+            var lk = lines[j+k].trim();
+            if(lk.length < 4) continue;
+            if(/^(AV\.?|AVENIDA|CALLE|CARRERA|EDIF|ESQ|SECTOR|URB|ZONA|TELF|TELÉF|RIF|SENIAT|FARMACIA)/i.test(lk)) continue;
+            if(/^\d/.test(lk)) continue;
+            proveedor = lk.replace(/[,;]+$/,'').trim();
+            break;
+          }
+        }
+        break;
+      }
+    }
+  }
+
+  // N° Factura
+  for(var a=0;a<lines.length;a++){
+    var lf = lines[a];
+    var mF = lf.match(/(?:FACTURA|FACT\.?|N[°º]\s*FACT)\s*[:.\-]?\s*(\d{5,12})/i);
+    if(mF){ nroFac = mF[1]; break; }
+    var mF2 = lf.match(/^\s*(\d{8})\s*$/);
+    if(mF2 && !nroFac){ nroFac = mF2[1]; }
+  }
+  if(!nroFac){
+    var mFallback = textClean.match(/\b(\d{8})\b/);
+    if(mFallback) nroFac = mFallback[1];
+  }
+
+  // N° Control
+  for(var b=0;b<lines.length;b++){
+    var lc = lines[b];
+    if(/RIF\s*\/\s*C\.?\s*I\.?/i.test(lc)) continue;
+    if(/RAZ[OÓ]N\s+SOCIAL/i.test(lc)) continue;
+
+    var mC2 = lc.match(/(?:N[°º]\s*)?CONTROL\s*[:.\-]?\s*([A-Z0-9\-]{5,20})/i);
+    if(mC2){ nroCtrl = mC2[1].toUpperCase(); break; }
+
+    var mC = lc.match(/\b(Z[0-9A-Z]{7,12})\b/i);
+    if(mC){ nroCtrl = mC[1].toUpperCase(); break; }
+
+    var matches = lc.match(/\b([A-Z0-9]{8,12})\b/gi) || [];
+    for(var mi=0; mi<matches.length; mi++){
+      var candidato = matches[mi].toUpperCase();
+      if(/^[JVGE]\d{7,10}$/.test(candidato)) continue;
+      if(/^[JVEG]\d+$/.test(candidato)) continue;
+      if(/^T[0-9A-Z]{5,}/.test(candidato)) continue;
+      if(/^0\d{7,}$/.test(candidato)) continue;
+
+      if(/[A-Z]/.test(candidato) && /\d/.test(candidato)){
+        nroCtrl = candidato;
+        break;
+      }
+    }
+    if(nroCtrl) break;
+  }
+
+  // Fecha
+  for(var c=0;c<lines.length;c++){
+    if(/FECHA|EMISI[OÓ]N/i.test(lines[c])){
+      var mFe = lines[c].match(/\b(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})\b/);
+      if(mFe){ fecha = normalizarFecha(mFe[1]); break; }
+    }
+  }
+
+  exento = detectarExento(lines);
+  if(exento) ivaPorc = 0;
+
+  subBs = buscarMontoEnLineas(lines, ['SUBTTL','SUBTOTAL','BASE\\s*IMP','BASE\\s*GRAV','MONTO\\s*GRAV']);
+  ivaBs = buscarMontoEnLineas(lines, ['IVA\\s*G','IVA\\s*16','I\\.V\\.A','\\bIVA\\b']);
+
+  totalBs = 0;
+  for(var t=0; t<lines.length; t++){
+    if(/^\s*TOTAL\b|\bTOTAL\s*[:]|\bTOTAL\s*BS|\bTOTAL\s*A\s*PAGAR/i.test(lines[t])){
+      for(var t2 = t; t2 < Math.min(t+6, lines.length); t2++){
+        var m = extraerMontoDeLinea(lines[t2]);
+        if(m > totalBs) totalBs = m;
+      }
+      if(totalBs > 0) break;
+    }
+  }
+
+  if(totalBs === 0){
+    var montosFinales = [];
+    var ult = lines.slice(Math.max(0, lines.length-15));
+    for(var u=0; u<ult.length; u++){
+      var ms = extraerTodosLosMontos(ult[u]);
+      for(var mi=0; mi<ms.length; mi++){
+        montosFinales.push(ms[mi]);
+      }
+    }
+    montosFinales.sort(function(x,y){ return y - x; });
+    if(montosFinales.length >= 1) totalBs = montosFinales[0];
+    if(montosFinales.length >= 2 && subBs === 0) subBs = montosFinales[1];
+  }
+
+  if(exento){
+    ivaBs = 0;
+    if(totalBs>0 && subBs===0) subBs = totalBs;
+    if(subBs>0 && totalBs===0) totalBs = subBs;
+  } else {
+    if(totalBs>0 && subBs===0){
+      subBs = parseFloat((totalBs/1.16).toFixed(2));
+      ivaBs = parseFloat((totalBs-subBs).toFixed(2));
+    } else if(subBs>0 && totalBs===0){
+      ivaBs = parseFloat((subBs*0.16).toFixed(2));
+      totalBs = parseFloat((subBs+ivaBs).toFixed(2));
+    }
+  }
+
+  return {
+    proveedor: proveedor || '⚠️ Sin Proveedor',
+    rif: rif || 'J-00000000-0',
+    nroFactura: nroFac || 'S/N',
+    nroControl: nroCtrl || '',
+    fecha: fecha || new Date().toISOString().split('T')[0],
+    subtotalBs: subBs,
+    ivaBs: ivaBs,
+    totalBs: totalBs,
+    ivaPorc: exento ? 0 : 16,
+    tasaCambio: tasa,
+    esExento: exento,
+    _ocrFlags: {
+      rif: !!rif,
+      proveedor: !!proveedor && proveedor !== '⚠️ Sin Proveedor',
+      factura: !!nroFac,
+      control: !!nroCtrl,
+      fecha: !!fecha,
+      total: totalBs>0,
+      exento: exento
+    }
+  };
+}
+
+// ============================================================
+// 9. PROCESAR LOTE OCR
+// ============================================================
+async function procesarLoteOcr(){
+  if(!imagenesPendientes.length) return;
+  mostrarOverlayOcr(true,'Extrayendo texto fiscal...');
+
+  try{
+    var total = imagenesPendientes.length;
+    var procesadas = 0;
+    var batchBase64=[], indicesOcr=[];
+    for(var i=0;i<imagenesPendientes.length;i++){
+      if(!imagenesPendientes[i].textoDirecto && imagenesPendientes[i].base64){
+        batchBase64.push(imagenesPendientes[i].base64);
+        indicesOcr.push(i);
+      }
+    }
+
+    var resultadosOcr=[];
+    if(batchBase64.length>0 && typeof google!=='undefined' && google.script && google.script.run && typeof google.script.run.procesarOcrLoteServidor === 'function'){
+      var TAM_LOTE=5;
+      for(var b=0;b<batchBase64.length;b+=TAM_LOTE){
+        var sub=batchBase64.slice(b,b+TAM_LOTE);
+        var progEl = document.getElementById('ocrProgreso');
+        if (progEl) progEl.textContent = 'Procesando '+(b+sub.length)+'/'+batchBase64.length;
+        try{
+          var r = await new Promise(function(resolve,reject){
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).procesarOcrLoteServidor(sub);
+          });
+          resultadosOcr = resultadosOcr.concat(r);
+        } catch(err){
+          sub.forEach(function(){ resultadosOcr.push({ status:'error', text:'' }); });
+        }
+      }
+    } else if(batchBase64.length>0){
+      resultadosOcr = batchBase64.map(function(_, idx){
+        var n = (idx+1)*100;
+        return { status:'success', text:
+          'SENIAT J-503360160 TECNOFARMA B. C.A.\n'+
+          'RIF: J-503360160\n'+
+          'FACTURA: 00021'+(180+idx)+'\n'+
+          'N° CONTROL: 00-000'+(100+idx)+'\n'+
+          'FECHA: 19-06-2026\n'+
+          'SUBTTL: '+(n+100).toFixed(2)+'\n'+
+          'IVA G 16%: '+(n*0.16).toFixed(2)+'\n'+
+          'TOTAL BS: '+((n+100)*1.16).toFixed(2)
+        };
+      });
+    }
+
+    for(var j=0;j<imagenesPendientes.length;j++){
+      var textoFinal = imagenesPendientes[j].textoDirecto || (resultadosOcr[indicesOcr.indexOf(j)] ? resultadosOcr[indicesOcr.indexOf(j)].text : '');
+      if(textoFinal){
+        var parsed = parsearTextoOCR(textoFinal);
+        parsed._nombreArchivo = imagenesPendientes[j].nombre || '';
+        parsed._textoCrudo = textoFinal;
+        agregarFacturaAObjetoYTabla(parsed);
+      }
+      procesadas++;
+      var prog2 = document.getElementById('ocrProgreso');
+      if (prog2) prog2.textContent = 'Procesando '+procesadas+'/'+total;
+    }
+
+    imagenesPendientes=[];
+    renderPreview();
+    notificar.exito('Procesamiento OCR completado: ' + facturasPrecargadas.length + ' facturas listas para revisión');
+    if(window.innerWidth<=768) cambiarTabAppSheet('facturas');
+  } catch(err){ 
+    notificar.error('Error en OCR: '+err.message); 
+  } finally{
+    mostrarOverlayOcr(false);
+    actualizarResumen();
+    var progFin = document.getElementById('ocrProgreso');
+    if (progFin) progFin.textContent='';
+  }
+}
+
+// ============================================================
+// 10. GESTIÓN DE TABLA Y DETALLE
+// ============================================================
+function agregarFacturaAObjetoYTabla(data){
+  var id='fac_'+Date.now()+'_'+Math.floor(Math.random()*1000);
+  var tasa = data.tasaCambio || tasaGlobalValor || TASA_DEFAULT;
+  var esValida = Boolean(
+    data.proveedor && data.proveedor!=='⚠️ Sin Proveedor' &&
+    data.rif && data.rif!=='J-00000000-0' &&
+    data.nroFactura && data.nroFactura!=='S/N' &&
+    data.nroControl &&
+    data.totalBs>0
+  );
+
+  var facturaObj = {
+    id: id,
+    proveedorNombre: data.proveedor||'⚠️ Sin Proveedor',
+    proveedorRif: data.rif||'J-00000000-0',
+    nroFactura: data.nroFactura||'S/N',
+    nroControl: data.nroControl||'',
+    fecha: data.fecha||new Date().toISOString().split('T')[0],
+    tipoDoc: 'factura',
+    moneda: 'Bolivares',
+    tasaCambio: tasa,
+    concepto: document.getElementById('editConceptoGasto').value||'COMPRA DIVERSA',
+    cuentaContable: document.getElementById('editCuentaContable').value||'120505001 - INVENTARIO DE SUMINISTROS',
+    subtotalBs: data.subtotalBs||0,
+    ivaBs: data.ivaBs||0,
+    totalBs: data.totalBs||0,
+    subtotalDivisa: parseFloat(((data.subtotalBs||0)/tasa).toFixed(2)),
+    ivaPorc: data.ivaPorc||16,
+    ivaDivisa: parseFloat(((data.ivaBs||0)/tasa).toFixed(2)),
+    totalDivisa: parseFloat(((data.totalBs||0)/tasa).toFixed(2)),
+    estado: esValida?'Validado':'Pendiente',
+    esExento: data.esExento || false,
+    _ocrFlags: data._ocrFlags||null,
+    _nombreArchivo: data._nombreArchivo||'',
+    _textoCrudo: data._textoCrudo||''
+  };
+  facturasPrecargadas.push(facturaObj);
+  renderTabla();
+  actualizarResumen();
+}
+
+function obtenerFiltradas(){
+  if(!busquedaActual) return facturasPrecargadas;
+  return facturasPrecargadas.filter(function(f){
+    return (f.proveedorNombre||'').toLowerCase().indexOf(busquedaActual)!==-1
+        || (f.proveedorRif||'').toLowerCase().indexOf(busquedaActual)!==-1
+        || (f.nroFactura||'').toLowerCase().indexOf(busquedaActual)!==-1
+        || (f.nroControl||'').toLowerCase().indexOf(busquedaActual)!==-1;
+  });
+}
+
+function renderTabla(){
+  var tbody=document.getElementById('tbodyPrecarga'); if(!tbody) return;
+  var todas=facturasPrecargadas;
+  var filtradas=obtenerFiltradas();
+  if(!todas.length){
+    tbody.innerHTML='<tr id="emptyRow"><td colspan="8" class="text-center py-5 text-muted"><i class="fas fa-folder-open display-6 mb-2 text-warning d-block" aria-hidden="true"></i>No hay facturas cargadas.</td></tr>';
+    document.getElementById('paginador').innerHTML='';
+    return;
+  }
+  if(!filtradas.length){
+    tbody.innerHTML='<tr><td colspan="8" class="text-center py-4 text-muted">Sin resultados para "<b>'+escapar(busquedaActual)+'</b>"</td></tr>';
+    document.getElementById('paginador').innerHTML='';
+    return;
+  }
+
+  var totalPaginas=Math.max(1, Math.ceil(filtradas.length/POR_PAGINA));
+  if(paginaActual>totalPaginas) paginaActual=totalPaginas;
+  var inicio=(paginaActual-1)*POR_PAGINA;
+  var pagina=filtradas.slice(inicio, inicio+POR_PAGINA);
+
+  var html='';
+  for(var i=0;i<pagina.length;i++){
+    var f=pagina[i];
+    var esDuplicado = facturasPrecargadas.some(function(o){
+      if(o.id===f.id) return false;
+      return normalizarRIF(o.proveedorRif)===normalizarRIF(f.proveedorRif) &&
+             (o.nroFactura===f.nroFactura || (o.nroControl && f.nroControl && o.nroControl===f.nroControl));
+    });
+    var estadoBadge;
+    if(esDuplicado) estadoBadge='<span class="badge-estado badge-duplicado"><i class="fas fa-copy me-1" aria-hidden="true"></i>Duplicado</span>';
+    else if(f.estado==='Validado') estadoBadge='<span class="badge-estado badge-validado"><i class="fas fa-check-circle me-1" aria-hidden="true"></i>Validado</span>';
+    else estadoBadge='<span class="badge-estado badge-pendiente"><i class="fas fa-clock me-1" aria-hidden="true"></i>Pendiente</span>';
+    var rowClass = esDuplicado?'tr-duplicado':(f.estado==='Validado'?'tr-validado':'tr-pendiente');
+    var proveedorDisplay=f.proveedorNombre||'⚠️ Sin Proveedor';
+    var rifDisplay=f.proveedorRif||'Sin RIF';
+    var facturaDisplay=f.nroFactura||'S/N';
+    var controlDisplay=f.nroControl||'---';
+
+    var flags='';
+    if(f._ocrFlags){
+      flags = '<span class="ms-1">'+
+        '<span class="badge-ocr '+(f._ocrFlags.rif?'ok':'fail')+'" title="RIF">RIF</span> '+
+        '<span class="badge-ocr '+(f._ocrFlags.control?'ok':'fail')+'" title="Control">CTRL</span> '+
+        '<span class="badge-ocr '+(f._ocrFlags.fecha?'ok':'fail')+'" title="Fecha">FEC</span>'+
+      '</span>';
+    }
+
+    html += '<tr id="row_'+f.id+'" class="'+rowClass+'" data-id="'+f.id+'" onclick="seleccionarFilaParaEditar(\''+f.id+'\')">'+
+      '<td><div class="d-flex justify-content-between align-items-start"><div><div class="fw-bold fs-6">'+escapar(proveedorDisplay)+flags+'</div><small class="text-muted">'+escapar(rifDisplay)+'</small></div><div class="d-md-none">'+estadoBadge+'</div></div></td>'+
+      '<td><span class="d-md-none text-muted small me-1">Fac:</span>'+escapar(facturaDisplay)+'</td>'+
+      '<td><span class="d-md-none text-muted small me-1">Ctrl:</span>'+escapar(controlDisplay)+'</td>'+
+      '<td><span class="d-md-none text-muted small me-1">Fecha:</span>'+f.fecha+'</td>'+
+      '<td class="text-md-end fw-bold text-warning"><span class="d-md-none text-muted small me-1 float-start">Bs:</span>Bs '+formatNumber(f.totalBs)+'</td>'+
+      '<td class="text-md-end fw-bold text-success"><span class="d-md-none text-muted small me-1 float-start">USD:</span>$'+formatNumber(f.totalDivisa)+'</td>'+
+      '<td class="text-center d-none d-md-table-cell">'+estadoBadge+'</td>'+
+      '<td class="text-end text-md-center"><button type="button" class="btn btn-sm text-danger p-1" aria-label="Eliminar factura" onclick="event.stopPropagation();eliminarFactura(\''+f.id+'\')"><i class="fas fa-trash" aria-hidden="true"></i></button></td>'+
+    '</tr>';
+  }
+  tbody.innerHTML=html;
+
+  var pag=document.getElementById('paginador');
+  if(totalPaginas>1){
+    pag.innerHTML = '<div class="text-muted small">'+filtradas.length+' resultados · Página '+paginaActual+' de '+totalPaginas+'</div>'+
+      '<div class="d-flex gap-2"><button type="button" class="btn-dynamic" '+(paginaActual===1?'disabled':'')+' onclick="cambiarPagina('+(paginaActual-1)+')"><i class="fas fa-chevron-left"></i></button>'+
+      '<button type="button" class="btn-dynamic" '+(paginaActual===totalPaginas?'disabled':'')+' onclick="cambiarPagina('+(paginaActual+1)+')"><i class="fas fa-chevron-right"></i></button></div>';
+  } else {
+    pag.innerHTML = '<div class="text-muted small">'+filtradas.length+' resultados</div>';
+  }
+}
+
+function cambiarPagina(n){ paginaActual=n; renderTabla(); }
+
+function seleccionarFilaParaEditar(id){
+  document.querySelectorAll('#tbodyPrecarga tr').forEach(function(tr){ tr.classList.remove('tr-selected'); });
+  var row=document.getElementById('row_'+id); if(row) row.classList.add('tr-selected');
+  var f=facturasPrecargadas.find(function(x){ return x.id===id; }); if(!f) return;
+  facturaSeleccionadaId=id;
+  document.getElementById('lblFilaSeleccionada').textContent=(f.nroFactura||'S/N');
+  document.getElementById('editFilaId').value=f.id;
+  document.getElementById('editProveedorNombre').value=f.proveedorNombre;
+  document.getElementById('editProveedorRif').value=f.proveedorRif;
+  document.getElementById('editTipoDoc').value=f.tipoDoc||'factura';
+  document.getElementById('editNroFactura').value=f.nroFactura;
+  document.getElementById('editNroControl').value=f.nroControl;
+  document.getElementById('editFecha').value=f.fecha;
+  document.getElementById('editTasaCambio').value=f.tasaCambio||TASA_DEFAULT;
+  document.getElementById('editConceptoGasto').value=f.concepto||'COMPRA DIVERSA';
+  document.getElementById('editCuentaContable').value=f.cuentaContable||'120505001 - INVENTARIO DE SUMINISTROS';
+  document.getElementById('editSubtotalBs').value=(f.subtotalBs||0).toFixed(2);
+  document.getElementById('editIvaBs').value=(f.ivaBs||0).toFixed(2);
+  document.getElementById('editIvaPorc').value=f.ivaPorc||16;
+  document.getElementById('editTotalBs').value=(f.totalBs||0).toFixed(2);
+  document.getElementById('editSubtotalUSD').value=(f.subtotalDivisa||0).toFixed(2);
+  document.getElementById('editIvaUSD').value=(f.ivaDivisa||0).toFixed(2);
+  document.getElementById('editTotalUSD').value=(f.totalDivisa||0).toFixed(2);
+  actualizarHintRIF();
+  verificarCoherencia();
+  renderDetallesOcr(f);
+  validarCamposEditor();
+  if(window.innerWidth<=768) cambiarTabAppSheet('editor');
+}
+
+function renderDetallesOcr(f){
+  var cont=document.getElementById('ocrDetalles'); if(!cont) return;
+  if(!f._ocrFlags){ cont.innerHTML=''; return; }
+  var items=[
+    { label:'RIF', ok:f._ocrFlags.rif },
+    { label:'Proveedor', ok:f._ocrFlags.proveedor },
+    { label:'N° Factura', ok:f._ocrFlags.factura },
+    { label:'N° Control', ok:f._ocrFlags.control },
+    { label:'Fecha', ok:f._ocrFlags.fecha },
+    { label:'Total', ok:f._ocrFlags.total }
+  ];
+  var html='<div style="background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);border-radius:10px;padding:8px 10px;font-size:10.5px;"><div class="fw-bold mb-1 text-muted" style="text-transform:uppercase;letter-spacing:.05em;">Detección OCR</div><div class="d-flex flex-wrap gap-2">';
+  items.forEach(function(it){
+    html += '<span class="badge-ocr '+(it.ok?'ok':'fail')+'">'+(it.ok?'<i class="fas fa-check"></i>':'<i class="fas fa-times"></i>')+' '+it.label+'</span>';
+  });
+  html += '</div>';
+  if(f._nombreArchivo) html += '<div class="text-muted mt-1" style="font-size:10px;"><i class="fas fa-file"></i> '+escapar(f._nombreArchivo)+'</div>';
+  if(f._textoCrudo) html += '<div class="mt-1"><button type="button" class="btn-dynamic" style="padding:3px 8px;font-size:10px;" onclick="verTextoCrudo(\''+f.id+'\')"><i class="fas fa-eye"></i> Ver texto OCR</button></div>';
+  html += '</div>';
+  cont.innerHTML=html;
+}
+
+function verTextoCrudo(id){
+  var f=facturasPrecargadas.find(function(x){ return x.id===id; }); if(!f||!f._textoCrudo) return;
+  if (!window.Swal) return;
+  Swal.fire({
+    title:'Texto OCR crudo',
+    html:'<pre style="text-align:left;font-size:11px;white-space:pre-wrap;word-break:break-word;max-height:60vh;overflow:auto;background:rgba(0,0,0,0.3);padding:10px;border-radius:8px;">'+escapar(f._textoCrudo)+'</pre>',
+    background:'#1a1a2e', color:'#f1f5f9', confirmButtonColor:'#f97316', width:'90%'
+  });
+}
+
+function verificarCoherencia(){
+  var el=document.getElementById('checkMat'); if(!el) return;
+  var s=parseFloat(document.getElementById('editSubtotalBs').value)||0;
+  var i=parseFloat(document.getElementById('editIvaBs').value)||0;
+  var t=parseFloat(document.getElementById('editTotalBs').value)||0;
+  if(s<=0&&t<=0){ el.textContent='—'; el.style.color='var(--text-light)'; return; }
+  var diff=Math.abs(s+i-t);
+  if(diff<=0.05){ el.innerHTML='<i class="fas fa-check-circle text-success"></i> <span class="text-success">Subtotal + IVA = Total</span>'; }
+  else if(diff<=0.5){ el.innerHTML='<i class="fas fa-exclamation-triangle text-warning"></i> <span class="text-warning">Diferencia de '+diff.toFixed(2)+' Bs</span>'; }
+  else { el.innerHTML='<i class="fas fa-times-circle text-danger"></i> <span class="text-danger">Diferencia de '+diff.toFixed(2)+' Bs</span>'; }
+}
+
+function aplicarCambiosEditor(){
+  var id=document.getElementById('editFilaId').value;
+  var f=facturasPrecargadas.find(function(x){ return x.id===id; });
+  if(!f){ notificar.error('Selecciona una factura para validar'); return; }
+  var subBs=parseFloat(document.getElementById('editSubtotalBs').value)||0;
+  var ivaBs=parseFloat(document.getElementById('editIvaBs').value)||0;
+  var totBs=parseFloat(document.getElementById('editTotalBs').value)||0;
+  var tasa=parseFloat(document.getElementById('editTasaCambio').value)||TASA_DEFAULT;
+
+  f.proveedorNombre=document.getElementById('editProveedorNombre').value.trim();
+  f.proveedorRif=normalizarRIF(document.getElementById('editProveedorRif').value.trim());
+  f.tipoDoc=document.getElementById('editTipoDoc').value;
+  f.nroFactura=document.getElementById('editNroFactura').value.trim();
+  f.nroControl=document.getElementById('editNroControl').value.trim();
+  f.fecha=document.getElementById('editFecha').value;
+  f.tasaCambio=tasa;
+  f.concepto=document.getElementById('editConceptoGasto').value.trim();
+  f.cuentaContable=document.getElementById('editCuentaContable').value.trim();
+  f.subtotalBs=subBs;
+  f.ivaBs=ivaBs;
+  f.ivaPorc=parseFloat(document.getElementById('editIvaPorc').value)||0;
+  f.totalBs=totBs;
+  f.subtotalDivisa=parseFloat((subBs/tasa).toFixed(2));
+  f.ivaDivisa=parseFloat((ivaBs/tasa).toFixed(2));
+  f.totalDivisa=parseFloat((totBs/tasa).toFixed(2));
+  f.esExento = (f.ivaPorc === 0);
+  f.estado='Validado';
+  renderTabla(); actualizarResumen();
+  notificar.exito('Factura Validada');
+  if(window.innerWidth<=768) cambiarTabAppSheet('facturas');
+}
+
+function eliminarFactura(id){
+  notificar.confirmar('¿Eliminar esta factura?','warning','Eliminar','Cancelar',function(ok){
+    if(!ok) return;
+    facturasPrecargadas=facturasPrecargadas.filter(function(f){ return f.id!==id; });
+    renderTabla(); actualizarResumen();
+    if(facturaSeleccionadaId===id){
+      var btnAp = document.getElementById('btnAplicarEdicion');
+      if (btnAp) btnAp.disabled=true;
+      document.getElementById('editFilaId').value='';
+      document.getElementById('lblFilaSeleccionada').textContent='Ninguna';
+      document.getElementById('ocrDetalles').innerHTML='';
+      facturaSeleccionadaId=null;
+    }
+  });
+}
+
+function forzarValidarTodo(){
+  var validados=0; var omitidos=0;
+  facturasPrecargadas.forEach(function(f){
+    var rifN=normalizarRIF(f.proveedorRif);
+    var rifOk = /^[JVGE]-\d{7,8}-\d$/.test(rifN);
+    var tieneBasicos = f.proveedorNombre && f.proveedorNombre!=='⚠️ Sin Proveedor' && f.nroFactura && f.nroFactura!=='S/N' && f.nroControl && f.totalBs>0;
+    var cuentaOk = f.cuentaContable && f.cuentaContable.trim().length>0;
+    var coherencia = Math.abs((f.subtotalBs||0)+(f.ivaBs||0)-f.totalBs)<=0.5;
+    var duplicado = facturasPrecargadas.some(function(o){
+      if(o.id===f.id) return false;
+      return normalizarRIF(o.proveedorRif)===rifN &&
+             (o.nroFactura===f.nroFactura || (o.nroControl && f.nroControl && o.nroControl===f.nroControl));
+    });
+    if(tieneBasicos && rifOk && cuentaOk && coherencia && !duplicado){
+      f.estado='Validado'; validados++;
+    } else omitidos++;
+  });
+  renderTabla(); actualizarResumen();
+  if(omitidos>0) notificar.advertencia(validados+' validadas, '+omitidos+' omitidas (datos incompletos, RIF inválido, duplicado o incoherencia)');
+  else notificar.exito(validados+' facturas validadas');
+}
+
+// ============================================================
+// 11. GUARDAR LOTE (CON TOKEN ZERO-TRUST)
+// ============================================================
+function guardarLote(){
+  if(!facturasPrecargadas.length){ notificar.advertencia('No hay facturas cargadas'); return; }
+  var pendientes=facturasPrecargadas.filter(function(f){ return f.estado!=='Validado'; });
+  if(pendientes.length>0){ notificar.advertencia('Hay '+pendientes.length+' factura(s) pendientes de validación'); return; }
+
+  var dup=0;
+  facturasPrecargadas.forEach(function(f, idx){
+    for(var k=idx+1;k<facturasPrecargadas.length;k++){
+      var o=facturasPrecargadas[k];
+      if(normalizarRIF(o.proveedorRif)===normalizarRIF(f.proveedorRif) &&
+         (o.nroFactura===f.nroFactura || (o.nroControl && f.nroControl && o.nroControl===f.nroControl))) dup++;
+    }
+  });
+  if(dup>0){ notificar.advertencia('Hay '+dup+' posible(s) duplicado(s). Revísalos antes de guardar.'); return; }
+
+  notificar.confirmar('¿Deseas registrar '+facturasPrecargadas.length+' facturas?','question','Sí, Guardar','Cancelar',function(ok){
+    if(!ok) return;
+    mostrarOverlay('Guardando lote en el sistema...');
+
+    var token = '';
+    try {
+      var u = JSON.parse(sessionStorage.getItem('userData') || '{}');
+      token = u.token || '';
+    } catch(e) {}
+
+    var payload = facturasPrecargadas.map(function(f){
+      return {
+        nombreProveedor: f.proveedorNombre,
+        rifProveedor: f.proveedorRif,
+        fechaFacturaProveedor: fechaISOaDDMMYYYY(f.fecha),
+        tipoProveedor: "Factura",
+        nroFacturaProveedor: f.nroFactura,
+        nroControlProveedor: f.nroControl,
+        monedaProveedor: "Bolivares",
+        tasaProveedor: f.tasaCambio,
+        subTotalProveedor: f.subtotalBs,
+        ivaProveedor: f.ivaBs,
+        totalProveedor: f.totalBs,
+        tipoExento: f.esExento ? "EXENTO" : "",
+        descripcionCompra: f.concepto || "COMPRA DIVERSA",
+        cuentaContable: f.cuentaContable || ""
+      };
+    });
+
+    if(typeof google!=='undefined' && google.script && google.script.run && typeof google.script.run.guardarLoteComprasOCR === 'function'){
+      google.script.run
+        .withSuccessHandler(function(resp){
+          ocultarOverlay();
+          if(resp && resp.status==='success'){
+            var msg = 'Guardadas: '+(resp.guardadas||0)+'.';
+            if(resp.asientos && resp.asientos.length) msg += ' Asientos: '+resp.asientos.length+'.';
+            if(resp.duplicados && resp.duplicados.length) msg += ' Duplicados omitidos: '+resp.duplicados.length+'.';
+            notificar.exito(msg);
+            limpiarTodoSilencioso();
+          } else {
+            notificar.error((resp && resp.message) ? resp.message : 'Error desconocido');
+          }
+        })
+        .withFailureHandler(function(err){
+          ocultarOverlay();
+          notificar.error('Error al guardar: '+(err && err.message ? err.message : err));
+        })
+        .guardarLoteComprasOCR(payload, token);
+    } else {
+      setTimeout(function(){
+        ocultarOverlay();
+        notificar.exito('Modo Demo: '+payload.length+' facturas registradas.');
+        limpiarTodoSilencioso();
+      }, 1000);
+    }
+  });
+}
+
+function exportarJSON(){
+  if(!facturasPrecargadas.length){ notificar.advertencia('No hay facturas para exportar'); return; }
+  var payload = facturasPrecargadas.map(function(f){ var c=Object.assign({},f); delete c._textoCrudo; return c; });
+  var blob = new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a=document.createElement('a'); a.href=url; a.download='facturas_'+Date.now()+'.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function mostrarAyuda(){
+  if (!window.Swal) return;
+  Swal.fire({
+    title:'Guía Rápida de Compras Masivas',
+    html:'<div style="text-align:left;font-size:12px;line-height:1.6;">'+
+      '<p><b>1. Captura:</b> Toma fotos de facturas físicas o sube archivos PDF.</p>'+
+      '<p><b>2. Procesar:</b> Presiona "Procesar Documentos" para activar la extracción OCR.</p>'+
+      '<p><b>3. Revisar:</b> Selecciona cada factura para verificar Proveedor, RIF, Control y Montos.</p>'+
+      '<p><b>4. Validar:</b> Asigna la cuenta contable de destino y pulsa "Aplicar y Validar".</p>'+
+      '<p><b>5. Guardar:</b> Pulsa "Guardar" para registrar todas las compras en el sistema.</p>'+
+      '</div>',
+    icon:'info', confirmButtonColor:'#f97316', background:'#1a1a2e', color:'#f1f5f9'
+  });
+}
+
+// ============================================================
+// 12. CÁLCULOS MATEMÁTICOS
+// ============================================================
+function recalcularDesdeBs(){
+  var tasa=parseFloat(document.getElementById('editTasaCambio').value)||tasaGlobalValor||TASA_DEFAULT;
+  var sub=parseFloat(document.getElementById('editSubtotalBs').value)||0;
+  var porc=parseFloat(document.getElementById('editIvaPorc').value)||0;
+  var iva=parseFloat((sub*porc/100).toFixed(2));
+  var tot=parseFloat((sub+iva).toFixed(2));
+  document.getElementById('editIvaBs').value=iva.toFixed(2);
+  document.getElementById('editTotalBs').value=tot.toFixed(2);
+  document.getElementById('editSubtotalUSD').value=(tasa>0?sub/tasa:0).toFixed(2);
+  document.getElementById('editIvaUSD').value=(tasa>0?iva/tasa:0).toFixed(2);
+  document.getElementById('editTotalUSD').value=(tasa>0?tot/tasa:0).toFixed(2);
+  verificarCoherencia(); validarCamposEditor();
+}
+
+function recalcularDesdeIvaBs(){
+  var sub=parseFloat(document.getElementById('editSubtotalBs').value)||0;
+  var iva=parseFloat(document.getElementById('editIvaBs').value)||0;
+  var tot=parseFloat((sub+iva).toFixed(2));
+  document.getElementById('editTotalBs').value=tot.toFixed(2);
+  var tasa=parseFloat(document.getElementById('editTasaCambio').value)||tasaGlobalValor||TASA_DEFAULT;
+  document.getElementById('editIvaUSD').value=(tasa>0?iva/tasa:0).toFixed(2);
+  document.getElementById('editTotalUSD').value=(tasa>0?tot/tasa:0).toFixed(2);
+  if(sub>0) document.getElementById('editIvaPorc').value=((iva/sub)*100).toFixed(2);
+  verificarCoherencia(); validarCamposEditor();
+}
+
+function recalcularDesdeTotalBs(){
+  var tasa=parseFloat(document.getElementById('editTasaCambio').value)||tasaGlobalValor||TASA_DEFAULT;
+  var tot=parseFloat(document.getElementById('editTotalBs').value)||0;
+  var porc=parseFloat(document.getElementById('editIvaPorc').value)||0;
+  var sub=porc>0?tot/(1+porc/100):tot;
+  var iva=tot-sub;
+  document.getElementById('editSubtotalBs').value=sub.toFixed(2);
+  document.getElementById('editIvaBs').value=iva.toFixed(2);
+  document.getElementById('editSubtotalUSD').value=(tasa>0?sub/tasa:0).toFixed(2);
+  document.getElementById('editIvaUSD').value=(tasa>0?iva/tasa:0).toFixed(2);
+  document.getElementById('editTotalUSD').value=(tasa>0?tot/tasa:0).toFixed(2);
+  verificarCoherencia(); validarCamposEditor();
+}
+
+function recalcularDesdeUSD(){
+  var tasa=parseFloat(document.getElementById('editTasaCambio').value)||tasaGlobalValor||TASA_DEFAULT;
+  var subUSD=parseFloat(document.getElementById('editSubtotalUSD').value)||0;
+  var porc=parseFloat(document.getElementById('editIvaPorc').value)||0;
+  var totUSD=subUSD*(1+porc/100);
+  var ivaUSD=totUSD-subUSD;
+  document.getElementById('editTotalUSD').value=totUSD.toFixed(2);
+  document.getElementById('editIvaUSD').value=ivaUSD.toFixed(2);
+  document.getElementById('editSubtotalBs').value=(subUSD*tasa).toFixed(2);
+  document.getElementById('editIvaBs').value=(ivaUSD*tasa).toFixed(2);
+  document.getElementById('editTotalBs').value=(totUSD*tasa).toFixed(2);
+  verificarCoherencia(); validarCamposEditor();
+}
+
+function recalcularDesdeTotalUSD(){
+  var tasa=parseFloat(document.getElementById('editTasaCambio').value)||tasaGlobalValor||TASA_DEFAULT;
+  var totUSD=parseFloat(document.getElementById('editTotalUSD').value)||0;
+  var porc=parseFloat(document.getElementById('editIvaPorc').value)||0;
+  var subUSD=porc>0?totUSD/(1+porc/100):totUSD;
+  var ivaUSD=totUSD-subUSD;
+  document.getElementById('editSubtotalUSD').value=subUSD.toFixed(2);
+  document.getElementById('editIvaUSD').value=ivaUSD.toFixed(2);
+  document.getElementById('editSubtotalBs').value=(subUSD*tasa).toFixed(2);
+  document.getElementById('editIvaBs').value=(ivaUSD*tasa).toFixed(2);
+  document.getElementById('editTotalBs').value=(totUSD*tasa).toFixed(2);
+  verificarCoherencia(); validarCamposEditor();
+}
+
+// ============================================================
+// 13. TASA GLOBAL
+// ============================================================
+function aplicarTasaGlobal(){
+  var v=parseFloat(document.getElementById('tasaGlobal').value);
+  if(!v||v<=0){ notificar.advertencia('Tasa inválida'); return; }
+  tasaGlobalValor=v;
+  facturasPrecargadas.forEach(function(f){
+    f.tasaCambio=v;
+    f.subtotalDivisa=parseFloat((f.subtotalBs/v).toFixed(2));
+    f.ivaDivisa=parseFloat((f.ivaBs/v).toFixed(2));
+    f.totalDivisa=parseFloat((f.totalBs/v).toFixed(2));
+  });
+  if(facturaSeleccionadaId){
+    document.getElementById('editTasaCambio').value=v;
+    var f=facturasPrecargadas.find(function(x){ return x.id===facturaSeleccionadaId; });
+    if(f){
+      document.getElementById('editSubtotalUSD').value=f.subtotalDivisa.toFixed(2);
+      document.getElementById('editIvaUSD').value=f.ivaDivisa.toFixed(2);
+      document.getElementById('editTotalUSD').value=f.totalDivisa.toFixed(2);
+    }
+  }
+  renderTabla(); actualizarResumen();
+  notificar.exito('Tasa '+v.toFixed(4)+' aplicada a todas las facturas');
+}
+
+// ============================================================
+// 14. RESUMEN Y LIMPIEZA
+// ============================================================
+function actualizarResumen(){
+  var resCant = document.getElementById('resCantidad');
+  if (resCant) resCant.textContent=facturasPrecargadas.length;
+  var totBs=facturasPrecargadas.reduce(function(a,b){ return a+(b.totalBs||0); },0);
+  var totUSD=facturasPrecargadas.reduce(function(a,b){ return a+(b.totalDivisa||0); },0);
+  var resBs = document.getElementById('resTotalBs'); if (resBs) resBs.textContent='Bs '+formatNumber(totBs);
+  var resUSD = document.getElementById('resTotalUSD'); if (resUSD) resUSD.textContent='$ '+formatNumber(totUSD);
+  var pend=facturasPrecargadas.filter(function(f){ return f.estado==='Pendiente'; }).length;
+  var resPend = document.getElementById('resPendientes'); if (resPend) resPend.textContent=pend;
+  var dup=0;
+  facturasPrecargadas.forEach(function(f,i){
+    for(var k=i+1;k<facturasPrecargadas.length;k++){
+      var o=facturasPrecargadas[k];
+      if(normalizarRIF(o.proveedorRif)===normalizarRIF(f.proveedorRif) &&
+         (o.nroFactura===f.nroFactura || (o.nroControl && f.nroControl && o.nroControl===f.nroControl))){ dup++; break; }
+    }
+  });
+  var resDup = document.getElementById('resDuplicados'); if (resDup) resDup.textContent=dup;
+  var tabBadge=document.getElementById('tabCountBadge'); if(tabBadge) tabBadge.textContent=facturasPrecargadas.length;
+}
+
+function limpiarTodoSilencioso(){
+  facturasPrecargadas = [];
+  imagenesPendientes = [];
+  facturaSeleccionadaId = null;
+  paginaActual = 1;
+  busquedaActual = '';
+
+  var buscarInput = document.getElementById('buscarFactura');
+  if(buscarInput) buscarInput.value = '';
+
+  renderPreview();
+  renderTabla();
+  actualizarResumen();
+
+  var idsLimpiar = [
+    'editFilaId','editProveedorNombre','editProveedorRif','editNroFactura',
+    'editNroControl','editFecha','editTasaCambio','editConceptoGasto',
+    'editCuentaContable','editSubtotalBs','editIvaBs','editIvaPorc',
+    'editTotalBs','editSubtotalUSD','editIvaUSD','editTotalUSD'
+  ];
+  idsLimpiar.forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    if(el.tagName === 'SELECT') el.selectedIndex = 0;
+    else el.value = '';
+  });
+
+  var ivaPorcEl = document.getElementById('editIvaPorc'); if(ivaPorcEl) ivaPorcEl.value = '16';
+  var conceptoEl = document.getElementById('editConceptoGasto'); if(conceptoEl) conceptoEl.value = 'COMPRA DIVERSA';
+  var cuentaEl = document.getElementById('editCuentaContable'); if(cuentaEl) cuentaEl.value = '120505001 - INVENTARIO DE SUMINISTROS';
+  var tipoDocEl = document.getElementById('editTipoDoc'); if(tipoDocEl) tipoDocEl.value = 'factura';
+
+  var hintRif = document.getElementById('hintRif'); if(hintRif){ hintRif.textContent = ''; hintRif.style.color = ''; }
+  var ocrDetalles = document.getElementById('ocrDetalles'); if(ocrDetalles) ocrDetalles.innerHTML = '';
+  var summary = document.getElementById('validationSummary'); if(summary){ summary.style.display = 'none'; summary.innerHTML = ''; }
+  var checkMat = document.getElementById('checkMat'); if(checkMat){ checkMat.textContent = '—'; checkMat.style.color = 'var(--text-light)'; }
+  var lbl = document.getElementById('lblFilaSeleccionada'); if(lbl) lbl.textContent = 'Ninguna';
+  var btnAplicar = document.getElementById('btnAplicarEdicion'); if(btnAplicar) btnAplicar.disabled = true;
+
+  ocultarOverlay();
+  mostrarOverlayOcr(false);
+}
+
+function limpiarTodo(){
+  notificar.confirmar('¿Eliminar todas las facturas cargadas?','warning','Sí, limpiar','Cancelar',function(ok){
+    if(!ok) return;
+    limpiarTodoSilencioso();
+    notificar.info('Limpieza completa realizada');
+  });
+}
+
+// ============================================================
+// 15. OVERLAYS Y LISTENERS
+// ============================================================
+function mostrarOverlayOcr(s,txt){
+  var o=document.getElementById('ocrOverlay'); if(!o) return;
+  if(txt) document.getElementById('ocrOverlayText').textContent=txt;
+  o.classList.toggle('active',s);
+  o.setAttribute('aria-hidden', s?'false':'true');
+  document.body.classList.toggle('overlay-activo', s);
+}
+
+function mostrarOverlay(msg){
+  var o=document.getElementById('overlay'); if(!o) return;
+  o.style.display='flex'; o.setAttribute('aria-hidden','false');
+  var t=document.getElementById('overlayMensaje'); if(t&&msg) t.textContent=msg;
+  document.body.classList.add('overlay-activo');
+}
+
+function ocultarOverlay(){
+  var o=document.getElementById('overlay'); if(!o) return;
+  o.style.display='none'; o.setAttribute('aria-hidden','true');
+  document.body.classList.remove('overlay-activo');
+}
+
+function initListenersEditor(){
+  var ids = [
+    'editProveedorNombre','editProveedorRif','editTipoDoc','editNroFactura',
+    'editNroControl','editFecha','editTasaCambio','editConceptoGasto',
+    'editCuentaContable','editSubtotalBs','editIvaBs','editIvaPorc',
+    'editTotalBs','editSubtotalUSD','editTotalUSD'
+  ];
+  ids.forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    if(el.dataset.listenerValidacion) return;
+    el.dataset.listenerValidacion = '1';
+    el.addEventListener('input', function(){
+      actualizarHintRIF();
+      verificarCoherencia();
+      validarCamposEditor();
+    });
+    el.addEventListener('change', function(){
+      actualizarHintRIF();
+      verificarCoherencia();
+      validarCamposEditor();
+    });
+  });
+}
+
+// ============================================================
+// 16. EXPORTACIÓN AL ENTORNO SPA
+// ============================================================
+window.ModuloComprasMasiva = {
+  mount: function() {
+    initCargaMasiva();
+  },
+  unmount: function() {
+    limpiarTodoSilencioso();
+  }
+};
+
+// Alias de inicialización para pageConfig.pComprasMasiva.initializer = 'initComprasMasiva'
+window.initComprasMasiva = function() {
+  window.ModuloComprasMasiva.mount();
+};
+
+// Exportar funciones globales para los atributos inline del HTML
+window.cambiarTabAppSheet        = cambiarTabAppSheet;
+window.removerImagen             = removerImagen;
+window.procesarLoteOcr           = procesarLoteOcr;
+window.cambiarPagina             = cambiarPagina;
+window.seleccionarFilaParaEditar = seleccionarFilaParaEditar;
+window.eliminarFactura           = eliminarFactura;
+window.aplicarCambiosEditor      = aplicarCambiosEditor;
+window.verTextoCrudo             = verTextoCrudo;
+window.validarCamposEditor       = validarCamposEditor;
+window.actualizarHintRIF         = actualizarHintRIF;
+window.abrirModalCuentaContable  = abrirModalCuentaContable;
+window.abrirModalNuevoProveedor  = abrirModalNuevoProveedor;
+window.recalcularDesdeBs         = recalcularDesdeBs;
+window.recalcularDesdeIvaBs      = recalcularDesdeIvaBs;
+window.recalcularDesdeTotalBs    = recalcularDesdeTotalBs;
+window.recalcularDesdeUSD        = recalcularDesdeUSD;
+window.recalcularDesdeTotalUSD   = recalcularDesdeTotalUSD;
+window.aplicarTasaGlobal         = aplicarTasaGlobal;
+window.limpiarTodo               = limpiarTodo;
+window.forzarValidarTodo         = forzarValidarTodo;
+window.guardarLote               = guardarLote;
+window.exportarJSON              = exportarJSON;
+window.mostrarAyuda              = mostrarAyuda;
+window.debounceBuscar            = debounceBuscar;
+window.escapar                   = escapar;
+window.formatNumber              = formatNumber;
+window.normalizarRIF             = normalizarRIF;
+window.normalizarFecha           = normalizarFecha;
+window.validarRIF                = validarRIF;
+
+// Inicialización automática si se abre de forma aislada
+if(document.readyState !== 'loading'){
+  window.ModuloComprasMasiva.mount();
+} else {
+  document.addEventListener('DOMContentLoaded', function(){
+    window.ModuloComprasMasiva.mount();
+  });
+}
+
+})(window);
+</script>
+
+</body>
+</html>

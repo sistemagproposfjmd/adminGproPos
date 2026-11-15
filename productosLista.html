@@ -1,0 +1,2945 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{--bg-body:#f8fafc;--bg-card:#ffffff;--bg-input:#f1f5f9;--border-color:#e2e8f0;--border-focus:rgba(59,130,246,0.5);--primary-accent:#3b82f6;--navy-primary:#2563eb;--success-accent:#10b981;--text-main:#1e293b;--text-muted:#64748b;--table-hover:#f8fafc;--overlay-bg:rgba(255,255,255,0.8);--shadow-sm:0 1px 2px 0 rgba(0,0,0,0.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);--shadow-lg:0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05)}[data-bs-theme="dark"]{--bg-body:#0b0f19;--bg-card:#151a27;--bg-input:#0f131f;--border-color:rgba(255,255,255,0.08);--border-focus:rgba(59,130,246,0.5);--primary-accent:#3b82f6;--navy-primary:#3b82f6;--success-accent:#10b981;--text-main:#e2e8f0;--text-muted:#94a3b8;--table-hover:rgba(255,255,255,0.02);--overlay-bg:rgba(11,15,25,0.85);--shadow-sm:0 1px 2px 0 rgba(0,0,0,0.5);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.5);--shadow-lg:0 10px 30px -10px rgba(0,0,0,0.8)}*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg-body);color:var(--text-main);font-size:0.9rem;letter-spacing:-0.01em;transition:background-color 0.3s,color 0.3s}.main-content{padding:20px 25px;max-width:1600px;margin:0 auto}h1,h2,h3,h4,h5,h6{font-weight:600;color:var(--text-main)}.text-primary{color:var(--primary-accent)!important}.text-muted{color:var(--text-muted)!important}.card,.data-section,.filters-section{background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;box-shadow:var(--shadow-sm);transition:all 0.3s ease}.data-section{padding:24px;margin-top:20px}.filters-section{padding:16px 24px;margin-top:20px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.card-header{background:rgba(0,0,0,0.02);border-bottom:1px solid var(--border-color)}[data-bs-theme="dark"] .card-header{background:rgba(255,255,255,0.02)!important}.btn-filter{background:transparent;border:1px solid var(--border-color);color:var(--text-muted);padding:6px 16px;border-radius:50px;font-size:0.85rem;font-weight:500;transition:all 0.2s}.btn-filter:hover{background:var(--bg-input);color:var(--text-main);border-color:var(--text-muted)}.btn-filter.active,.btn-filter:focus{background:var(--primary-accent);color:white;border-color:var(--primary-accent)}.btn{border-radius:10px;font-weight:500;display:inline-flex;align-items:center;justify-content:center;transition:all 0.2s}.btn-primary{background:linear-gradient(135deg,#3b82f6,#2563eb)!important;border:none;box-shadow:0 4px 12px rgba(37,99,235,0.2);color:white!important}.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 15px rgba(37,99,235,0.3)}.form-control,.form-select{background-color:var(--bg-input)!important;border:1px solid var(--border-color)!important;color:var(--text-main)!important;border-radius:10px;padding:0.6rem 1rem;font-size:0.9rem;transition:all 0.2s}.form-control:focus,.form-select:focus{box-shadow:0 0 0 3px rgba(59,130,246,0.15)!important;border-color:var(--primary-accent)!important}.form-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;font-weight:600;color:var(--text-muted);margin-bottom:0.4rem}.search-box{position:relative;max-width:400px;width:100%}.search-box input{padding-left:40px;border-radius:12px}.search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none}table.dataTable{width:100%;border-collapse:collapse}table.dataTable thead th{background:transparent;color:var(--text-muted);padding:16px;font-weight:600;text-transform:uppercase;font-size:0.75rem;letter-spacing:0.05em;border-bottom:1px solid var(--border-color)}table.dataTable tbody td{padding:14px 16px;border-bottom:1px solid var(--border-color);vertical-align:middle;transition:background 0.2s}table.dataTable tbody tr:hover td{background-color:var(--table-hover)!important}#overlay{background:var(--overlay-bg);backdrop-filter:blur(4px);position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center}.spinner{width:40px;height:40px;border:3px solid rgba(59,130,246,0.2);border-radius:50%;border-top-color:var(--primary-accent);animation:spin 0.8s linear infinite;margin-bottom:15px}@keyframes spin{to{transform:rotate(360deg)}}.theme-toggle{position:fixed;bottom:30px;right:30px;z-index:1000;width:45px;height:45px;border-radius:50%;background:var(--bg-card);color:var(--text-main);border:1px solid var(--border-color);display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:var(--shadow-md);transition:all 0.3s}.theme-toggle:hover{transform:scale(1.1);color:var(--primary-accent)}.modal-drawer{position:fixed;top:0;right:0;width:100%;height:100%;z-index:2000;display:none;overflow:hidden}.modal-drawer.active{display:block}.modal-drawer-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.4);backdrop-filter:blur(3px);opacity:0;transition:opacity 0.3s ease}.modal-drawer.active .modal-drawer-overlay{opacity:1}.modal-drawer-content{position:fixed;top:0;right:-600px;width:600px;max-width:90vw;height:100vh;display:flex;flex-direction:column;background:var(--bg-card);transition:transform 0.4s cubic-bezier(0.25,0.8,0.25,1);transform:translateX(600px);box-shadow:var(--shadow-lg);z-index:2001}.modal-drawer.active .modal-drawer-content{transform:translateX(0);right:0}.modal-drawer-header{flex-shrink:0;border-bottom:1px solid var(--border-color);background:transparent!important;color:var(--text-main)!important;padding:20px 24px}.modal-drawer-body{flex:1;overflow-y:auto;padding:24px;background:var(--bg-body)!important}.modal-drawer-footer{flex-shrink:0;border-top:1px solid var(--border-color);padding:16px 24px;background:var(--bg-card)!important}@media (max-width:768px){.modal-drawer-content{width:100%;max-width:100vw}}.modal-drawer-left{left:0!important;right:auto!important;transform:translateX(-100%)!important;transition:transform 0.4s cubic-bezier(0.25,0.8,0.25,1)!important}#gestionarCategoriasModal.active .modal-drawer-left{transform:translateX(0)!important}.stock-badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 10px;border-radius:8px;font-weight:600;font-size:0.75rem;min-width:80px;transition:all 0.2s ease;border:1px solid transparent}table.dataTable tbody td.stock-cero .stock-badge{background:#fee2e2!important;color:#ef4444!important;border-color:#fca5a5}table.dataTable tbody td.stock-uno .stock-badge{background:#fef3c7!important;color:#f59e0b!important;border-color:#fcd34d;animation:pulse-warning 2s infinite}table.dataTable tbody td.stock-minimo .stock-badge{background:#ffedd5!important;color:#f97316!important;border-color:#fdba74}table.dataTable tbody td.stock-positivo .stock-badge{background:#dcfce7!important;color:#10b981!important;border-color:#86efac}[data-bs-theme="dark"] table.dataTable tbody td.stock-cero .stock-badge{background:rgba(239,68,68,0.15)!important;color:#fca5a5!important;border-color:rgba(239,68,68,0.3)}[data-bs-theme="dark"] table.dataTable tbody td.stock-uno .stock-badge{background:rgba(245,158,11,0.15)!important;color:#fcd34d!important;border-color:rgba(245,158,11,0.3)}[data-bs-theme="dark"] table.dataTable tbody td.stock-minimo .stock-badge{background:rgba(249,115,22,0.15)!important;color:#fdba74!important;border-color:rgba(249,115,22,0.3)}[data-bs-theme="dark"] table.dataTable tbody td.stock-positivo .stock-badge{background:rgba(16,185,129,0.15)!important;color:#6ee7b7!important;border-color:rgba(16,185,129,0.3)}.badge-condicion{display:inline-block;padding:4px 10px;border-radius:6px;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}.condicion-nuevo{background-color:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)}.condicion-ajuste{background-color:rgba(59,130,246,0.1);color:#3b82f6;border:1px solid rgba(59,130,246,0.2)}.condicion-precio{background-color:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.2)}.condicion-default{background-color:rgba(100,116,139,0.1);color:var(--text-muted);border:1px solid rgba(100,116,139,0.2)}.badge-lote{display:inline-block;padding:3px 8px;border-radius:6px;font-size:0.7rem;font-family:'Courier New',monospace;background:var(--bg-input);color:var(--text-muted);border:1px solid var(--border-color)}.badge-status{display:inline-block;padding:4px 10px;border-radius:6px;font-size:0.7rem;font-weight:600;text-transform:uppercase}.status-activo{background:rgba(16,185,129,0.1);color:#10b981;border:1px solid rgba(16,185,129,0.2)}.status-inactivo{background:rgba(100,116,139,0.1);color:var(--text-muted);border:1px solid rgba(100,116,139,0.2)}.currency-toggle-container{display:flex;align-items:center;gap:10px;background:var(--bg-input);padding:6px 14px;border-radius:50px;border:1px solid var(--border-color)}.currency-toggle{position:relative;display:inline-block;width:50px;height:26px;margin:0}.currency-toggle input{opacity:0;width:0;height:0}.currency-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#cbd5e1;transition:.3s;border-radius:30px}[data-bs-theme="dark"] .currency-slider{background-color:#334155}.currency-slider:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,0.1)}input:checked + .currency-slider{background-color:var(--primary-accent)}input:checked + .currency-slider:before{transform:translateX(24px)}.currency-label{font-size:0.8rem;font-weight:600;color:var(--text-muted);transition:color 0.2s}.currency-label.active{color:var(--text-main)}.tasa-indicator{font-size:0.75rem;color:var(--primary-accent);cursor:pointer;text-decoration:none;margin-left:5px;font-weight:500;padding:2px 8px;border-radius:12px;background:rgba(59,130,246,0.1)}.tasa-indicator:hover{background:rgba(59,130,246,0.2)}.price-bs{color:var(--success-accent)!important;font-weight:600}.price-bs::before{content:"Bs. ";font-size:0.85em;opacity:0.8}@keyframes pulse-warning{0%{box-shadow:0 0 0 0 rgba(245,158,11,0.4)}70%{box-shadow:0 0 0 4px rgba(245,158,11,0)}100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}}.badge{font-weight:500;padding:0.4em 0.6em;border-radius:6px}.btn-outline-danger{color:#ef4444;border-color:rgba(239,68,68,0.3)}.btn-outline-danger:hover{background:#ef4444;border-color:#ef4444;color:white}.btn-outline-warning{color:#f59e0b;border-color:rgba(245,158,11,0.3)}.btn-outline-warning:hover{background:#f59e0b;border-color:#f59e0b;color:white}::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(148,163,184,0.3);border-radius:4px}::-webkit-scrollbar-thumb:hover{background:rgba(148,163,184,0.5)}[data-bs-theme="dark"] ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1)}[data-bs-theme="dark"] ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.2)}.stock-badge-sidebar{display:inline-flex;align-items:center;padding:6px 14px;border-radius:8px;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;border:1px solid transparent}.stock-badge-agotado{background:rgba(239,68,68,0.1);color:#ef4444;border-color:rgba(239,68,68,0.2)}.stock-badge-ultimo{background:rgba(245,158,11,0.1);color:#f59e0b;border-color:rgba(245,158,11,0.2)}.stock-badge-minimo{background:rgba(249,115,22,0.1);color:#f97316;border-color:rgba(249,115,22,0.2)}.stock-badge-normal{background:rgba(16,185,129,0.1);color:#10b981;border-color:rgba(16,185,129,0.2)}#barraEstadoStock{border:1px solid var(--border-color);background:var(--bg-card)!important}.estado-stock-agotado{border-left:4px solid #ef4444!important}.estado-stock-ultimo{border-left:4px solid #f59e0b!important}.estado-stock-minimo{border-left:4px solid #f97316!important}.estado-stock-normal{border-left:4px solid #10b981!important}.indicador-input{width:10px;height:10px;border-radius:50%;display:inline-block}.indicador-rojo{background-color:#ef4444;box-shadow:0 0 0 2px rgba(239,68,68,0.2)}.indicador-amarillo{background-color:#f59e0b;box-shadow:0 0 0 2px rgba(245,158,11,0.2)}.indicador-naranja{background-color:#f97316;box-shadow:0 0 0 2px rgba(249,115,22,0.2)}.indicador-verde{background-color:#10b981;box-shadow:0 0 0 2px rgba(16,185,129,0.2)}.toast-container-modal{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}.toast-container-modal > *{pointer-events:auto}.toast-modal{background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;box-shadow:var(--shadow-lg);padding:16px 20px;min-width:300px;max-width:400px;display:flex;align-items:flex-start;gap:12px;animation:slideInToast 0.3s ease;border-left:4px solid;color:var(--text-main)}.toast-modal.success{border-left-color:#10b981}.toast-modal.error{border-left-color:#ef4444}.toast-modal.warning{border-left-color:#f59e0b}.toast-modal.info{border-left-color:#3b82f6}.toast-modal.confirmacion{border-left-color:#f97316;background:var(--bg-input)}@keyframes slideInToast{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}@keyframes fadeOutToast{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(100%)}}.toast-modal.hiding{animation:fadeOutToast 0.3s ease forwards}.toast-icon{font-size:20px;flex-shrink:0}.toast-content{flex:1}.toast-title{font-weight:600;margin-bottom:4px;font-size:0.95rem}.toast-message{color:var(--text-muted);font-size:0.85rem;margin-bottom:12px}.toast-actions{display:flex;gap:8px;margin-top:8px}.toast-btn{padding:6px 16px;border:none;border-radius:6px;font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.2s}.toast-btn-confirmar{background:var(--primary-accent);color:white}.toast-btn-confirmar:hover{background:#2563eb}.toast-btn-cancelar{background:var(--bg-body);color:var(--text-main);border:1px solid var(--border-color)}.toast-btn-cancelar:hover{background:var(--border-color)}.toast-close{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0;font-size:16px;line-height:1}.toast-close:hover{color:var(--text-main)}.swal2-container{z-index:99999!important}.swal2-popup{background:var(--bg-card)!important;color:var(--text-main)!important;border:1px solid var(--border-color);border-radius:16px!important}.swal2-title{color:var(--text-main)!important}.swal2-html-container{color:var(--text-muted)!important}.bg-orange{background-color:#f97316!important}.text-orange{color:#f97316!important}.barcode-container{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px;background:white;border-radius:8px;min-height:80px}.barcode-container svg{max-width:100%}.barcode-input-group{position:relative}.barcode-input-group .input-group-text{cursor:pointer;transition:all 0.2s}.barcode-input-group .input-group-text:hover{background:var(--primary-accent);color:white}.barcode-toggle-switch{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg-input);border-radius:8px;border:1px solid var(--border-color)}.badge-codigo-barras{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;background:rgba(16,185,129,0.1);color:#10b981;border-radius:6px;font-size:0.75rem;font-weight:600}.codigo-barras-inactivo{background:rgba(100,116,139,0.1);color:var(--text-muted)}
+
+/* ============================================================
+   DARK MODE — MAYOR CONTRASTE EN MODALES DE PRODUCTOS
+   ============================================================ */
+[data-bs-theme="dark"]{
+  --bg-modal:#1b2334;              /* superficie del modal (más clara que --bg-card) */
+  --bg-modal-elev:#212b40;         /* header / footer del modal */
+  --bg-modal-input:#101625;        /* inputs (más oscuros que el modal) */
+  --border-modal:rgba(255,255,255,0.14);
+  --border-modal-strong:rgba(255,255,255,0.24);
+}
+
+/* Overlay más oscuro para que el modal destaque */
+[data-bs-theme="dark"] .modal-drawer-overlay{ background-color:rgba(0,0,0,0.7)!important; }
+[data-bs-theme="dark"] .modal-backdrop.show{ opacity:0.75; }
+
+/* --- Modales Bootstrap (Enviar Reporte, Lector de Código) --- */
+[data-bs-theme="dark"] .modal-content{
+  background:var(--bg-modal)!important;
+  border:1px solid var(--border-modal);
+  box-shadow:0 25px 60px -15px rgba(0,0,0,0.9);
+}
+
+/* --- Drawers (Ver Producto / Categorías) --- */
+[data-bs-theme="dark"] #modalVerProducto .modal-drawer-content{
+  background:var(--bg-modal);
+  border-left:1px solid var(--border-modal);
+}
+[data-bs-theme="dark"] #gestionarCategoriasModal .modal-drawer-content{
+  background:var(--bg-modal);
+  border-right:1px solid var(--border-modal);
+}
+[data-bs-theme="dark"] .modal-drawer-header{
+  background:var(--bg-modal-elev)!important;
+  border-bottom:1px solid var(--border-modal-strong)!important;
+}
+[data-bs-theme="dark"] .modal-drawer-body{ background:var(--bg-modal)!important; }
+[data-bs-theme="dark"] .modal-drawer-footer{
+  background:var(--bg-modal-elev)!important;
+  border-top:1px solid var(--border-modal-strong)!important;
+}
+
+/* Botón de cerrar visible */
+[data-bs-theme="dark"] .modal-content .btn-close,
+[data-bs-theme="dark"] .modal-drawer-header .btn-close{
+  filter:invert(1) grayscale(1) brightness(1.8);
+}
+
+/* --- Cards dentro de los modales --- */
+[data-bs-theme="dark"] .modal-drawer-body .card,
+[data-bs-theme="dark"] .modal-content .card{
+  background:rgba(255,255,255,0.03);
+  border-color:var(--border-modal)!important;
+}
+[data-bs-theme="dark"] .modal-drawer-body .card-header,
+[data-bs-theme="dark"] .modal-content .card-header{
+  background:rgba(255,255,255,0.05)!important;
+  border-bottom:1px solid var(--border-modal)!important;
+}
+[data-bs-theme="dark"] .modal-drawer-body .card-footer{
+  background:rgba(255,255,255,0.03)!important;
+  border-top:1px solid var(--border-modal)!important;
+}
+
+/* --- Inputs con más contraste --- */
+[data-bs-theme="dark"] .modal-drawer-body .form-control,
+[data-bs-theme="dark"] .modal-drawer-body .form-select,
+[data-bs-theme="dark"] .modal-content .form-control,
+[data-bs-theme="dark"] .modal-content .form-select{
+  background-color:var(--bg-modal-input)!important;
+  border-color:rgba(255,255,255,0.20)!important;
+  color:#f1f5f9!important;
+}
+[data-bs-theme="dark"] .modal-drawer-body .form-control:focus,
+[data-bs-theme="dark"] .modal-drawer-body .form-select:focus,
+[data-bs-theme="dark"] .modal-content .form-control:focus,
+[data-bs-theme="dark"] .modal-content .form-select:focus{
+  background-color:#0d1320!important;
+  border-color:var(--primary-accent)!important;
+  box-shadow:0 0 0 3px rgba(59,130,246,0.28)!important;
+}
+[data-bs-theme="dark"] .modal-drawer-body .form-label,
+[data-bs-theme="dark"] .modal-content .form-label{ color:#b8c4d8!important; }
+
+/* --- Input groups y elementos auxiliares --- */
+[data-bs-theme="dark"] .modal-drawer-body .input-group-text,
+[data-bs-theme="dark"] .modal-content .input-group-text{
+  background:rgba(255,255,255,0.07)!important;
+  border-color:rgba(255,255,255,0.20)!important;
+  color:#cbd5e1;
+}
+[data-bs-theme="dark"] .modal-drawer-body .barcode-toggle-switch{
+  background:rgba(255,255,255,0.04);
+  border-color:var(--border-modal);
+}
+
+/* --- Tabla del modal de Categorías --- */
+[data-bs-theme="dark"] .modal-drawer-body .table{ color:#e2e8f0; --bs-table-bg:transparent; }
+[data-bs-theme="dark"] .modal-drawer-body .table-light{
+  --bs-table-bg:rgba(255,255,255,0.05);
+  --bs-table-color:#cbd5e1;
+}
+[data-bs-theme="dark"] .modal-drawer-body .table-hover > tbody > tr:hover > *{
+  --bs-table-bg-state:rgba(59,130,246,0.10);
+}
+[data-bs-theme="dark"] .modal-drawer-body .table td,
+[data-bs-theme="dark"] .modal-drawer-body .table th{ border-color:var(--border-modal); }
+
+/* --- Paginación dentro de modales --- */
+[data-bs-theme="dark"] .modal-drawer-body .page-link{
+  background-color:rgba(255,255,255,0.05);
+  border-color:var(--border-modal);
+  color:#cbd5e1;
+}
+[data-bs-theme="dark"] .modal-drawer-body .page-item.active .page-link{
+  background-color:var(--primary-accent);
+  border-color:var(--primary-accent);
+  color:#fff;
+}
+
+/* --- Botones outline dentro de modales --- */
+[data-bs-theme="dark"] .modal-drawer-body .btn-outline-secondary,
+[data-bs-theme="dark"] .modal-content .btn-outline-secondary{
+  color:#d3dce9; border-color:rgba(255,255,255,0.28);
+}
+[data-bs-theme="dark"] .modal-drawer-body .btn-outline-secondary:hover,
+[data-bs-theme="dark"] .modal-content .btn-outline-secondary:hover{
+  background:rgba(255,255,255,0.10); color:#fff;
+}
+
+/* --- Textos muted más legibles dentro de modales --- */
+[data-bs-theme="dark"] .modal-drawer-body .text-muted,
+[data-bs-theme="dark"] .modal-content .text-muted{ color:#a9b7cc!important; }
+
+@keyframes slideInToastFallback {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+</style>
+
+<base target="_blank">
+
+</head>
+
+<body id="bodyProducto">
+
+<div id="toastContainerFallback" style="position:fixed; top:20px; right:20px; z-index:99999; display:flex; flex-direction:column; gap:10px; pointer-events:none;"></div>
+  
+  <!-- PANTALLA DE CARGA -->
+  <div id="overlay"><div class="spinner"></div><p class="fw-medium mt-2 text-muted">Cargando Inventario...</p></div>
+
+  <div class="app-container" id="botoneraInventario" style="visibility: hidden;">
+    <div class="main-content">
+
+      <!-- PAGE HEADER -->
+      <header class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div><h3 class="mb-1 fw-bold"><i class="fas fa-boxes me-2 text-primary"></i>Inventario de Productos</h3><p class="text-muted mb-0 small">Gestión general de artículos, precios y stock</p>
+        </div>
+
+        <div class="d-flex flex-wrap align-items-center gap-3">
+          <div class="currency-toggle-container shadow-sm" title="Cambiar Moneda">
+            <span class="currency-label" id="labelUSD">USD</span>
+            <label class="currency-toggle mx-1">
+              <input type="checkbox" id="currencyToggle" onchange="toggleCurrency()">
+              <span class="currency-slider"></span>
+            </label>
+            <span class="currency-label" id="labelVES">Bs</span>
+            <span class="border-start border-secondary mx-2 h-100" style="opacity: 0.3;"></span>
+            <span class="tasa-indicator" onclick="editarTasaCambio()" title="Editar tasa de cambio">
+              <i class="fas fa-edit me-1"></i><span id="tasaDisplay">---</span>
+            </span>
+          </div>
+
+          <div class="d-flex gap-2">
+
+
+          </div>
+        </div>
+      </header>
+
+      <!-- FILTROS SECTION -->
+      <div class="filters-section" id="filtrosArea">
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <span class="text-muted fw-bold small text-uppercase me-2">Vistas:</span>
+          <button class="btn-filter" data-filter="todos" onclick="restablecerFiltro()">Todos</button>
+          <button class="btn-filter" data-filter="minimo" onclick="filtrarStockMinimo()">Mínimo</button>
+          <button class="btn-filter" data-filter="cero" onclick="filtrarStockCero()">Sin Stock</button>
+
+          <span class="border-start mx-2 h-100 d-none d-md-block" style="border-color: var(--border-color) !important;"></span>
+
+          <select class="form-select form-select-sm w-auto border-0 shadow-none bg-transparent fw-medium text-muted" id="filtroCondicion" onchange="filtrarPorCondicion()">
+            <option value="">Todas las Condiciones</option>
+            <option value="nuevo">Nuevo</option>
+            <option value="ajuste">Ajuste</option>
+            <option value="Precio">Cambio Precio</option>
+          </select>
+
+          <select class="form-select form-select-sm w-auto border-0 shadow-none bg-transparent fw-medium text-muted" id="filtroLote" onchange="filtrarPorLote()">
+            <option value="">Todos los Lotes</option>
+          </select>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap mt-3 mt-lg-0">
+            <button id="btnNewForm" class="btn-dynamic" onclick="abrirAgregar()" title="Nuevo Producto"><i class="fas fa-plus me-2"></i><span>Nuevo</span></button>
+            <button class="btn-dynamic teal" onclick="agregarCategoria()"><i class="fas fa-tags me-1"></i><span>Categorías</span></button>
+            <button class="btn-dynamic" data-bs-target="#sendEmailModalProducto" data-bs-toggle="modal"><i class="fas fa-envelope me-1"></i><span>Enviar Reporte</span></button>
+            <button class="btn-dynamic advertencia" onclick="validarYEnviarAlertaStock(this)"><i class="fas fa-bell me-1"></i><span>Alerta Stock</span></button>
+            <button id="btnExcelForm" class="btn btn-outline-success border-0 bg-success bg-opacity-10" onclick="descargarXLSX()" title="Exportar Excel"><i class="fas fa-file-excel"></i></button>
+        </div>
+      </div>
+
+      <!-- FORMULARIO PRODUCTO (INLINE) -->
+      <div id="formularioProducto" class="d-none">
+        <div class="row g-4">
+
+          <!-- Información Básica -->
+          <div class="col-12 col-lg-8">
+            <div class="card shadow-none border">
+              <div class="card-header bg-transparent border-bottom fw-bold text-muted small text-uppercase py-3">
+                <i class="fas fa-info-circle me-2"></i>Información Básica
+              </div>
+              <div class="card-body p-3">
+                <input type="hidden" id="idProductoForm">
+                <div class="row g-3">
+                  <div class="col-md-8">
+                    <label class="form-label">Nombre del producto *</label>
+                    <input type="text" class="form-control" id="nombreProductoForm" required>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Tipo de Producto *</label>
+                    <select class="form-select" id="tipoProductoForm" onchange="toggleTipoProducto(this.value)" required>
+                      <option value="Simple">Simple</option>
+                      <option value="Compuesto">Compuesto (Receta)</option>
+                    </select>
+                  </div>
+
+                  <!-- Código de Barras -->
+                  <div class="col-md-6">
+                    <label class="form-label">
+                      <i class="fas fa-barcode me-1"></i>Código de Barras
+                    </label>
+                    <div class="barcode-input-group input-group">
+                      <input type="text" class="form-control" id="codigoBarrasForm"
+                             placeholder="Escanee o escriba el código"
+                             oninput="generarCodigoBarrasPreview(this.value)">
+                      <span class="input-group-text" onclick="iniciarLectorCodigoBarras()" title="Escanear código de barras">
+                        <i class="fas fa-camera"></i>
+                      </span>
+                      <span class="input-group-text" onclick="generarCodigoBarrasAutomatico()" title="Generar automáticamente">
+                        <i class="fas fa-magic"></i>
+                      </span>
+                    </div>
+                    <div class="barcode-toggle-switch mt-2">
+                      <input type="checkbox" id="habilitarCodigoBarras"
+                             onchange="toggleCodigoBarrasHabilitado(this.checked)" checked>
+                      <span class="small">Habilitar código de barras para este producto</span>
+                    </div>
+                    <div id="previewCodigoBarras" class="barcode-container mt-2 d-none">
+                      <svg id="barcodePreviewSvg"></svg>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Código SKU Alternativo</label>
+                    <input type="text" class="form-control" id="codigoSkuAlternativoForm"
+                           placeholder="Código interno o referencia">
+                    <small class="text-muted">Puede buscar por este código o el código de barras</small>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label class="form-label">Categoría *</label>
+                    <select class="form-select" id="categoriaProductoForm" required></select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Cuenta Contable *</label>
+                    <select class="form-select" id="cuentaProductoForm" required onchange="actualizarCuentaInfo(this.value)"></select>
+                    <input type="hidden" id="nombreCuentaForm">
+                    <input type="hidden" id="cuentaMayorForm">
+                    <input type="hidden" id="subCuentaForm">
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Medida Mayor</label>
+                    <input type="text" class="form-control" id="medidaMayorForm" placeholder="KG, L, UNID" value="UNID" oninput="actualizarLabelIngredientes()">
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Medida Menor</label>
+                    <input type="text" class="form-control" id="medidaMenorForm" placeholder="GR, ML, UNID" value="UNID" oninput="actualizarLabelIngredientes()">
+                  </div>
+                  <div class="col-md-4" id="divFactorConversion">
+                    <label class="form-label">Factor Conversión (Mayor a Menor)</label>
+                    <input type="number" class="form-control" id="factorConversionForm" placeholder="Ej: 1000" value="1">
+                    <small class="text-muted" style="font-size: 0.75rem;">Cuántas unidades menores hacen una unidad mayor (ej. 1000g = 1kg).</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECCIÓN RECETA (PRODUCTOS COMPUESTOS) -->
+            <div class="card shadow-none border mt-4 d-none" id="cardRecetaProducto">
+              <div class="card-header bg-transparent border-bottom fw-bold text-muted small text-uppercase py-3 d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-mortar-pestle me-2 text-warning"></i>Composición de la Receta / Ingredientes</span>
+                <span class="badge bg-warning bg-opacity-10 text-warning">Producto Compuesto</span>
+              </div>
+              <div class="card-body p-3">
+                <div class="row g-2 mb-3 align-items-end">
+                  <div class="col-md-6">
+                    <label class="form-label">Seleccionar Ingrediente (Simples)</label>
+                    <select class="form-select" id="recetaIngredienteSelect" onchange="onIngredienteSelectChange(this.value)"></select>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Cantidad</label>
+                    <input type="number" class="form-control" id="recetaCantidadInput" value="1" step="0.01">
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label">Unidad</label>
+                    <select class="form-select" id="recetaUnidadSelect"></select>
+                  </div>
+                  <div class="col-md-1">
+                    <button type="button" class="btn btn-primary w-100" onclick="agregarIngredienteAReceta()"><i class="fas fa-plus"></i></button>
+                  </div>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover align-middle">
+                    <thead>
+                      <tr>
+                        <th>SKU</th>
+                        <th>Ingrediente</th>
+                        <th class="text-end">Cantidad</th>
+                        <th>Unidad de receta</th>
+                        <th class="text-center">Eliminar</th>
+                      </tr>
+                    </thead>
+                    <tbody id="recetaTablaBody">
+                      <tr><td colspan="5" class="text-center text-muted small py-3">Agregue componentes a este producto compuesto</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-info d-flex align-items-center mt-3" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <div class="small">
+                  <strong>Editor básico.</strong> Para funcionalidades avanzadas (versiones, costos automáticos, compuestos anidados, búsqueda con stock), usa el
+                  <a href="#" onclick="event.preventDefault();abrirEditorRecetaAvanzado(document.getElementById('idProductoForm').value);" class="fw-bold">Editor Avanzado de Receta</a>.
+                </div>
+            </div>
+          </div>
+
+          <!-- Precios e Inventario -->
+          <div class="col-12 col-lg-4">
+            <div class="card shadow-none border">
+              <div class="card-header bg-transparent border-bottom fw-bold text-muted small text-uppercase d-flex justify-content-between align-items-center py-3">
+                <span><i class="fas fa-dollar-sign me-2"></i>Precios e Inventario</span>
+                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25" id="badgeMonedaFormInline">USD</span>
+              </div>
+              <div class="card-body p-3">
+                <div class="row g-3">
+                  <div class="col-md-12">
+                    <label class="form-label" id="labelCostoForm">Costo Base *</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-tag"></i></span>
+                      <input type="number" step="0.01" class="form-control border-start-0 ps-0 fw-bold text-primary" id="precioProductoForm" required>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Precio de Venta</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="fas fa-dollar-sign"></i></span>
+                      <input type="number" step="0.01" class="form-control border-start-0 ps-0 fw-bold text-success" id="precioVentaForm">
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Tasa IVA</label>
+                    <select class="form-select" id="ivaProductoForm">
+                      <option value="0">Exento (0%)</option>
+                      <option value="8">Reducido (8%)</option>
+                      <option value="16">General (16%)</option>
+                    </select>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" id="statusProductoForm">
+                      <option value="Activo">Activo</option>
+                      <option value="Inactivo">Inactivo</option>
+                    </select>
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Stock Actual <span id="indicadorStockInputForm" class="ms-1"></span></label>
+                    <input type="number" step="0.01" class="form-control" id="stockProductoForm" value="0" oninput="actualizarIndicadorStockForm()">
+                  </div>
+                  <div class="col-md-12">
+                    <label class="form-label">Stock Mínimo</label>
+                    <input type="number" step="0.01" class="form-control" id="minimoProductoForm" value="0" oninput="actualizarIndicadorStockForm()">
+                  </div>
+                </div>
+
+                <div id="barraEstadoStockForm" class="mt-3 p-3 rounded-3 d-none">
+                  <div class="d-flex align-items-center justify-content-between mb-2">
+                    <div class="d-flex align-items-center gap-2">
+                      <i id="iconoEstadoStockForm" class="fas fa-circle fa-sm"></i>
+                      <span id="textoEstadoStockForm" class="fw-bold small">Stock Normal</span>
+                    </div>
+                    <small class="text-muted">Mín: <span id="stockMinimoDisplayForm">0</span></small>
+                  </div>
+                  <div class="progress" style="height: 6px; background-color: var(--border-color);">
+                    <div id="progressBarStockForm" class="progress-bar" role="progressbar" style="width: 0%; transition: width 0.5s ease;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Multimedia -->
+            <div class="card shadow-none border mt-4">
+              <div class="card-header bg-transparent border-bottom fw-bold text-muted small text-uppercase py-3">
+                <i class="fas fa-image me-2"></i>Multimedia
+              </div>
+              <div class="card-body p-3">
+                <div class="mb-3">
+                  <label class="form-label">URL de la Imagen</label>
+                  <div class="input-group">
+                    <span class="input-group-text bg-transparent border-end-0"><i class="fas fa-link text-muted"></i></span>
+                    <input type="url" class="form-control border-start-0 ps-0" id="imagenProductoForm" placeholder="https://..." oninput="actualizarPreviewForm(this.value)">
+                  </div>
+                </div>
+                <div class="text-center p-3 border rounded-3" style="background-color: var(--bg-input); min-height: 120px; display: flex; align-items: center; justify-content: center;">
+                  <img id="previewImagenProductoForm" src="" alt="Vista previa" style="max-width: 100%; max-height: 150px; display: none; border-radius: 8px; box-shadow: var(--shadow-sm);">
+                  <div id="placeholderImagenForm" style="color: var(--text-muted);">
+                    <i class="far fa-image fa-2x mb-2 opacity-50"></i>
+                    <p class="mb-0 small fw-medium">Vista Previa</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-flex justify-content-end gap-2 mt-4 mb-4">
+          <button type="button" class="btn btn-outline-secondary" onclick="cerrarAgregar()">
+            <i class="fas fa-arrow-left me-2"></i>Volver al Inventario
+          </button>
+          <button type="button" class="btn btn-primary px-4" id="btnGuardarProductoForm" onclick="guardarDatosProducto(this)">
+            <i class="fas fa-save me-2"></i>Guardar Producto
+          </button>
+        </div>
+      </div>
+
+      <!-- DATA SECTION -->
+      <div class="data-section" id="tablaProductosArea">
+        <div class="d-flex justify-content-between align-items-center flex-wrap mb-4 gap-3">
+          <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInputProducto" class="form-control" placeholder="Buscar por nombre, SKU o categoría..." oninput="debounceBuscarProductos()">
+          </div>
+          <div class="text-muted small">Mostrando <strong id="totalRegistros" class="text-primary">0</strong> registros</div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="dataTable align-middle">
+            <thead>
+              <tr>
+                <th class="ps-4">SKU</th>
+                <th>Producto</th>
+                <th>Código</th>
+                <th>Categoría</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th id="thCosto">Costo ($)</th>
+                <th id="thVenta">Venta ($)</th>
+                <th>Stock</th>
+                <th>Condición</th>
+                <th>Lote</th>
+                <th class="text-center pe-4">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaProductosBody"></tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-center mt-4 border-top pt-3" style="border-color: var(--border-color) !important;">
+          <ul class="pagination pagination-sm mb-0 shadow-sm" id="pagination"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL REPORTE COMPLETO -->
+  <div class="modal fade" id="sendEmailModalProducto" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg" style="background: var(--bg-card); border-radius: 16px;">
+        <div class="modal-header border-bottom-0 p-4 pb-0">
+          <h5 class="modal-title fw-bold"><i class="fas fa-paper-plane me-2 text-primary"></i>Enviar Reporte</h5>
+          <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <p class="text-muted mb-4">Se generará un reporte HTML completo con el estado actual del inventario, niveles de stock y valorización.</p>
+          <div class="p-3 rounded-3" style="background: var(--bg-input);">
+            <span class="text-muted small text-uppercase fw-bold d-block mb-1">Destinatario Fijo:</span>
+            <span class="fw-medium">fmorenocontabilidad@gmail.com</span>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 p-4 pt-0">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="enviarReporteCompleto(this)" id="btnEnviarReporte">Enviar Ahora</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL GESTION CATEGORIAS (DRAWER IZQUIERDO) -->
+  <div class="modal-drawer" id="gestionarCategoriasModal">
+    <div class="modal-drawer-overlay" onclick="cerrarModalCategorias()"></div>
+    <div class="modal-drawer-content modal-drawer-left">
+
+      <div class="modal-drawer-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold"><i class="fas fa-tags me-2 text-primary"></i>Categorías</h5>
+        <button type="button" class="btn-close shadow-none" onclick="cerrarModalCategorias()"></button>
+      </div>
+
+      <div class="modal-drawer-body">
+
+        <div class="card shadow-none border mb-4">
+          <div class="card-header bg-transparent border-bottom p-3">
+            <span class="fw-bold text-muted small text-uppercase" id="tituloFormCategoria"><i class="fas fa-plus me-2"></i>Nueva Categoría</span>
+          </div>
+          <div class="card-body p-3">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label">Cód.</label>
+                <input type="text" class="form-control form-control-sm" id="idCategoriaInput" placeholder="CAT01">
+              </div>
+              <div class="col-md-8">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control form-control-sm" id="nombreCategoriaInput" placeholder="Ej: Electrónica">
+              </div>
+            </div>
+            <div class="mt-3 d-flex gap-2 justify-content-end">
+              <button type="button" class="btn btn-sm btn-outline-secondary" onclick="limpiarFormCategoria()">Limpiar</button>
+              <button type="button" class="btn btn-sm btn-primary" onclick="guardarCategoriaTasas()">Guardar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-none border">
+          <div class="card-header bg-transparent border-bottom p-3 d-flex justify-content-between align-items-center">
+            <span class="fw-bold text-muted small text-uppercase">Listado</span>
+            <div class="search-box" style="width: 150px;">
+              <i class="fas fa-search search-icon" style="font-size: 0.7rem; left: 10px;"></i>
+              <input type="text" id="buscarCategoriaInput" class="form-control form-control-sm" placeholder="Buscar..." onkeyup="debounceFiltrarCategorias()" style="padding-left: 28px; border-radius: 6px;">
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-sm">
+              <thead class="table-light">
+                <tr>
+                  <th class="ps-3 text-muted" style="font-size: 0.7rem;">ID</th>
+                  <th class="text-muted" style="font-size: 0.7rem;">NOMBRE</th>
+                  <th class="text-center text-muted pe-3" style="font-size: 0.7rem;">ACCIÓN</th>
+                </tr>
+              </thead>
+              <tbody id="tablaCategoriasBody">
+                <tr><td colspan="3" class="text-center text-muted py-4 small">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer bg-transparent border-top p-2 d-flex justify-content-center">
+            <ul class="pagination pagination-sm mb-0" id="paginationCategorias"></ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL VER PRODUCTO (DRAWER LATERAL DERECHO) -->
+  <div class="modal-drawer" id="modalVerProducto">
+    <div class="modal-drawer-overlay" onclick="cerrarVerProducto()"></div>
+    <div class="modal-drawer-content">
+      <div class="modal-drawer-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold"><i class="fas fa-eye me-2 text-primary"></i>Ver Producto</h5>
+        <button type="button" class="btn-close shadow-none" onclick="cerrarVerProducto()"></button>
+      </div>
+      <div class="modal-drawer-body" id="verProductoBody">
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary"></div>
+          <p class="mt-3 text-muted">Cargando información...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL LECTOR DE CÓDIGO DE BARRAS -->
+  <div class="modal fade" id="modalLectorCodigoBarras" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: var(--bg-card); border-radius: 16px;">
+        <div class="modal-header border-bottom-0">
+          <h5 class="modal-title"><i class="fas fa-barcode me-2"></i>Escanear Código</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="detenerLectorCodigoBarras()"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p class="text-muted small">Escanee el código o escríbalo manualmente</p>
+          <input type="text" id="inputLecturaCodigoBarras" class="form-control form-control-lg text-center"
+                 placeholder="Esperando lectura..." autocomplete="off"
+                 onkeypress="if(event.key==='Enter'){event.preventDefault();procesarCodigoEscaneado();}">
+        </div>
+        <div class="modal-footer border-top-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="detenerLectorCodigoBarras()">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="procesarCodigoEscaneado()">Aceptar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+// ============================================================
+// HELPERS CENTRALIZADOS DE NOTIFICACIÓN Y UI (INDEX)
+// Usa las funciones globales del index con fallback local
+// ============================================================
+function _notifySuccess(msg) {
+  if (typeof notificar !== 'undefined' && notificar.exito) return notificar.exito(msg);
+  if (typeof notyf !== 'undefined' && notyf && notyf.success) return notyf.success(msg);
+  console.log('[success]', msg);
+}
+function _notifyError(msg) {
+  if (typeof notificar !== 'undefined' && notificar.error) return notificar.error(msg);
+  if (typeof notyf !== 'undefined' && notyf && notyf.error) return notyf.error(msg);
+  console.log('[error]', msg);
+}
+function _notifyWarning(msg) {
+  if (typeof notificar !== 'undefined' && notificar.advertencia) return notificar.advertencia(msg);
+  if (typeof notyf !== 'undefined' && notyf && notyf.warning) return notyf.warning(msg);
+  console.log('[warning]', msg);
+}
+function _notifyInfo(msg) {
+  if (typeof notificar !== 'undefined' && notificar.info) return notificar.info(msg);
+  if (typeof notyf !== 'undefined' && notyf && notyf.info) return notyf.info(msg);
+  console.log('[info]', msg);
+}
+function _confirmarAccion(mensaje, onConfirm, onCancel, tipo) {
+  if (typeof notificar !== 'undefined' && notificar.confirmar) {
+    return notificar.confirmar(mensaje, tipo || 'warning', 'Sí, continuar', 'Cancelar', function(ok) {
+      if (ok && typeof onConfirm === 'function') onConfirm();
+      else if (!ok && typeof onCancel === 'function') onCancel();
+    });
+  }
+  if (typeof Swal !== 'undefined') {
+    return Swal.fire({
+      title: '¿Estás seguro?',
+      text: mensaje,
+      icon: tipo || 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, continuar',
+      cancelButtonText: 'Cancelar'
+    }).then(function(r) {
+      if (r.isConfirmed && typeof onConfirm === 'function') onConfirm();
+      else if (!r.isConfirmed && typeof onCancel === 'function') onCancel();
+    });
+  }
+  if (confirm(mensaje)) { if (typeof onConfirm === 'function') onConfirm(); }
+  else { if (typeof onCancel === 'function') onCancel(); }
+}
+
+function _mostrarCargando(titulo, subtitulo, pct) {
+  // 1. Intentar mostrar el overlay global del index (si existe)
+  if (typeof mostrarLoading === 'function') {
+    try { mostrarLoading(titulo || 'Procesando', subtitulo || 'Por favor espere...', pct || 40); } catch (e) { console.warn('mostrarLoading falló:', e); }
+  }
+  // 2. SIEMPRE mostrar el overlay local de productos
+  var overlay = document.getElementById('overlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function _ocultarCargando() {
+  // 1. Intentar cerrar el overlay global del index (si existe)
+  if (typeof ocultarLoading === 'function') {
+    try { ocultarLoading(); } catch (e) { console.warn('ocultarLoading falló:', e); }
+  }
+  // 2. SIEMPRE cerrar el overlay local de productos
+  var overlay = document.getElementById('overlay');
+  if (overlay) overlay.style.display = 'none';
+  // 3. SIEMPRE mostrar la botonera (por si quedó hidden)
+  var botonera = document.getElementById('botoneraInventario');
+  if (botonera) botonera.style.visibility = 'visible';
+}
+
+// ============================================================
+// 1. VARIABLES GLOBALES
+// ============================================================
+var productosData = [];
+var filteredDataProducto = [];
+var categoriasMap = {};
+var itemsPerPageProducto = 20;
+var currentPageProducto = 1;
+var tasaCambio = 35.00;
+var monedaActual = 'USD';
+var currentPageCategoria = 1;
+var categoriasData = [];
+var categoriasFiltradas = [];
+var lotesUnicos = [];
+var notyf = null;
+var debounceTimer = null;
+var debounceTimerCategorias = null;
+var isRendering = false;
+var productosInicializados = false;
+var recetaTemporal = [];
+var lectorCodigoBarrasActivo = false;
+var timeoutLectorCodigoBarras = null;
+var DEBUG = false;
+
+// Referencias para observers y listeners rastreables
+if (typeof window._observerProductos === 'undefined') window._observerProductos = null;
+if (typeof window._ultimaVistaProductos === 'undefined') window._ultimaVistaProductos = null;
+if (typeof window._productosFocusListenerAdded === 'undefined') window._productosFocusListenerAdded = false;
+var _productosListeners = [];
+var _ultimoResetPorFocoProductos = 0;
+
+// ============================================================
+// 2. UTILIDADES
+// ============================================================
+function escapeHtml(texto) {
+  if (texto === null || texto === undefined) return '';
+  return String(texto)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function mockNotyf() {
+  function mostrarToast(mensaje, tipo) {
+    var container = document.getElementById('toastContainerFallback');
+    if (!container) {
+      console.log('[' + tipo + '] ' + mensaje);
+      return;
+    }
+
+    var colores = {
+      success: { bg: '#10b981', icon: 'fa-check-circle' },
+      error: { bg: '#ef4444', icon: 'fa-times-circle' },
+      warning: { bg: '#f59e0b', icon: 'fa-exclamation-triangle' },
+      info: { bg: '#3b82f6', icon: 'fa-info-circle' }
+    };
+
+    var config = colores[tipo] || colores.info;
+
+    var toast = document.createElement('div');
+    toast.style.cssText = 'background:var(--bg-card, #fff); color:var(--text-main, #1e293b); border-left:4px solid ' + config.bg + '; border-radius:10px; padding:12px 18px; box-shadow:0 4px 12px rgba(0,0,0,0.15); display:flex; align-items:center; gap:10px; min-width:280px; max-width:400px; pointer-events:auto; animation:slideInToastFallback 0.3s ease; font-size:0.9rem;';
+    toast.innerHTML = '<i class="fas ' + config.icon + '" style="color:' + config.bg + '; font-size:1.1rem;"></i><span>' + escapeHtml(mensaje) + '</span>';
+
+    container.appendChild(toast);
+
+    setTimeout(function() {
+      toast.style.transition = 'opacity 0.3s, transform 0.3s';
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(100%)';
+      setTimeout(function() {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 300);
+    }, 3500);
+  }
+
+  return {
+    success: function(msg) { mostrarToast(msg, 'success'); },
+    error: function(msg) { mostrarToast(msg, 'error'); },
+    warning: function(msg) { mostrarToast(msg, 'warning'); },
+    info: function(msg) { mostrarToast(msg, 'info'); }
+  };
+}
+
+function mostrarToast(titulo, mensaje, tipo) {
+  try {
+    if (notyf) {
+      switch (tipo) {
+        case 'success': notyf.success(mensaje); break;
+        case 'error': notyf.error(mensaje); break;
+        case 'warning': notyf.warning(mensaje); break;
+        default: notyf.info(mensaje);
+      }
+      return;
+    }
+  } catch (e) {}
+  console.log(titulo + ': ' + mensaje);
+}
+
+// ============================================================
+// 2b. RESETEAR DOM COMPLETO DE PRODUCTOS
+// ============================================================
+function resetearDOMProductos() {
+  try {
+    // 1. Mostrar tabla, ocultar formulario
+    var formulario = document.getElementById('formularioProducto');
+    var tablaArea = document.getElementById('tablaProductosArea');
+    var filtrosArea = document.getElementById('filtrosArea');
+    if (formulario) formulario.classList.add('d-none');
+    if (tablaArea) tablaArea.classList.remove('d-none');
+    if (filtrosArea) filtrosArea.classList.remove('d-none');
+
+    // 2. Resetear filtros
+    var filtroCondicion = document.getElementById('filtroCondicion');
+    var filtroLote = document.getElementById('filtroLote');
+    var searchInput = document.getElementById('searchInputProducto');
+    if (filtroCondicion) filtroCondicion.value = '';
+    if (filtroLote) filtroLote.value = '';
+    if (searchInput) searchInput.value = '';
+
+    // 3. Resetear paginación de productos
+    currentPageProducto = 1;
+
+    // 4. Cerrar modales drawers si están abiertos
+    var modalVer = document.getElementById('modalVerProducto');
+    var modalCat = document.getElementById('gestionarCategoriasModal');
+    if (modalVer) modalVer.classList.remove('active');
+    if (modalCat) modalCat.classList.remove('active');
+
+    // 5. Cerrar modales Bootstrap si están abiertos
+    try {
+      if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+        document.querySelectorAll('.modal.show').forEach(function(modalEl) {
+          var inst = bootstrap.Modal.getInstance(modalEl);
+          if (inst) inst.hide();
+        });
+      }
+    } catch (e) {}
+
+    // 6. Resetear receta temporal
+    recetaTemporal = [];
+    var recetaTbody = document.getElementById('recetaTablaBody');
+    if (recetaTbody) {
+      recetaTbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted small py-3">Agregue componentes a este producto compuesto</td></tr>';
+    }
+
+    // 7. Resetear paginación de categorías
+    currentPageCategoria = 1;
+
+    // 8. Cerrar cualquier Swal abierto
+    try { if (typeof Swal !== 'undefined') Swal.close(); } catch (e) {}
+
+    // 9. Restaurar body overflow
+    document.body.style.overflow = '';
+
+    console.log('✅ DOM de Productos reseteado completamente');
+  } catch (error) {
+    console.error('❌ Error al resetear DOM de Productos:', error);
+  }
+}
+
+// ============================================================
+// CONEXIÓN DIRECTA CON EL ROUTER SPA
+// ============================================================
+window.ModuloProductos = {
+  mount: function() {
+    resetearDOMProductos();
+    cargarDatosProductos();
+    cargarCategoriasAsync();
+    cargarCuentasAsync();
+  },
+  unmount: function() {
+    resetearDOMProductos();
+    if (window._observerProductos) {
+      try { window._observerProductos.disconnect(); } catch (e) {}
+      window._observerProductos = null;
+    }
+  }
+};
+
+function initProductosLista() {
+  window.ModuloProductos.mount();
+}
+
+// ============================================================
+// 3b. OBSERVER DE VISIBILIDAD (SPA)
+// ============================================================
+function iniciarObserverVisibilidadProductos() {
+  if (window._observerProductos) {
+    try { window._observerProductos.disconnect(); } catch (e) {}
+    window._observerProductos = null;
+  }
+
+  var contenedorPrincipal = document.getElementById('botoneraInventario') || document.querySelector('.app-container');
+  if (!contenedorPrincipal) {
+    console.warn('No se encontró contenedor principal para el observer de productos');
+    return;
+  }
+
+  window._observerProductos = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.type === 'attributes' && (mutation.attributeName === 'class' || mutation.attributeName === 'style')) {
+        var target = mutation.target;
+        var esVisible = !target.classList.contains('d-none') && target.offsetParent !== null;
+
+        if (esVisible && window._ultimaVistaProductos !== 'visible') {
+          window._ultimaVistaProductos = 'visible';
+          console.log('👁️ Módulo Productos visible — reseteando DOM...');
+          setTimeout(function() {
+            resetearDOMProductos();
+            _configurarListenersProductos();
+          }, 100);
+        } else if (!esVisible && window._ultimaVistaProductos !== 'hidden') {
+          window._ultimaVistaProductos = 'hidden';
+          console.log('👁️ Módulo Productos oculto');
+        }
+      }
+    });
+  });
+
+  // Observar el contenedor y sus padres
+  var nodo = contenedorPrincipal;
+  while (nodo && nodo !== document.body) {
+    window._observerProductos.observe(nodo, {
+      attributes: true,
+      attributeFilter: ['class', 'style']
+    });
+    nodo = nodo.parentElement;
+  }
+
+  console.log('✅ Observer de visibilidad iniciado para Productos');
+}
+
+// ============================================================
+// 3c. LISTENER DE FOCO (SPA)
+// ============================================================
+function iniciarListenerFocoProductos() {
+  if (window._productosFocusListenerAdded) return;
+  window._productosFocusListenerAdded = true;
+
+  function verificarYResetear() {
+    var contenedor = document.getElementById('botoneraInventario') || document.querySelector('.app-container');
+    if (!contenedor) return;
+    var esVisible = contenedor.style.visibility !== 'hidden' && contenedor.offsetParent !== null;
+    if (!esVisible) return;
+
+    var ahora = Date.now();
+    if (ahora - _ultimoResetPorFocoProductos < 500) return;
+    _ultimoResetPorFocoProductos = ahora;
+
+    console.log('🔄 Reseteando DOM de Productos por cambio de foco');
+    resetearDOMProductos();
+    _configurarListenersProductos();
+  }
+
+  document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) verificarYResetear();
+  });
+
+  document.addEventListener('click', function(e) {
+    var target = e.target.closest('a, button, [role="menuitem"], .nav-link, .menu-item');
+    if (!target) return;
+    var href = target.getAttribute('href') || '';
+    var onclick = target.getAttribute('onclick') || '';
+    var textContent = (target.textContent || '').toLowerCase();
+
+    if (href.indexOf('pProductos') !== -1 ||
+        onclick.indexOf('pProductos') !== -1 ||
+        textContent.indexOf('producto') !== -1 ||
+        textContent.indexOf('inventario') !== -1 ||
+        target.closest('nav, .navbar, .sidebar, .menu')) {
+      setTimeout(verificarYResetear, 300);
+    }
+  });
+}
+
+// ============================================================
+// 3d. CONFIGURAR LISTENERS (IDEMPOTENTE)
+// ============================================================
+function _configurarListenersProductos() {
+  // Re-configurar listeners de búsqueda y filtros si es necesario
+  var searchInput = document.getElementById('searchInputProducto');
+  if (searchInput && !searchInput.dataset.hasListener) {
+    searchInput.addEventListener('input', debounceBuscarProductos);
+    searchInput.dataset.hasListener = 'true';
+  }
+
+  var buscarCatInput = document.getElementById('buscarCategoriaInput');
+  if (buscarCatInput && !buscarCatInput.dataset.hasListener) {
+    buscarCatInput.addEventListener('keyup', debounceFiltrarCategorias);
+    buscarCatInput.dataset.hasListener = 'true';
+  }
+
+  var currencyToggle = document.getElementById('currencyToggle');
+  if (currencyToggle && !currencyToggle.dataset.hasListener) {
+    currencyToggle.addEventListener('change', toggleCurrency);
+    currencyToggle.dataset.hasListener = 'true';
+  }
+}
+
+// ============================================================
+// 3e. SINCRONIZAR ICONO DE TEMA CON EL INDEX
+// ============================================================
+function _sincronizarIconoTemaProductos() {
+  // Actualizar el icono del botón de tema al cargar
+  var icon = document.getElementById('themeIcon');
+  if (icon) {
+    var currentTheme = document.documentElement.getAttribute('data-bs-theme') || 'dark';
+    icon.className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+  }
+
+  // Escuchar cambios de tema desde el index
+  if (!window._themeListenerProductosAdded) {
+    document.addEventListener('themeChanged', function(e) {
+      var iconEl = document.getElementById('themeIcon');
+      if (iconEl && e.detail && e.detail.theme) {
+        iconEl.className = e.detail.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+      }
+    });
+    window._themeListenerProductosAdded = true;
+  }
+}
+
+// ============================================================
+// 3f. HOOKS SPA (MONTAR / DESMONTAR / RESET MANUAL)
+// ============================================================
+window.montarModuloProductos = function() {
+  initProductosLista();
+};
+
+window.desmontarModuloProductos = function() {
+  console.log('Desmontando Modulo Productos SPA...');
+
+  // Desconectar observer
+  if (window._observerProductos) {
+    try { window._observerProductos.disconnect(); } catch (e) {}
+    window._observerProductos = null;
+  }
+  window._ultimaVistaProductos = null;
+
+  // Limpiar DOM
+  resetearDOMProductos();
+};
+
+window.resetearModuloProductos = function() {
+  console.log('🔄 Reset manual del módulo Productos');
+  resetearDOMProductos();
+  _configurarListenersProductos();
+  if (typeof cargarDatosProductos === 'function') cargarDatosProductos();
+  if (typeof cargarCategoriasAsync === 'function') cargarCategoriasAsync();
+  if (typeof cargarCuentasAsync === 'function') cargarCuentasAsync();
+};
+
+// ============================================================
+// 4. CARGA DE DATOS
+// ============================================================
+
+function cargarCategoriasAsync() {
+  if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+
+  google.script.run
+    .withSuccessHandler(function(cats) {
+      var selectForm = document.getElementById("categoriaProductoForm");
+      if (!selectForm) return;
+
+      var htmlForm = '<option value="">Seleccionar categoría</option>';
+      if (cats && Array.isArray(cats)) {
+        cats.forEach(function(c) {
+          if (c && c.id) {
+            htmlForm += '<option value="' + escapeHtml(c.id) + '">' + escapeHtml(c.nombre || c.id) + '</option>';
+            categoriasMap[c.id] = c.nombre || c.id;
+          }
+        });
+      }
+      selectForm.innerHTML = htmlForm;
+    })
+    .withFailureHandler(function(error) {
+      console.warn('Error al cargar categorías:', error);
+    })
+    .obtenerCategoriasConId();
+}
+
+function cargarCuentasAsync() {
+  if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+
+  google.script.run
+    .withSuccessHandler(function(cuentas) {
+      var selectForm = document.getElementById("cuentaProductoForm");
+      if (!selectForm) return;
+
+      var htmlForm = '<option value="">Seleccionar cuenta</option>';
+      if (cuentas && Array.isArray(cuentas)) {
+        cuentas.forEach(function(c) {
+          if (c && c.codigo) {
+            htmlForm += '<option value="' + escapeHtml(c.codigo) + '" data-nombre="' + escapeHtml(c.nombre || '') + '" data-cuenta="' + escapeHtml(c.cuenta || '') + '" data-sub="' + escapeHtml(c.subcuenta || '') + '">' + escapeHtml(c.codigo) + ' - ' + escapeHtml(c.nombre || '') + '</option>';
+          }
+        });
+      }
+      selectForm.innerHTML = htmlForm;
+    })
+    .withFailureHandler(function(error) {
+      console.warn('Error al cargar cuentas:', error);
+    })
+    .obtenerCuentasContables();
+}
+
+function actualizarCuentaInfo(codigo) {
+  var opt = document.querySelector('#cuentaProductoForm option[value="' + codigo + '"]');
+  if (!opt) return;
+  document.getElementById('nombreCuentaForm').value = opt.getAttribute('data-nombre') || "";
+  document.getElementById('cuentaMayorForm').value = opt.getAttribute('data-cuenta') || "";
+  document.getElementById('subCuentaForm').value = opt.getAttribute('data-sub') || "";
+}
+
+// ============================================================
+// 4. CARGA DE DATOS
+// ============================================================
+function cargarDatosProductos() {
+  _mostrarCargando('Cargando Inventario', 'Obteniendo productos del servidor...', 15);
+
+  var bannerError = document.getElementById('bannerErrorCarga');
+  if (bannerError) bannerError.style.display = 'none';
+
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    _ocultarCargando();
+    mostrarErrorCarga('No se pudo conectar con Google Apps Script. Verifique que la aplicación esté desplegada correctamente.');
+    return;
+  }
+
+  // Cargar tasa en paralelo (sin bloquear)
+  google.script.run
+    .withSuccessHandler(function(tasas) {
+      if (tasas && tasas.tasaUSD > 0) {
+        tasaCambio = tasas.tasaUSD;
+        try { localStorage.setItem('tasaCambio', tasaCambio); } catch (e) {}
+        actualizarDisplayTasa();
+      }
+    })
+    .withFailureHandler(function(error) {
+      console.warn('⚠️ Error al cargar tasa:', error);
+    })
+    .obtenerTasaCambioActual();
+
+  var cargaCompletada = false;
+
+var cargaTimeout = setTimeout(function() {
+  if (cargaCompletada) return;
+  console.warn('⏰ [ProductosLista] Timeout en carga (15s)');
+  _ocultarCargando();  // ← ahora sí cierra el overlay local
+  mostrarErrorCarga('La carga tardó demasiado. Verifique su conexión e intente nuevamente.');
+}, 15000);  // ← bajado de 30s a 15s
+
+  google.script.run
+    .withSuccessHandler(function(data) {
+      cargaCompletada = true;
+      clearTimeout(cargaTimeout);
+
+      var bannerError = document.getElementById('bannerErrorCarga');
+      if (bannerError) bannerError.style.display = 'none';
+
+      if (!data || !Array.isArray(data)) {
+        _ocultarCargando();
+        mostrarErrorCarga('La respuesta del servidor no es válida.');
+        return;
+      }
+
+      if (data.length === 0) {
+        productosData = [];
+        filteredDataProducto = [];
+        renderTablaProductos();
+        actualizarContadoresFiltro();
+        _ocultarCargando();
+        var botonera = document.getElementById('botoneraInventario');
+        if (botonera) botonera.style.visibility = 'visible';
+        _notifyInfo('No hay productos registrados');
+        return;
+      }
+
+      productosData = data.map(function(p) {
+        return {
+          IdProducto: String(p.IdProducto || ""),
+          NombreProducto: String(p.NombreProducto || ""),
+          PrecioProducto: parseFloat(p.PrecioProducto) || 0,
+          precioVenta: parseFloat(p.precioVenta) || 0,
+          IvaProducto: String(p.IvaProducto || "0"),
+          StockProducto: parseFloat(p.StockProducto) || 0,
+          MinimoProducto: parseFloat(p.MinimoProducto) || 0,
+          CuentaContable: String(p.CuentaContable || ""),
+          NombreCuenta: String(p.NombreCuenta || ""),
+          Cuenta: String(p.Cuenta || ""),
+          SubCuenta: String(p.SubCuenta || ""),
+          CategoriaProducto: String(p.CategoriaProducto || ""),
+          ImagenProducto: String(p.ImagenProducto || ""),
+          Status: String(p.Status || "Activo"),
+          Condicion: String(p.Condicion || ""),
+          subida: String(p.subida || ""),
+          tipo: String(p.tipo || "Simple"),
+          Medida: String(p.Medida || "UNID"),
+          UnidadMedida: String(p.UnidadMedida || "UNID"),
+          FactorConversion: parseFloat(p.FactorConversion) || 1,
+          Compuesto: String(p.Compuesto || ""),
+          CodBarra: String(p.CodBarra || "")
+        };
+      });
+
+      filteredDataProducto = productosData.slice();
+      extraerLotesUnicos();
+      renderTablaProductos();
+      actualizarContadoresFiltro();
+
+      _ocultarCargando();
+      var botonera = document.getElementById('botoneraInventario');
+      if (botonera) botonera.style.visibility = 'visible';
+      _notifySuccess('✅ ' + productosData.length + ' productos cargados');
+    })
+    .withFailureHandler(function(error) {
+      cargaCompletada = true;
+      clearTimeout(cargaTimeout);
+      console.error('❌ Error al cargar productos:', error);
+      _ocultarCargando();
+      mostrarErrorCarga('No se pudieron cargar los productos: ' + (error.message || error));
+    })
+    .obtenerProductos();
+}
+
+function mostrarErrorCarga(mensaje) {
+  // 1. SIEMPRE mostrar la botonera y ocultar overlay
+  var botonera = document.getElementById('botoneraInventario');
+  if (botonera) botonera.style.visibility = 'visible';
+  var overlay = document.getElementById('overlay');
+  if (overlay) overlay.style.display = 'none';
+
+  // 2. Mostrar alerta (con fallback si Swal no está)
+  if (typeof Swal === 'undefined') {
+    console.error('❌ Error de carga:', mensaje);
+    alert('Error de conexión: ' + mensaje);
+    return;
+  }
+
+  Swal.fire({
+    title: 'Error de conexión',
+    html: '<p>' + escapeHtml(mensaje) + '</p>' +
+          '<p class="text-muted small mt-3">Verifique su conexión a internet y que la aplicación esté desplegada correctamente.</p>',
+    icon: 'error',
+    showCancelButton: true,
+    confirmButtonText: '<i class="fas fa-sync-alt me-1"></i> Reintentar',
+    cancelButtonText: 'Cerrar',
+    reverseButtons: true
+  }).then(function(result) {
+    if (result.isConfirmed) {
+      cargarDatosProductos();
+    }
+  });
+}
+
+function cargarCategoriasAsync() {
+  if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+
+  google.script.run
+    .withSuccessHandler(function(cats) {
+      var selectForm = document.getElementById("categoriaProductoForm");
+      if (!selectForm) return;
+
+      var htmlForm = '<option value="">Seleccionar categoría</option>';
+      if (cats && Array.isArray(cats)) {
+        cats.forEach(function(c) {
+          if (c && c.id) {
+            htmlForm += '<option value="' + escapeHtml(c.id) + '">' + escapeHtml(c.nombre || c.id) + '</option>';
+            categoriasMap[c.id] = c.nombre || c.id;
+          }
+        });
+      }
+      selectForm.innerHTML = htmlForm;
+    })
+    .withFailureHandler(function(error) {
+      console.warn('Error al cargar categorías:', error);
+    })
+    .obtenerCategoriasConId();
+}
+
+function cargarCuentasAsync() {
+  if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+
+  google.script.run
+    .withSuccessHandler(function(cuentas) {
+      var selectForm = document.getElementById("cuentaProductoForm");
+      if (!selectForm) return;
+
+      var htmlForm = '<option value="">Seleccionar cuenta</option>';
+      if (cuentas && Array.isArray(cuentas)) {
+        cuentas.forEach(function(c) {
+          if (c && c.codigo) {
+            htmlForm += '<option value="' + escapeHtml(c.codigo) + '" data-nombre="' + escapeHtml(c.nombre || '') + '" data-cuenta="' + escapeHtml(c.cuenta || '') + '" data-sub="' + escapeHtml(c.subcuenta || '') + '">' + escapeHtml(c.codigo) + ' - ' + escapeHtml(c.nombre || '') + '</option>';
+          }
+        });
+      }
+      selectForm.innerHTML = htmlForm;
+    })
+    .withFailureHandler(function(error) {
+      console.warn('Error al cargar cuentas:', error);
+    })
+    .obtenerCuentasContables();
+}
+
+function actualizarCuentaInfo(codigo) {
+  var opt = document.querySelector('#cuentaProductoForm option[value="' + codigo + '"]');
+  if (!opt) return;
+  document.getElementById('nombreCuentaForm').value = opt.getAttribute('data-nombre') || "";
+  document.getElementById('cuentaMayorForm').value = opt.getAttribute('data-cuenta') || "";
+  document.getElementById('subCuentaForm').value = opt.getAttribute('data-sub') || "";
+}
+
+// ============================================================
+// 5. RECETAS (PRODUCTOS COMPUESTOS)
+// ============================================================
+function toggleTipoProducto(tipo) {
+  var cardReceta = document.getElementById('cardRecetaProducto');
+  if (tipo === 'Compuesto') {
+    cardReceta.classList.remove('d-none');
+    llenarSelectIngredientes();
+  } else {
+    cardReceta.classList.add('d-none');
+  }
+}
+
+function llenarSelectIngredientes() {
+  var select = document.getElementById('recetaIngredienteSelect');
+  if (!select) return;
+  var html = '<option value="">Seleccionar Ingrediente...</option>';
+  var idActual = document.getElementById('idProductoForm').value;
+  productosData.forEach(function(p) {
+    if (String(p.IdProducto) !== String(idActual) && p.tipo !== 'Compuesto') {
+      html += '<option value="' + escapeHtml(p.IdProducto) + '">' + escapeHtml(p.NombreProducto) + ' (' + escapeHtml(p.Medida) + ')</option>';
+    }
+  });
+  select.innerHTML = html;
+}
+
+function onIngredienteSelectChange(idIngrediente) {
+  var unidadSelect = document.getElementById('recetaUnidadSelect');
+  if (!unidadSelect) return;
+  unidadSelect.innerHTML = '';
+  if (!idIngrediente) return;
+
+  var ingrediente = productosData.find(function(p) {
+    return String(p.IdProducto) === String(idIngrediente);
+  });
+  if (!ingrediente) return;
+
+  var opciones = [];
+  if (ingrediente.Medida) opciones.push(ingrediente.Medida);
+  if (ingrediente.UnidadMedida && ingrediente.UnidadMedida !== ingrediente.Medida) {
+    opciones.push(ingrediente.UnidadMedida);
+  }
+  if (opciones.length === 0) opciones.push('UNID');
+
+  var html = '';
+  opciones.forEach(function(opt) {
+    html += '<option value="' + escapeHtml(opt) + '">' + escapeHtml(opt) + '</option>';
+  });
+  unidadSelect.innerHTML = html;
+}
+
+function agregarIngredienteAReceta() {
+  var selectIngrediente = document.getElementById('recetaIngredienteSelect');
+  var cantidadInput = document.getElementById('recetaCantidadInput');
+  var selectUnidad = document.getElementById('recetaUnidadSelect');
+
+  var id = selectIngrediente.value;
+  var qty = parseFloat(cantidadInput.value);
+  var unit = selectUnidad.value;
+
+  if (!id || isNaN(qty) || qty <= 0 || !unit) {
+    _notifyWarning('Ingrese un ingrediente, cantidad y unidad válidos.');
+    return;
+  }
+
+  var ingrediente = productosData.find(function(p) {
+    return String(p.IdProducto) === String(id);
+  });
+  if (!ingrediente) return;
+
+  var existenteIdx = recetaTemporal.findIndex(function(item) {
+    return String(item.id) === String(id);
+  });
+
+  if (existenteIdx !== -1) {
+    recetaTemporal[existenteIdx].qty += qty;
+  } else {
+    recetaTemporal.push({ id: id, nombre: ingrediente.NombreProducto, qty: qty, unit: unit });
+  }
+
+  renderTablaRecetaTemporal();
+  selectIngrediente.value = '';
+  cantidadInput.value = '1';
+  selectUnidad.innerHTML = '';
+}
+
+function eliminarIngredienteDeReceta(index) {
+  recetaTemporal.splice(index, 1);
+  renderTablaRecetaTemporal();
+}
+
+function renderTablaRecetaTemporal() {
+  var tbody = document.getElementById('recetaTablaBody');
+  if (!tbody) return;
+
+  if (recetaTemporal.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted small py-3">Agregue componentes a este producto compuesto</td></tr>';
+    return;
+  }
+
+  var html = '';
+  recetaTemporal.forEach(function(item, index) {
+    html += '<tr>' +
+      '<td><span class="badge bg-light text-dark border">' + escapeHtml(item.id) + '</span></td>' +
+      '<td class="fw-medium">' + escapeHtml(item.nombre || item.id) + '</td>' +
+      '<td class="text-end fw-bold text-primary">' + Number(item.qty).toFixed(2) + '</td>' +
+      '<td><span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25">' + escapeHtml(item.unit) + '</span></td>' +
+      '<td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="eliminarIngredienteDeReceta(' + index + ')"><i class="fas fa-trash"></i></button></td>' +
+    '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function producirCompuestoManual(id) {
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    _notifyError('No hay conexión con el servidor.');
+    return;
+  }
+
+  _mostrarCargando('Abriendo Producción', 'Conectando con el módulo de producción...', 40);
+
+  google.script.run
+    .withSuccessHandler(function(urlBase) {
+      _ocultarCargando();
+      if (!urlBase) {
+        _notifyError('No se pudo obtener la URL de producción.');
+        return;
+      }
+      var urlFinal = urlBase + '&page=produccion&id=' + encodeURIComponent(id);
+      window.open(urlFinal, '_blank');
+    })
+    .withFailureHandler(function(err) {
+      _ocultarCargando();
+      _notifyError('No se pudo abrir la producción: ' + err.message);
+    })
+    .getUrlProduccionHtml();
+}
+
+function mostrarModalProduccion(id, producto, maxProducible, desglose) {
+  var desgloseHTML = '<div class="text-start mt-3 border-top pt-2"><small class="text-muted text-uppercase fw-bold">Disponibilidad de Insumos:</small><ul class="list-unstyled mt-2 small">';
+
+  desglose.forEach(function(item) {
+    if (!item.encontrado) {
+      desgloseHTML += '<li><i class="fas fa-times-circle me-1 text-danger"></i> <b>' + escapeHtml(item.nombre) + '</b>: no encontrado en catálogo.</li>';
+    } else if (item.error) {
+      desgloseHTML += '<li><i class="fas fa-exclamation-triangle me-1 text-warning"></i> <b>' + escapeHtml(item.nombre) + '</b>: ' + escapeHtml(item.error) + '</li>';
+    } else {
+      desgloseHTML += '<li><i class="fas fa-info-circle me-1 text-primary"></i> ' + escapeHtml(item.nombre) + ': requiere <b>' + item.requeridoPorUnidad + ' ' + escapeHtml(item.unidad) + '</b> por unidad. Disp: <b>' + item.stockDisponible.toFixed(2) + ' ' + escapeHtml(item.unidadInventario) + '</b> (Máx: ' + item.maxParaEste + ' u.)</li>';
+    }
+  });
+
+  desgloseHTML += '</ul></div>';
+
+  Swal.fire({
+    title: 'Producción de Compuesto',
+    html: '<div class="text-start"><p class="mb-2">¿Cuántas unidades de <b>' + escapeHtml(producto.NombreProducto) + '</b> desea producir?</p>' +
+      '<p class="mb-2 text-success"><b>Cantidad máxima producible actual: ' + maxProducible + ' unidades</b></p>' +
+      '<input type="number" id="inputProducirCant" class="form-control text-center text-primary fw-bold" value="' + (maxProducible > 0 ? 1 : 0) + '" min="0.01" step="0.01">' +
+      desgloseHTML + '</div>',
+    showCancelButton: true,
+    confirmButtonText: 'Producir y Descontar',
+    cancelButtonText: 'Cancelar',
+    preConfirm: function() {
+      var cant = parseFloat(document.getElementById('inputProducirCant').value);
+      if (isNaN(cant) || cant <= 0) {
+        Swal.showValidationMessage('Ingrese una cantidad válida para producir.');
+        return false;
+      }
+      if (cant > maxProducible) {
+        Swal.showValidationMessage('Insumos insuficientes. El máximo que puede producir es ' + maxProducible + '.');
+        return false;
+      }
+      return cant;
+    }
+  }).then(function(result) {
+    if (result.isConfirmed) {
+      var cantidad = result.value;
+      ejecutarProduccion(id, cantidad);
+    }
+  });
+}
+
+function ejecutarProduccion(id, cantidad) {
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    _notifyError('No hay conexión con el servidor. No se puede producir.');
+    return;
+  }
+
+  _mostrarCargando('Produciendo', 'Descontando insumos y actualizando stock...', 60);
+
+  google.script.run
+    .withSuccessHandler(function(res) {
+      _ocultarCargando();
+      if (res && res.success) {
+        _notifySuccess(res.message || 'Producción realizada correctamente');
+        cargarDatosProductos();
+      } else {
+        _notifyError(res ? res.message : 'Error desconocido en la producción');
+      }
+    })
+    .withFailureHandler(function(err) {
+      _ocultarCargando();
+      _notifyError('No se pudo comunicar con el servidor: ' + err.message);
+    })
+    .descontarStockCompuesto(id, cantidad);
+}
+
+// ============================================================
+// 6. BÚSQUEDA Y FILTROS
+// ============================================================
+function debounceBuscarProductos() {
+  var input = document.getElementById('searchInputProducto');
+  if (input) input.classList.add('searching');
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(function() {
+    buscarProductos();
+    if (input) input.classList.remove('searching');
+  }, 300);
+}
+
+function debounceFiltrarCategorias() {
+  clearTimeout(debounceTimerCategorias);
+  debounceTimerCategorias = setTimeout(filtrarCategorias, 300);
+}
+
+function extraerLotesUnicos() {
+  var lotesSet = new Set();
+  productosData.forEach(function(p) {
+    var lote = p.subida;
+    if (lote && lote.toString().trim() !== '') lotesSet.add(lote.toString().trim());
+  });
+  lotesUnicos = Array.from(lotesSet).sort().reverse();
+  actualizarSelectLotes();
+}
+
+function actualizarSelectLotes() {
+  var select = document.getElementById('filtroLote');
+  if (!select) return;
+  var html = '<option value="">Todos los Lotes</option>';
+  lotesUnicos.forEach(function(lote) {
+    html += '<option value="' + escapeHtml(lote) + '">' + escapeHtml(lote) + '</option>';
+  });
+  select.innerHTML = html;
+}
+
+function filtrarPorCondicion() {
+  var condicion = document.getElementById('filtroCondicion').value;
+  if (!condicion) {
+    filteredDataProducto = productosData.slice();
+  } else {
+    var condicionLower = condicion.toLowerCase();
+    filteredDataProducto = productosData.filter(function(p) {
+      return (p.Condicion || "").toString().trim().toLowerCase() === condicionLower;
+    });
+  }
+  currentPageProducto = 1;
+  renderTablaProductos();
+}
+
+function filtrarPorLote() {
+  var lote = document.getElementById('filtroLote').value;
+  if (!lote) {
+    filteredDataProducto = productosData.slice();
+  } else {
+    filteredDataProducto = productosData.filter(function(p) {
+      return (p.subida || "").toString().trim() === lote;
+    });
+  }
+  currentPageProducto = 1;
+  renderTablaProductos();
+}
+
+function buscarProductos() {
+  var searchTerm = document.getElementById('searchInputProducto').value.toLowerCase().trim();
+  if (!searchTerm) {
+    filteredDataProducto = productosData.slice();
+  } else {
+    filteredDataProducto = productosData.filter(function(p) {
+      if (p.IdProducto && p.IdProducto.toLowerCase().indexOf(searchTerm) !== -1) return true;
+      if (p.NombreProducto && p.NombreProducto.toLowerCase().indexOf(searchTerm) !== -1) return true;
+      if (p.CodBarra && p.CodBarra.toLowerCase().indexOf(searchTerm) !== -1) return true;
+      var categoriaNombre = categoriasMap[p.CategoriaProducto] || p.CategoriaProducto || '';
+      if (categoriaNombre.toLowerCase().indexOf(searchTerm) !== -1) return true;
+      return false;
+    });
+  }
+  currentPageProducto = 1;
+  renderTablaProductos();
+}
+
+function restablecerFiltro() {
+  document.getElementById('filtroCondicion').value = '';
+  document.getElementById('filtroLote').value = '';
+  document.getElementById('searchInputProducto').value = '';
+  filteredDataProducto = productosData.slice();
+  currentPageProducto = 1;
+  renderTablaProductos();
+}
+
+function filtrarStockMinimo() {
+  filteredDataProducto = productosData.filter(function(p) {
+    return p.StockProducto > 0 && p.StockProducto <= p.MinimoProducto;
+  });
+  currentPageProducto = 1;
+  renderTablaProductos();
+}
+
+function filtrarStockCero() {
+  filteredDataProducto = productosData.filter(function(p) {
+    return p.StockProducto === 0;
+  });
+  currentPageProducto = 1;
+  renderTablaProductos();
+}
+
+function actualizarContadoresFiltro() {
+  var total = productosData.length;
+  var stockCero = 0;
+  var stockMinimo = 0;
+  productosData.forEach(function(p) {
+    if (p.StockProducto === 0) stockCero++;
+    else if (p.StockProducto <= p.MinimoProducto) stockMinimo++;
+  });
+  var btnTodos = document.querySelector('[data-filter="todos"]');
+  var btnCero = document.querySelector('[data-filter="cero"]');
+  var btnMin = document.querySelector('[data-filter="minimo"]');
+  if (btnTodos) btnTodos.innerHTML = 'Todos <span class="badge bg-secondary ms-1">' + total + '</span>';
+  if (btnCero) btnCero.innerHTML = 'Sin Stock <span class="badge bg-danger ms-1">' + stockCero + '</span>';
+  if (btnMin) btnMin.innerHTML = 'Stock Mínimo <span class="badge bg-warning ms-1">' + stockMinimo + '</span>';
+}
+
+// ============================================================
+// 7. RENDER DE TABLA
+// ============================================================
+function getStockStatus(stock, minimo) {
+  if (stock === 0) return { class: 'stock-cero', text: 'Agotado' };
+  else if (stock === 1) return { class: 'stock-uno', text: 'Último' };
+  else if (stock <= minimo) return { class: 'stock-minimo', text: 'Mínimo(' + stock + ')' };
+  else return { class: 'stock-positivo', text: stock + ' unid.' };
+}
+
+function formatearCondicion(condicion) {
+  if (!condicion) return '<span class="badge-condicion condicion-default">-</span>';
+  var c = condicion.toString().toLowerCase();
+  if (c === 'nuevo') return '<span class="badge-condicion condicion-nuevo">Nuevo</span>';
+  if (c === 'ajuste') return '<span class="badge-condicion condicion-ajuste">Ajuste</span>';
+  return '<span class="badge-condicion condicion-precio">Cambio Precio</span>';
+}
+
+function formatearLote(lote) {
+  if (!lote) return '<span class="text-muted">-</span>';
+  return '<span class="badge-lote">' + escapeHtml(lote) + '</span>';
+}
+
+function renderTablaProductos() {
+  if (isRendering) return;
+  isRendering = true;
+
+  var tbody = document.getElementById('tablaProductosBody');
+  var pagination = document.getElementById('pagination');
+
+  if (!filteredDataProducto || filteredDataProducto.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="12" class="text-center text-muted py-4">No hay productos registrados</td></tr>';
+    document.getElementById('totalRegistros').innerText = '0';
+    if (pagination) pagination.innerHTML = '';
+    isRendering = false;
+    return;
+  }
+
+  var totalPages = Math.ceil(filteredDataProducto.length / itemsPerPageProducto);
+  var start = (currentPageProducto - 1) * itemsPerPageProducto;
+  var end = start + itemsPerPageProducto;
+  var pageData = filteredDataProducto.slice(start, end);
+  var html = '';
+
+  pageData.forEach(function(p) {
+    var stockStatus = getStockStatus(p.StockProducto, p.MinimoProducto);
+    var categoriaNombre = categoriasMap[p.CategoriaProducto] || p.CategoriaProducto || "-";
+    var precioCostoFormateado = formatCurrency(p.PrecioProducto);
+    var precioVentaFormateado = formatCurrency(p.precioVenta || 0);
+    var idEscapado = String(p.IdProducto).replace(/'/g, "\\'");
+    var esCompuesto = p.tipo === 'Compuesto';
+
+    var tipoBadge = esCompuesto
+      ? '<span class="badge bg-warning text-dark"><i class="fas fa-mortar-pestle me-1"></i>Compuesto</span>'
+      : '<span class="badge bg-secondary">Simple</span>';
+
+    var btnProduccion = esCompuesto
+      ? '<button class="btn btn-sm btn-outline-warning border-0 me-1" onclick="producirCompuestoManual(\'' + idEscapado + '\')" title="Producir (abre nueva pestaña)"><i class="fas fa-hammer"></i></button>'
+      : '';
+
+    var codigoHTML = '-';
+    if (p.CodBarra) {
+      codigoHTML = '<span class="badge-codigo-barras" title="' + escapeHtml(p.CodBarra) + '"><i class="fas fa-barcode"></i> ' + escapeHtml(p.CodBarra) + '</span>';
+    }
+
+    var statusBadge = p.Status === 'Activo'
+      ? '<span class="badge-status status-activo">Activo</span>'
+      : '<span class="badge-status status-inactivo">Inactivo</span>';
+
+    html += '<tr>' +
+      '<td class="ps-4"><span class="badge bg-input text-muted border">' + escapeHtml(p.IdProducto) + '</span></td>' +
+      '<td class="fw-bold">' + escapeHtml(p.NombreProducto) + '</td>' +
+      '<td>' + codigoHTML + '</td>' +
+      '<td>' + escapeHtml(categoriaNombre) + '</td>' +
+      '<td>' + tipoBadge + '</td>' +
+      '<td>' + statusBadge + '</td>' +
+      '<td class="' + (monedaActual === 'VES' ? 'price-bs' : 'text-primary') + '">' + precioCostoFormateado + '</td>' +
+      '<td class="' + (monedaActual === 'VES' ? 'price-bs' : 'text-primary fw-bold') + '">' + precioVentaFormateado + '</td>' +
+      '<td class="' + stockStatus.class + '"><span class="stock-badge ' + stockStatus.class + '">' + stockStatus.text + '</span></td>' +
+      '<td>' + formatearCondicion(p.Condicion) + '</td>' +
+      '<td>' + formatearLote(p.subida) + '</td>' +
+      '<td class="text-center pe-4">' + btnProduccion +
+        '<button class="btn btn-sm btn-outline-info border-0 me-1" onclick="verProducto(\'' + idEscapado + '\')" title="Ver"><i class="fas fa-eye"></i></button>' +
+        '<button class="btn btn-sm btn-outline-primary border-0 me-1" onclick="editarProducto(\'' + idEscapado + '\')" title="Editar"><i class="fas fa-edit"></i></button>' +
+        '<button class="btn btn-sm btn-outline-danger border-0" onclick="eliminarProducto(\'' + idEscapado + '\')" title="Eliminar"><i class="fas fa-trash"></i></button>' +
+      '</td>' +
+    '</tr>';
+  });
+
+  tbody.innerHTML = html;
+  document.getElementById('totalRegistros').innerText = filteredDataProducto.length;
+
+  if (pagination) {
+    var pagHtml = '';
+    if (totalPages > 1) {
+      pagHtml += '<li class="page-item ' + (currentPageProducto === 1 ? 'disabled' : '') + '"><a class="page-link border-0 shadow-none bg-transparent" href="#" onclick="event.preventDefault();cambiarPaginaProducto(' + (currentPageProducto - 1) + ')">&laquo;</a></li>';
+      for (var j = 1; j <= totalPages; j++) {
+        pagHtml += '<li class="page-item ' + (j === currentPageProducto ? 'active' : '') + '"><a class="page-link border-0 shadow-none ' + (j === currentPageProducto ? 'bg-primary text-white rounded-3' : 'bg-transparent') + '" href="#" onclick="event.preventDefault();cambiarPaginaProducto(' + j + ')">' + j + '</a></li>';
+      }
+      pagHtml += '<li class="page-item ' + (currentPageProducto === totalPages ? 'disabled' : '') + '"><a class="page-link border-0 shadow-none bg-transparent" href="#" onclick="event.preventDefault();cambiarPaginaProducto(' + (currentPageProducto + 1) + ')">&raquo;</a></li>';
+    }
+    pagination.innerHTML = pagHtml;
+  }
+
+  isRendering = false;
+}
+
+function cambiarPaginaProducto(page) {
+  currentPageProducto = page;
+  renderTablaProductos();
+}
+
+
+
+// ============================================================
+// 8. FORMULARIO PRODUCTO
+// ============================================================
+function abrirAgregar() {
+  recetaTemporal = [];
+
+  var tablaArea = document.getElementById('tablaProductosArea');
+  if (tablaArea) tablaArea.classList.add('d-none');
+  var filtrosArea = document.getElementById('filtrosArea');
+  if (filtrosArea) filtrosArea.classList.add('d-none');
+  var formulario = document.getElementById('formularioProducto');
+  if (formulario) formulario.classList.remove('d-none');
+
+  document.getElementById('idProductoForm').value = "";
+  document.getElementById('nombreProductoForm').value = "";
+  document.getElementById('precioProductoForm').value = "";
+  document.getElementById('precioVentaForm').value = "";
+  document.getElementById('stockProductoForm').value = "0";
+  document.getElementById('minimoProductoForm').value = "0";
+  document.getElementById('imagenProductoForm').value = "";
+  document.getElementById('categoriaProductoForm').value = "";
+  document.getElementById('cuentaProductoForm').value = "";
+  document.getElementById('nombreCuentaForm').value = "";
+  document.getElementById('cuentaMayorForm').value = "";
+  document.getElementById('subCuentaForm').value = "";
+  document.getElementById('ivaProductoForm').value = "0";
+  document.getElementById('statusProductoForm').value = "Activo";
+  document.getElementById('tipoProductoForm').value = "Simple";
+  document.getElementById('medidaMayorForm').value = "UNID";
+  document.getElementById('medidaMenorForm').value = "UNID";
+  document.getElementById('factorConversionForm').value = "1";
+  document.getElementById('codigoBarrasForm').value = "";
+  document.getElementById('codigoSkuAlternativoForm').value = "";
+  document.getElementById('habilitarCodigoBarras').checked = true;
+  document.getElementById('codigoBarrasForm').disabled = false;
+  document.getElementById('previewCodigoBarras').classList.add('d-none');
+
+  toggleTipoProducto('Simple');
+  renderTablaRecetaTemporal();
+
+  var barra = document.getElementById('barraEstadoStockForm');
+  if (barra) barra.classList.add('d-none');
+
+  actualizarPreviewForm("");
+
+  var titulo = document.getElementById('tituloFormularioProducto');
+  if (titulo) titulo.innerHTML = '<i class="fas fa-plus-circle me-2 text-primary"></i>Agregar Nuevo Producto';
+
+  var btnGuardar = document.getElementById('btnGuardarProductoForm');
+  if (btnGuardar) {
+    btnGuardar.innerHTML = '<i class="fas fa-save me-2"></i>Guardar Producto';
+    btnGuardar.onclick = function() { guardarDatosProducto(this); };
+  }
+
+  actualizarLabelsMonedaForm();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function cerrarAgregar() {
+  recetaTemporal = [];
+  renderTablaRecetaTemporal();
+
+  var formulario = document.getElementById('formularioProducto');
+  if (formulario) formulario.classList.add('d-none');
+  var tablaArea = document.getElementById('tablaProductosArea');
+  if (tablaArea) tablaArea.classList.remove('d-none');
+  var filtrosArea = document.getElementById('filtrosArea');
+  if (filtrosArea) filtrosArea.classList.remove('d-none');
+}
+
+function guardarDatosProducto(btn) {
+  var idGenerado = "P" + Math.floor(Math.random() * 900000 + 100000);
+  var idProducto = document.getElementById('idProductoForm').value || idGenerado;
+  var nombre = document.getElementById('nombreProductoForm').value.toUpperCase().trim();
+  var precio = parseFloat(document.getElementById('precioProductoForm').value) || 0;
+  var precioVenta = parseFloat(document.getElementById('precioVentaForm').value) || 0;
+
+  if (!nombre || precio <= 0) {
+    _notifyError('Nombre y Costo son obligatorios');
+    return;
+  }
+  if (!document.getElementById('categoriaProductoForm').value) {
+    _notifyError('Debe seleccionar una categoría');
+    return;
+  }
+  if (!document.getElementById('cuentaProductoForm').value) {
+    _notifyError('Debe seleccionar una cuenta contable');
+    return;
+  }
+
+  var productoData = {
+    IdProducto: idProducto,
+    NombreProducto: nombre,
+    PrecioProducto: precio,
+    precioVenta: precioVenta,
+    IvaProducto: document.getElementById('ivaProductoForm').value,
+    StockProducto: parseFloat(document.getElementById('stockProductoForm').value) || 0,
+    MinimoProducto: parseFloat(document.getElementById('minimoProductoForm').value) || 0,
+    CuentaContable: document.getElementById('cuentaProductoForm').value,
+    NombreCuenta: document.getElementById('nombreCuentaForm').value,
+    Cuenta: document.getElementById('cuentaMayorForm').value,
+    SubCuenta: document.getElementById('subCuentaForm').value,
+    CategoriaProducto: document.getElementById('categoriaProductoForm').value,
+    ImagenProducto: document.getElementById('imagenProductoForm').value,
+    Status: document.getElementById('statusProductoForm').value,
+    Condicion: "nuevo",
+    subida: "",
+    tipo: document.getElementById('tipoProductoForm').value,
+    Medida: document.getElementById('medidaMayorForm').value.toUpperCase(),
+    UnidadMedida: document.getElementById('medidaMenorForm').value.toUpperCase(),
+    FactorConversion: parseFloat(document.getElementById('factorConversionForm').value) || 1,
+    Compuesto: document.getElementById('tipoProductoForm').value === 'Compuesto' ? JSON.stringify(recetaTemporal) : "",
+    CodBarra: document.getElementById('codigoBarrasForm').value
+  };
+
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    _notifyError('No hay conexión con el servidor. No se puede guardar.');
+    return;
+  }
+
+  var originalText = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Guardando...';
+  btn.disabled = true;
+
+  google.script.run
+    .withSuccessHandler(function(res) {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      if (res && res.success) {
+        _notifySuccess(res.message || 'Producto guardado');
+        cerrarAgregar();
+        cargarDatosProductos();
+      } else {
+        _notifyError(res ? res.message : 'Error al guardar');
+      }
+    })
+    .withFailureHandler(function(err) {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      _notifyError('Error: ' + err.message);
+    })
+    .guardarProducto(productoData);
+}
+
+function editarProducto(id) {
+  var producto = productosData.find(function(p) {
+    return String(p.IdProducto) === String(id);
+  });
+  if (!producto) {
+    _notifyError('Producto no encontrado');
+    return;
+  }
+
+  var tablaArea = document.getElementById('tablaProductosArea');
+  if (tablaArea) tablaArea.classList.add('d-none');
+  var filtrosArea = document.getElementById('filtrosArea');
+  if (filtrosArea) filtrosArea.classList.add('d-none');
+  var formulario = document.getElementById('formularioProducto');
+  if (formulario) formulario.classList.remove('d-none');
+
+  document.getElementById('idProductoForm').value = producto.IdProducto || "";
+  document.getElementById('nombreProductoForm').value = producto.NombreProducto || "";
+  document.getElementById('precioProductoForm').value = producto.PrecioProducto || "";
+  document.getElementById('precioVentaForm').value = producto.precioVenta || 0;
+  document.getElementById('stockProductoForm').value = producto.StockProducto || 0;
+  document.getElementById('minimoProductoForm').value = producto.MinimoProducto || 0;
+  document.getElementById('categoriaProductoForm').value = producto.CategoriaProducto || "";
+  document.getElementById('cuentaProductoForm').value = producto.CuentaContable || "";
+  document.getElementById('nombreCuentaForm').value = producto.NombreCuenta || "";
+  document.getElementById('cuentaMayorForm').value = producto.Cuenta || "";
+  document.getElementById('subCuentaForm').value = producto.SubCuenta || "";
+  document.getElementById('ivaProductoForm').value = producto.IvaProducto || "0";
+  document.getElementById('statusProductoForm').value = producto.Status || "Activo";
+  document.getElementById('imagenProductoForm').value = producto.ImagenProducto || "";
+  document.getElementById('tipoProductoForm').value = producto.tipo || "Simple";
+  document.getElementById('medidaMayorForm').value = producto.Medida || "UNID";
+  document.getElementById('medidaMenorForm').value = producto.UnidadMedida || "UNID";
+  document.getElementById('factorConversionForm').value = producto.FactorConversion || 1;
+  document.getElementById('codigoBarrasForm').value = producto.CodBarra || "";
+  document.getElementById('codigoSkuAlternativoForm').value = "";
+  document.getElementById('habilitarCodigoBarras').checked = true;
+  toggleCodigoBarrasHabilitado(true);
+
+  if (producto.CodBarra) {
+    generarCodigoBarrasPreview(producto.CodBarra);
+  } else {
+    document.getElementById('previewCodigoBarras').classList.add('d-none');
+  }
+
+  toggleTipoProducto(producto.tipo || "Simple");
+  actualizarLabelIngredientes();
+
+  if (producto.tipo === 'Compuesto' && producto.Compuesto) {
+    try { recetaTemporal = JSON.parse(producto.Compuesto); } catch (e) { recetaTemporal = []; }
+  } else {
+    recetaTemporal = [];
+  }
+  renderTablaRecetaTemporal();
+
+  setTimeout(function() {
+    actualizarPreviewForm(producto.ImagenProducto || "");
+  }, 100);
+
+  actualizarBadgeStockSidebarForm(producto.StockProducto, producto.MinimoProducto);
+
+  var titulo = document.getElementById('tituloFormularioProducto');
+  if (titulo) titulo.innerHTML = '<i class="fas fa-edit me-2 text-primary"></i>Editar Producto';
+
+  var btnGuardar = document.getElementById('btnGuardarProductoForm');
+  if (btnGuardar) {
+    btnGuardar.innerHTML = '<i class="fas fa-sync-alt me-2"></i>Actualizar Producto';
+    btnGuardar.onclick = function() { ejecutarActualizacion(this); };
+  }
+
+  actualizarLabelsMonedaForm();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function ejecutarActualizacion(btn) {
+  var productoData = {
+    id: document.getElementById('idProductoForm').value,
+    nombre: document.getElementById('nombreProductoForm').value.toUpperCase().trim(),
+    categoria: document.getElementById('categoriaProductoForm').value,
+    cuenta: document.getElementById('cuentaProductoForm').value,
+    nombreCuenta: document.getElementById('nombreCuentaForm').value,
+    cuentaMayor: document.getElementById('cuentaMayorForm').value,
+    subCuenta: document.getElementById('subCuentaForm').value,
+    precio: document.getElementById('precioProductoForm').value,
+    precioVenta: document.getElementById('precioVentaForm').value,
+    iva: document.getElementById('ivaProductoForm').value,
+    stock: document.getElementById('stockProductoForm').value,
+    minimo: document.getElementById('minimoProductoForm').value,
+    imagen: document.getElementById('imagenProductoForm').value,
+    status: document.getElementById('statusProductoForm').value,
+    tipo: document.getElementById('tipoProductoForm').value,
+    medida: document.getElementById('medidaMayorForm').value.toUpperCase(),
+    unidadMedida: document.getElementById('medidaMenorForm').value.toUpperCase(),
+    factorConversion: parseFloat(document.getElementById('factorConversionForm').value) || 1,
+    compuesto: document.getElementById('tipoProductoForm').value === 'Compuesto' ? JSON.stringify(recetaTemporal) : "",
+    CodBarra: document.getElementById('codigoBarrasForm').value
+  };
+
+  if (!productoData.nombre || !productoData.precio) {
+    _notifyError('Nombre y Precio son obligatorios');
+    return;
+  }
+
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    _notifyError('No hay conexión con el servidor. No se puede actualizar.');
+    return;
+  }
+
+  var originalText = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Actualizando...';
+  btn.disabled = true;
+
+  google.script.run
+    .withSuccessHandler(function(response) {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      if (response && response.success) {
+        _notifySuccess('Producto actualizado');
+        cerrarAgregar();
+        cargarDatosProductos();
+      } else {
+        _notifyError(response ? response.message : 'Error desconocido');
+      }
+    })
+    .withFailureHandler(function(error) {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      _notifyError('Error: ' + error.message);
+    })
+    .actualizarProducto(productoData);
+}
+
+function eliminarProducto(id) {
+  var producto = productosData.find(function(p) {
+    return String(p.IdProducto) === String(id);
+  });
+  var nombre = producto ? producto.NombreProducto : id;
+
+  _confirmarAccion(
+    'Se eliminará "' + nombre + '". Esta acción no se puede deshacer.',
+    function() {
+      if (typeof google === 'undefined' || !google.script || !google.script.run) {
+        _notifyError('No hay conexión con el servidor. No se puede eliminar.');
+        return;
+      }
+
+      _mostrarCargando('Eliminando', 'Procesando eliminación...', 50);
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          _ocultarCargando();
+          if (res && res.success) {
+            _notifySuccess(res.message || 'Producto eliminado');
+            cargarDatosProductos();
+          } else {
+            _notifyError(res ? res.message : 'Error al eliminar');
+          }
+        })
+        .withFailureHandler(function(error) {
+          _ocultarCargando();
+          _notifyError('Error al eliminar: ' + error.message);
+        })
+        .eliminarProducto(id);
+    },
+    null,
+    'error'
+  );
+}
+
+// ============================================================
+// 9. STOCK BADGES / BARRA
+// ============================================================
+function actualizarBadgeStockSidebarForm(stock, minimo) {
+  var barra = document.getElementById('barraEstadoStockForm');
+  var estado = determinarEstadoStock(stock, minimo);
+  actualizarBarraEstadoStockForm(stock, minimo, estado);
+}
+
+function determinarEstadoStock(stock, minimo) {
+  stock = parseFloat(stock) || 0;
+  minimo = parseFloat(minimo) || 0;
+  if (stock === 0) return { tipo: 'agotado', texto: 'Sin Stock' };
+  if (stock === 1) return { tipo: 'ultimo', texto: 'Última Unidad' };
+  if (stock <= minimo) return { tipo: 'minimo', texto: 'Stock Mínimo' };
+  return { tipo: 'normal', texto: 'Stock Normal' };
+}
+
+function actualizarBarraEstadoStockForm(stock, minimo, estado) {
+  var barra = document.getElementById('barraEstadoStockForm');
+  if (!barra) return;
+  barra.classList.remove('d-none');
+
+  var icono = document.getElementById('iconoEstadoStockForm');
+  var texto = document.getElementById('textoEstadoStockForm');
+  var progressBar = document.getElementById('progressBarStockForm');
+  var minimoDisplay = document.getElementById('stockMinimoDisplayForm');
+  if (minimoDisplay) minimoDisplay.textContent = minimo;
+
+  barra.className = 'mt-3 p-3 rounded-3';
+  progressBar.className = 'progress-bar';
+
+  var porcentaje = minimo > 0 ? (stock / (minimo * 2)) * 100 : (stock > 0 ? 100 : 0);
+  if (porcentaje > 100) porcentaje = 100;
+  if (porcentaje < 0) porcentaje = 0;
+
+  switch (estado.tipo) {
+    case 'agotado':
+      barra.classList.add('estado-stock-agotado');
+      if (icono) icono.className = 'fas fa-circle fa-sm text-danger';
+      if (texto) texto.textContent = 'Producto Agotado - Reponer Urgente';
+      progressBar.style.width = '0%';
+      progressBar.classList.add('bg-danger');
+      break;
+    case 'ultimo':
+      barra.classList.add('estado-stock-ultimo');
+      if (icono) icono.className = 'fas fa-circle fa-sm text-warning';
+      if (texto) texto.textContent = '¡Última unidad disponible!';
+      progressBar.style.width = '10%';
+      progressBar.classList.add('bg-warning');
+      break;
+    case 'minimo':
+      barra.classList.add('estado-stock-minimo');
+      if (icono) icono.className = 'fas fa-circle fa-sm text-orange';
+      if (texto) texto.textContent = 'Stock bajo(' + stock + ' unidades)';
+      progressBar.style.width = porcentaje + '%';
+      progressBar.classList.add('bg-orange');
+      break;
+    case 'normal':
+      barra.classList.add('estado-stock-normal');
+      if (icono) icono.className = 'fas fa-circle fa-sm text-success';
+      if (texto) texto.textContent = 'Stock disponible: ' + stock + ' unidades';
+      progressBar.style.width = porcentaje + '%';
+      progressBar.classList.add('bg-success');
+      break;
+  }
+}
+
+function actualizarIndicadorStockForm() {
+  var stock = document.getElementById('stockProductoForm').value;
+  var minimo = document.getElementById('minimoProductoForm').value;
+  actualizarBadgeStockSidebarForm(stock, minimo);
+}
+
+function actualizarPreviewForm(url) {
+  var img = document.getElementById('previewImagenProductoForm');
+  var placeholder = document.getElementById('placeholderImagenForm');
+  if (!img || !placeholder) return;
+
+  if (url && url.trim() !== "") {
+    img.onload = function() {
+      img.style.display = 'block';
+      placeholder.style.display = 'none';
+    };
+    img.onerror = function() {
+      img.style.display = 'none';
+      placeholder.style.display = 'block';
+    };
+    img.src = url;
+  } else {
+    img.style.display = 'none';
+    img.src = "";
+    placeholder.style.display = 'block';
+  }
+}
+
+// ============================================================
+// 10. MONEDA Y TASA
+// ============================================================
+function toggleCurrency() {
+  var toggle = document.getElementById('currencyToggle');
+  if (!toggle) return;
+  monedaActual = toggle.checked ? 'VES' : 'USD';
+  try { localStorage.setItem('monedaPreferida', monedaActual); } catch (e) {}
+  actualizarLabelsMoneda();
+  renderTablaProductos();
+  _notifySuccess('Moneda: ' + (monedaActual === 'USD' ? 'Dólares ($)' : 'Bolívares (Bs)'));
+}
+
+function actualizarLabelsMoneda() {
+  var labelUSD = document.getElementById('labelUSD');
+  var labelVES = document.getElementById('labelVES');
+  var thCosto = document.getElementById('thCosto');
+  var thVenta = document.getElementById('thVenta');
+
+  if (monedaActual === 'VES') {
+    if (labelUSD) labelUSD.classList.remove('active');
+    if (labelVES) labelVES.classList.add('active');
+    if (thCosto) thCosto.textContent = 'Costo (Bs)';
+    if (thVenta) thVenta.textContent = 'Venta (Bs)';
+  } else {
+    if (labelUSD) labelUSD.classList.add('active');
+    if (labelVES) labelVES.classList.remove('active');
+    if (thCosto) thCosto.textContent = 'Costo ($)';
+    if (thVenta) thVenta.textContent = 'Venta ($)';
+  }
+  actualizarLabelsMonedaForm();
+}
+
+function actualizarLabelsMonedaForm() {
+  var badgeMoneda = document.getElementById('badgeMonedaFormInline');
+  var labelCosto = document.getElementById('labelCostoForm');
+  if (monedaActual === 'VES') {
+    if (badgeMoneda) badgeMoneda.textContent = 'Bs';
+    if (labelCosto) labelCosto.textContent = 'Costo (Bs)*';
+  } else {
+    if (badgeMoneda) badgeMoneda.textContent = 'USD';
+    if (labelCosto) labelCosto.textContent = 'Costo ($)*';
+  }
+}
+
+function actualizarDisplayTasa() {
+  var display = document.getElementById('tasaDisplay');
+  if (display) display.textContent = tasaCambio.toFixed(2);
+}
+
+function formatCurrency(amount) {
+  var valor = parseFloat(amount) || 0;
+  if (monedaActual === 'VES') {
+    var bs = valor * tasaCambio;
+    return 'Bs. ' + bs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  } else {
+    return '$' + valor.toFixed(2);
+  }
+}
+
+function editarTasaCambio() {
+  Swal.fire({
+    title: 'Configurar Tasa de Cambio',
+    html: '<input type="number" id="inputTasa" class="form-control form-control-lg text-center" value="' + tasaCambio + '" step="0.01" min="0.01">',
+    showCancelButton: true,
+    confirmButtonText: 'Guardar',
+    cancelButtonText: 'Cancelar',
+    preConfirm: function() {
+      var valor = document.getElementById('inputTasa').value;
+      if (!valor || parseFloat(valor) <= 0) {
+        Swal.showValidationMessage('Ingrese una tasa válida');
+        return false;
+      }
+      return parseFloat(valor);
+    }
+  }).then(function(result) {
+    if (result.isConfirmed) {
+      tasaCambio = result.value;
+      try { localStorage.setItem('tasaCambio', tasaCambio); } catch (e) {}
+      actualizarDisplayTasa();
+      renderTablaProductos();
+      _notifySuccess('Tasa actualizada: ' + tasaCambio.toFixed(2));
+    }
+  });
+}
+
+// ============================================================
+// 11. REPORTES
+// ============================================================
+function enviarReporteCompleto(btn) {
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    _notifyError('No hay conexión con el servidor.');
+    return;
+  }
+
+  var originalText = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Enviando...';
+  btn.disabled = true;
+
+  google.script.run
+    .withSuccessHandler(function(result) {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      var modal = bootstrap.Modal.getInstance(document.getElementById('sendEmailModalProducto'));
+      if (modal) modal.hide();
+      if (result && result.success) {
+        _notifySuccess(result.message || 'Reporte enviado correctamente');
+      } else {
+        _notifyWarning(result ? result.message : 'Error desconocido');
+      }
+    })
+    .withFailureHandler(function(error) {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      _notifyError('Error al enviar: ' + error.message);
+    })
+    .enviarReporteCompleto();
+}
+
+function validarYEnviarAlertaStock(btn) {
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    _notifyError('No hay conexión con el servidor.');
+    return;
+  }
+
+  _confirmarAccion(
+    'Se enviará un reporte de productos con stock crítico a fmorenocontabilidad@gmail.com',
+    function() {
+      var originalText = btn.innerHTML;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Procesando...';
+      btn.disabled = true;
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+          if (res && res.success) {
+            _notifySuccess('Alerta de stock enviada');
+          } else {
+            _notifyError(res ? res.message : 'Error desconocido');
+          }
+        })
+        .withFailureHandler(function(error) {
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+          _notifyError('Error al enviar: ' + error.message);
+        })
+        .enviarAlertaStock();
+    },
+    null,
+    'warning'
+  );
+}
+
+function descargarXLSX() {
+  var exportData = productosData.map(function(p) {
+    return {
+      SKU: p.IdProducto,
+      Nombre: p.NombreProducto,
+      Categoria: categoriasMap[p.CategoriaProducto] || p.CategoriaProducto,
+      Costo: parseFloat(p.PrecioProducto).toFixed(2),
+      'Precio Venta': parseFloat(p.precioVenta).toFixed(2),
+      Stock: p.StockProducto,
+      'Stock Mínimo': p.MinimoProducto,
+      IVA: p.IvaProducto,
+      Estado: p.Status,
+      Condicion: p.Condicion || "",
+      Lote: p.subida || "",
+      Tipo: p.tipo,
+      Medida: p.Medida,
+      UnidadMedida: p.UnidadMedida,
+      FactorConversion: p.FactorConversion,
+      'Código Barras': p.CodBarra || ""
+    };
+  });
+
+  if (exportData.length === 0) {
+    _notifyWarning('No hay productos para exportar.');
+    return;
+  }
+
+  try {
+    var ws = XLSX.utils.json_to_sheet(exportData);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Productos");
+    var fecha = new Date().toISOString().split('T')[0];
+    XLSX.writeFile(wb, 'Productos_' + fecha + '.xlsx');
+    _notifySuccess('Exportación completada');
+  } catch (error) {
+    _notifyError('Error al exportar: ' + error.message);
+  }
+}
+
+// ============================================================
+// 12. INGREDIENTES / UNIDADES
+// ============================================================
+function actualizarLabelIngredientes() {
+  var mayor = (document.getElementById('medidaMayorForm').value || "").toUpperCase().trim();
+  var menor = (document.getElementById('medidaMenorForm').value || "").toUpperCase().trim();
+  var inputFactor = document.getElementById('factorConversionForm');
+  var divFactor = document.getElementById('divFactorConversion');
+
+  if (mayor === menor || menor === "") {
+    if (inputFactor) inputFactor.value = "1";
+    if (divFactor) divFactor.style.display = "none";
+  } else {
+    if (divFactor) divFactor.style.display = "block";
+    if ((mayor === "KG" && menor === "GR") || (mayor === "KG" && menor === "G") || (mayor === "L" && menor === "ML")) {
+      if (inputFactor && (inputFactor.value === "1" || inputFactor.value === "")) {
+        inputFactor.value = "1000";
+      }
+    }
+  }
+}
+
+// ============================================================
+// 13. VER PRODUCTO
+// ============================================================
+function verProducto(id) {
+  var producto = productosData.find(function(p) {
+    return String(p.IdProducto) === String(id);
+  });
+
+  if (!producto) {
+    _notifyError('Producto no encontrado');
+    return;
+  }
+
+  var body = document.getElementById('verProductoBody');
+  if (!body) return;
+
+  var categoriaNombre = categoriasMap[producto.CategoriaProducto] || producto.CategoriaProducto || 'Sin categoría';
+  var stockStatus = getStockStatus(producto.StockProducto, producto.MinimoProducto);
+  var precioCosto = formatCurrency(producto.PrecioProducto);
+  var precioVenta = formatCurrency(producto.precioVenta || 0);
+
+  var codigoBarrasHTML = '';
+  if (producto.CodBarra) {
+    codigoBarrasHTML = '<div class="col-12"><small class="text-muted text-uppercase fw-bold">Código de Barras</small>' +
+      '<div class="barcode-container mt-2 p-3 bg-white rounded"><svg id="barcodeViewSvg"></svg>' +
+      '<p class="mb-0 mt-2 small text-dark">' + escapeHtml(producto.CodBarra) + '</p></div></div>';
+  }
+
+  var recetaHtml = '';
+  if (producto.tipo === 'Compuesto' && producto.Compuesto) {
+    try {
+      var recetaObj = JSON.parse(producto.Compuesto);
+      if (recetaObj && recetaObj.length > 0) {
+        recetaHtml += '<div class="col-12 mt-3"><small class="text-muted text-uppercase fw-bold"><i class="fas fa-list me-1 text-warning"></i>Ingredientes de la Receta</small>' +
+          '<div class="border rounded p-2 bg-light bg-opacity-10 mt-1"><table class="table table-sm table-borderless mb-0" style="font-size:0.8rem;">' +
+          '<thead><tr class="border-bottom"><th class="py-1">Nombre</th><th class="text-end py-1">Cant.</th><th class="py-1">Unidad</th></tr></thead><tbody>';
+        recetaObj.forEach(function(item) {
+          recetaHtml += '<tr><td class="py-1">' + escapeHtml(item.nombre || item.id) + '</td>' +
+            '<td class="text-end fw-bold text-primary py-1">' + escapeHtml(item.qty) + '</td>' +
+            '<td class="py-1"><span class="badge bg-secondary bg-opacity-25 text-dark border-0">' + escapeHtml(item.unit) + '</span></td></tr>';
+        });
+        recetaHtml += '</tbody></table></div></div>';
+      }
+    } catch (e) {
+      recetaHtml = '<div class="col-12 mt-2"><small class="text-danger d-block">Error al decodificar la receta.</small></div>';
+    }
+  }
+
+  var btnProduccionVer = producto.tipo === 'Compuesto'
+    ? '<button class="btn btn-sm btn-warning w-100 mb-2 text-dark" onclick="cerrarVerProducto();producirCompuestoManual(\'' + String(producto.IdProducto).replace(/'/g, "\\'") + '\');"><i class="fas fa-hammer me-2"></i>Producir / Descontar Stock</button>' +
+      '<button class="btn btn-sm btn-outline-info w-100 mb-2" onclick="cerrarVerProducto();abrirEditorRecetaAvanzado(\'' + String(producto.IdProducto).replace(/'/g, "\\'") + '\');"><i class="fas fa-book me-2"></i>Editor Avanzado de Receta</button>'
+    : '';
+
+  var html = '<div class="text-center mb-4">' +
+    (producto.ImagenProducto && producto.ImagenProducto.trim() !== ''
+      ? '<img src="' + escapeHtml(producto.ImagenProducto) + '" style="max-width:200px;max-height:200px;border-radius:12px;box-shadow:var(--shadow-sm);" class="mb-3" onerror="this.style.display=\'none\'">'
+      : '<div class="p-5 border rounded-3" style="background:var(--bg-input);"><i class="fas fa-image fa-3x text-muted"></i></div>') +
+    '</div>' +
+    '<div class="row g-3">' +
+    '<div class="col-6"><small class="text-muted text-uppercase fw-bold">SKU</small><p class="fw-bold mb-0">' + escapeHtml(producto.IdProducto) + '</p></div>' +
+    '<div class="col-6"><small class="text-muted text-uppercase fw-bold">Categoría</small><p class="fw-bold mb-0">' + escapeHtml(categoriaNombre) + '</p></div>' +
+    '<div class="col-6"><small class="text-muted text-uppercase fw-bold">Estado</small><p class="mb-0">' + (producto.Status === 'Activo' ? '<span class="badge-status status-activo">Activo</span>' : '<span class="badge-status status-inactivo">Inactivo</span>') + '</p></div>' +
+    '<div class="col-6"><small class="text-muted text-uppercase fw-bold">Tipo Producto</small><p class="fw-bold mb-0"><span class="badge ' + (producto.tipo === 'Compuesto' ? 'bg-warning text-dark' : 'bg-secondary') + '">' + escapeHtml(producto.tipo || 'Simple') + '</span></p></div>' +
+    '<div class="col-12"><small class="text-muted text-uppercase fw-bold">Nombre</small><p class="fw-bold mb-0">' + escapeHtml(producto.NombreProducto) + '</p></div>' +
+    codigoBarrasHTML +
+    '<div class="col-6"><small class="text-muted text-uppercase fw-bold">Costo</small><p class="fw-bold mb-0 text-primary">' + precioCosto + '</p></div>' +
+    '<div class="col-6"><small class="text-muted text-uppercase fw-bold">Precio Venta</small><p class="fw-bold mb-0 text-success">' + precioVenta + '</p></div>' +
+    '<div class="col-6"><small class="text-muted text-uppercase fw-bold">Stock</small><p class="mb-0"><span class="stock-badge ' + stockStatus.class + '">' + stockStatus.text + '</span></p></div>' +
+    '<div class="col-6"><small class="text-muted text-uppercase fw-bold">Stock Mínimo</small><p class="fw-bold mb-0">' + escapeHtml(producto.MinimoProducto) + '</p></div>' +
+    '<div class="col-6"><small class="text-muted text-uppercase fw-bold">IVA</small><p class="fw-bold mb-0">' + escapeHtml(producto.IvaProducto || 0) + '%</p></div>' +
+    '<div class="col-6"><small class="text-muted text-uppercase fw-bold">Condición</small><p class="mb-0">' + formatearCondicion(producto.Condicion) + '</p></div>' +
+    '<div class="col-12"><small class="text-muted text-uppercase fw-bold">Cuenta Contable</small><p class="fw-bold mb-0">' + escapeHtml(producto.CuentaContable || '-') + (producto.NombreCuenta ? ' - ' + escapeHtml(producto.NombreCuenta) : '') + '</p></div>' +
+    recetaHtml +
+    '</div>' +
+    '<div class="mt-4 pt-3 border-top" style="border-color:var(--border-color);">' +
+    btnProduccionVer +
+    '<button class="btn btn-sm btn-outline-primary w-100" onclick="cerrarVerProducto();editarProducto(\'' + String(producto.IdProducto).replace(/'/g, "\\'") + '\')">' +
+    '<i class="fas fa-edit me-2"></i>Editar Producto</button>' +
+    '</div>';
+
+  body.innerHTML = html;
+
+  setTimeout(function() {
+    if (producto.CodBarra) {
+      try {
+        var formato = (producto.CodBarra.length === 13 && /^\d+$/.test(producto.CodBarra)) ? "EAN13" : "CODE128";
+        JsBarcode("#barcodeViewSvg", producto.CodBarra, {
+          format: formato,
+          width: 2,
+          height: 40,
+          displayValue: false,
+          margin: 5,
+          background: "#ffffff",
+          lineColor: "#000000"
+        });
+      } catch (e) {
+        console.warn('Error generando código de barras en vista:', e);
+      }
+    }
+  }, 100);
+
+  var modal = document.getElementById('modalVerProducto');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function cerrarVerProducto() {
+  var modal = document.getElementById('modalVerProducto');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+// ============================================================
+// 14. CATEGORÍAS
+// ============================================================
+function agregarCategoria() {
+  cargarCategorias();
+  var modal = document.getElementById('gestionarCategoriasModal');
+  if (!modal) return;
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function cerrarModalCategorias() {
+  var modal = document.getElementById('gestionarCategoriasModal');
+  if (modal) modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function cargarCategorias() {
+  var tbody = document.getElementById('tablaCategoriasBody');
+  if (!tbody) return;
+
+  tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Cargando categorías...</td></tr>';
+
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">No hay conexión con el servidor.</td></tr>';
+    return;
+  }
+
+  google.script.run
+    .withSuccessHandler(function(data) {
+      categoriasData = data || [];
+      categoriasFiltradas = categoriasData.concat([]);
+      currentPageCategoria = 1;
+      renderTablaCategorias();
+    })
+    .withFailureHandler(function(error) {
+      console.error("❌ Error al cargar categorías:", error);
+      tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Error al cargar categorías: ' + escapeHtml(error.message || error) + '</td></tr>';
+    })
+    .obtenerCategoriasDesdeTasas();
+}
+
+function filtrarCategorias() {
+  var inputBusqueda = document.getElementById('buscarCategoriaInput');
+  if (!inputBusqueda) return;
+  var searchTerm = inputBusqueda.value.toLowerCase().trim();
+  if (!searchTerm) {
+    categoriasFiltradas = categoriasData.concat([]);
+  } else {
+    categoriasFiltradas = categoriasData.filter(function(cat) {
+      return (cat.id && cat.id.toLowerCase().indexOf(searchTerm) !== -1) ||
+             (cat.nombre && cat.nombre.toLowerCase().indexOf(searchTerm) !== -1);
+    });
+  }
+  currentPageCategoria = 1;
+  renderTablaCategorias();
+}
+
+function renderTablaCategorias() {
+  var tbody = document.getElementById('tablaCategoriasBody');
+  var pagination = document.getElementById('paginationCategorias');
+  if (!tbody) return;
+
+  if (!categoriasFiltradas || categoriasFiltradas.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-4">No hay categorías registradas</td></tr>';
+    if (pagination) pagination.innerHTML = '';
+    return;
+  }
+
+  var itemsPerPage = 5;
+  var totalPages = Math.ceil(categoriasFiltradas.length / itemsPerPage);
+  var start = (currentPageCategoria - 1) * itemsPerPage;
+  var end = start + itemsPerPage;
+  var pageData = categoriasFiltradas.slice(start, end);
+  var html = '';
+
+  pageData.forEach(function(cat) {
+    html += '<tr>' +
+      '<td><span class="badge bg-light text-dark border">' + escapeHtml(cat.id) + '</span></td>' +
+      '<td class="fw-medium">' + escapeHtml(cat.nombre) + '</td>' +
+      '<td class="text-center"><div class="btn-group btn-group-sm">' +
+        '<button type="button" class="btn btn-outline-warning" onclick="editarCategoria(\'' + String(cat.id).replace(/'/g, "\\'") + '\')" title="Editar"><i class="fas fa-edit"></i></button>' +
+        '<button type="button" class="btn btn-outline-danger" onclick="eliminarCategoria(\'' + String(cat.id).replace(/'/g, "\\'") + '\')" title="Eliminar"><i class="fas fa-trash"></i></button>' +
+      '</div></td>' +
+    '</tr>';
+  });
+
+  tbody.innerHTML = html;
+
+  if (pagination) {
+    var pagHtml = '';
+    if (totalPages > 1) {
+      pagHtml += '<li class="page-item ' + (currentPageCategoria === 1 ? 'disabled' : '') + '"><a class="page-link" href="#" onclick="event.preventDefault();cambiarPaginaCategoria(' + (currentPageCategoria - 1) + ')"><i class="fas fa-chevron-left"></i></a></li>';
+      for (var j = 1; j <= totalPages; j++) {
+        pagHtml += '<li class="page-item ' + (j === currentPageCategoria ? 'active' : '') + '"><a class="page-link" href="#" onclick="event.preventDefault();cambiarPaginaCategoria(' + j + ')">' + j + '</a></li>';
+      }
+      pagHtml += '<li class="page-item ' + (currentPageCategoria === totalPages ? 'disabled' : '') + '"><a class="page-link" href="#" onclick="event.preventDefault();cambiarPaginaCategoria(' + (currentPageCategoria + 1) + ')"><i class="fas fa-chevron-right"></i></a></li>';
+    }
+    pagination.innerHTML = pagHtml;
+  }
+}
+
+function cambiarPaginaCategoria(page) {
+  currentPageCategoria = page;
+  renderTablaCategorias();
+}
+
+function limpiarFormCategoria() {
+  var idInput = document.getElementById('idCategoriaInput');
+  var nombreInput = document.getElementById('nombreCategoriaInput');
+  if (idInput) { idInput.value = ''; idInput.disabled = false; }
+  if (nombreInput) nombreInput.value = '';
+}
+
+function guardarCategoriaTasas() {
+  var idInput = document.getElementById('idCategoriaInput');
+  var nombreInput = document.getElementById('nombreCategoriaInput');
+  if (!idInput || !nombreInput) return;
+
+  var id = idInput.value.trim();
+  var nombre = nombreInput.value.trim();
+
+  if (!id || !nombre) {
+    _notifyWarning('Complete campos obligatorios');
+    return;
+  }
+
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    _notifyError('No hay conexión con el servidor. No se puede guardar.');
+    return;
+  }
+
+  google.script.run
+    .withSuccessHandler(function() {
+      _notifySuccess('Categoría guardada');
+      cargarCategorias();
+      limpiarFormCategoria();
+      recargarSelectCategorias();
+    })
+    .withFailureHandler(function(error) {
+      _notifyError('No se pudo guardar: ' + (error.message || error));
+    })
+    .guardarCategoriaTasas(id, nombre, false);
+}
+
+function editarCategoria(id) {
+  var categoria = categoriasData.find(function(c) { return c.id === id; });
+  if (!categoria) return;
+  var idInput = document.getElementById('idCategoriaInput');
+  var nombreInput = document.getElementById('nombreCategoriaInput');
+  if (idInput) { idInput.value = categoria.id; idInput.disabled = true; }
+  if (nombreInput) nombreInput.value = categoria.nombre;
+}
+
+function eliminarCategoria(id) {
+  _confirmarAccion(
+    'Se eliminará la categoría "' + id + '".',
+    function() {
+      if (typeof google === 'undefined' || !google.script || !google.script.run) {
+        _notifyError('No hay conexión con el servidor.');
+        return;
+      }
+
+      google.script.run
+        .withSuccessHandler(function() {
+          _notifySuccess('Categoría eliminada');
+          cargarCategorias();
+          recargarSelectCategorias();
+        })
+        .withFailureHandler(function(error) {
+          _notifyError('Error al eliminar: ' + (error.message || error));
+        })
+        .eliminarCategoria(id);
+    },
+    null,
+    'error'
+  );
+}
+
+function recargarSelectCategorias() {
+  cargarCategoriasAsync();
+}
+
+// ============================================================
+// 15. TEMA (delegado al index)
+// ============================================================
+// toggleTheme se elimina — se usa el del index (window.toggleTheme)
+// El icono se sincroniza automáticamente vía el evento 'themeChanged'
+// que ya está escuchando _sincronizarIconoTemaProductos()
+
+// ============================================================
+// 16. CÓDIGO DE BARRAS
+// ============================================================
+function generarCodigoBarrasAutomatico() {
+  var prefix = "750";
+  var base = prefix + Date.now().toString().slice(-9);
+  var suma = 0;
+  for (var i = 0; i < 12; i++) {
+    suma += parseInt(base[i]) * (i % 2 === 0 ? 1 : 3);
+  }
+  var check = (10 - (suma % 10)) % 10;
+  var codigo = base + check;
+  document.getElementById('codigoBarrasForm').value = codigo;
+  generarCodigoBarrasPreview(codigo);
+  _notifyInfo('Código generado: ' + codigo);
+}
+
+function generarCodigoBarrasPreview(codigo) {
+  var previewContainer = document.getElementById('previewCodigoBarras');
+  var svgElement = document.getElementById('barcodePreviewSvg');
+  if (!codigo || codigo.length < 8) {
+    previewContainer.classList.add('d-none');
+    return;
+  }
+  try {
+    svgElement.innerHTML = '';
+    var formato = (codigo.length === 13 && /^\d+$/.test(codigo)) ? "EAN13" : "CODE128";
+    JsBarcode(svgElement, codigo, {
+      format: formato,
+      width: 2,
+      height: 50,
+      displayValue: true,
+      fontSize: 12,
+      margin: 5,
+      background: "#ffffff",
+      lineColor: "#000000"
+    });
+    previewContainer.classList.remove('d-none');
+  } catch (e) {
+    console.warn('Error generando código de barras:', e);
+    previewContainer.classList.add('d-none');
+  }
+}
+
+function toggleCodigoBarrasHabilitado(habilitado) {
+  var inputCodigo = document.getElementById('codigoBarrasForm');
+  var previewContainer = document.getElementById('previewCodigoBarras');
+  if (!inputCodigo) return;
+  if (habilitado) {
+    inputCodigo.disabled = false;
+    inputCodigo.placeholder = "Escanee o escriba el código";
+    if (inputCodigo.value) generarCodigoBarrasPreview(inputCodigo.value);
+  } else {
+    inputCodigo.disabled = true;
+    inputCodigo.placeholder = "Código de barras deshabilitado";
+    if (previewContainer) previewContainer.classList.add('d-none');
+  }
+}
+
+function iniciarLectorCodigoBarras() {
+  var modalEl = document.getElementById('modalLectorCodigoBarras');
+  if (!modalEl) return;
+  var modal = new bootstrap.Modal(modalEl);
+  modal.show();
+  lectorCodigoBarrasActivo = true;
+  setTimeout(function() {
+    var input = document.getElementById('inputLecturaCodigoBarras');
+    if (input) { input.focus(); input.value = ''; }
+  }, 300);
+}
+
+function detenerLectorCodigoBarras() {
+  lectorCodigoBarrasActivo = false;
+  if (timeoutLectorCodigoBarras) {
+    clearTimeout(timeoutLectorCodigoBarras);
+    timeoutLectorCodigoBarras = null;
+  }
+}
+
+function abrirEditorRecetaAvanzado(id) {
+  if (typeof google === 'undefined' || !google.script || !google.script.run) {
+    _notifyError('No hay conexión con el servidor.');
+    return;
+  }
+
+  _mostrarCargando('Abriendo Editor', 'Conectando con el editor de recetas...', 40);
+
+  google.script.run
+    .withSuccessHandler(function(urlBase) {
+      _ocultarCargando();
+      if (!urlBase) {
+        _notifyError('No se pudo obtener la URL de producción.');
+        return;
+      }
+      var urlFinal = urlBase + '&page=produccion&tab=recetas&id=' + encodeURIComponent(id);
+      window.open(urlFinal, '_blank');
+    })
+    .withFailureHandler(function(err) {
+      _ocultarCargando();
+      _notifyError('No se pudo abrir el editor: ' + err.message);
+    })
+    .getUrlProduccionHtml();
+}
+
+function procesarCodigoEscaneado() {
+  var input = document.getElementById('inputLecturaCodigoBarras');
+  var codigo = input.value.trim();
+  if (!codigo) {
+    _notifyWarning('No se ha detectado ningún código');
+    return;
+  }
+  document.getElementById('codigoBarrasForm').value = codigo;
+  document.getElementById('habilitarCodigoBarras').checked = true;
+  document.getElementById('codigoBarrasForm').disabled = false;
+  generarCodigoBarrasPreview(codigo);
+  var modal = bootstrap.Modal.getInstance(document.getElementById('modalLectorCodigoBarras'));
+  if (modal) modal.hide();
+  detenerLectorCodigoBarras();
+  _notifySuccess('Código de barras procesado: ' + codigo);
+}
+
+// ============================================================
+// 17. INICIALIZACIÓN SPA
+// ============================================================
+// El IIFE de auto-init se ELIMINA.
+// El index llama a initProductosLista vía pageConfig.pProductosLista.initializer
+// cuando corresponde. Además, los hooks montarModuloProductos / desmontarModuloProductos
+// están definidos en la Respuesta 2/5.
+
+// ============================================================
+// 18. EXPOSICIÓN GLOBAL
+// ============================================================
+window.abrirAgregar = abrirAgregar;
+window.cerrarAgregar = cerrarAgregar;
+window.guardarDatosProducto = guardarDatosProducto;
+window.editarProducto = editarProducto;
+window.ejecutarActualizacion = ejecutarActualizacion;
+window.eliminarProducto = eliminarProducto;
+window.verProducto = verProducto;
+window.cerrarVerProducto = cerrarVerProducto;
+window.restablecerFiltro = restablecerFiltro;
+window.filtrarStockMinimo = filtrarStockMinimo;
+window.filtrarStockCero = filtrarStockCero;
+window.filtrarPorCondicion = filtrarPorCondicion;
+window.filtrarPorLote = filtrarPorLote;
+window.buscarProductos = buscarProductos;
+window.debounceBuscarProductos = debounceBuscarProductos;
+window.agregarCategoria = agregarCategoria;
+window.cerrarModalCategorias = cerrarModalCategorias;
+window.cargarCategorias = cargarCategorias;
+window.filtrarCategorias = filtrarCategorias;
+window.debounceFiltrarCategorias = debounceFiltrarCategorias;
+window.cambiarPaginaCategoria = cambiarPaginaCategoria;
+window.limpiarFormCategoria = limpiarFormCategoria;
+window.guardarCategoriaTasas = guardarCategoriaTasas;
+window.editarCategoria = editarCategoria;
+window.eliminarCategoria = eliminarCategoria;
+window.recargarSelectCategorias = recargarSelectCategorias;
+window.enviarReporteCompleto = enviarReporteCompleto;
+window.validarYEnviarAlertaStock = validarYEnviarAlertaStock;
+window.descargarXLSX = descargarXLSX;
+window.toggleCurrency = toggleCurrency;
+window.editarTasaCambio = editarTasaCambio;
+// window.toggleTheme → ya NO se sobrescribe, se usa el del index
+window.actualizarIndicadorStockForm = actualizarIndicadorStockForm;
+window.actualizarPreviewForm = actualizarPreviewForm;
+window.initProductosLista = initProductosLista;
+window.toggleTipoProducto = toggleTipoProducto;
+window.onIngredienteSelectChange = onIngredienteSelectChange;
+window.agregarIngredienteAReceta = agregarIngredienteAReceta;
+window.eliminarIngredienteDeReceta = eliminarIngredienteDeReceta;
+window.producirCompuestoManual = producirCompuestoManual;
+window.actualizarLabelIngredientes = actualizarLabelIngredientes;
+window.generarCodigoBarrasAutomatico = generarCodigoBarrasAutomatico;
+window.generarCodigoBarrasPreview = generarCodigoBarrasPreview;
+window.toggleCodigoBarrasHabilitado = toggleCodigoBarrasHabilitado;
+window.iniciarLectorCodigoBarras = iniciarLectorCodigoBarras;
+window.detenerLectorCodigoBarras = detenerLectorCodigoBarras;
+window.procesarCodigoEscaneado = procesarCodigoEscaneado;
+window.actualizarCuentaInfo = actualizarCuentaInfo;
+window.escapeHtml = escapeHtml;
+
+// Exponer helpers nuevos para uso global
+window._notifySuccess = _notifySuccess;
+window._notifyError = _notifyError;
+window._notifyWarning = _notifyWarning;
+window._notifyInfo = _notifyInfo;
+window._confirmarAccion = _confirmarAccion;
+window._mostrarCargando = _mostrarCargando;
+window._ocultarCargando = _ocultarCargando;
+window.resetearDOMProductos = resetearDOMProductos;
+
+// ============================================================
+// AUTO-INIT Y FALLBACK DE EMERGENCIA
+// ============================================================
+
+// 🔹 Auto-init normal: si el index no llama en 500ms, forzamos
+if (!window.__productosYaInicializado) {
+  window.__productosYaInicializado = true;
+
+  var autoInitProductos = function() {
+    setTimeout(function() {
+      var yaCorrio = productosInicializados === true;
+      var hayContenedor = !!document.getElementById('tablaProductosBody');
+      
+      if (!yaCorrio && hayContenedor) {
+        console.log('🚀 Auto-init de Productos (carga aislada o index no llamó)');
+        try {
+          initProductosLista();
+        } catch (e) {
+          console.error('❌ Falló auto-init:', e);
+          _ocultarCargando();
+        }
+      }
+    }, 500);
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', autoInitProductos);
+  } else {
+    autoInitProductos();
+  }
+}
+
+// 🔹 Fallback de emergencia: si tras 6s el overlay sigue visible, forzar cierre
+setTimeout(function() {
+  var overlay = document.getElementById('overlay');
+  var sigueVisible = overlay && overlay.style.display !== 'none';
+  
+  if (sigueVisible) {
+    console.warn('⚠️ Fallback de emergencia: overlay sigue visible tras 6s. Forzando cierre.');
+    if (overlay) overlay.style.display = 'none';
+    var botonera = document.getElementById('botoneraInventario');
+    if (botonera) botonera.style.visibility = 'visible';
+    
+    // Si nunca se inicializó, intentar de nuevo
+    if (!productosInicializados) {
+      try { initProductosLista(); } catch (e) { console.error('❌ init de emergencia falló:', e); }
+    }
+  }
+}, 6000);
+
+// 🔹 Diagnóstico: verificar CDNs
+setTimeout(function() {
+  var faltantes = [];
+  if (typeof bootstrap === 'undefined') faltantes.push('bootstrap');
+  if (typeof Swal === 'undefined') faltantes.push('Swal');
+  if (typeof XLSX === 'undefined') faltantes.push('XLSX');
+  if (typeof JsBarcode === 'undefined') faltantes.push('JsBarcode');
+  if (typeof Notyf === 'undefined') faltantes.push('Notyf');
+  if (faltantes.length > 0) {
+    console.warn('⚠️ CDNs faltantes (algunas funciones fallarán):', faltantes.join(', '));
+  } else {
+    console.log('✅ Todos los CDNs cargados correctamente');
+  }
+}, 1000);
+
+</script>
+
+</body>
+</html>

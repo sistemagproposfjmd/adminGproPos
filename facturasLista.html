@@ -1,0 +1,2609 @@
+<!-- ================================================================
+     MÓDULO FACTURAS LISTA (CXP / CXC) - REFACTORIZADO E INTEGRADO
+     - Encapsulado en IIFE, expone window.ModuloFacturasLista
+     - Usa GProUI.notificar (toast centralizado) con fallback
+     - Escucha themeChanged y usa variables CSS
+     - Sin auto-invoke DOMContentLoaded
+     - unmount() limpia modales, backdrops, timers y estado
+     - Spinner local solo como fallback del overlay global
+================================================================= -->
+
+<style>
+/* ================================================================
+   ESTILOS ESPECÍFICOS DEL MÓDULO (solo lo que NO está en css global)
+   Los form-control, form-select, modal-*, badge-*, btn-* ya vienen
+   del head_assets / css global. Aquí solo lo propio.
+================================================================= */
+
+/* Variables locales con fallback (por si el theme no las define) */
+#facturasMainContainer {
+  --fac-bg-soft:    var(--bg-card, rgba(255,255,255,0.05));
+  --fac-border:     var(--glass-border, rgba(255,255,255,0.12));
+  --fac-text-main:  var(--text-main, #f8fafc);
+  --fac-text-soft:  var(--text-light, #94a3b8);
+  --fac-primary:    var(--primary, #f97316);
+  --fac-primary-dk: var(--primary-dark, #ea580c);
+  --fac-surface:    var(--fac-bg-soft);
+  --fac-surface-2:  rgba(255,255,255,0.03);
+  --fac-surface-3:  rgba(255,255,255,0.06);
+}
+
+/* Modo claro - sobreescribe variables locales */
+[data-bs-theme="light"] #facturasMainContainer {
+  --fac-bg-soft:    #ffffff;
+  --fac-border:     rgba(15,23,42,0.10);
+  --fac-text-main:  #0f172a;
+  --fac-text-soft:  #64748b;
+  --fac-surface:    #ffffff;
+  --fac-surface-2:  #f8fafc;
+  --fac-surface-3:  #f1f5f9;
+}
+
+#facturasMainContainer.position-relative { position: relative; }
+
+/* Loader local (fallback del global) */
+#facturas-loader {
+  position: absolute;
+  inset: 0;
+  background: rgba(10,10,15,0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+  border-radius: 20px;
+}
+[data-bs-theme="light"] #facturas-loader {
+  background: rgba(248,250,252,0.85);
+}
+
+/* Panel sección (sub-bloques dentro de modales) */
+.panel-seccion {
+  background: var(--fac-surface-2, rgba(255,255,255,0.03));
+  border: 1px solid var(--fac-border, rgba(255,255,255,0.12));
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+/* Search box interno */
+#facturasMainContainer .search-box {
+  position: relative;
+  min-width: 240px;
+  flex: 1;
+}
+#facturasMainContainer .search-box input {
+  width: 100%;
+  padding: 8px 16px 8px 40px;
+  border: 1.5px solid var(--fac-border, rgba(255,255,255,0.12));
+  border-radius: 20px;
+  background: var(--fac-surface-2, rgba(255,255,255,0.04));
+  color: var(--fac-text-main, #fff);
+  outline: none;
+}
+#facturasMainContainer .search-box input:focus {
+  border-color: var(--fac-primary, #f97316);
+  box-shadow: 0 0 0 3px rgba(249,115,22,0.20);
+}
+#facturasMainContainer .search-box i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--fac-text-soft, #94a3b8);
+}
+#facturasMainContainer #suggestions-box {
+  position: absolute;
+  width: 100%;
+  z-index: 1070;
+  background: var(--fac-surface, #1a1a29);
+  border: 1px solid var(--fac-border, rgba(255,255,255,0.12));
+  border-radius: 12px;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+}
+#facturasMainContainer #suggestions-box.show { display: block; }
+#facturasMainContainer #suggestions-box .list-group-item {
+  background: transparent;
+  color: var(--fac-text-main, #f8fafc);
+  border: none;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 13px;
+}
+#facturasMainContainer #suggestions-box .list-group-item:hover {
+  background: rgba(249,115,22,0.15);
+  color: var(--fac-primary, #f97316);
+}
+
+/* Botones filtro */
+#facturasMainContainer .btn-filter {
+  background: var(--fac-surface-2, rgba(255,255,255,0.04));
+  border: 1px solid var(--fac-border, rgba(255,255,255,0.12));
+  color: var(--fac-text-soft, #94a3b8);
+  padding: 7px 15px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#facturasMainContainer .btn-filter:hover {
+  color: var(--fac-text-main, #fff);
+  border-color: var(--fac-primary, #f97316);
+}
+#facturasMainContainer .btn-filter.active {
+  background: linear-gradient(135deg, var(--fac-primary, #f97316) 0%, var(--fac-primary-dk, #ea580c) 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(249,115,22,0.30);
+}
+
+/* Página header específico */
+#facturasMainContainer .page-header {
+  background: var(--fac-bg-soft, rgba(255,255,255,0.05));
+  border: 1px solid var(--fac-border, rgba(255,255,255,0.12));
+  border-radius: 20px;
+  padding: 22px 30px;
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#facturasMainContainer .page-header h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary-light, #fb923c), var(--fac-primary, #f97316));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+#facturasMainContainer .page-header .subtitle {
+  color: var(--fac-text-soft, #94a3b8);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Filtros */
+#facturasMainContainer .filters-section {
+  padding: 18px 24px;
+  margin-bottom: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  background: var(--fac-bg-soft, rgba(255,255,255,0.05));
+  border: 1px solid var(--fac-border, rgba(255,255,255,0.12));
+  border-radius: 16px;
+}
+
+/* Data section */
+#facturasMainContainer .data-section {
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--fac-bg-soft, rgba(255,255,255,0.05));
+  border: 1px solid var(--fac-border, rgba(255,255,255,0.12));
+}
+
+/* Sombra tabla oscura ya viene del css global. Forzamos texto claro/oscuro por theme */
+#facturasMainContainer .table tbody td { color: var(--fac-text-main, #f8fafc); }
+#facturasMainContainer .table thead th {
+  background: linear-gradient(135deg, var(--fac-primary, #f97316) 0%, var(--fac-primary-dk, #ea580c) 100%);
+  color: #fff;
+  border: none;
+}
+
+/* Botones acción (por si no están en css global) */
+#facturasMainContainer .btn-action-group { display: flex; gap: 5px; justify-content: center; }
+#facturasMainContainer .btn-action {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--fac-border, rgba(255,255,255,0.12));
+  background: var(--fac-surface-2, rgba(255,255,255,0.04));
+  color: var(--fac-text-soft, #94a3b8);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+#facturasMainContainer .btn-action:hover { border-color: var(--fac-primary, #f97316); color: var(--fac-primary, #f97316); }
+#facturasMainContainer .btn-action.ver:hover { color:#3b82f6; border-color:#3b82f6; background: rgba(59,130,246,0.1); }
+#facturasMainContainer .btn-action.historial:hover { color:#a855f7; border-color:#a855f7; background: rgba(168,85,247,0.1); }
+#facturasMainContainer .btn-action.retencion:hover { color:#06b6d4; border-color:#06b6d4; background: rgba(6,182,212,0.1); }
+#facturasMainContainer .btn-action.editar:hover { color:#f59e0b; border-color:#f59e0b; background: rgba(245,158,11,0.1); }
+#facturasMainContainer .btn-action.pagar:hover { color:#10b981; border-color:#10b981; background: rgba(16,185,129,0.1); }
+#facturasMainContainer .btn-action.anular:hover { color:#6b7280; border-color:#6b7280; background: rgba(107,114,128,0.1); }
+#facturasMainContainer .btn-action.eliminar:hover { color:#ef4444; border-color:#ef4444; background: rgba(239,68,68,0.1); }
+
+/* Badges estado */
+#facturasMainContainer .badge-status {
+  display: inline-block; padding: 4px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+}
+#facturasMainContainer .badge-active    { background: rgba(16,185,129,0.15); color:#10b981; }
+#facturasMainContainer .badge-anulada   { background: rgba(239,68,68,0.15);  color:#ef4444; }
+#facturasMainContainer .badge-pendiente { background: rgba(245,158,11,0.15); color:#f59e0b; }
+
+/* Botones glass */
+#facturasMainContainer .btn-primary-glass {
+  background: linear-gradient(135deg, var(--fac-primary, #f97316) 0%, var(--fac-primary-dk, #ea580c) 100%);
+  border: none; color:#fff; padding: 9px 24px; border-radius: 10px;
+  font-weight: 600; box-shadow: 0 4px 16px rgba(249,115,22,0.30);
+}
+#facturasMainContainer .btn-secondary-glass {
+  background: var(--fac-surface-3, rgba(255,255,255,0.08));
+  border: 1px solid var(--fac-border, rgba(255,255,255,0.12));
+  color: var(--fac-text-main, #fff);
+  padding: 9px 20px; border-radius: 10px; font-weight: 600;
+}
+
+/* Modales: forzamos colores según theme */
+[data-bs-theme="light"] .modal-content {
+  background: #ffffff !important;
+  border-color: rgba(15,23,42,0.10) !important;
+  color: #0f172a !important;
+}
+[data-bs-theme="light"] .modal-header {
+  background: linear-gradient(135deg, rgba(249,115,22,0.08) 0%, rgba(255,255,255,0.6) 100%) !important;
+}
+[data-bs-theme="light"] .modal-header .btn-close { filter: none; opacity: 0.7; }
+[data-bs-theme="light"] .modal-body,
+[data-bs-theme="light"] .modal-footer { color: #0f172a !important; }
+[data-bs-theme="light"] .modal .text-light,
+[data-bs-theme="light"] .modal .text-muted { color: #475569 !important; }
+[data-bs-theme="light"] .modal .fw-bold.text-light { color: #0f172a !important; }
+[data-bs-theme="light"] .modal .form-control,
+[data-bs-theme="light"] .modal .form-select {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: rgba(15,23,42,0.15) !important;
+}
+[data-bs-theme="light"] .modal .form-control:focus,
+[data-bs-theme="light"] .modal .form-select:focus {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+[data-bs-theme="light"] .modal table thead tr { background: #f1f5f9 !important; }
+[data-bs-theme="light"] .modal table tbody td { color: #0f172a !important; }
+[data-bs-theme="light"] .modal .bg-dark { background: #f1f5f9 !important; color:#0f172a !important; }
+</style>
+
+<!-- ================================================================
+     CONTENEDOR PRINCIPAL
+================================================================= -->
+<div class="view-container position-relative" id="facturasMainContainer">
+
+  <div id="facturas-loader" style="display: none;">
+    <div class="spinner-border text-warning" role="status"></div>
+    <span class="text-light fw-bold" id="facturas-loader-text">Cargando facturas...</span>
+  </div>
+
+  <div class="page-header">
+    <div>
+      <h2 id="tituloPagina">Cuentas por Pagar</h2>
+      <div class="subtitle" id="subtituloPagina">Gestión de facturas con saldo pendiente mayor a cero</div>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+<div class="filters-section">
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <span class="text-muted" style="font-size:12px; font-weight:600;">Estado:</span>
+      <button class="btn-filter active" onclick="ModuloFacturasLista.cambiarFiltroEstado('porPagar')" data-filtro="porPagar"><i class="bi bi-arrow-left-circle me-1"></i> Por Pagar</button>
+      <button class="btn-filter" onclick="ModuloFacturasLista.cambiarFiltroEstado('porCobrar')" data-filtro="porCobrar"><i class="bi bi-arrow-right-circle me-1"></i> Por Cobrar</button>
+      <button class="btn-filter" onclick="ModuloFacturasLista.cambiarFiltroEstado('pagada')" data-filtro="pagada"><i class="bi bi-check2-all me-1"></i> Pagadas</button>
+      <button class="btn-filter" onclick="ModuloFacturasLista.cambiarFiltroEstado('cobrada')" data-filtro="cobrada"><i class="bi bi-check2-circle me-1"></i> Cobradas</button>
+    </div>
+
+    <div class="d-flex align-items-center gap-2">
+      <div class="d-flex align-items-center gap-1">
+        <label class="form-label m-0 small text-muted">Desde:</label>
+        <input type="date" class="form-control form-control-sm" id="filtroFechaDesde" style="width:130px;" onchange="ModuloFacturasLista.filtrarYMostrarFacturas()">
+      </div>
+      <div class="d-flex align-items-center gap-1">
+        <label class="form-label m-0 small text-muted">Hasta:</label>
+        <input type="date" class="form-control form-control-sm" id="filtroFechaHasta" style="width:130px;" onchange="ModuloFacturasLista.filtrarYMostrarFacturas()">
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-2" style="flex:1; min-width:240px;">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" id="searchProveedor" placeholder="Buscar por Nombre o N° Factura..." autocomplete="off">
+        <div id="suggestions-box" class="list-group"></div>
+      </div>
+      <button type="button" class="btn btn-primary-glass py-2 px-3" onclick="ModuloFacturasLista.recargarDatos()" title="Recargar datos"><i class="bi bi-arrow-clockwise"></i></button>
+    </div>
+
+    <!-- BOTONES DE COBRANZA DIGITAL -->
+    <button type="button" class="btn btn-outline-warning py-2 px-3" onclick="ModuloFacturasLista.abrirModalEnvioCobranza()" title="Enviar Cobro por Correo al Cliente">
+      <i class="bi bi-envelope-at me-1"></i> Notificar Cobro
+    </button>
+
+    <button type="button" class="btn btn-outline-info py-2 px-3 position-relative" onclick="ModuloFacturasLista.abrirModalSoportesWeb()" title="Ver Soportes Reportados por Clientes">
+      <i class="bi bi-inbox-fill me-1"></i> Soportes Web
+      <span id="badgeSoportesWebCount" class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle" style="display:none;font-size:10px;">0</span>
+    </button>
+</div>
+
+  <!-- TABLA -->
+  <div class="data-section">
+    <div class="table-responsive">
+      <table id="facturasLista" class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>Proveedor / Cliente</th>
+            <th>Nro Factura</th>
+            <th>Fecha</th>
+            <th class="text-end">Saldo (Bs)</th>
+            <th class="text-end">Saldo ($)</th>
+            <th class="text-end">Total ($)</th>
+            <th class="text-center">Transacción</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaFacturasBody">
+          <tr>
+            <td colspan="9" class="text-center py-4 text-muted"><i class="bi bi-inbox me-2"></i> Cargando facturas...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     MODALES
+================================================================= -->
+
+<!-- 1. VER FACTURA -->
+<div class="modal fade" id="facturaModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-light fw-bold"><i class="bi bi-file-text me-2 text-warning"></i> Detalles de la Factura</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-2">
+          <div class="col-6 p-2 rounded" style="background:rgba(255,255,255,0.03);">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">PROVEEDOR / CLIENTE</div>
+            <div id="modalNombre" class="text-light fw-bold fs-6">-</div>
+          </div>
+          <div class="col-6 p-2 rounded" style="background:rgba(255,255,255,0.03);">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">RIF / CÉDULA</div>
+            <div id="modalRif" class="text-light fw-bold fs-6">-</div>
+          </div>
+          <div class="col-6 p-2 rounded" style="background:rgba(255,255,255,0.03);">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">FECHA EMISIÓN</div>
+            <div id="modalFecha" class="text-light">-</div>
+          </div>
+          <div class="col-6 p-2 rounded" style="background:rgba(255,255,255,0.03);">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">FECHA VENCIMIENTO</div>
+            <div id="modalFechaVenc" class="text-light">-</div>
+          </div>
+          <div class="col-6 p-2 rounded" style="background:rgba(255,255,255,0.03);">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">TOTAL ($ / Bs)</div>
+            <div id="modalMontoUSD" class="text-success fw-bold">-</div>
+            <div id="modalMontoBs" class="text-muted small">-</div>
+          </div>
+          <div class="col-6 p-2 rounded" style="background:rgba(255,255,255,0.03);">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">SALDO PENDIENTE ($ / Bs)</div>
+            <div id="modalSaldoUSD" class="text-warning fw-bold">-</div>
+            <div id="modalSaldoBs" class="text-muted small">-</div>
+          </div>
+          <div class="col-6 p-2 rounded" style="background:rgba(255,255,255,0.03);">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">COMPROBANTE RET. IVA</div>
+            <div id="modalCompIVA" class="text-info fw-semibold">-</div>
+          </div>
+          <div class="col-6 p-2 rounded" style="background:rgba(255,255,255,0.03);">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">COMPROBANTE RET. ISLR</div>
+            <div id="modalCompISLR" class="text-info fw-semibold">-</div>
+          </div>
+          <div class="col-12 p-2 rounded" style="background:rgba(255,255,255,0.03);">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">DESTINO / BANCO ASIGNADO</div>
+            <div id="modalBancoDestino" class="text-light">-</div>
+          </div>
+          <div class="col-12 d-flex justify-content-between align-items-center p-2 rounded" style="background:rgba(255,255,255,0.03);">
+            <div style="font-size:11px;color:#94a3b8;font-weight:600;">STATUS ACTUAL</div>
+            <div id="modalStatus">-</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary-glass" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. HISTORIAL DE ABONOS -->
+<div class="modal fade" id="modalHistorialAbonos" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-light fw-bold" id="historialTituloModal"><i class="bi bi-clock-history me-2 text-warning"></i> Historial de Pagos y Abonos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-dark border-secondary p-2 mb-3 small d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-info-circle text-info me-1"></i> Para anular una factura, debe anular previamente todos los abonos o pagos listados abajo.</span>
+          <b class="text-warning" id="historialNroFacturaBadge">-</b>
+        </div>
+        <div class="table-responsive" style="max-height:420px; overflow-y:auto;">
+          <table class="table table-sm table-hover text-light align-middle" style="font-size:12px;">
+            <thead>
+              <tr style="position:sticky; top:0; z-index:2;">
+                <th>Fecha</th>
+                <th>Concepto / Tipo</th>
+                <th class="text-end">Monto ($)</th>
+                <th class="text-end">Monto (Bs)</th>
+                <th>Descripción / Referencia</th>
+                <th class="text-center">Comprobante</th>
+                <th class="text-center">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="historialAbonosTbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary-glass" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3. EDITAR FACTURA -->
+<div class="modal fade" id="editFacturaModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-light fw-bold"><i class="bi bi-pencil-square me-2 text-warning"></i> Editar Factura</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editFacturaForm" onsubmit="return false;">
+          <div class="mb-3">
+            <label class="form-label">Transacción</label>
+            <input type="text" class="form-control" id="editTransaccion" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Proveedor / Cliente</label>
+            <input type="text" class="form-control" id="editNombreProveedor">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">RIF / Cédula</label>
+            <input type="text" class="form-control" id="editRifProveedor">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Fecha Factura</label>
+            <input type="date" class="form-control" id="editFechaFactura">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Monto Total Factura (Bs)</label>
+            <input type="number" class="form-control" id="editMontoFactura" step="0.01">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nro Factura</label>
+            <input type="text" class="form-control" id="editNroFactura">
+            <small id="editNroFacturaMsg" style="display:block;margin-top:6px;font-size:12px;"></small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary-glass" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary-glass" onclick="ModuloFacturasLista.confirmarGuardarEdicion()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. LIQUIDACIÓN INTEGRAL -->
+<div class="modal fade" id="modalLiquidacionIntegral" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-light fw-bold" id="liqModalTitulo"><i class="bi bi-cash-stack me-2 text-warning"></i> Registrar Cobro / Pago</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="max-height:82vh; overflow-y:auto;">
+
+        <div class="panel-seccion" style="background:rgba(249,115,22,0.06); border-color:rgba(249,115,22,0.25);">
+          <div class="row g-2 align-items-center">
+            <div class="col-md-5">
+              <div style="font-size:11px; color:#94a3b8; font-weight:600;">PROVEEDOR / CLIENTE</div>
+              <div class="text-light fw-bold fs-6" id="liqTerceroNombre">-</div>
+              <div class="text-muted small" id="liqTerceroRif">RIF: -</div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Fecha Operación</label>
+              <input type="date" class="form-control form-control-sm" id="liqFechaOperacion">
+            </div>
+            <div class="col-md-4 text-end">
+              <button type="button" class="btn btn-sm btn-outline-info" id="btnToggleAnticipoDirecto" onclick="ModuloFacturasLista.alternarModoAnticipoDirecto()">
+                <i class="bi bi-bookmark-plus me-1"></i> Modo: Liquidar Facturas
+              </button>
+              <div class="small text-muted mt-1" id="liqTasa">Tasa: 1.00 Bs/$</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-seccion" id="seccionTablaFacturas">
+          <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+            <h6 class="text-light fw-bold m-0"><i class="bi bi-table text-warning me-2"></i> Facturas Pendientes (Saldo > 0)</h6>
+            <div class="d-flex gap-2">
+              <input type="text" class="form-control form-control-sm" id="filtroTablaFacNro" placeholder="Filtrar Nro Factura..." style="width:160px;" oninput="ModuloFacturasLista.filtrarTablaFacturasModal()">
+              <input type="date" class="form-control form-control-sm" id="filtroTablaFacDesde" title="Desde" onchange="ModuloFacturasLista.filtrarTablaFacturasModal()">
+              <input type="date" class="form-control form-control-sm" id="filtroTablaFacHasta" title="Hasta" onchange="ModuloFacturasLista.filtrarTablaFacturasModal()">
+            </div>
+          </div>
+
+          <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+            <table class="table table-sm table-hover align-middle" id="tablaFacturasModal" style="font-size:12px;">
+              <thead>
+                <tr style="position:sticky; top:0; z-index:5;">
+                  <th style="width:35px; text-align:center;">
+                    <input class="form-check-input" type="checkbox" id="chkSelectAllFac" onchange="ModuloFacturasLista.toggleSelectAllFacturas(this.checked)">
+                  </th>
+                  <th>N° Factura</th>
+                  <th>Fecha</th>
+                  <th class="text-end">Base Imp. ($)</th>
+                  <th class="text-end">IVA ($)</th>
+                  <th class="text-end">Exento ($)</th>
+                  <th class="text-end">Total ($)</th>
+                  <th class="text-end text-warning">Saldo ($)</th>
+                </tr>
+              </thead>
+              <tbody id="bodyFacturasModal"></tbody>
+            </table>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-2 px-2 py-1 rounded" style="background:rgba(255,255,255,0.02);">
+            <span class="small text-muted" id="badgeFacturasSeleccionadas">0 facturas seleccionadas</span>
+            <div class="text-end">
+              <span class="small text-muted me-2">Total Saldo Seleccionado:</span>
+              <b class="text-warning fs-6" id="totalSaldoSeleccionadoUSD">$ 0.00</b>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-seccion" id="seccionRetencionesWrapper">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="text-light fw-bold m-0"><i class="bi bi-shield-check text-info me-2"></i> Retenciones Tributarias</h6>
+            <span class="small text-muted">Cálculo automático editable</span>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6 p-3 rounded" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="form-check form-switch m-0">
+                  <input class="form-check-input" type="checkbox" id="chkRetIVA" onchange="ModuloFacturasLista.recalcularRetencionesAutomaticas()">
+                  <label class="form-check-label text-light fw-bold" for="chkRetIVA">Retención IVA</label>
+                </div>
+                <span class="small text-muted">Base: IVA (<span id="baseIvaCalcTexto">$ 0.00</span>)</span>
+              </div>
+              <div id="boxRetIVA" style="display:none;" class="row g-2 mt-1">
+                <div class="col-4">
+                  <label class="form-label" style="font-size:10px;">% Retención</label>
+                  <select class="form-select form-select-sm" id="pctRetIVA" onchange="ModuloFacturasLista.recalcularRetencionesAutomaticas()">
+                    <option value="75">75%</option>
+                    <option value="100">100%</option>
+                  </select>
+                </div>
+                <div class="col-8">
+                  <label class="form-label" style="font-size:10px;">Monto Retenido ($) (Editable)</label>
+                  <input type="number" class="form-control form-control-sm text-info fw-bold" id="montoRetIVA" step="0.01" value="0.00" oninput="ModuloFacturasLista.calcularLiquidacion()">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 p-3 rounded" style="background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06);">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="form-check form-switch m-0">
+                  <input class="form-check-input" type="checkbox" id="chkRetISLR" onchange="ModuloFacturasLista.recalcularRetencionesAutomaticas()">
+                  <label class="form-check-label text-light fw-bold" for="chkRetISLR">Retención ISLR</label>
+                </div>
+                <span class="small text-muted">Base: Gravable + Exento (<span id="baseIslrCalcTexto">$ 0.00</span>)</span>
+              </div>
+              <div id="boxRetISLR" style="display:none;" class="row g-2 mt-1">
+                <div class="col-4">
+                  <label class="form-label" style="font-size:10px;">% Retención</label>
+                  <select class="form-select form-select-sm" id="pctRetISLR" onchange="ModuloFacturasLista.recalcularRetencionesAutomaticas()">
+                    <option value="2">2%</option>
+                    <option value="3">3%</option>
+                    <option value="5">5%</option>
+                  </select>
+                </div>
+                <div class="col-8">
+                  <label class="form-label" style="font-size:10px;">Monto Retenido ($) (Editable)</label>
+                  <input type="number" class="form-control form-control-sm text-info fw-bold" id="montoRetISLR" step="0.01" value="0.00" oninput="ModuloFacturasLista.calcularLiquidacion()">
+                </div>
+
+                <div class="col-12 mt-2" id="boxIslrConcepto" style="display:none;">
+                  <label class="form-label" style="font-size:10px;">Concepto de Retención ISLR</label>
+                  <select class="form-select form-select-sm" id="selConceptoISLR"
+                          onchange="ModuloFacturasLista.recalcularRetencionesAutomaticas()">
+                    <option value="">-- Seleccionar concepto --</option>
+                    <option value="1" data-pct="5">Servicios (5%)</option>
+                    <option value="2" data-pct="3">Honorarios profesionales (3%)</option>
+                    <option value="3" data-pct="5">Comisiones mercantiles (5%)</option>
+                    <option value="4" data-pct="34">Enriquecimiento sin causa (34%)</option>
+                    <option value="5" data-pct="1">Intereses (1%)</option>
+                    <option value="6" data-pct="2">Publicidad y propaganda (2%)</option>
+                    <option value="7" data-pct="5">Arrendamiento (5%)</option>
+                    <option value="8" data-pct="1">Fletes (1%)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-seccion" id="seccionAnticiposWrapper">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="text-light fw-bold m-0"><i class="bi bi-arrow-left-right text-primary me-2"></i> Anticipos Disponibles</h6>
+            <span class="badge bg-secondary" id="badgeAnticiposCount">0 disponibles</span>
+          </div>
+          <div id="contenedorAnticipos" class="small text-muted">Consultando anticipos...</div>
+        </div>
+
+        <div class="panel-seccion">
+          <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+            <h6 class="text-light fw-bold m-0"><i class="bi bi-wallet2 text-success me-2"></i> Formas de Pago / Cajas y Bancos</h6>
+            <div class="d-flex gap-2 align-items-center">
+              <label class="form-label m-0">Modalidad:</label>
+              <select id="ant-modalidad" class="form-select form-select-sm" style="width:200px;" onchange="ModuloFacturasLista.filtrarCuentasPorModalidadAnticipo(this.value)">
+                <option value="Transferencia">Transferencia Bancaria (Banco)</option>
+                <option value="PagoMovil">Pago Móvil (Banco)</option>
+                <option value="Zelle">Zelle / Remesa (Banco)</option>
+                <option value="Efectivo">Efectivo (Caja)</option>
+              </select>
+              <button type="button" class="btn btn-sm btn-outline-warning" onclick="ModuloFacturasLista.agregarFilaPago()"><i class="bi bi-plus-circle me-1"></i> Añadir Línea</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-sm table-borderless text-light align-middle" id="tablaLineasPago">
+              <thead>
+                <tr class="text-muted" style="font-size:11px;">
+                  <th>Cuenta / Caja</th>
+                  <th style="width:110px;">Moneda</th>
+                  <th style="width:130px;">Monto</th>
+                  <th>Referencia</th>
+                  <th style="width:30px;"></th>
+                </tr>
+              </thead>
+              <tbody id="bodyLineasPago"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="p-3 rounded" style="background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.12);">
+          <div class="row align-items-center">
+            <div class="col-md-7">
+              <div class="d-flex justify-content-between small text-muted">
+                <span>(-) Total Retenciones (IVA + ISLR):</span>
+                <span id="resumenRet" class="text-light fw-semibold">$ 0.00</span>
+              </div>
+              <div class="d-flex justify-content-between small text-muted">
+                <span>(-) Total Anticipos Aplicados:</span>
+                <span id="resumenAnt" class="text-light fw-semibold">$ 0.00</span>
+              </div>
+              <div class="d-flex justify-content-between small text-muted">
+                <span>(-) Total Pagado en Bancos/Caja:</span>
+                <span id="resumenBanco" class="text-light fw-semibold">$ 0.00</span>
+              </div>
+            </div>
+            <div class="col-md-5 text-end">
+              <div style="font-size:11px; color:#94a3b8; font-weight:600;" id="lblSaldoRestante">SALDO RESTANTE</div>
+              <div style="font-size:24px; font-weight:800;" id="resumenSaldoRestante">$ 0.00</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary-glass" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary-glass" id="btnConfirmarLiquidacion" onclick="ModuloFacturasLista.confirmarYProcesarLiquidacion()">Procesar Pago</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ENVIAR CORREO DE COBRANZA -->
+<div class="modal fade" id="modalEnvioCobro" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-light fw-bold"><i class="bi bi-envelope-paper me-2 text-warning"></i> Enviar Estado de Cuenta por Correo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <label class="form-label small text-muted">Cliente / RIF</label>
+            <input type="text" class="form-control form-control-sm text-light fw-bold" id="cobroClienteNombre" readonly>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label small text-muted">Correo Destino (Editable)</label>
+            <input type="email" class="form-control form-control-sm" id="cobroClienteCorreo" placeholder="correo@cliente.com" required>
+          </div>
+        </div>
+
+        <h6 class="text-light fw-bold mb-2"><i class="bi bi-card-checklist text-warning me-1"></i> Facturas a Incluir en la Notificación:</h6>
+        <div class="table-responsive" style="max-height:220px; overflow-y:auto;">
+          <table class="table table-sm table-hover text-light align-middle" style="font-size:12px;">
+            <thead>
+              <tr style="position:sticky;top:0;background:#1e293b;">
+                <th style="width:35px;"><input type="checkbox" id="chkTodosCobro" onchange="ModuloFacturasLista.toggleTodosCobro(this.checked)" checked></th>
+                <th>N° Factura</th>
+                <th>Emisión</th>
+                <th class="text-end text-warning">Saldo ($)</th>
+              </tr>
+            </thead>
+            <tbody id="bodyFacturasCobro"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary-glass" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary-glass" id="btnDispararCorreoCobro" onclick="ModuloFacturasLista.confirmarDisparoCorreoCobro()">
+          <i class="bi bi-send me-1"></i> Enviar Correo con Link de Pago
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: GESTIÓN DE SOPORTES WEB RECIBIDOS -->
+<div class="modal fade" id="modalSoportesWeb" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-light fw-bold"><i class="bi bi-inbox-fill me-2 text-info"></i> Soportes de Pago Reportados por Clientes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="small text-muted mb-3">Los siguientes pagos fueron reportados por los clientes desde su correo. Seleccione una cuenta receptora y pulse "Convertir a Anticipo" para ingresarlo al sistema.</p>
+        
+        <div class="table-responsive" style="max-height:360px; overflow-y:auto;">
+          <table class="table table-sm table-hover text-light align-middle" style="font-size:12px;">
+            <thead>
+              <tr style="position:sticky;top:0;background:#1e293b;">
+                <th>Fecha</th>
+                <th>Cliente / RIF</th>
+                <th>Facturas</th>
+                <th>Método / Ref</th>
+                <th>Origen / Destino</th>
+                <th class="text-end text-warning">Monto ($)</th>
+                <th class="text-center">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="bodySoportesWeb"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary-glass" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     SCRIPT DEL MÓDULO - ENCAPSULADO EN IIFE
+================================================================= -->
+<script>
+(function () {
+  'use strict';
+
+  // ===========================================================
+  // ESTADO INTERNO
+  // ===========================================================
+  var state = {
+    facturas: [],
+    filtroEstado: 'porPagar',
+    transaccionActual: 'Compra',
+    userRole: 'Owner',
+    historialCache: {},
+    bancosCajas: [],
+    anticipos: [],
+    tercero: { nombre: '', rif: '', tasa: 1 },
+    facturasTercero: [],
+    modoAnticipoDirecto: false,
+    mounted: false,
+    activeModals: [],
+    debounceTimer: null,
+    idSpreadsheet: '',
+    empresaNombre: ''
+  };
+
+  // ===========================================================
+  // LECTURA ROBUSTA DE LA EMPRESA ACTIVA
+  // ===========================================================
+  function leerEmpresaActiva() {
+    var fuentes = [];
+    try { fuentes.push(sessionStorage.getItem('empresaActiva')); } catch (e) {}
+    try { fuentes.push(localStorage.getItem('empresaActiva')); } catch (e) {}
+    try { if (window.empresaActiva) fuentes.push(JSON.stringify(window.empresaActiva)); } catch (e) {}
+    try { if (window.EMPRESA_ACTIVA) fuentes.push(JSON.stringify(window.EMPRESA_ACTIVA)); } catch (e) {}
+
+    for (var i = 0; i < fuentes.length; i++) {
+      var raw = fuentes[i];
+      if (!raw) continue;
+      try {
+        var obj = (typeof raw === 'string') ? JSON.parse(raw) : raw;
+        if (!obj || typeof obj !== 'object') continue;
+        var id = obj.idSpreadsheet || obj.id || obj.spreadsheetId || obj.sheetId || '';
+        var nom = obj.nombre || obj.name || obj.empresa || '';
+        if (id) {
+          return { id: String(id), nombre: String(nom || '') };
+        }
+      } catch (e) {}
+    }
+    return { id: '', nombre: '' };
+  }
+
+  function refrescarEmpresaActiva() {
+    var e = leerEmpresaActiva();
+    if (e.id) {
+      state.idSpreadsheet = e.id;
+      state.empresaNombre = e.nombre;
+    }
+    return e;
+  }
+
+  // Inicialización
+  (function initEmpresa() {
+    var e = leerEmpresaActiva();
+    state.idSpreadsheet = e.id || '';
+    state.empresaNombre = e.nombre || '';
+  })();
+
+  // ===========================================================
+  // PARSER NUMÉRICO ROBUSTO (formato latino / US / mixto)
+  // ===========================================================
+  function num(v) {
+    if (v === null || v === undefined || v === '') return 0;
+    if (typeof v === 'number') return isFinite(v) ? v : 0;
+
+    // Si ya es un número disfrazado de string simple
+    var direct = Number(v);
+    if (!isNaN(direct) && String(v).indexOf(',') === -1) return direct;
+
+    var s = String(v).trim().replace(/[^\d.,\-]/g, '');
+    if (!s || s === '-' || s === '.' || s === ',') return 0;
+
+    var lastC = s.lastIndexOf(',');
+    var lastP = s.lastIndexOf('.');
+
+    if (lastC !== -1 && lastP !== -1) {
+      // Ambos presentes: el último define el decimal
+      if (lastC > lastP) {
+        s = s.replace(/\./g, '').replace(',', '.');
+      } else {
+        s = s.replace(/,/g, '');
+      }
+    } else if (lastC !== -1) {
+      var partes = s.split(',');
+      if (partes.length === 2 && partes[1].length === 3) {
+        s = partes.join(''); // era separador de miles
+      } else {
+        s = s.replace(/,/g, '.');
+      }
+    }
+    // Si solo hay puntos, se asume decimal (formato US estándar)
+
+    var n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+
+  // ===========================================================
+  // HELPERS DE UI
+  // ===========================================================
+  function notify(mensaje, tipo, duracion) {
+    if (window.GProUI && window.GProUI.notificar) {
+      var n = window.GProUI.notificar;
+      tipo = tipo || 'info';
+      switch (tipo) {
+        case 'success': case 'exito': return n.exito(mensaje, duracion);
+        case 'error':   case 'danger': return n.error(mensaje, duracion);
+        case 'warning': case 'advertencia': return n.advertencia(mensaje, duracion);
+        default: return n.info(mensaje, duracion);
+      }
+    }
+    if (window.notificar && window.notificar.toast) return window.notificar.toast(mensaje, tipo, duracion);
+    if (window.toast && window.toast.toast) return window.toast.toast(mensaje, tipo, duracion);
+    try { console.log('[Facturas]', tipo, mensaje); } catch (e) {}
+    if (tipo === 'error') alert(mensaje);
+  }
+
+  function root() {
+    return document.getElementById('facturasMainContainer') || document;
+  }
+
+  function toggleLoaderLocal(show, text) {
+    var el = document.getElementById('facturas-loader');
+    var txt = document.getElementById('facturas-loader-text');
+    if (!el) return;
+    if (txt && text) txt.textContent = text;
+    el.style.display = show ? 'flex' : 'none';
+  }
+
+  function overlayGlobalVisible() {
+    var g = document.getElementById('globalLoadingOverlay');
+    return g && g.style.display === 'flex';
+  }
+
+  function openModalSafe(id) {
+    var el = document.getElementById(id);
+    if (!el) return null;
+    if (typeof bootstrap === 'undefined' || !bootstrap.Modal) return null;
+    if (el.parentElement !== document.body) document.body.appendChild(el);
+    var m = bootstrap.Modal.getOrCreateInstance(el, { backdrop: false, keyboard: true });
+    m.show();
+    if (state.activeModals.indexOf(m) === -1) state.activeModals.push(m);
+    return m;
+  }
+
+  function closeModalSafe(id) {
+    var el = document.getElementById(id);
+    if (!el || typeof bootstrap === 'undefined' || !bootstrap.Modal) return;
+    var m = bootstrap.Modal.getInstance(el);
+    if (m) m.hide();
+  }
+
+  // ===========================================================
+  // FORMATTERS
+  // ===========================================================
+  function fmt(n) {
+    return Number(n || 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtUSD(n) { return '$ ' + fmt(n); }
+  function fmtBs(n)  { return 'Bs. ' + fmt(n); }
+  function safeStr(s) { return String(s == null ? '' : s); }
+  function sanitizeJsAttr(s) {
+    return String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  }
+
+  // ===========================================================
+  // CARGA DE DATOS
+  // ===========================================================
+  function cargarBancosCajas() {
+    if (typeof google === 'undefined' || !google.script || !google.script.run) return;
+    google.script.run
+      .withSuccessHandler(function (res) {
+        state.bancosCajas = Array.isArray(res) ? res : [];
+        console.log('[FACTURAS] Bancos/Cajas cargados:', state.bancosCajas.length);
+      })
+      .withFailureHandler(function (err) {
+        console.warn('[FACTURAS] Error cargando bancos/cajas:', err);
+        state.bancosCajas = [];
+      })
+      .getBancosYCajas(state.idSpreadsheet);
+  }
+
+  function cargarFacturas(opts) {
+    opts = opts || {};
+    var mostrarSpinner = opts.spinner !== false;
+
+    if (mostrarSpinner && !overlayGlobalVisible()) {
+      toggleLoaderLocal(true, 'Consultando facturas...');
+    }
+
+    var transaccionConsulta = (state.filtroEstado === 'porCobrar' || state.filtroEstado === 'cobrada') ? 'Venta' : 'Compra';
+    state.transaccionActual = transaccionConsulta;
+
+    if (typeof google === 'undefined' || !google.script || !google.script.run) {
+      toggleLoaderLocal(false);
+      notify('No hay conexión con el servidor.', 'error');
+      return;
+    }
+
+    // Refrescar empresa activa
+    refrescarEmpresaActiva();
+
+    // 🔍 LOGGING DIAGNÓSTICO
+    console.log('[FACTURAS] === INICIO CARGA ===');
+    console.log('[FACTURAS] filtroEstado:', state.filtroEstado);
+    console.log('[FACTURAS] transaccionConsulta:', transaccionConsulta);
+    console.log('[FACTURAS] idSpreadsheet:', JSON.stringify(state.idSpreadsheet));
+    console.log('[FACTURAS] empresaNombre:', JSON.stringify(state.empresaNombre));
+
+    if (!state.idSpreadsheet) {
+      toggleLoaderLocal(false);
+      console.warn('[FACTURAS] ⚠️ idSpreadsheet VACÍO — revisar sessionStorage "empresaActiva"');
+    }
+
+    google.script.run
+      .withSuccessHandler(function (d) {
+        console.log('[FACTURAS] Respuesta servidor:', d);
+        console.log('[FACTURAS] Tipo:', typeof d, '| EsArray:', Array.isArray(d), '| Largo:', d && d.length);
+
+        if (Array.isArray(d) && d.length > 0) {
+          console.log('[FACTURAS] Estructura primera factura:', JSON.stringify(d[0], null, 2));
+          console.log('[FACTURAS] Columnas detectadas:', Object.keys(d[0]));
+        }
+
+        state.facturas = Array.isArray(d) ? d : [];
+        filtrarYMostrarFacturas();
+        toggleLoaderLocal(false);
+      })
+      .withFailureHandler(function (e) {
+        console.error('[FACTURAS] Error servidor:', e);
+        notify('Error: ' + (e && e.message ? e.message : 'No se pudieron obtener datos'), 'error');
+        state.facturas = [];
+        filtrarYMostrarFacturas();
+        toggleLoaderLocal(false);
+      })
+      .getFacturasPorTransaccion(transaccionConsulta, state.idSpreadsheet);
+  }
+
+  // ===========================================================
+  // RENDER TABLA PRINCIPAL
+  // ===========================================================
+  function filtrarYMostrarFacturas() {
+    var inp = document.getElementById('searchProveedor');
+    var f = (inp ? inp.value : '').trim().toLowerCase();
+    var fDesde = document.getElementById('filtroFechaDesde') ? document.getElementById('filtroFechaDesde').value : '';
+    var fHasta = document.getElementById('filtroFechaHasta') ? document.getElementById('filtroFechaHasta').value : '';
+    var tb = document.getElementById('tablaFacturasBody');
+    if (!tb) {
+      console.warn('[FACTURAS] tablaFacturasBody no encontrado en DOM');
+      return;
+    }
+
+    var esVenta = (state.filtroEstado === 'porCobrar' || state.filtroEstado === 'cobrada');
+    var soloSaldosPendientes = (state.filtroEstado === 'porPagar' || state.filtroEstado === 'porCobrar');
+
+    console.log('[FACTURAS] Filtrando. Total facturas:', state.facturas.length,
+                '| esVenta:', esVenta, '| soloPendientes:', soloSaldosPendientes);
+
+    var list = state.facturas.filter(function (x) {
+      var trans = safeStr(x.Transaccion).toLowerCase().trim();
+
+      // Filtro de tipo PERMISIVO: contiene (no empieza con)
+      var matchTipo;
+      if (esVenta) {
+        matchTipo = (trans === '') || (trans.indexOf('vent') !== -1) || (trans.indexOf('cobr') !== -1);
+      } else {
+        matchTipo = (trans === '') || (trans.indexOf('compr') !== -1) || (trans.indexOf('pag') !== -1);
+      }
+
+      var nom = safeStr(x.ProveedorCliente).toLowerCase();
+      var nro = safeStr(x.NroFactura).toLowerCase();
+      var matchTexto = (!f || nom.indexOf(f) !== -1 || nro.indexOf(f) !== -1);
+
+      var fecha = safeStr(x.FechaFactura).slice(0, 10);
+      var matchFecha = true;
+      if (fDesde && fecha && fecha < fDesde) matchFecha = false;
+      if (fHasta && fecha && fecha > fHasta) matchFecha = false;
+
+      var tasa = num(x.Tasa) || 1;
+      var saldoBs = num(x.SaldoFactura);
+      var saldoUSD = num(x.SaldoFacturaUSD);
+      if (!saldoUSD && saldoBs) saldoUSD = saldoBs / tasa; // fallback
+      var tieneSaldo = (saldoBs > 0.01 || saldoUSD > 0.01);
+
+      var estado = safeStr(x.cobradaPagada).toLowerCase().trim();
+      var noAnulada = (estado !== 'anulada');
+
+      if (soloSaldosPendientes) {
+        return matchTipo && matchTexto && matchFecha && tieneSaldo && noAnulada;
+      } else {
+        return matchTipo && matchTexto && matchFecha && (!tieneSaldo) && noAnulada;
+      }
+    });
+
+    console.log('[FACTURAS] Registros tras filtro:', list.length);
+
+    tb.innerHTML = '';
+
+    if (!list.length) {
+      tb.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-muted"><i class="bi bi-inbox me-2"></i> No hay facturas en esta categoría</td></tr>';
+      return;
+    }
+
+    list.forEach(function (x) {
+      var nombre = x.ProveedorCliente || 'N/A';
+      var nro = x.NroFactura || 'N/A';
+      var trans = x.Transaccion || (esVenta ? 'Venta' : 'Compra');
+      var tasa = num(x.Tasa) || 1;
+      var totalBs = num(x.TotalFactura) || num(x.TotaFactura);
+      var totalUSD = tasa > 0 ? (totalBs / tasa) : 0;
+      var saldoBs = num(x.SaldoFactura);
+      var saldoUSD = num(x.SaldoFacturaUSD);
+      if (!saldoUSD && saldoBs) saldoUSD = saldoBs / tasa;
+      var fechaStr = safeStr(x.FechaFactura).slice(0, 10);
+
+      var nSan = sanitizeJsAttr(nro);
+      var tSan = sanitizeJsAttr(trans);
+
+      var stVal = safeStr(x.cobradaPagada || 'Pendiente');
+      var an = stVal.toLowerCase() === 'anulada';
+      var sp = (saldoBs > 0.01) || (saldoUSD > 0.01);
+
+      var sb = an ? 'badge-anulada' : (!sp ? 'badge-active' : 'badge-pendiente');
+      var st = an ? 'Anulada' : (!sp ? (esVenta ? 'Cobrada' : 'Pagada') : 'Pendiente');
+
+      var tieneRet = (x.nroComprobantesRetIVA && safeStr(x.nroComprobantesRetIVA).trim() !== '') ||
+                     (x.nroComprobantesRetISLR && safeStr(x.nroComprobantesRetISLR).trim() !== '');
+
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="fw-bold text-light">' + nombre + '</td>' +
+        '<td><span class="badge bg-dark border border-secondary">' + nro + '</span></td>' +
+        '<td class="text-muted small">' + fechaStr + '</td>' +
+        '<td class="text-end text-muted">' + fmtBs(saldoBs) + '</td>' +
+        '<td class="text-end text-warning fw-bold">' + fmtUSD(saldoUSD) + '</td>' +
+        '<td class="text-end text-success fw-bold">' + fmtUSD(totalUSD) + '</td>' +
+        '<td class="text-center"><span class="badge ' + (esVenta ? 'bg-primary' : 'bg-info') + '">' + trans + '</span></td>' +
+        '<td class="text-center"><span class="badge-status ' + sb + '">' + st + '</span></td>' +
+        '<td class="text-center"><div class="btn-action-group">' +
+          '<button type="button" class="btn-action ver" onclick="ModuloFacturasLista.verFactura(\'' + nSan + '\')" title="Ver Detalles"><i class="bi bi-eye"></i></button>' +
+          '<button type="button" class="btn-action historial" onclick="ModuloFacturasLista.verHistorialAbonos(\'' + nSan + '\')" title="Historial de Abonos y Pagos"><i class="bi bi-clock-history"></i></button>' +
+          (tieneRet ?
+            '<button type="button" class="btn-action retencion" onclick="ModuloFacturasLista.imprimirRetencionFactura(\'' + nSan + '\')" title="Imprimir Comprobante"><i class="bi bi-file-earmark-check"></i></button>'
+          : '') +
+          (!an && sp ?
+            '<button type="button" class="btn-action editar" onclick="ModuloFacturasLista.abrirModalEdicion(\'' + nSan + '\')" title="Editar"><i class="bi bi-pencil-square"></i></button>' +
+            '<button type="button" class="btn-action pagar" onclick="ModuloFacturasLista.abrirModalLiquidacion(\'' + nSan + '\')" title="' + (esVenta ? 'Cobrar' : 'Pagar') + '"><i class="bi bi-cash-coin"></i></button>'
+          : '') +
+          ((state.userRole === 'Admin' || state.userRole === 'Owner') && !an ?
+            '<button type="button" class="btn-action anular" onclick="ModuloFacturasLista.anularFactura(\'' + nSan + '\', \'' + tSan + '\')" title="Anular Factura"><i class="bi bi-ban"></i></button>' +
+            '<button type="button" class="btn-action eliminar" onclick="ModuloFacturasLista.borrarFactura(\'' + nSan + '\')" title="Eliminar"><i class="bi bi-trash"></i></button>'
+          : '') +
+        '</div></td>';
+      tb.appendChild(tr);
+    });
+  }
+
+  // ===========================================================
+  // CAMBIO DE FILTRO / TÍTULOS
+  // ===========================================================
+  function cambiarFiltroEstado(nuevoEstado) {
+    state.filtroEstado = nuevoEstado;
+
+    root().querySelectorAll('.btn-filter').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.filtro === nuevoEstado);
+    });
+
+    var te = document.getElementById('tituloPagina');
+    var se = document.getElementById('subtituloPagina');
+
+    if (nuevoEstado === 'porPagar') {
+      if (te) te.textContent = 'Cuentas por Pagar';
+      if (se) se.textContent = 'Facturas de proveedores con saldo pendiente mayor a cero';
+    } else if (nuevoEstado === 'porCobrar') {
+      if (te) te.textContent = 'Cuentas por Cobrar';
+      if (se) se.textContent = 'Facturas de clientes con saldo pendiente mayor a cero';
+    } else if (nuevoEstado === 'pagada') {
+      if (te) te.textContent = 'Histórico de Facturas Pagadas';
+      if (se) se.textContent = 'Facturas de proveedores totalmente canceladas (Saldo 0)';
+    } else if (nuevoEstado === 'cobrada') {
+      if (te) te.textContent = 'Histórico de Facturas Cobradas';
+      if (se) se.textContent = 'Facturas de clientes totalmente canceladas (Saldo 0)';
+    }
+
+    cargarFacturas();
+  }
+
+  function recargarDatos() {
+    state.historialCache = {};
+    refrescarEmpresaActiva();
+    cargarBancosCajas();
+    cargarFacturas();
+  }
+
+  // ===========================================================
+  // VER FACTURA
+  // ===========================================================
+  function verFactura(id) {
+    var f = state.facturas.find(function (x) { return String(x.NroFactura) === String(id); });
+    if (!f) { notify('Factura no encontrada.', 'warning'); return; }
+
+    var tasa = num(f.Tasa) || 1;
+    var totalBs = num(f.TotalFactura) || num(f.TotaFactura);
+    var totalUSD = tasa > 0 ? (totalBs / tasa) : 0;
+    var saldoBs = num(f.SaldoFactura);
+    var saldoUSD = num(f.SaldoFacturaUSD);
+    if (!saldoUSD && saldoBs) saldoUSD = saldoBs / tasa;
+
+    document.getElementById('modalNombre').textContent = f.ProveedorCliente || 'N/A';
+    document.getElementById('modalRif').textContent = f.Rif || 'N/A';
+    document.getElementById('modalFecha').textContent = f.FechaFactura || 'N/A';
+    document.getElementById('modalFechaVenc').textContent = f.fechaVencimiento || 'N/A';
+    document.getElementById('modalMontoBs').textContent = fmtBs(totalBs);
+    document.getElementById('modalMontoUSD').textContent = fmtUSD(totalUSD);
+    document.getElementById('modalSaldoBs').textContent = fmtBs(saldoBs);
+    document.getElementById('modalSaldoUSD').textContent = fmtUSD(saldoUSD);
+    document.getElementById('modalCompIVA').textContent = f.nroComprobantesRetIVA || 'No registrado';
+    document.getElementById('modalCompISLR').textContent = f.nroComprobantesRetISLR || 'No registrado';
+    document.getElementById('modalBancoDestino').textContent = f.BancoDestino
+      ? (f.BancoDestino + (f.CuentaDestino ? ' - ' + f.CuentaDestino : ''))
+      : 'Sin destino asignado';
+
+    var se = document.getElementById('modalStatus');
+    var an = safeStr(f.cobradaPagada).toLowerCase() === 'anulada';
+    se.innerHTML = an
+      ? '<span class="badge-status badge-anulada">Anulada</span>'
+      : '<span class="badge-status badge-active">' + (f.cobradaPagada || 'Activa') + '</span>';
+
+    openModalSafe('facturaModal');
+  }
+
+  // ===========================================================
+  // HISTORIAL DE ABONOS
+  // ===========================================================
+  function verHistorialAbonos(id) {
+    var f = state.facturas.find(function (x) { return String(x.NroFactura) === String(id); });
+    if (!f) { notify('Factura no encontrada.', 'warning'); return; }
+
+    document.getElementById('historialNroFacturaBadge').textContent = 'Factura N° ' + id;
+
+    if (!overlayGlobalVisible()) toggleLoaderLocal(true, 'Cargando historial de pagos...');
+
+    if (typeof google === 'undefined' || !google.script || !google.script.run) {
+      toggleLoaderLocal(false);
+      notify('No hay conexión con el servidor.', 'error');
+      return;
+    }
+
+    google.script.run
+      .withSuccessHandler(function (rows) {
+        toggleLoaderLocal(false);
+        renderHistorialModal(id, rows);
+      })
+      .withFailureHandler(function (e) {
+        toggleLoaderLocal(false);
+        notify('Error al cargar historial: ' + (e && e.message ? e.message : ''), 'error');
+      })
+      .getHistorialAbonos(id, state.idSpreadsheet);
+  }
+
+  function renderHistorialModal(idFactura, rows) {
+    var tbody = document.getElementById('historialAbonosTbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (!rows || !rows.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted"><i class="bi bi-inbox me-2"></i> Esta factura no posee abonos ni pagos registrados.</td></tr>';
+      openModalSafe('modalHistorialAbonos');
+      return;
+    }
+
+    rows.forEach(function (r) {
+      var fechaStr = safeStr(r.Fecha || r.FechaAbono).slice(0, 10);
+      if (!fechaStr || fechaStr === '1969-12-31' || fechaStr.indexOf('1970') === 0) fechaStr = '-';
+
+      var botones = [];
+      if (r.ComprobanteIVA) {
+        botones.push(
+          '<button type="button" class="btn btn-sm btn-outline-info py-0 px-2 me-1" ' +
+          'onclick="ModuloFacturasLista.reimprimirComprobanteGenerado(\'' +
+          sanitizeJsAttr(r.ComprobanteIVA) + '\',\'IVA\')" title="Reimprimir Retención IVA">' +
+          '<i class="bi bi-printer me-1"></i>' + r.ComprobanteIVA + '</button>'
+        );
+      }
+      if (r.ComprobanteISLR) {
+        botones.push(
+          '<button type="button" class="btn btn-sm btn-outline-warning py-0 px-2 me-1" ' +
+          'onclick="ModuloFacturasLista.reimprimirComprobanteGenerado(\'' +
+          sanitizeJsAttr(r.ComprobanteISLR) + '\',\'ISLR\')" title="Reimprimir Retención ISLR">' +
+          '<i class="bi bi-printer me-1"></i>' + r.ComprobanteISLR + '</button>'
+        );
+      }
+      var botonImprimir = botones.length ? botones.join('') : '-';
+
+      var idPagoAnular = r.id || r.idAbono || r.ComprobanteIVA || r.ComprobanteISLR || r.TipoMovimiento;
+      var nSan  = sanitizeJsAttr(idFactura);
+      var idSan = sanitizeJsAttr(idPagoAnular);
+
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td class="text-muted">' + fechaStr + '</td>' +
+        '<td class="fw-bold text-light">' + (r.TipoMovimiento || '-') + '</td>' +
+        '<td class="text-end text-success fw-bold">' + fmtUSD(num(r.MontoUSD)) + '</td>' +
+        '<td class="text-end text-muted">' + fmtBs(num(r.MontoBS)) + '</td>' +
+        '<td class="small text-muted">' + (r.Descripcion || '-') + '</td>' +
+        '<td class="text-center">' + botonImprimir + '</td>' +
+        '<td class="text-center">' +
+          '<button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" ' +
+          'onclick="ModuloFacturasLista.confirmarAnularPago(\'' + idSan + '\', \'' + nSan + '\')" ' +
+          'title="Anular este pago y restituir saldo">' +
+          '<i class="bi bi-x-circle me-1"></i> Anular Pago</button>' +
+        '</td>';
+      tbody.appendChild(tr);
+    });
+
+    openModalSafe('modalHistorialAbonos');
+  }
+
+  function confirmarAnularPago(idPago, nroFactura) {
+    if (typeof Swal === 'undefined') {
+      if (!confirm('¿Anular este pago de la factura ' + nroFactura + '?')) return;
+      doAnularPago(idPago, nroFactura);
+      return;
+    }
+    Swal.fire({
+      title: '¿Anular este Pago/Abono?',
+      text: 'Se revertirá el monto del pago, restituyendo el saldo pendiente a la Factura N° ' + nroFactura + ' y a bancos.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, Revertir Pago',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280'
+    }).then(function (r) {
+      if (!r.isConfirmed) return;
+      closeModalSafe('modalHistorialAbonos');
+      doAnularPago(idPago, nroFactura);
+    });
+  }
+
+  function doAnularPago(idPago, nroFactura) {
+    if (!overlayGlobalVisible()) toggleLoaderLocal(true, 'Revertiendo pago y ajustando saldos...');
+    google.script.run
+      .withSuccessHandler(function (resp) {
+        toggleLoaderLocal(false);
+        notify((resp && resp.mensaje) || 'Pago anulado con éxito', 'success');
+        cargarFacturas();
+      })
+      .withFailureHandler(function (e) {
+        toggleLoaderLocal(false);
+        notify('Error: ' + (e && e.message ? e.message : ''), 'error');
+      })
+      .anularPagoIndividual(idPago, nroFactura, state.idSpreadsheet);
+  }
+
+  function anularFactura(id, transaccion) {
+    var confirmFn = function (ok) {
+      if (!ok) return;
+      if (!overlayGlobalVisible()) toggleLoaderLocal(true, 'Verificando y anulando factura...');
+      google.script.run
+        .withSuccessHandler(function () {
+          toggleLoaderLocal(false);
+          notify('Factura anulada con éxito', 'success');
+          cargarFacturas();
+        })
+        .withFailureHandler(function (e) {
+          toggleLoaderLocal(false);
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({ icon: 'error', title: 'Acción Bloqueada', text: (e && e.message) || 'No se pudo anular.', confirmButtonColor: '#ef4444' });
+          } else {
+            notify('Acción bloqueada: ' + (e && e.message ? e.message : ''), 'error', 6000);
+          }
+        })
+        .anularFacturaUniversal(id, transaccion, state.idSpreadsheet);
+    };
+
+    if (typeof Swal === 'undefined') {
+      confirmFn(confirm('¿Anular factura ' + id + '? Si tiene abonos debe revertirlos primero.'));
+      return;
+    }
+    Swal.fire({
+      title: '¿Anular Factura ' + id + '?',
+      text: 'Recuerde: Si la factura tiene abonos o pagos, no se podrá anular hasta que revierta los pagos en el Historial.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#f97316',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Sí, anular factura',
+      cancelButtonText: 'Cancelar'
+    }).then(function (r) { confirmFn(r.isConfirmed); });
+  }
+
+  // ===========================================================
+  // COMPROBANTES RETENCIÓN
+  // ===========================================================
+  function imprimirRetencionFactura(nroFactura) {
+    var f = state.facturas.find(function (x) { return String(x.NroFactura) === String(nroFactura); });
+    if (!f) { notify('Factura no encontrada.', 'warning'); return; }
+
+    var compIVA  = f.nroComprobantesRetIVA;
+    var compISLR = f.nroComprobantesRetISLR;
+
+    if (!compIVA && !compISLR) {
+      notify('Esta factura no tiene comprobantes de retención.', 'info');
+      return;
+    }
+
+    if (compIVA && compISLR) {
+      if (typeof Swal === 'undefined') {
+        var choice = prompt(
+          'Comprobantes disponibles:\n1) IVA  -> ' + compIVA + '\n2) ISLR -> ' + compISLR +
+          '\n\nEscriba IVA o ISLR:',
+          'IVA'
+        );
+        if (!choice) return;
+        if (choice.toUpperCase() === 'IVA')  reimprimirComprobanteGenerado(compIVA, 'IVA');
+        if (choice.toUpperCase() === 'ISLR') reimprimirComprobanteGenerado(compISLR, 'ISLR');
+        return;
+      }
+      Swal.fire({
+        title: 'Comprobantes disponibles',
+        html:
+          '<div class="d-grid gap-2 mt-3">' +
+            '<button id="btnRetIVA" class="btn btn-info">Retención IVA<br><small>' + compIVA + '</small></button>' +
+            '<button id="btnRetISLR" class="btn btn-warning">Retención ISLR<br><small>' + compISLR + '</small></button>' +
+          '</div>',
+        showConfirmButton: false,
+        showCancelButton: true,
+        cancelButtonText: 'Cerrar',
+        didOpen: function () {
+          document.getElementById('btnRetIVA').onclick  = function () { Swal.close(); reimprimirComprobanteGenerado(compIVA,  'IVA');  };
+          document.getElementById('btnRetISLR').onclick = function () { Swal.close(); reimprimirComprobanteGenerado(compISLR, 'ISLR'); };
+        }
+      });
+      return;
+    }
+
+    if (compIVA)  reimprimirComprobanteGenerado(compIVA,  'IVA');
+    if (compISLR) reimprimirComprobanteGenerado(compISLR, 'ISLR');
+  }
+
+  function reimprimirComprobanteGenerado(nroComprobante, tipoRet) {
+    if (!overlayGlobalVisible()) toggleLoaderLocal(true, 'Generando comprobante...');
+    google.script.run
+      .withSuccessHandler(function (resp) {
+        toggleLoaderLocal(false);
+        if (resp && resp.html) {
+          var win = window.open('', '_blank', 'width=900,height=750');
+          if (win) {
+            win.document.open();
+            win.document.write(resp.html);
+            win.document.close();
+          } else {
+            notify('El navegador bloqueó la ventana emergente.', 'warning');
+          }
+        } else {
+          notify('No se recibió el comprobante.', 'warning');
+        }
+      })
+      .withFailureHandler(function (e) {
+        toggleLoaderLocal(false);
+        notify('Error: ' + (e && e.message ? e.message : ''), 'error');
+      })
+      .reimprimirComprobanteHistorial(nroComprobante, tipoRet);
+  }
+
+  // ===========================================================
+  // MODAL LIQUIDACIÓN
+  // ===========================================================
+  function abrirModalLiquidacion(idInicial) {
+    var f = state.facturas.find(function (x) { return String(x.NroFactura) === String(idInicial); });
+    if (!f) { notify('Factura no encontrada.', 'warning'); return; }
+
+    state.tercero = {
+      nombre: f.ProveedorCliente,
+      rif: f.Rif,
+      tasa: num(f.Tasa) || 1
+    };
+    state.modoAnticipoDirecto = false;
+
+    var esVenta = safeStr(f.Transaccion).toLowerCase().indexOf('vent') !== -1;
+    document.getElementById('liqModalTitulo').innerHTML = '<i class="bi bi-cash-stack me-2 text-warning"></i> ' +
+      (esVenta ? 'Registrar Cobro' : 'Registrar Pago');
+    document.getElementById('liqTerceroNombre').textContent = state.tercero.nombre;
+    document.getElementById('liqTerceroRif').textContent = 'RIF: ' + (state.tercero.rif || 'N/A');
+    document.getElementById('liqFechaOperacion').value = new Date().toISOString().split('T')[0];
+    document.getElementById('liqTasa').textContent = 'Tasa: ' + state.tercero.tasa.toFixed(2) + ' Bs/$';
+
+    state.facturasTercero = state.facturas.filter(function (x) {
+      var matchNom = safeStr(x.ProveedorCliente).trim().toLowerCase() === safeStr(state.tercero.nombre).trim().toLowerCase();
+      var matchRif = safeStr(x.Rif).trim().toLowerCase() === safeStr(state.tercero.rif).trim().toLowerCase();
+      var tasa = num(x.Tasa) || 1;
+      var saldoBs = num(x.SaldoFactura);
+      var saldoUSD = num(x.SaldoFacturaUSD);
+      if (!saldoUSD && saldoBs) saldoUSD = saldoBs / tasa;
+      var tieneSaldo = (saldoBs > 0.01 || saldoUSD > 0.01);
+      var noAnulada = safeStr(x.cobradaPagada).toLowerCase() !== 'anulada';
+      return (matchNom || matchRif) && tieneSaldo && noAnulada;
+    });
+
+    renderTablaFacturasModal(idInicial);
+
+    document.getElementById('ant-modalidad').value = 'Transferencia';
+    document.getElementById('chkRetIVA').checked = false;
+    document.getElementById('chkRetISLR').checked = false;
+    document.getElementById('boxRetIVA').style.display = 'none';
+    document.getElementById('boxRetISLR').style.display = 'none';
+    document.getElementById('montoRetIVA').value = '0.00';
+    document.getElementById('montoRetISLR').value = '0.00';
+
+    document.getElementById('bodyLineasPago').innerHTML = '';
+    agregarFilaPago(0);
+
+    consultarAnticiposTercero(state.tercero.nombre, state.tercero.rif);
+    calcularLiquidacion();
+    openModalSafe('modalLiquidacionIntegral');
+  }
+
+  function renderTablaFacturasModal(idSeleccionarInicial) {
+    var tbody = document.getElementById('bodyFacturasModal');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    state.facturasTercero.forEach(function (fac, idx) {
+      var tasaFac = num(fac.Tasa) || 1;
+      var saldoUSD = num(fac.SaldoFacturaUSD);
+      if (!saldoUSD) {
+        var sBs = num(fac.SaldoFactura);
+        if (sBs) saldoUSD = sBs / tasaFac;
+      }
+      var isChecked = (idSeleccionarInicial && String(fac.NroFactura) === String(idSeleccionarInicial));
+
+      var tr = document.createElement('tr');
+      tr.className = 'fila-fac-modal';
+      tr.dataset.nro = fac.NroFactura;
+      tr.dataset.fecha = fac.FechaFactura || '';
+
+      tr.innerHTML =
+        '<td style="text-align:center;"><input class="form-check-input chk-fac-item" type="checkbox" data-idx="' + idx + '" ' + (isChecked ? 'checked' : '') + ' onchange="ModuloFacturasLista.onFacturaCheckChanged()"></td>' +
+        '<td><span class="badge bg-dark border border-secondary">' + fac.NroFactura + '</span></td>' +
+        '<td>' + (fac.FechaFactura || '-') + '</td>' +
+        '<td class="text-end text-muted">' + fmtUSD(num(fac.BaseImponible) / tasaFac) + '</td>' +
+        '<td class="text-end text-muted">' + fmtUSD(num(fac.MontoIVA) / tasaFac) + '</td>' +
+        '<td class="text-end text-muted">' + fmtUSD(num(fac.MontoExento) / tasaFac) + '</td>' +
+        '<td class="text-end text-muted">' + fmtUSD(num(fac.TotalFactura) / tasaFac) + '</td>' +
+        '<td class="text-end text-warning fw-bold">' + fmtUSD(saldoUSD) + '</td>';
+
+      tbody.appendChild(tr);
+    });
+
+    onFacturaCheckChanged();
+  }
+
+  function filtrarTablaFacturasModal() {
+    var fNro = (document.getElementById('filtroTablaFacNro').value || '').trim().toLowerCase();
+    var fDesde = document.getElementById('filtroTablaFacDesde').value;
+    var fHasta = document.getElementById('filtroTablaFacHasta').value;
+
+    document.querySelectorAll('.fila-fac-modal').forEach(function (tr) {
+      var nro = safeStr(tr.dataset.nro).toLowerCase();
+      var fecha = safeStr(tr.dataset.fecha);
+      var matchNro = (!fNro || nro.indexOf(fNro) !== -1);
+      var matchFecha = true;
+      if (fDesde && fecha && fecha < fDesde) matchFecha = false;
+      if (fHasta && fecha && fecha > fHasta) matchFecha = false;
+      tr.style.display = (matchNro && matchFecha) ? '' : 'none';
+    });
+  }
+
+  function toggleSelectAllFacturas(checked) {
+    document.querySelectorAll('.chk-fac-item').forEach(function (c) {
+      var tr = c.closest('tr');
+      if (tr && tr.style.display !== 'none') c.checked = checked;
+    });
+    onFacturaCheckChanged();
+  }
+
+  function obtenerFacturasSeleccionadas() {
+    var res = [];
+    document.querySelectorAll('.chk-fac-item:checked').forEach(function (c) {
+      var idx = parseInt(c.dataset.idx, 10);
+      if (!isNaN(idx) && state.facturasTercero[idx]) res.push(state.facturasTercero[idx]);
+    });
+    return res;
+  }
+
+  function onFacturaCheckChanged() {
+    var seleccionadas = obtenerFacturasSeleccionadas();
+    var totalSaldoUSD = 0, totalIVA_USD = 0, totalBaseISLR_USD = 0;
+    var baseIvaRetenible = 0, baseIslrRetenible = 0;
+    var facturasConRetIVA = [], facturasConRetISLR = [];
+
+    seleccionadas.forEach(function (fac) {
+      var tasaFac = num(fac.Tasa) || 1;
+      var saldoUSD = num(fac.SaldoFacturaUSD);
+      if (!saldoUSD) {
+        var sBs = num(fac.SaldoFactura);
+        if (sBs) saldoUSD = sBs / tasaFac;
+      }
+      var ivaUSD = num(fac.MontoIVA) / tasaFac;
+      var baseIslrUSD = (num(fac.BaseImponible) + num(fac.MontoExento)) / tasaFac;
+
+      totalSaldoUSD   += saldoUSD;
+      totalIVA_USD    += ivaUSD;
+      totalBaseISLR_USD += baseIslrUSD;
+
+      var tieneRetIVA  = fac.nroComprobantesRetIVA  && safeStr(fac.nroComprobantesRetIVA).trim()  !== '';
+      var tieneRetISLR = fac.nroComprobantesRetISLR && safeStr(fac.nroComprobantesRetISLR).trim() !== '';
+
+      if (tieneRetIVA)  facturasConRetIVA.push(fac.NroFactura);
+      else              baseIvaRetenible += ivaUSD;
+
+      if (tieneRetISLR) facturasConRetISLR.push(fac.NroFactura);
+      else              baseIslrRetenible += baseIslrUSD;
+
+      fac._tieneRetIVA  = tieneRetIVA;
+      fac._tieneRetISLR = tieneRetISLR;
+    });
+
+    var badge = document.getElementById('badgeFacturasSeleccionadas');
+    if (badge) badge.textContent = seleccionadas.length + ' facturas seleccionadas';
+    var totSel = document.getElementById('totalSaldoSeleccionadoUSD');
+    if (totSel) totSel.textContent = fmtUSD(totalSaldoUSD);
+
+    // ---- IVA ----
+    var chkIVA = document.getElementById('chkRetIVA');
+    var baseIvaTxt = document.getElementById('baseIvaCalcTexto');
+    var todasConIVA = seleccionadas.length > 0 && facturasConRetIVA.length === seleccionadas.length;
+
+    chkIVA.disabled = todasConIVA;
+    if (todasConIVA) {
+      chkIVA.checked = false;
+      document.getElementById('boxRetIVA').style.display = 'none';
+      if (baseIvaTxt) baseIvaTxt.textContent = 'Ya aplicada en todas (' + facturasConRetIVA.length + ')';
+    } else if (facturasConRetIVA.length > 0) {
+      if (baseIvaTxt) baseIvaTxt.textContent =
+        fmtUSD(baseIvaRetenible) + ' — ' + facturasConRetIVA.length + ' ya retenidas (omitidas)';
+    } else {
+      if (baseIvaTxt) baseIvaTxt.textContent = fmtUSD(totalIVA_USD);
+    }
+
+    // ---- ISLR ----
+    var chkISLR = document.getElementById('chkRetISLR');
+    var baseIslrTxt = document.getElementById('baseIslrCalcTexto');
+    var todasConISLR = seleccionadas.length > 0 && facturasConRetISLR.length === seleccionadas.length;
+
+    chkISLR.disabled = todasConISLR;
+    if (todasConISLR) {
+      chkISLR.checked = false;
+      document.getElementById('boxRetISLR').style.display = 'none';
+      if (baseIslrTxt) baseIslrTxt.textContent = 'Ya aplicada en todas (' + facturasConRetISLR.length + ')';
+    } else if (facturasConRetISLR.length > 0) {
+      if (baseIslrTxt) baseIslrTxt.textContent =
+        fmtUSD(baseIslrRetenible) + ' — ' + facturasConRetISLR.length + ' ya retenidas (omitidas)';
+    } else {
+      if (baseIslrTxt) baseIslrTxt.textContent = fmtUSD(totalBaseISLR_USD);
+    }
+
+    state.baseIvaRetenible  = baseIvaRetenible;
+    state.baseIslrRetenible = baseIslrRetenible;
+
+    recalcularRetencionesAutomaticas();
+  }
+
+  function recalcularRetencionesAutomaticas() {
+    var seleccionadas = obtenerFacturasSeleccionadas();
+
+    var baseIvaRet = 0, baseIslrRet = 0;
+    seleccionadas.forEach(function (fac) {
+      var tasaFac = num(fac.Tasa) || 1;
+      var tieneRetIVA  = fac.nroComprobantesRetIVA  && safeStr(fac.nroComprobantesRetIVA).trim()  !== '';
+      var tieneRetISLR = fac.nroComprobantesRetISLR && safeStr(fac.nroComprobantesRetISLR).trim() !== '';
+      if (!tieneRetIVA)  baseIvaRet  += (num(fac.MontoIVA) / tasaFac);
+      if (!tieneRetISLR) baseIslrRet += ((num(fac.BaseImponible) + num(fac.MontoExento)) / tasaFac);
+    });
+
+    // ---- IVA ----
+    var chkIVA = document.getElementById('chkRetIVA');
+    if (chkIVA.checked && !chkIVA.disabled) {
+      document.getElementById('boxRetIVA').style.display = 'flex';
+      var pctIVA = parseFloat(document.getElementById('pctRetIVA').value) || 75;
+      document.getElementById('montoRetIVA').value = (baseIvaRet * (pctIVA / 100)).toFixed(2);
+    } else {
+      document.getElementById('boxRetIVA').style.display = 'none';
+      document.getElementById('montoRetIVA').value = '0.00';
+    }
+
+    // ---- ISLR ----
+    var chkISLR = document.getElementById('chkRetISLR');
+    var boxConcepto = document.getElementById('boxIslrConcepto');
+    if (chkISLR.checked && !chkISLR.disabled) {
+      document.getElementById('boxRetISLR').style.display = 'flex';
+      if (boxConcepto) boxConcepto.style.display = 'block';
+
+      var selConcepto = document.getElementById('selConceptoISLR');
+      var pctISLR = 0;
+      if (selConcepto && selConcepto.selectedIndex >= 0) {
+        var opt = selConcepto.options[selConcepto.selectedIndex];
+        if (opt && opt.dataset && opt.dataset.pct) pctISLR = parseFloat(opt.dataset.pct) || 0;
+      }
+      var selPct = document.getElementById('pctRetISLR');
+      if (pctISLR <= 0 && selPct) pctISLR = parseFloat(selPct.value) || 0;
+
+      var montoSugerido = baseIslrRet * (pctISLR / 100);
+      document.getElementById('montoRetISLR').value = montoSugerido.toFixed(2);
+      document.getElementById('montoRetISLR').dataset.pctAplicado = pctISLR.toFixed(2);
+    } else {
+      document.getElementById('boxRetISLR').style.display = 'none';
+      document.getElementById('montoRetISLR').value = '0.00';
+      if (boxConcepto) boxConcepto.style.display = 'none';
+    }
+
+    calcularLiquidacion();
+  }
+
+  function alternarModoAnticipoDirecto() {
+    state.modoAnticipoDirecto = !state.modoAnticipoDirecto;
+    var btn = document.getElementById('btnToggleAnticipoDirecto');
+    var secFac = document.getElementById('seccionTablaFacturas');
+    var secRet = document.getElementById('seccionRetencionesWrapper');
+    var secAnt = document.getElementById('seccionAnticiposWrapper');
+    var lblSaldo = document.getElementById('lblSaldoRestante');
+
+    if (state.modoAnticipoDirecto) {
+      btn.className = 'btn btn-sm btn-warning';
+      btn.innerHTML = '<i class="bi bi-star-fill me-1"></i> Modo: Anticipo Directo Activo';
+      secFac.style.display = 'none';
+      secRet.style.display = 'none';
+      secAnt.style.display = 'none';
+      lblSaldo.textContent = 'MONTO DEL ANTICIPO';
+    } else {
+      btn.className = 'btn btn-sm btn-outline-info';
+      btn.innerHTML = '<i class="bi bi-bookmark-plus me-1"></i> Modo: Liquidar Facturas';
+      secFac.style.display = 'block';
+      secRet.style.display = 'block';
+      secAnt.style.display = 'block';
+      lblSaldo.textContent = 'SALDO RESTANTE';
+    }
+    calcularLiquidacion();
+  }
+
+  function filtrarCuentasPorModalidadAnticipo(modalidad) {
+    document.querySelectorAll('.fila-pago-item').forEach(function (tr) {
+      ajustarFilaSegunModalidad(tr, modalidad);
+    });
+    calcularLiquidacion();
+  }
+
+  function agregarFilaPago(montoSugerido) {
+    montoSugerido = montoSugerido !== undefined ? Number(montoSugerido).toFixed(2) : '0.00';
+    var tbody = document.getElementById('bodyLineasPago');
+    if (!tbody) return;
+    var modalidad = document.getElementById('ant-modalidad').value;
+
+    var tr = document.createElement('tr');
+    tr.className = 'fila-pago-item';
+    tr.innerHTML =
+      '<td><select class="form-select form-select-sm sel-cuenta" onchange="ModuloFacturasLista.verificarCambioCuentaFila(this)"></select></td>' +
+      '<td><select class="form-select form-select-sm sel-moneda" onchange="ModuloFacturasLista.calcularLiquidacion()"><option value="USD">USD ($)</option><option value="BS">Bs (Bolívares)</option></select></td>' +
+      '<td><input type="number" class="form-control form-control-sm inp-monto" step="0.01" value="' + montoSugerido + '" oninput="ModuloFacturasLista.calcularLiquidacion()"></td>' +
+      '<td><input type="text" class="form-control form-control-sm inp-ref" placeholder="Referencia / N° Operación"></td>' +
+      '<td><button type="button" class="btn btn-sm text-danger p-0" onclick="ModuloFacturasLista.eliminarFilaPago(this)"><i class="bi bi-trash"></i></button></td>';
+
+    tbody.appendChild(tr);
+    ajustarFilaSegunModalidad(tr, modalidad);
+    calcularLiquidacion();
+  }
+
+  function ajustarFilaSegunModalidad(tr, modalidad) {
+    var selCuenta = tr.querySelector('.sel-cuenta');
+    var inpRef = tr.querySelector('.inp-ref');
+    var esEfectivo = (modalidad === 'Efectivo');
+
+    selCuenta.innerHTML = '<option value="">-- Seleccionar --</option>';
+    state.bancosCajas.forEach(function (c) {
+      var tipoEsCaja = safeStr(c.tipo).toLowerCase() === 'caja';
+      if (esEfectivo && !tipoEsCaja) return;
+      if (!esEfectivo && tipoEsCaja) return;
+
+      var val = c.tipo + '|' + (c.NombreBanco || c.nombreCaja) + '|' + (c.CodigoCuenta || c.codigoCaja) + '|' + c.codContable + '|' + c.nomContable;
+      var texto = '[' + c.tipo + '] ' + (c.NombreBanco || c.nombreCaja) + ' (' + (c.NroCuenta || c.codigoCaja) + ')';
+      selCuenta.innerHTML += '<option value="' + val + '">' + texto + '</option>';
+    });
+
+    if (esEfectivo) {
+      inpRef.value = 'EFECTIVO';
+      inpRef.disabled = true;
+    } else {
+      if (inpRef.value === 'EFECTIVO') inpRef.value = '';
+      inpRef.disabled = false;
+    }
+  }
+
+  function verificarCambioCuentaFila(select) {
+    var tr = select.closest('tr');
+    var inpRef = tr.querySelector('.inp-ref');
+    var esCaja = safeStr(select.value).toLowerCase().indexOf('caja') !== -1;
+
+    if (esCaja) {
+      inpRef.value = 'EFECTIVO';
+      inpRef.disabled = true;
+    } else {
+      if (inpRef.value === 'EFECTIVO') inpRef.value = '';
+      inpRef.disabled = false;
+    }
+    calcularLiquidacion();
+  }
+
+  function eliminarFilaPago(btn) {
+    var row = btn.closest('tr');
+    if (row) row.remove();
+    calcularLiquidacion();
+  }
+
+  function consultarAnticiposTercero(nombre, rif) {
+    var cont = document.getElementById('contenedorAnticipos');
+    var badge = document.getElementById('badgeAnticiposCount');
+    if (!cont) return;
+    cont.innerHTML = '<span class="text-muted"><i class="bi bi-hourglass-split me-1"></i> Consultando...</span>';
+
+    if (typeof google === 'undefined' || !google.script || !google.script.run) {
+      cont.innerHTML = '<span class="text-muted">Sin conexión de anticipos.</span>';
+      return;
+    }
+
+    google.script.run
+      .withSuccessHandler(function (anticipos) {
+        state.anticipos = Array.isArray(anticipos) ? anticipos : [];
+        badge.textContent = state.anticipos.length + ' disponibles';
+
+        if (!state.anticipos.length) {
+          cont.innerHTML = '<span class="text-muted">No posee anticipos con saldo a favor.</span>';
+          calcularLiquidacion();
+          return;
+        }
+
+        var html = '';
+        state.anticipos.forEach(function (a, idx) {
+          var saldoAnt = num(a.saldoUSD);
+          html +=
+            '<div class="d-flex justify-content-between align-items-center p-2 mb-1 rounded" style="background:rgba(255,255,255,0.04);">' +
+              '<div>' +
+                '<input class="form-check-input me-2 chk-anticipo" type="checkbox" id="ant_' + idx + '" data-id="' + a.idAnticipo + '" data-max="' + saldoAnt + '" onchange="ModuloFacturasLista.calcularLiquidacion()">' +
+                '<label for="ant_' + idx + '" class="text-light fw-bold" style="font-size:12px;">' + a.idAnticipo + '</label>' +
+                '<span class="text-muted ms-2" style="font-size:11px;">(Disponible: ' + fmtUSD(saldoAnt) + ')</span>' +
+              '</div>' +
+              '<div style="width:110px;">' +
+                '<input type="number" class="form-control form-control-sm inp-monto-anticipo" id="montoAnt_' + idx + '" step="0.01" max="' + saldoAnt + '" value="' + saldoAnt.toFixed(2) + '" style="display:none;" oninput="ModuloFacturasLista.calcularLiquidacion()">' +
+              '</div>' +
+            '</div>';
+        });
+        cont.innerHTML = html;
+        calcularLiquidacion();
+      })
+      .withFailureHandler(function () {
+        cont.innerHTML = '<span class="text-muted">No se pudo verificar anticipos.</span>';
+      })
+      .obtenerAnticiposDisponibles(nombre, rif);
+  }
+
+  function calcularLiquidacion() {
+    var tasa = num(state.tercero.tasa) || 1;
+    var seleccionadas = obtenerFacturasSeleccionadas();
+    var saldoTotalUSD = 0;
+    seleccionadas.forEach(function (fac) {
+      var s = num(fac.SaldoFacturaUSD);
+      if (!s) {
+        var sBs = num(fac.SaldoFactura);
+        if (sBs) s = sBs / (num(fac.Tasa) || tasa);
+      }
+      saldoTotalUSD += s;
+    });
+    var saldoTotalBs = saldoTotalUSD * tasa;
+
+    var retIVA_USD = document.getElementById('chkRetIVA').checked ? (parseFloat(document.getElementById('montoRetIVA').value) || 0) : 0;
+    var retISLR_USD = document.getElementById('chkRetISLR').checked ? (parseFloat(document.getElementById('montoRetISLR').value) || 0) : 0;
+    var totalRetUSD = retIVA_USD + retISLR_USD;
+
+    var totalAnticiposUSD = 0;
+    document.querySelectorAll('.chk-anticipo').forEach(function (chk, idx) {
+      var inp = document.getElementById('montoAnt_' + idx);
+      if (chk.checked) {
+        if (inp) inp.style.display = 'block';
+        totalAnticiposUSD += (parseFloat(inp ? inp.value : 0) || 0);
+      } else {
+        if (inp) inp.style.display = 'none';
+      }
+    });
+
+    var totalBancoUSD = 0;
+    document.querySelectorAll('.fila-pago-item').forEach(function (row) {
+      var mon = row.querySelector('.sel-moneda').value;
+      var monto = parseFloat(row.querySelector('.inp-monto').value) || 0;
+      var usd = (mon === 'USD') ? monto : (monto / tasa);
+      totalBancoUSD += usd;
+    });
+
+    var totalCubiertoUSD = totalRetUSD + totalAnticiposUSD + totalBancoUSD;
+    var saldoRestanteUSD = state.modoAnticipoDirecto ? totalCubiertoUSD : (saldoTotalUSD - totalCubiertoUSD);
+    var saldoRestanteBs = saldoRestanteUSD * tasa;
+
+    var elRet = document.getElementById('resumenRet');
+    if (elRet) elRet.textContent = fmtUSD(totalRetUSD) + ' (Bs. ' + fmt(totalRetUSD * tasa) + ')';
+    var elAnt = document.getElementById('resumenAnt');
+    if (elAnt) elAnt.textContent = fmtUSD(totalAnticiposUSD) + ' (Bs. ' + fmt(totalAnticiposUSD * tasa) + ')';
+    var elBan = document.getElementById('resumenBanco');
+    if (elBan) elBan.textContent = fmtUSD(totalBancoUSD) + ' (Bs. ' + fmt(totalBancoUSD * tasa) + ')';
+
+    var elSaldoRest = document.getElementById('resumenSaldoRestante');
+    if (elSaldoRest) {
+      if (state.modoAnticipoDirecto) {
+        elSaldoRest.innerHTML = '<span class="text-success">' + fmtUSD(totalCubiertoUSD) + '</span><br><span style="font-size:14px;color:#94a3b8;">Bs. ' + fmt(totalCubiertoUSD * tasa) + '</span>';
+      } else {
+        var colorSaldo = Math.abs(saldoRestanteUSD) <= 0.01 ? '#10b981' : (saldoRestanteUSD < 0 ? '#ef4444' : '#f59e0b');
+        elSaldoRest.innerHTML = '<span style="color:' + colorSaldo + ';">' + fmtUSD(Math.max(0, saldoRestanteUSD)) + '</span><br><span style="font-size:14px;color:#94a3b8;">Bs. ' + fmt(Math.max(0, saldoRestanteBs)) + '</span>';
+      }
+    }
+
+    return { saldoTotalUSD: saldoTotalUSD, totalCubiertoUSD: totalCubiertoUSD, saldoRestanteUSD: saldoRestanteUSD };
+  }
+
+  function confirmarYProcesarLiquidacion() {
+    var seleccionadas = obtenerFacturasSeleccionadas();
+    var calc = calcularLiquidacion();
+
+    if (!state.modoAnticipoDirecto && seleccionadas.length > 0) {
+      if (calc.totalCubiertoUSD > (calc.saldoTotalUSD + 0.01)) {
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Monto Excede el Saldo',
+            text: 'El monto total aplicado (' + fmtUSD(calc.totalCubiertoUSD) +
+                  ') supera el saldo de las facturas seleccionadas (' + fmtUSD(calc.saldoTotalUSD) + ').',
+            confirmButtonColor: '#f97316'
+          });
+        } else {
+          notify('El monto excede el saldo seleccionado.', 'warning', 5000);
+        }
+        return;
+      }
+    }
+
+    if (calc.totalCubiertoUSD <= 0) {
+      notify('Debe ingresar un monto válido a procesar.', 'warning');
+      return;
+    }
+
+    // Recolectar filas de pago
+    var detallesPago = [];
+    var filas = document.querySelectorAll('.fila-pago-item');
+    for (var i = 0; i < filas.length; i++) {
+      var cta = filas[i].querySelector('.sel-cuenta').value;
+      var mon = filas[i].querySelector('.sel-moneda').value;
+      var mto = parseFloat(filas[i].querySelector('.inp-monto').value) || 0;
+      var ref = filas[i].querySelector('.inp-ref').value.trim();
+
+      if (mto > 0 && !cta) {
+        notify('Debe seleccionar la cuenta para cada fila de pago.', 'warning');
+        return;
+      }
+      if (safeStr(cta).toLowerCase().indexOf('caja') !== -1 && !ref) ref = 'EFECTIVO';
+      if (mto > 0) detallesPago.push({ cuenta: cta, moneda: mon, monto: mto, referencia: ref });
+    }
+
+    // Retenciones
+    var retIVA_USD  = document.getElementById('chkRetIVA').checked
+      ? (parseFloat(document.getElementById('montoRetIVA').value)  || 0) : 0;
+    var retISLR_USD = document.getElementById('chkRetISLR').checked
+      ? (parseFloat(document.getElementById('montoRetISLR').value) || 0) : 0;
+
+    // Anticipos
+    var totalAnticiposUSD = 0;
+    var anticiposSeleccionados = [];
+    document.querySelectorAll('.chk-anticipo').forEach(function (chk) {
+      if (!chk.checked) return;
+      var id = chk.dataset.id;
+      var inp = document.getElementById(chk.id.replace('ant_', 'montoAnt_'));
+      var monto = parseFloat(inp ? inp.value : 0) || 0;
+      if (monto > 0) {
+        totalAnticiposUSD += monto;
+        anticiposSeleccionados.push({ idAnticipo: id, montoUSD: monto });
+      }
+    });
+
+    // Total banco/caja
+    var totalBancoUSD = 0;
+    detallesPago.forEach(function (d) {
+      var tasa = num(state.tercero.tasa) || 1;
+      totalBancoUSD += (d.moneda === 'USD') ? d.monto : (d.monto / tasa);
+    });
+
+    // ISLR concepto / %
+    var selConcepto = document.getElementById('selConceptoISLR');
+    var conceptoISLR = '';
+    var pctISLR = 0;
+    if (selConcepto && selConcepto.selectedIndex >= 0) {
+      var opt = selConcepto.options[selConcepto.selectedIndex];
+      conceptoISLR = opt ? opt.textContent.trim() : '';
+      if (opt && opt.dataset && opt.dataset.pct) pctISLR = parseFloat(opt.dataset.pct) || 0;
+    }
+    if (pctISLR <= 0) {
+      var pctInput = document.getElementById('pctRetISLR');
+      if (pctInput) pctISLR = parseFloat(pctInput.value) || 0;
+    }
+
+    // Facturas payload
+    var facturasSeleccionadasPayload = seleccionadas.map(function (fac) {
+      var tasaFac = num(fac.Tasa) || 1;
+      var sUSD = num(fac.SaldoFacturaUSD);
+      if (!sUSD) {
+        var sBs = num(fac.SaldoFactura);
+        if (sBs) sUSD = sBs / tasaFac;
+      }
+      return {
+        nroFactura: fac.NroFactura,
+        saldoUSD: sUSD,
+        saldoBs: num(fac.SaldoFactura),
+        baseIvaUSD: num(fac.MontoIVA) / tasaFac,
+        baseIslrUSD: (num(fac.BaseImponible) + num(fac.MontoExento)) / tasaFac,
+        tieneRetIVA: !!fac._tieneRetIVA,
+        tieneRetISLR: !!fac._tieneRetISLR
+      };
+    });
+
+    var textoConfirm = (state.modoAnticipoDirecto || seleccionadas.length === 0)
+      ? 'Se registrará un ANTICIPO de ' + fmtUSD(calc.totalCubiertoUSD) + ' a favor de ' + state.tercero.nombre
+      : 'Se liquidarán ' + fmtUSD(calc.totalCubiertoUSD) + ' distribuidos en ' + seleccionadas.length + ' factura(s).' +
+        (retISLR_USD > 0 ? '\nSe generará comprobante ISLR por ' + fmtUSD(retISLR_USD) : '') +
+        (retIVA_USD > 0 ? '\nSe generará comprobante IVA por ' + fmtUSD(retIVA_USD) : '');
+
+    var ejecutar = function () {
+      closeModalSafe('modalLiquidacionIntegral');
+      ejecutarEnvioLiquidacion(detallesPago, retIVA_USD, retISLR_USD, calc.totalCubiertoUSD,
+        facturasSeleccionadasPayload, anticiposSeleccionados, totalAnticiposUSD, totalBancoUSD,
+        conceptoISLR, pctISLR);
+    };
+
+    if (typeof Swal === 'undefined') {
+      if (confirm(textoConfirm + '\n\n¿Procesar?')) ejecutar();
+      return;
+    }
+    Swal.fire({
+      title: '¿Confirmar Operación?',
+      html: textoConfirm.replace(/\n/g, '<br>'),
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, Procesar',
+      cancelButtonText: 'Revisar',
+      confirmButtonColor: '#f97316',
+      cancelButtonColor: '#6b7280'
+    }).then(function (r) { if (r.isConfirmed) ejecutar(); });
+  }
+
+  function ejecutarEnvioLiquidacion(detallesPago, retIVA_USD, retISLR_USD, totalAplicadoUSD,
+                                    facturasSeleccionadasPayload, anticiposSeleccionados,
+                                    totalAnticiposUSD, totalBancoUSD, conceptoISLR, pctISLR) {
+    var tasa = num(state.tercero.tasa) || 1;
+    var fecha = document.getElementById('liqFechaOperacion').value || new Date().toISOString().split('T')[0];
+    var modalidad = document.getElementById('ant-modalidad').value;
+
+    var esCobro = (safeStr(state.transaccionActual).toLowerCase().indexOf('vent') !== -1) ||
+                  (safeStr(state.tercero.transaccion).toLowerCase().indexOf('vent') !== -1);
+
+    var payload = {
+      idSpreadsheet: state.idSpreadsheet,
+      empresaNombre: state.empresaNombre,
+
+      esAnticipoDirecto: (state.modoAnticipoDirecto || facturasSeleccionadasPayload.length === 0),
+      facturasSeleccionadas: facturasSeleccionadasPayload,
+      tipoMovimiento: esCobro ? 'Cobro' : 'Pago',
+      tercero: state.tercero.nombre,
+      rif: state.tercero.rif,
+      fecha: fecha,
+      tasa: tasa,
+      modalidad: modalidad,
+      montoRetIVA: retIVA_USD,
+      montoRetISLR: retISLR_USD,
+      conceptoISLR: conceptoISLR,
+      porcentajeISLR: pctISLR,
+      totalAnticiposUSD: totalAnticiposUSD,
+      anticiposSeleccionados: anticiposSeleccionados,
+      totalBancoUSD: totalBancoUSD,
+      totalRetencionesUSD: (retIVA_USD + retISLR_USD),
+      totalAplicadoUSD: totalAplicadoUSD,
+      detallesPago: detallesPago
+    };
+
+    console.log('[FACTURAS] Payload liquidación:', payload);
+
+    if (!overlayGlobalVisible()) toggleLoaderLocal(true, 'Procesando liquidación en sistema...');
+    google.script.run
+      .withSuccessHandler(function (resp) {
+        toggleLoaderLocal(false);
+        console.log('[FACTURAS] Respuesta liquidación:', resp);
+        var msg = (resp && resp.mensaje) || 'Operación registrada con éxito';
+        if (resp && resp.comprobantes && resp.comprobantes.length) {
+          msg += ' | Comprobantes: ' + resp.comprobantes.join(', ');
+        }
+        notify(msg, 'success', 6000);
+        state.historialCache = {};
+        cargarFacturas();
+      })
+      .withFailureHandler(function (e) {
+        toggleLoaderLocal(false);
+        console.error('[FACTURAS] Error liquidación:', e);
+        notify('Error: ' + (e && e.message ? e.message : ''), 'error');
+      })
+      .procesarLiquidacionCompleta(payload);
+  }
+
+  // ===========================================================
+  // EDICIÓN DE FACTURA
+  // ===========================================================
+  function abrirModalEdicion(id) {
+    var f = state.facturas.find(function (x) { return String(x.NroFactura) === String(id); });
+    if (!f) { notify('Factura no encontrada.', 'warning'); return; }
+
+    document.getElementById('editNombreProveedor').value = f.ProveedorCliente || '';
+    document.getElementById('editRifProveedor').value = f.Rif || '';
+    document.getElementById('editFechaFactura').value = f.FechaFactura || '';
+    document.getElementById('editMontoFactura').value = num(f.TotalFactura) || num(f.TotaFactura);
+    document.getElementById('editTransaccion').value = f.Transaccion || '';
+
+    var inputNro = document.getElementById('editNroFactura');
+    inputNro.value = f.NroFactura || '';
+    inputNro.dataset.nroOriginal = f.NroFactura || '';
+
+    openModalSafe('editFacturaModal');
+  }
+
+  function confirmarGuardarEdicion() {
+    var nroNuevo = document.getElementById('editNroFactura').value.trim();
+    var nombre = document.getElementById('editNombreProveedor').value.trim();
+    var rif = document.getElementById('editRifProveedor').value.trim();
+
+    if (!nroNuevo || !nombre || !rif) {
+      notify('Por favor complete los campos obligatorios.', 'warning');
+      return;
+    }
+
+    var ejecutar = function () {
+      closeModalSafe('editFacturaModal');
+      guardarEdicionFactura();
+    };
+
+    if (typeof Swal === 'undefined') {
+      if (confirm('¿Guardar cambios de la factura ' + nroNuevo + '?')) ejecutar();
+      return;
+    }
+    Swal.fire({
+      title: '¿Guardar Cambios?',
+      text: 'Se actualizarán los datos de la factura ' + nroNuevo,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, Guardar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#f97316',
+      cancelButtonColor: '#6b7280'
+    }).then(function (r) { if (r.isConfirmed) ejecutar(); });
+  }
+
+  function guardarEdicionFactura() {
+    var idOriginal = document.getElementById('editNroFactura').dataset.nroOriginal || '';
+    var nroNuevo = document.getElementById('editNroFactura').value.trim();
+    var nombre = document.getElementById('editNombreProveedor').value.trim();
+    var rif = document.getElementById('editRifProveedor').value.trim();
+    var fecha = document.getElementById('editFechaFactura').value;
+    var monto = parseFloat(document.getElementById('editMontoFactura').value) || 0;
+    var trans = document.getElementById('editTransaccion').value;
+
+    if (!overlayGlobalVisible()) toggleLoaderLocal(true, 'Guardando cambios...');
+    google.script.run
+      .withSuccessHandler(function () {
+        toggleLoaderLocal(false);
+        notify('Factura actualizada correctamente', 'success');
+        cargarFacturas();
+      })
+      .withFailureHandler(function (e) {
+        toggleLoaderLocal(false);
+        notify('Error: ' + (e && e.message ? e.message : ''), 'error');
+      })
+      .updateFactura({
+        idSpreadsheet: state.idSpreadsheet,
+        NroFactura: nroNuevo,
+        NroFacturaOriginal: idOriginal,
+        ProveedorCliente: nombre,
+        Rif: rif,
+        FechaFactura: fecha,
+        TotaFactura: monto,
+        Transaccion: trans
+      });
+  }
+
+  function borrarFactura(id) {
+    var ejecutar = function () {
+      if (!overlayGlobalVisible()) toggleLoaderLocal(true, 'Eliminando...');
+      google.script.run
+        .withSuccessHandler(function () {
+          toggleLoaderLocal(false);
+          notify('Factura eliminada', 'success');
+          cargarFacturas();
+        })
+        .withFailureHandler(function (e) {
+          toggleLoaderLocal(false);
+          notify('Error: ' + (e && e.message ? e.message : ''), 'error');
+        })
+        .borrarFacturaCobrosPagos(id);
+    };
+
+    if (typeof Swal === 'undefined') {
+      if (confirm('¿Eliminar la factura ' + id + '? Esta acción no se puede deshacer.')) ejecutar();
+      return;
+    }
+    Swal.fire({
+      title: '¿Eliminar factura ' + id + '?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'error',
+      showCancelButton: true,
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(function (r) { if (r.isConfirmed) ejecutar(); });
+  }
+
+  // ===========================================================
+  // BÚSQUEDA PREDICTIVA
+  // ===========================================================
+  var onDocumentClickDismissSuggestions = null;
+
+  function setupBusquedaPredictiva() {
+    var inp = document.getElementById('searchProveedor');
+    var box = document.getElementById('suggestions-box');
+    if (!inp || !box) return;
+
+    inp.addEventListener('input', function () {
+      var q = inp.value.trim().toLowerCase();
+      filtrarYMostrarFacturas();
+
+      if (!q) { box.classList.remove('show'); box.innerHTML = ''; return; }
+
+      var matches = state.facturas.filter(function (x) {
+        var nom = safeStr(x.ProveedorCliente).toLowerCase();
+        var nro = safeStr(x.NroFactura).toLowerCase();
+        return nom.indexOf(q) !== -1 || nro.indexOf(q) !== -1;
+      }).slice(0, 12);
+
+      if (!matches.length) { box.classList.remove('show'); box.innerHTML = ''; return; }
+
+      box.innerHTML = matches.map(function (x) {
+        var txt = safeStr(x.ProveedorCliente) + ' — ' + safeStr(x.NroFactura);
+        return '<div class="list-group-item" data-sug="' + safeStr(x.NroFactura).replace(/"/g, '&quot;') + '">' + txt + '</div>';
+      }).join('');
+      box.classList.add('show');
+
+      box.querySelectorAll('.list-group-item').forEach(function (item) {
+        item.onclick = function () {
+          inp.value = item.dataset.sug || '';
+          box.classList.remove('show');
+          filtrarYMostrarFacturas();
+        };
+      });
+    });
+
+    if (onDocumentClickDismissSuggestions) {
+      document.removeEventListener('click', onDocumentClickDismissSuggestions);
+    }
+
+    onDocumentClickDismissSuggestions = function (e) {
+      if (!box.contains(e.target) && e.target !== inp) box.classList.remove('show');
+    };
+
+    document.addEventListener('click', onDocumentClickDismissSuggestions);
+  }
+
+  // ===========================================================
+  // THEME CHANGED
+  // ===========================================================
+  document.addEventListener('themeChanged', function () {
+    if (state.mounted) filtrarYMostrarFacturas();
+  });
+
+  // ===========================================================
+  // CICLO DE VIDA: MOUNT / UNMOUNT
+  // ===========================================================
+  function mount(transaccion, rol) {
+    refrescarEmpresaActiva();
+
+    var t = transaccion || 'Compra';
+    state.filtroEstado = (safeStr(t).toLowerCase().indexOf('compr') !== -1 || safeStr(t).toLowerCase().indexOf('pagar') !== -1)
+      ? 'porPagar' : 'porCobrar';
+    state.userRole = rol || 'Owner';
+    state.mounted = true;
+
+    console.log('[FACTURAS] mount() — transaccion:', t, '| rol:', state.userRole, '| idSpreadsheet:', state.idSpreadsheet);
+
+    root().querySelectorAll('.btn-filter').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.filtro === state.filtroEstado);
+    });
+
+    cambiarFiltroEstado(state.filtroEstado);
+    setupBusquedaPredictiva();
+    cargarBancosCajas();
+  }
+
+  function unmount() {
+    state.mounted = false;
+
+    if (onDocumentClickDismissSuggestions) {
+      document.removeEventListener('click', onDocumentClickDismissSuggestions);
+      onDocumentClickDismissSuggestions = null;
+    }
+
+    state.activeModals.forEach(function (m) {
+      try { if (m && m.hide) m.hide(); } catch (e) {}
+    });
+    state.activeModals = [];
+
+    document.querySelectorAll('.modal-backdrop').forEach(function (el) { el.remove(); });
+    document.body.classList.remove('modal-open');
+    document.body.style.removeProperty('padding-right');
+    document.body.style.overflow = '';
+
+    if (state.debounceTimer) {
+      clearTimeout(state.debounceTimer);
+      state.debounceTimer = null;
+    }
+
+    state.facturas = [];
+    state.bancosCajas = [];
+    state.anticipos = [];
+    state.facturasTercero = [];
+    state.historialCache = {};
+    state.tercero = { nombre: '', rif: '', tasa: 1 };
+    state.modoAnticipoDirecto = false;
+  }
+
+  // ===========================================================
+  // COBRANZA POR CORREO Y SOPORTES WEB
+  // ===========================================================
+  function abrirModalEnvioCobranza() {
+    var inp = document.getElementById('searchProveedor');
+    var busqueda = (inp ? inp.value : '').trim();
+
+    if (!busqueda) {
+      notify('Por favor busque o seleccione primero el Cliente en la barra de búsqueda.', 'warning');
+      return;
+    }
+
+    toggleLoaderLocal(true, 'Consultando datos del cliente...');
+    google.script.run
+      .withSuccessHandler(function (res) {
+        toggleLoaderLocal(false);
+        if (!res || !res.success) {
+          notify((res && res.message) || 'No se encontraron datos.', 'warning');
+          return;
+        }
+
+        document.getElementById('cobroClienteNombre').value = res.nombre + ' (' + res.rif + ')';
+        document.getElementById('cobroClienteCorreo').value = res.correo || '';
+
+        var tbody = document.getElementById('bodyFacturasCobro');
+        tbody.innerHTML = '';
+
+        if (!res.facturas || !res.facturas.length) {
+          tbody.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">Este cliente no posee facturas con saldo pendiente.</td></tr>';
+          document.getElementById('btnDispararCorreoCobro').disabled = true;
+        } else {
+          document.getElementById('btnDispararCorreoCobro').disabled = false;
+          res.facturas.forEach(function (f, idx) {
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+              '<td><input type="checkbox" class="chk-item-cobro" checked data-idx="' + idx + '" data-nro="' + f.NroFactura + '" data-saldo="' + num(f.SaldoFacturaUSD) + '" data-fecha="' + (f.FechaFactura || '') + '"></td>' +
+              '<td class="fw-bold">#' + f.NroFactura + '</td>' +
+              '<td class="text-muted">' + (f.FechaFactura || '-') + '</td>' +
+              '<td class="text-end text-warning fw-bold">$ ' + num(f.SaldoFacturaUSD).toFixed(2) + '</td>';
+            tbody.appendChild(tr);
+          });
+        }
+
+        state.cobroClienteActual = res;
+        openModalSafe('modalEnvioCobro');
+      })
+      .withFailureHandler(function (err) {
+        toggleLoaderLocal(false);
+        notify('Error: ' + (err && err.message ? err.message : ''), 'error');
+      })
+      .obtenerDatosParaEnvioCobro(busqueda, state.idSpreadsheet);
+  }
+
+  function toggleTodosCobro(checked) {
+    document.querySelectorAll('.chk-item-cobro').forEach(function (c) { c.checked = checked; });
+  }
+
+  function confirmarDisparoCorreoCobro() {
+    var correo = document.getElementById('cobroClienteCorreo').value.trim();
+    if (!correo || correo.indexOf('@') === -1) {
+      notify('Ingrese un correo electrónico válido.', 'warning');
+      return;
+    }
+
+    var seleccionadas = [];
+    document.querySelectorAll('.chk-item-cobro:checked').forEach(function (c) {
+      seleccionadas.push({
+        NroFactura: c.dataset.nro,
+        SaldoFacturaUSD: parseFloat(c.dataset.saldo) || 0,
+        FechaFactura: c.dataset.fecha
+      });
+    });
+
+    if (!seleccionadas.length) {
+      notify('Seleccione al menos una factura para notificar.', 'warning');
+      return;
+    }
+
+    var payload = {
+      rif: state.cobroClienteActual.rif,
+      nombre: state.cobroClienteActual.nombre,
+      correo: correo,
+      facturas: seleccionadas,
+      idSpreadsheet: state.idSpreadsheet,
+      empresaNombre: state.empresaNombre
+    };
+
+    closeModalSafe('modalEnvioCobro');
+    toggleLoaderLocal(true, 'Enviando correo con botón de reporte de pago...');
+
+    google.script.run
+      .withSuccessHandler(function (res) {
+        toggleLoaderLocal(false);
+        if (res && res.success) {
+          notify(res.message, 'success', 6000);
+        } else {
+          notify((res && res.message) || 'No se pudo enviar el correo.', 'error', 6000);
+        }
+      })
+      .withFailureHandler(function (err) {
+        toggleLoaderLocal(false);
+        notify('Error al enviar correo: ' + (err && err.message ? err.message : ''), 'error');
+      })
+      .enviarNotificacionCobroCliente(payload);
+  }
+
+  function abrirModalSoportesWeb() {
+    toggleLoaderLocal(true, 'Consultando soportes web...');
+    google.script.run
+      .withSuccessHandler(function (soportes) {
+        toggleLoaderLocal(false);
+        var tbody = document.getElementById('bodySoportesWeb');
+        tbody.innerHTML = '';
+
+        if (!soportes || !soportes.length) {
+          tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">No hay soportes pendientes por verificar.</td></tr>';
+        } else {
+          soportes.forEach(function (s) {
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+              '<td class="text-muted small">' + s.fechaRegistro + '</td>' +
+              '<td class="fw-bold text-white">' + s.cliente + '<br><small class="text-muted">' + s.rif + '</small></td>' +
+              '<td class="small text-info">' + s.facturas + '</td>' +
+              '<td><span class="badge bg-secondary">' + s.formaPago + '</span><br><small class="text-muted">Ref: ' + s.referencia + '</small></td>' +
+              '<td class="small text-muted">' + s.bancoOrigen + ' ➔ ' + s.bancoDestino + '</td>' +
+              '<td class="text-end text-warning fw-bold">$ ' + num(s.montoUSD).toFixed(2) + '</td>' +
+              '<td class="text-center">' +
+                '<button type="button" class="btn btn-sm btn-outline-success py-1 px-2" onclick="ModuloFacturasLista.aprobarSoporteWebDirecto(\'' + s.idSoporte + '\')" title="Aprobar y Asentar como Anticipo">' +
+                  '<i class="bi bi-check-lg me-1"></i> Aprobar' +
+                '</button>' +
+              '</td>';
+            tbody.appendChild(tr);
+          });
+        }
+        openModalSafe('modalSoportesWeb');
+      })
+      .withFailureHandler(function (e) {
+        toggleLoaderLocal(false);
+        notify('Error: ' + (e && e.message ? e.message : ''), 'error');
+      })
+      .obtenerSoportesWebPendientes(state.idSpreadsheet);
+  }
+
+  function aprobarSoporteWebDirecto(idSoporte) {
+    if (!state.bancosCajas || state.bancosCajas.length === 0) {
+      notify('No hay cuentas bancarias cargadas para asociar el anticipo.', 'warning');
+      return;
+    }
+
+    var optionsHtml = '';
+    state.bancosCajas.forEach(function (c, i) {
+      var val = c.tipo + '|' + (c.NombreBanco || c.nombreCaja) + '|' + (c.CodigoCuenta || c.codigoCaja) + '|' + c.codContable + '|' + c.nomContable;
+      var txt = '[' + c.tipo + '] ' + (c.NombreBanco || c.nombreCaja) + ' (' + (c.NroCuenta || c.codigoCaja || 'Efectivo') + ')';
+      optionsHtml += '<option value="' + val + '" ' + (i === 0 ? 'selected' : '') + '>' + txt + '</option>';
+    });
+
+    if (typeof Swal === 'undefined') {
+      var cta = prompt('Seleccione cuenta (pegue el valor exacto de una opción):');
+      if (!cta) return;
+      procesarAprobacionSoporteWeb(idSoporte, cta);
+      return;
+    }
+
+    Swal.fire({
+      title: 'Aprobar Soporte Web',
+      html:
+        '<p class="small text-muted mb-3">Seleccione la Cuenta / Caja destino donde se recibió el dinero:</p>' +
+        '<select id="swalSelectCuentaDestino" class="form-select form-select-sm text-dark">' +
+          optionsHtml +
+        '</select>',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Aprobar y Asentar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#10b981',
+      cancelButtonColor: '#6b7280',
+      preConfirm: function () {
+        return document.getElementById('swalSelectCuentaDestino').value;
+      }
+    }).then(function (r) {
+      if (!r.isConfirmed || !r.value) return;
+      procesarAprobacionSoporteWeb(idSoporte, r.value);
+    });
+  }
+
+  function procesarAprobacionSoporteWeb(idSoporte, cuentaSeleccionada) {
+    closeModalSafe('modalSoportesWeb');
+    toggleLoaderLocal(true, 'Asentando anticipo en bancos y cuentas por cobrar...');
+
+    google.script.run
+      .withSuccessHandler(function (res) {
+        toggleLoaderLocal(false);
+        if (res && res.success) {
+          notify(res.mensaje || 'Soporte aprobado con éxito.', 'success', 6000);
+          recargarDatos();
+        } else {
+          notify((res && res.message) || 'Error al procesar.', 'error');
+        }
+      })
+      .withFailureHandler(function (e) {
+        toggleLoaderLocal(false);
+        notify('Error: ' + (e && e.message ? e.message : ''), 'error');
+      })
+      .convertirSoporteEnAnticipo(idSoporte, cuentaSeleccionada, state.idSpreadsheet);
+  }
+
+  // ===========================================================
+  // API PÚBLICA
+  // ===========================================================
+  window.ModuloFacturasLista = {
+    mount: mount,
+    unmount: unmount,
+    refresh: function () { recargarDatos(); },
+
+    // Métodos invocados desde onclick inline del HTML
+    cambiarFiltroEstado: cambiarFiltroEstado,
+    filtrarYMostrarFacturas: filtrarYMostrarFacturas,
+    recargarDatos: recargarDatos,
+    verFactura: verFactura,
+    verHistorialAbonos: verHistorialAbonos,
+    confirmarAnularPago: confirmarAnularPago,
+    anularFactura: anularFactura,
+    imprimirRetencionFactura: imprimirRetencionFactura,
+    reimprimirComprobanteGenerado: reimprimirComprobanteGenerado,
+    abrirModalLiquidacion: abrirModalLiquidacion,
+    filtrarTablaFacturasModal: filtrarTablaFacturasModal,
+    toggleSelectAllFacturas: toggleSelectAllFacturas,
+    onFacturaCheckChanged: onFacturaCheckChanged,
+    recalcularRetencionesAutomaticas: recalcularRetencionesAutomaticas,
+    alternarModoAnticipoDirecto: alternarModoAnticipoDirecto,
+    filtrarCuentasPorModalidadAnticipo: filtrarCuentasPorModalidadAnticipo,
+    agregarFilaPago: agregarFilaPago,
+    verificarCambioCuentaFila: verificarCambioCuentaFila,
+    eliminarFilaPago: eliminarFilaPago,
+    calcularLiquidacion: calcularLiquidacion,
+    confirmarYProcesarLiquidacion: confirmarYProcesarLiquidacion,
+    abrirModalEdicion: abrirModalEdicion,
+    confirmarGuardarEdicion: confirmarGuardarEdicion,
+    abrirModalEnvioCobranza: abrirModalEnvioCobranza,
+    toggleTodosCobro: toggleTodosCobro,
+    confirmarDisparoCorreoCobro: confirmarDisparoCorreoCobro,
+    abrirModalSoportesWeb: abrirModalSoportesWeb,
+    aprobarSoporteWebDirecto: aprobarSoporteWebDirecto,
+    borrarFactura: borrarFactura,
+
+    // Diagnóstico expuesto (útil mientras depuras)
+    _debug: function () {
+      return {
+        idSpreadsheet: state.idSpreadsheet,
+        empresaNombre: state.empresaNombre,
+        filtroEstado: state.filtroEstado,
+        transaccionActual: state.transaccionActual,
+        totalFacturas: state.facturas.length,
+        primeraFactura: state.facturas[0] || null,
+        bancosCajas: state.bancosCajas.length
+      };
+    }
+  };
+
+  // Retro-compatibilidad
+  window.initFacturasLista = mount;
+
+})();
+</script>

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprobante de Retención <?= datos.tipo || 'IVA' ?></title>
+
+<style>
+@media print {
+    @page { size: auto; margin: 0.5cm; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .no-print { display: none !important; }
+    .islr-container { border: none !important; }
+}
+
+body { font-family: "Times New Roman", Times, serif; font-size: 10.5px; margin: 15px; color: #000; background: #fff; } 
+.no-print { text-align: center; background: #f8f9fa; padding: 12px; border-bottom: 2px solid #ddd; margin-bottom: 15px; font-family: Arial, sans-serif; } 
+button { background-color: #198754; color: white; border: none; padding: 8px 16px; cursor: pointer; font-size: 13px; border-radius: 4px; margin: 0 5px; font-weight: bold; }
+
+/* ISLR FORMAT */
+.islr-wrapper { max-width: 210mm; margin: 0 auto; padding: 5px; }
+.islr-container { border: 2px solid #000; padding: 12px; background: #fff; }
+.islr-national-header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 10px; }
+.islr-national-header h1 { font-size: 13px; margin: 0 0 3px 0; font-weight: bold; text-transform: uppercase; }
+.islr-national-header h2 { font-size: 16px; margin: 3px 0; font-weight: bold; text-transform: uppercase; }
+.islr-national-header .subtitle { font-size: 9.5px; }
+.islr-section { border: 1px solid #000; margin-bottom: 8px; padding: 6px 8px; }
+.islr-section-title { font-weight: bold; font-size: 10.5px; margin-bottom: 6px; text-decoration: underline; display: block; }
+.islr-row { display: flex; margin-bottom: 3px; align-items: baseline; }
+.islr-label { font-weight: bold; min-width: 140px; font-size: 10px; }
+.islr-value { flex: 1; border-bottom: 1px solid #333; padding-left: 5px; font-size: 10.5px; }
+.islr-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.islr-monto-box { border: 2px solid #000; padding: 10px; text-align: center; margin: 10px 0; background-color: #f8fafc; }
+.islr-monto-box .amount { font-size: 20px; font-weight: bold; color: #b91c1c; display: block; margin: 4px 0; }
+.islr-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 9.5px; }
+.islr-table th { background: #f1f5f9; border: 1px solid #000; padding: 4px; text-align: center; }
+.islr-table td { border: 1px solid #000; padding: 4px 6px; }
+.islr-signatures { display: flex; justify-content: space-between; margin-top: 30px; padding: 0 20px; }
+.islr-signature { width: 42%; text-align: center; }
+.islr-signature-line { border-top: 1px solid #000; margin-top: 25px; padding-top: 4px; font-size: 9.5px; font-weight: bold; }
+.islr-footer { margin-top: 15px; padding-top: 8px; border-top: 1px solid #999; font-size: 8.5px; text-align: center; color: #333; }
+
+/* IVA FORMAT */
+.iva-container { width: 100%; max-width: 1100px; margin: 0 auto; font-family: Arial, sans-serif; font-size: 10px; } 
+.iva-header-table td { vertical-align: top; padding: 4px; } 
+.iva-main-table { margin-top: 10px; font-size: 9px; border-collapse: collapse; width: 100%; } 
+.iva-main-table th { background-color: #f1f5f9; border: 1px solid #000; padding: 5px 3px; text-align: center; font-weight: bold; } 
+.iva-main-table td { border: 1px solid #000; padding: 4px 5px; text-align: right; } 
+.iva-box-info { border: 1px solid #000; padding: 4px; text-align: center; background-color: #f8f9fa; }
+.iva-firmas { display: flex; justify-content: space-around; margin-top: 40px; } 
+.iva-firma-box { width: 38%; border-top: 1px solid #000; text-align: center; padding-top: 4px; font-size: 9.5px; }
+.text-center { text-align: center !important; } 
+.text-left { text-align: left !important; }
+</style>
+
+</head>
+
+<body>
+
+    <? 
+       // ============ FUNCIONES HELPER ============
+       // ✅ FIX R9: format() ahora es seguro contra NaN / Infinity
+       function format(num) {
+          if (num === null || num === undefined || num === '') return '0,00';
+          var n = parseFloat(num);
+          if (isNaN(n) || !isFinite(n)) return '0,00';
+          return n.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+       }
+       
+       // ✅ FIX R8: formatFecha() respeta la zona horaria local para strings ISO 'YYYY-MM-DD'
+       function formatFecha(fechaStr) {
+          if (!fechaStr) return '';
+          try {
+             // Si viene como 'YYYY-MM-DD', parsear como fecha local para evitar desfase UTC
+             if (typeof fechaStr === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(fechaStr)) {
+                var partes = fechaStr.split('-');
+                var fechaLocal = new Date(parseInt(partes[0], 10), parseInt(partes[1], 10) - 1, parseInt(partes[2], 10));
+                return fechaLocal.toLocaleDateString('es-ES');
+             }
+             var fecha = new Date(fechaStr);
+             if (isNaN(fecha.getTime())) return String(fechaStr);
+             return fecha.toLocaleDateString('es-ES');
+          } catch(e) {
+             return String(fechaStr);
+          }
+       }
+       
+       var tipoRetencion = (datos.tipo || datos.tipoRetencion || 'IVA').toUpperCase();
+       var esISLR = (tipoRetencion.indexOf('ISLR') !== -1);
+       var esIVA = !esISLR;
+       
+       var fechaEmision = new Date();
+       var fechaEmisionStr = formatFecha(datos.fecha || fechaEmision);
+       var anioFiscal = (new Date(datos.fecha || fechaEmision)).getFullYear();
+       var mesFiscal = String((new Date(datos.fecha || fechaEmision)).getMonth() + 1).padStart(2, '0');
+       var periodoFiscal = anioFiscal + "-" + mesFiscal;
+       
+       var tasa = parseFloat(datos.tasa || datos.tasaCambio || 1);
+       if (isNaN(tasa) || tasa <= 0) tasa = 1;
+       
+       var nroComprobante = datos.nroComprobante || "SIN-NUMERO";
+       var nombreEntidad = datos.nombreEntidad || datos.nombreProveedor || datos.nombreCliente || datos.tercero || "";
+       var rifEntidad = datos.rifEntidad || datos.rifProveedor || datos.rifCliente || datos.rif || "J-00000000-0";
+       
+       // Datos Empresa Emisora
+       // ✅ FIX R4: sin optional chaining (?.)
+       var empresaNombre = (datos.empresa && datos.empresa.nombre) || "EMPRESA C.A.";
+       var empresaRif = (datos.empresa && datos.empresa.rif) || "J-00000000-0";
+       var empresaDireccion = (datos.empresa && datos.empresa.direccion) || "Dirección Fiscal de la Empresa";
+       var empresaLogo = (datos.empresa && datos.empresa.logo) || ""; 
+       var empresaTelefono = (datos.empresa && datos.empresa.telefono) || "";
+
+       // ============ NORMALIZAR LISTA DE FACTURAS (MULTI-FACTURA) ============
+       var facturasList = [];
+       if (datos.facturas && Array.isArray(datos.facturas) && datos.facturas.length > 0) {
+           facturasList = datos.facturas;
+       } else {
+           // Soporte para comprobante individual
+           facturasList.push({
+               nroFactura: datos.nroFactura || "S/F",
+               nroControl: datos.nroControl || "00-00000000",
+               fechaFactura: datos.fechaFactura || datos.fecha || "",
+               totalFactura: parseFloat(datos.totalFactura || datos.montoTotal || 0),
+               baseImponible: parseFloat(datos.baseImponible || datos.subTotal || 0),
+               montoIva: parseFloat(datos.montoIva || datos.iva || 0),
+               porcentaje: parseFloat(datos.porcentaje || datos.pctRetencion || (esIVA ? 75 : 2)),
+               montoRetenidoBs: parseFloat(datos.montoRetenidoBs || 0),
+               montoRetenidoUSD: parseFloat(datos.montoRetenidoUSD || 0)
+           });
+       }
+
+       // ============ TOTALIZADORES ============
+       var sumTotalFactura = 0;
+       var sumBaseImponible = 0;
+       var sumMontoIva = 0;
+       var sumTotalRetenidoBs = 0;
+       var sumTotalRetenidoUSD = 0;
+
+       facturasList.forEach(function(f) {
+           // ✅ FIX R3: guarda contra pct = 0 o NaN
+           var pct = parseFloat(f.porcentaje || f.pctRetencion || (esIVA ? 75 : 2));
+           if (isNaN(pct) || pct <= 0) pct = esIVA ? 75 : 2;
+           
+           var retBs = parseFloat(f.montoRetenidoBs || f.calcRetBs || 0);
+           var retUSD = parseFloat(f.montoRetenidoUSD || f.calcRetUSD || 0);
+
+           var base = parseFloat(f.baseImponible || 0);
+           var iva = parseFloat(f.montoIva || 0);
+           var total = parseFloat(f.totalFactura || 0);
+
+           // ✅ FIX R3: guarda extra para evitar división por cero
+           if (base <= 0 && retBs > 0 && pct > 0) {
+               if (esIVA) {
+                   iva = retBs / (pct / 100);
+                   base = iva / 0.16;
+                   total = base + iva;
+               } else {
+                   base = retBs / (pct / 100);
+                   iva = base * 0.16;
+                   total = base + iva;
+               }
+           }
+
+           if (retBs <= 0) {
+               retBs = esIVA ? (iva * (pct / 100)) : (base * (pct / 100));
+               retUSD = retBs / tasa;
+           }
+
+           f.calcBase = base;
+           f.calcIva = iva;
+           f.calcTotal = total;
+           f.calcPct = pct;
+           f.calcRetBs = retBs; // <--- Solo el monto retenido
+           f.calcRetUSD = retUSD;
+
+           sumTotalFactura += total;
+           sumBaseImponible += base;
+           sumMontoIva += iva;
+           sumTotalRetenidoBs += retBs;
+           sumTotalRetenidoUSD += retUSD;
+       });
+
+       var montoEnLetras = datos.montoEnLetras || ("**** " + format(sumTotalRetenidoBs) + " BOLÍVARES ****");
+    ?>
+
+    <!-- ============ BOTONES DE ACCIÓN ============ -->
+    <div class="no-print">
+        <!-- ✅ FIX R7: etiqueta correcta 'I.V.A.' vs 'ISLR' -->
+        <button onclick="window.print()" style="background-color: <?= esISLR ? '#dc2626' : '#16a34a' ?>;">
+            🖨️ IMPRIMIR COMPROBANTE <?= esISLR ? 'ISLR' : 'I.V.A.' ?>
+        </button>
+        <button onclick="window.close()" style="background-color: #475569;">
+            ✕ Cerrar
+        </button>
+        <div style="margin-top:6px; font-size:11px; color:#475569;">
+            Comprobante N°: <strong><?= nroComprobante ?></strong> | 
+            Facturas: <strong><?= facturasList.length ?></strong> | 
+            Total Retenido: <strong style="color:#b91c1c;"><?= format(sumTotalRetenidoBs) ?> Bs ($<?= format(sumTotalRetenidoUSD) ?>)</strong>
+        </div>
+    </div>
+
+    <? if (esIVA) { ?>
+    <!-- ============================================ -->
+    <!-- ============ FORMATO OFICIAL IVA =========== -->
+    <!-- ============================================ -->
+    <div class="iva-container">
+        <table class="iva-header-table" style="width: 100%;">
+            <tr>
+                <td style="width: 40%">
+                    <? if (empresaLogo) { ?>
+                        <img src="<?= empresaLogo ?>" alt="Logo" style="max-height: 60px; max-width: 160px; margin-bottom: 4px;">
+                    <? } ?>
+                    <div style="font-size: 12px; font-weight: bold;"><?= empresaNombre ?></div>
+                    <div><strong>RIF:</strong> <?= empresaRif ?></div>
+                    <div style="font-size: 8.5px;"><?= empresaDireccion ?></div>
+                    <div style="font-size: 8px; margin-top: 4px;">
+                        <strong>Agente de Retención del IVA</strong> (Providencia SNAT/2015/0049)
+                    </div>
+                </td>
+                <td style="width: 30%; text-align: center; vertical-align: middle;">
+                    <h3 style="margin: 0; font-size: 13px; text-transform: uppercase;">Comprobante de Retención del I.V.A.</h3>
+                </td>
+                <td style="width: 30%">
+                    <div class="iva-box-info" style="border: 2px solid #000;">
+                        <table style="border: none; width: 100%; font-size: 9.5px;">
+                            <tr>
+                                <td style="border: none; text-align: right;"><strong>NRO:</strong></td>
+                                <td style="border: none; text-align: left; font-weight: bold; font-size: 12px; color: #b91c1c;">
+                                    <?= nroComprobante ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; text-align: right;"><strong>FECHA:</strong></td>
+                                <td style="border: none; text-align: left; font-weight: bold;"><?= fechaEmisionStr ?></td>
+                            </tr>
+                            <tr>
+                                <td style="border: none; text-align: right;"><strong>PERÍODO:</strong></td>
+                                <td style="border: none; text-align: left; font-weight: bold;"><?= periodoFiscal ?></td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <div style="margin-top: 8px; border: 1px solid #000; padding: 5px; background: #f9f9f9;">
+            <table style="width: 100%; border: none; font-size: 9.5px;">
+                <tr>
+                    <td style="border: none; width: 14%;"><strong>PROVEEDOR / CLIENTE:</strong></td>
+                    <td style="border: none; width: 56%; font-weight: bold; font-size: 10.5px;"><?= nombreEntidad ?></td>
+                    <td style="border: none; width: 8%; text-align: right;"><strong>RIF:</strong></td>
+                    <td style="border: none; width: 22%; font-weight: bold; font-size: 10.5px;"><?= rifEntidad ?></td>
+                </tr>
+            </table>
+        </div>
+
+        <table class="iva-main-table">
+            <thead>
+                <tr>
+                    <th style="width: 4%;">Op</th>
+                    <th style="width: 9%;">Fecha Fact.</th>
+                    <th style="width: 10%;">N° Factura</th>
+                    <th style="width: 10%;">N° Control</th>
+                    <th style="width: 6%;">Tipo</th>
+                    <th style="width: 13%;">Total con IVA</th>
+                    <th style="width: 9%;">Exento</th>
+                    <th style="width: 13%;">Base Imponible</th>
+                    <th style="width: 6%;">% Ret.</th>
+                    <th style="width: 10%;">Monto IVA</th>
+                    <th style="width: 10%;">IVA Retenido</th>
+                </tr>
+            </thead>
+            <tbody>
+                <? for (var i = 0; i < facturasList.length; i++) { 
+                    var f = facturasList[i];
+                ?>
+                <tr>
+                    <td class="text-center"><?= i + 1 ?></td>
+                    <td class="text-center"><?= formatFecha(f.fechaFactura || f.fecha) ?></td>
+                    <td class="text-center" style="font-weight: bold;"><?= f.nroFactura || f.factura ?></td>
+                    <td class="text-center"><?= f.nroControl || '00-00000000' ?></td>
+                    <td class="text-center">01</td>
+                    <td><?= format(f.calcTotal) ?></td>
+                    <td>0,00</td>
+                    <td><?= format(f.calcBase) ?></td>
+                    <td class="text-center"><?= f.calcPct ?>%</td>
+                    <td><?= format(f.calcIva) ?></td>
+                    <td style="font-weight: bold; background-color: #fef3c7;"><?= format(f.calcRetBs) ?></td>
+                </tr>
+                <? } ?>
+                <tr style="background-color: #f1f5f9; font-weight: bold;">
+                    <td colspan="5" style="text-align: right; padding-right: 8px;">TOTALES:</td>
+                    <td><?= format(sumTotalFactura) ?></td>
+                    <td>0,00</td>
+                    <td><?= format(sumBaseImponible) ?></td>
+                    <td></td>
+                    <td><?= format(sumMontoIva) ?></td>
+                    <td style="background-color: #fde68a;"><?= format(sumTotalRetenidoBs) ?></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 12px;">
+            <div style="border: 1px solid #000; padding: 6px; background-color: #f8fafc; margin-bottom: 12px;">
+                <strong>TOTAL RETENIDO (EN LETRAS):</strong><br>
+                <span style="font-style: italic; font-weight: bold; font-size: 10px; text-transform: uppercase;">
+                    <?= montoEnLetras ?>
+                </span>
+            </div>
+
+            <div class="iva-firmas">
+                <div class="iva-firma-box">
+                    <strong>AGENTE DE RETENCIÓN</strong><br>
+                    <span style="font-size: 8.5px;">(Sello y Firma)</span>
+                    <br><br><br>
+                    _________________________<br>
+                    <span style="font-size: 8.5px;"><?= empresaNombre ?></span>
+                </div>
+                <div class="iva-firma-box">
+                    <strong>SUJETO RETENIDO</strong><br>
+                    <span style="font-size: 8.5px;">(Sello y Firma)</span>
+                    <br><br><br>
+                    _________________________<br>
+                    <span style="font-size: 8.5px;"><?= nombreEntidad ?></span>
+                </div>
+            </div>
+            
+            <div style="font-size: 7.5px; color: #64748b; margin-top: 15px; text-align: center;">
+                Providencia Administrativa SNAT/2015/0049 - Gaceta Oficial N°40.720 del 10/08/2015
+            </div>
+        </div>
+    </div>
+
+    <? } else { ?>
+    <!-- ============================================ -->
+    <!-- ============ FORMATO OFICIAL ISLR ========== -->
+    <!-- ============================================ -->
+    <div class="islr-wrapper">
+        <div class="islr-container">
+            <div class="islr-national-header">
+                <? if (empresaLogo) { ?>
+                    <div style="text-align:center; margin-bottom:4px;"><img src="<?= empresaLogo ?>" alt="Logo" style="max-height:50px;"></div>
+                <? } ?>
+                <h1>República Bolivariana de Venezuela</h1>
+                <h2>Comprobante de Retención del ISLR</h2>
+                <div class="subtitle">
+                    <strong>Ley de Impuesto Sobre la Renta</strong> - Decreto N° 1.807
+                </div>
+            </div>
+
+            <!-- DATOS AGENTE Y COMPROBANTE -->
+            <div class="islr-grid-2">
+                <div class="islr-section">
+                    <span class="islr-section-title">1. AGENTE DE RETENCIÓN</span>
+                    <div class="islr-row"><span class="islr-label">Razón Social:</span><span class="islr-value font-bold"><?= empresaNombre ?></span></div>
+                    <div class="islr-row"><span class="islr-label">RIF:</span><span class="islr-value"><?= empresaRif ?></span></div>
+                    <div class="islr-row"><span class="islr-label">Dirección:</span><span class="islr-value"><?= empresaDireccion ?></span></div>
+                </div>
+
+                <div class="islr-section">
+                    <span class="islr-section-title">2. DATOS DEL COMPROBANTE</span>
+                    <div class="islr-row"><span class="islr-label">N° Comprobante:</span><span class="islr-value" style="font-weight:bold; color:#b91c1c; font-size:12px;"><?= nroComprobante ?></span></div>
+                    <div class="islr-row"><span class="islr-label">Fecha Emisión:</span><span class="islr-value"><?= fechaEmisionStr ?></span></div>
+                    <div class="islr-row"><span class="islr-label">Período Fiscal:</span><span class="islr-value"><?= periodoFiscal ?></span></div>
+                </div>
+            </div>
+
+            <!-- DATOS BENEFICIARIO -->
+            <div class="islr-section" style="margin-top: 4px;">
+                <span class="islr-section-title">3. BENEFICIARIO / SUJETO RETENIDO</span>
+                <div class="islr-grid-2">
+                    <div class="islr-row"><span class="islr-label">Razón Social:</span><span class="islr-value font-bold"><?= nombreEntidad ?></span></div>
+                    <div class="islr-row"><span class="islr-label">RIF:</span><span class="islr-value font-bold"><?= rifEntidad ?></span></div>
+                </div>
+            </div>
+
+            <!-- TABLA MULTI-FACTURAS ISLR -->
+            <div class="islr-section" style="margin-top: 4px;">
+                <span class="islr-section-title">4. DETALLE DE FACTURAS Y RETENCIONES</span>
+                <table class="islr-table">
+                    <thead>
+                        <tr>
+                            <th>N° Factura</th>
+                            <th>N° Control</th>
+                            <th>Fecha</th>
+                            <th style="text-align:right;">Monto Total Fact.</th>
+                            <th style="text-align:right;">Base Imponible</th>
+                            <th style="text-align:center;">% Ret.</th>
+                            <th style="text-align:right;">Impuesto Retenido</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <? for (var j = 0; j < facturasList.length; j++) { 
+                            var it = facturasList[j];
+                        ?>
+                        <tr>
+                            <td class="text-center font-bold"><?= it.nroFactura || it.factura ?></td>
+                            <td class="text-center"><?= it.nroControl || '00-00000000' ?></td>
+                            <td class="text-center"><?= formatFecha(it.fechaFactura || it.fecha) ?></td>
+                            <td style="text-align:right;"><?= format(it.calcTotal) ?></td>
+                            <td style="text-align:right;"><?= format(it.calcBase) ?></td>
+                            <td style="text-align:center; font-weight:bold;"><?= it.calcPct ?>%</td>
+                            <td style="text-align:right; font-weight:bold; background-color:#fef3c7;"><?= format(it.calcRetBs) ?></td>
+                        </tr>
+                        <? } ?>
+                        <tr style="font-weight:bold; background:#f1f5f9;">
+                            <td colspan="3" style="text-align:right;">TOTALES:</td>
+                            <td style="text-align:right;"><?= format(sumTotalFactura) ?></td>
+                            <td style="text-align:right;"><?= format(sumBaseImponible) ?></td>
+                            <td></td>
+                            <td style="text-align:right; background:#fde68a;"><?= format(sumTotalRetenidoBs) ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CAJA MONTO TOTAL -->
+            <div class="islr-monto-box">
+                <span style="font-size:10px; font-weight:bold; color:#475569;">TOTAL RETENCIÓN ISLR ACUMULADA</span>
+                <span class="amount"><?= format(sumTotalRetenidoBs) ?> Bs</span>
+                <div style="font-size:9.5px; color:#334155; margin-top:2px;">
+                    Equivalente en Divisa: <strong>$<?= format(sumTotalRetenidoUSD) ?> USD</strong> (Tasa: <?= tasa ?> Bs/$)
+                </div>
+                <div style="font-size:9.5px; font-style:italic; margin-top:4px;">
+                    <strong>SON:</strong> <?= montoEnLetras ?>
+                </div>
+            </div>
+
+            <!-- FIRMAS -->
+            <div class="islr-signatures">
+                <div class="islr-signature">
+                    <div class="islr-signature-line">AGENTE DE RETENCIÓN</div>
+                    <div style="font-size:8px;">Firma, Sello y Fecha</div>
+                </div>
+                <div class="islr-signature">
+                    <div class="islr-signature-line">SUJETO RETENIDO</div>
+                    <div style="font-size:8px;">Firma, Sello y Fecha</div>
+                </div>
+            </div>
+
+            <div class="islr-footer">
+                Documento Oficial de Retención de ISLR - Generado el <?= fechaEmisionStr ?> (Comprobante N° <?= nroComprobante ?>)
+            </div>
+        </div>
+    </div>
+    <? } ?>
+
+</body>
+
+</html>

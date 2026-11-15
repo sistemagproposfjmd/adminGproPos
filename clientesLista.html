@@ -1,0 +1,740 @@
+<!-- ==================== CLIENTES · DISEÑO APPSHEET (mismos colores) ==================== -->
+<style>
+/* ---- Variables (scoped al módulo para no chocar con otros módulos) ---- */
+#pClientesLista{
+  --primary:#38bdf8;--primary-dark:#0284c7;--primary-light:#bae6fd;--primary-soft:rgba(56,189,248,0.12);
+  --bg-body:#0b111e;--bg-card:rgba(255,255,255,0.04);--text-main:#f8fafc;--text-light:#94a3b8;
+  --glass-border:rgba(255,255,255,0.08);--glass-blur:blur(16px);
+  --danger:#f43f5e;--success:#10b981;--warning:#f59e0b;--shadow:0 8px 32px rgba(0,0,0,0.35);
+  --cli-grad:linear-gradient(135deg,#38bdf8 0%,#0284c7 100%);--cli-appbar-h:60px;--cli-nav-h:62px;
+  font-family:'Inter',-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--text-main);font-size:14px;
+  background:var(--bg-body);min-height:100vh;position:relative;
+}
+#pClientesLista h2,#pClientesLista h3,#pClientesLista p{margin:0}
+#pClientesLista ul{list-style:none;margin:0;padding:0}
+
+/* ==================== APP BAR ==================== */
+.cli-appbar{position:sticky;top:0;z-index:600;height:var(--cli-appbar-h);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;background:var(--cli-grad);box-shadow:0 4px 18px rgba(2,132,199,.35)}
+.cli-appbar-left{display:flex;align-items:center;gap:12px;min-width:0}
+.cli-appbar-logo{width:38px;height:38px;border-radius:11px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0}
+.cli-appbar-title{font-size:16px;font-weight:700;color:#fff;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cli-appbar-sub{font-size:10.5px;color:rgba(255,255,255,.85);letter-spacing:.5px;text-transform:uppercase}
+.cli-appbar-right{display:flex;align-items:center;gap:4px}
+.cli-appbar-btn{width:40px;height:40px;border-radius:50%;border:none;background:transparent;color:#fff;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
+.cli-appbar-btn:hover{background:rgba(255,255,255,.18)}
+.cli-appbar-pill{height:38px;padding:0 18px;border-radius:19px;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.22);color:#fff;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;transition:background .2s;flex-shrink:0}
+.cli-appbar-pill:hover{background:rgba(0,0,0,.38)}
+.cli-appbar-avatar{width:34px;height:34px;border-radius:50%;background:rgba(11,17,30,.55);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.35);flex-shrink:0}
+
+/* ==================== CHIPS (escritorio) ==================== */
+.cli-chips{position:sticky;top:var(--cli-appbar-h);z-index:550;display:flex;gap:8px;padding:10px 16px;background:rgba(11,17,30,.85);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border-bottom:1px solid var(--glass-border);overflow-x:auto;scrollbar-width:none}
+.cli-chips::-webkit-scrollbar{display:none}
+.cli-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;border:1.5px solid var(--glass-border);background:var(--bg-card);color:var(--text-light);font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s;text-decoration:none}
+.cli-chip i{color:var(--primary)}
+.cli-chip:hover{border-color:var(--primary);color:var(--text-main)}
+.cli-chip.active{background:var(--cli-grad);border-color:var(--primary);color:#fff}
+.cli-chip.active i{color:#fff}
+
+/* ==================== BOTTOM NAV (solo móvil) ==================== */
+.cli-bottomnav{position:fixed;left:0;right:0;bottom:0;z-index:640;display:none;padding-bottom:env(safe-area-inset-bottom,0px);background:rgba(11,17,30,.96);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border-top:1px solid var(--glass-border)}
+.cli-bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:9px 0 7px;background:none;border:none;color:var(--text-light);font-size:10px;font-weight:600;cursor:pointer;position:relative;transition:color .2s}
+.cli-bn-item i{font-size:17px}
+.cli-bn-item.active{color:var(--primary)}
+.cli-bn-item.active::before{content:'';position:absolute;top:0;left:24%;right:24%;height:3px;background:var(--primary);border-radius:0 0 4px 4px}
+
+/* ==================== FAB (móvil, vista lista) ==================== */
+.cli-fab{position:fixed;right:18px;bottom:calc(var(--cli-nav-h) + env(safe-area-inset-bottom,0px) + 18px);z-index:630;width:56px;height:56px;border-radius:50%;border:none;background:var(--cli-grad);color:#fff;font-size:20px;box-shadow:0 6px 22px rgba(56,189,248,.5);cursor:pointer;display:none;align-items:center;justify-content:center;transition:transform .2s}
+.cli-fab:active{transform:scale(.94)}
+@media(min-width:769px){.cli-fab,.cli-bottomnav{display:none!important}}
+
+/* ==================== VISTAS ==================== */
+#pClientesLista .vista{display:none;animation:cliFade .35s ease;padding:20px;max-width:1440px;margin:0 auto}
+#pClientesLista .vista.activa{display:block}
+@keyframes cliFade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.cli-pagehead{padding:18px 22px;border-radius:18px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--glass-border);background:linear-gradient(135deg,rgba(56,189,248,.18) 0%,rgba(2,132,199,.28) 100%);flex-wrap:wrap}
+.cli-pagehead h2{font-size:19px;font-weight:700;display:flex;align-items:center;gap:10px}
+.cli-pagehead p{margin-top:3px;opacity:.85;font-size:12.5px}
+.cli-btn-volver{background:rgba(255,255,255,.08);border:1px solid var(--glass-border);color:#fff;padding:10px 18px;border-radius:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:44px;transition:all .25s}
+.cli-btn-volver:hover{background:rgba(255,255,255,.18);transform:translateX(-3px)}
+
+/* ==================== TOOLBAR LISTA ==================== */
+.cli-toolbar{padding:14px 16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;background:var(--bg-card);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:16px}
+.cli-filters-group{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cli-filters-group .lbl{color:var(--text-light);font-weight:600;font-size:13px}
+.btn-filter{background:transparent;border:1.5px solid var(--glass-border);color:var(--text-light);padding:8px 16px;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;min-height:38px;white-space:nowrap;transition:all .25s}
+.btn-filter:hover{border-color:var(--primary);color:var(--text-main)}
+.btn-filter.active{background:var(--cli-grad);color:#fff;border-color:var(--primary);font-weight:700}
+.cli-search{position:relative;width:100%;max-width:300px}
+.cli-search input{width:100%;height:42px;padding:0 16px 0 40px;border:1.5px solid var(--glass-border);border-radius:21px;background:rgba(255,255,255,.04);color:var(--text-main);outline:none;font-size:14px;transition:all .25s}
+.cli-search input:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-soft)}
+.cli-search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-light);pointer-events:none}
+.view-toggle-group{display:inline-flex;background:rgba(0,0,0,.25);padding:3px;border-radius:10px;border:1px solid var(--glass-border)}
+.btn-toggle-view{background:transparent;border:none;color:var(--text-light);padding:7px 14px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;min-height:36px;transition:all .2s}
+.btn-toggle-view.active{background:var(--primary);color:#0b111e}
+.btn-dynamic{background:rgba(255,255,255,.05);border:1.5px solid var(--glass-border);color:var(--text-main);padding:9px 16px;border-radius:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:42px;font-size:13px;transition:all .25s}
+.btn-dynamic:hover{border-color:var(--primary);color:var(--primary-light);background:rgba(56,189,248,.08)}
+.btn-dynamic.aceptar{background:var(--cli-grad);border-color:transparent;color:#06121f}
+.btn-dynamic.aceptar:hover{color:#06121f;transform:translateY(-1px)}
+
+/* ==================== TABLA / CARDS ==================== */
+.cli-data{padding:16px;border-radius:18px;background:var(--bg-card);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border)}
+.cli-tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
+.clientes-table{width:100%;border-collapse:collapse;min-width:860px}
+.clientes-table th{background:rgba(56,189,248,.08);color:var(--primary-light);padding:12px 14px;font-weight:600;text-transform:uppercase;font-size:11px;letter-spacing:.06em;text-align:left;white-space:nowrap}
+.clientes-table td{padding:12px 14px;border-bottom:1px solid var(--glass-border);vertical-align:middle;color:var(--text-main)}
+.clientes-table tbody tr{transition:background .15s}
+.clientes-table tbody tr:hover td{background:rgba(56,189,248,.04)}
+.clientes-table tbody tr:last-child td{border-bottom:none}
+.cards-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.client-card{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:16px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;transition:transform .2s,border-color .2s}
+.client-card:hover{transform:translateY(-3px);border-color:rgba(56,189,248,.35)}
+.balance-box-container{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:rgba(0,0,0,.25);padding:10px;border-radius:10px;margin:12px 0;border:1px solid rgba(255,255,255,.03)}
+.balance-label{font-size:10px;color:var(--text-light);text-transform:uppercase;font-weight:700}
+.balance-val{font-size:14px;font-weight:700}
+.balance-val.pending-usd{color:#34d399}
+.balance-val.pending-bs{color:var(--primary-light)}
+.balance-zero{color:var(--text-light);opacity:.5}
+.badge-custom{display:inline-block;padding:3px 10px;border-radius:14px;font-size:11px;font-weight:600}
+.badge-formal{background:rgba(56,189,248,.15);color:var(--primary-light);border:1px solid rgba(56,189,248,.3)}
+.badge-spe{background:rgba(168,85,247,.15);color:#c084fc;border:1px solid rgba(168,85,247,.3)}
+.btn-outline-custom{background:rgba(255,255,255,.04);border:1.5px solid var(--glass-border);color:var(--text-light);padding:6px 10px;border-radius:10px;cursor:pointer;min-height:36px;min-width:36px;display:inline-flex;align-items:center;justify-content:center;transition:all .2s}
+.btn-outline-custom:hover{border-color:var(--primary);color:var(--primary-light);background:rgba(56,189,248,.08)}
+
+/* ==================== FORMULARIOS ==================== */
+.cli-formcard{padding:22px;background:var(--bg-card);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:18px}
+.form-section-saas{margin-bottom:24px}
+.form-section-saas.mb-0{margin-bottom:0}
+.form-section-title{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--primary-light);font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--glass-border);display:flex;align-items:center;gap:8px}
+.form-group-saas{margin-bottom:16px}
+.form-group-saas.mb-0{margin-bottom:0}
+.form-label-saas{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text-main)}
+.required{color:var(--danger)}
+.input-saas{width:100%;padding:10px 14px;background:rgba(255,255,255,.04);border:1.5px solid var(--glass-border);border-radius:12px;color:var(--text-main);font-size:14px;outline:none;min-height:44px;transition:all .25s}
+.input-saas:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+textarea.input-saas{min-height:90px;resize:vertical}
+select.input-saas{cursor:pointer}
+select.input-saas option{background:#0f172a;color:#fff}
+.retencion-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.btn-retencion{padding:8px 4px;border:1.5px solid var(--glass-border);background:rgba(255,255,255,.03);border-radius:10px;font-weight:600;font-size:12px;cursor:pointer;text-align:center;color:var(--text-light);min-height:38px;transition:all .2s}
+.btn-retencion:hover{border-color:var(--primary);color:#fff}
+.btn-retencion.activo{background:var(--primary);border-color:var(--primary);color:#0b111e;font-weight:700}
+.form-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;padding-top:18px;border-top:1px solid var(--glass-border)}
+.btn-saas{padding:11px 22px;border-radius:12px;font-weight:700;font-size:14px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;min-height:46px;transition:all .25s}
+.btn-saas-secondary{background:rgba(255,255,255,.06);color:var(--text-main);border:1px solid var(--glass-border)}
+.btn-saas-secondary:hover{background:rgba(255,255,255,.12)}
+.btn-saas-primary{background:var(--cli-grad);color:#06121f}
+.btn-saas-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(56,189,248,.4)}
+
+/* ==================== DETALLE (Ver) ==================== */
+.cli-detail{padding:24px;background:var(--bg-card);border:1px solid var(--glass-border);border-radius:18px;max-width:800px;margin:0 auto}
+.detail-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--glass-border)}
+.detail-row:last-of-type{border-bottom:none}
+.detail-label{width:190px;flex-shrink:0;font-weight:600;color:var(--text-light);font-size:13px}
+.detail-value{flex:1;color:var(--text-main);font-size:14px}
+
+/* ==================== PAGINACIÓN / ESTADOS ==================== */
+.pagination{display:flex;gap:6px;flex-wrap:wrap}
+.pagination .page-link{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 10px;background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:10px;color:var(--text-main);text-decoration:none;font-weight:600;font-size:13px;cursor:pointer}
+.pagination .page-item.active .page-link{background:var(--primary);border-color:var(--primary);color:#0b111e;font-weight:700}
+.pagination .page-item.disabled .page-link{opacity:.4;pointer-events:none}
+.loading{display:inline-block;width:18px;height:18px;border:3px solid rgba(56,189,248,.3);border-radius:50%;border-top-color:var(--primary);animation:cliSpin 1s linear infinite;vertical-align:middle}
+@keyframes cliSpin{to{transform:rotate(360deg)}}
+#cli_alertServidorError{display:none;padding:12px 16px;margin-bottom:16px;border-radius:12px;background:rgba(244,63,94,.12);border:1px solid rgba(244,63,94,.4);color:#fda4af;font-size:13px}
+#cli_resultadosBusqueda{display:none;padding:10px 14px;margin-bottom:14px;background:var(--primary-soft);border:1px solid rgba(56,189,248,.3);border-radius:10px;color:var(--primary-light);font-size:13px}
+
+/* ==================== SIDEBAR DOCUMENTOS ==================== */
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;z-index:900;backdrop-filter:blur(3px)}
+.sidebar-overlay.activo{display:block}
+.sidebar-documentos{position:fixed;top:0;right:-420px;width:420px;max-width:100%;height:100vh;height:100dvh;background:var(--bg-body);border-left:1px solid var(--glass-border);box-shadow:var(--shadow);transition:right .3s ease;z-index:950;overflow-y:auto}
+.sidebar-documentos.activo{right:0}
+.sidebar-header{padding:18px 20px;border-bottom:1px solid var(--glass-border);display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,rgba(56,189,248,.28) 0%,rgba(2,132,199,.4) 100%);position:sticky;top:0;z-index:2}
+.sidebar-header h3{font-size:16px;font-weight:700;color:#fff}
+.sidebar-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;width:40px;height:40px;border-radius:50%}
+.sidebar-close:hover{background:rgba(255,255,255,.15)}
+.sidebar-content{padding:18px}
+.cliente-info-sidebar{background:rgba(56,189,248,.08);border:1px solid var(--glass-border);border-radius:12px;padding:14px;margin-bottom:16px}
+.cliente-info-row{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;margin-bottom:6px}
+.cliente-info-row:last-child{margin-bottom:0}
+.cliente-info-label{color:var(--text-light);font-weight:600}
+.cliente-info-value{color:var(--text-main);font-weight:700;text-align:right}
+.documento-item{background:rgba(255,255,255,.04);border:1px solid var(--glass-border);border-radius:12px;padding:14px;margin-bottom:12px}
+.documento-item-header{display:flex;justify-content:space-between;align-items:start;gap:8px;margin-bottom:8px}
+.documento-nro{font-weight:700;color:var(--primary-light);font-size:14px}
+.documento-estado{font-size:10.5px;padding:2px 8px;border-radius:8px;background:rgba(245,158,11,.18);color:var(--warning);text-transform:uppercase;font-weight:700}
+.documento-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text-light);margin-bottom:4px}
+.documento-saldo{background:rgba(56,189,248,.08);padding:8px 10px;border-radius:8px;margin-top:8px}
+.documento-saldo-item{display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;margin-bottom:4px}
+.documento-saldo-item:last-child{margin-bottom:0}
+.documento-saldo-bs{color:var(--primary-light)}
+.documento-saldo-usd{color:#34d399}
+
+/* ============================================================
+   MÓVIL (≤768px): modo app AppSheet
+   ============================================================ */
+@media(max-width:768px){
+  .cli-chips{display:none}
+  .cli-bottomnav{display:flex}
+  .cli-appbar-sub{display:none}
+  .hide-mobile{display:none!important}
+  #pClientesLista .vista{padding:14px 12px calc(var(--cli-nav-h) + env(safe-area-inset-bottom,0px) + 22px)}
+  #pClientesLista.cli-submode .vista{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
+  #pClientesLista.cli-submode .cli-bottomnav{display:none!important}
+  .cli-toolbar{flex-direction:column;align-items:stretch}
+  .cli-search{order:1;max-width:100%}
+  .cli-filters-group{order:2;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .cli-filters-group::-webkit-scrollbar{display:none}
+  .cli-toolbar-actions{order:3;justify-content:space-between}
+  /* Sin zoom iOS en inputs */
+  .input-saas,.cli-search input{font-size:16px}
+  .input-saas{min-height:46px}
+  /* Barra de guardado fija estilo AppSheet */
+  .form-actions{position:fixed;left:0;right:0;bottom:0;z-index:645;margin:0;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(11,17,30,.97);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border-top:1px solid var(--glass-border);justify-content:stretch}
+  .form-actions .btn-saas{flex:1;justify-content:center}
+  /* Detalle apilado */
+  .detail-row{flex-direction:column;gap:2px;padding:10px 0}
+  .detail-label{width:100%;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+  .cli-detail{padding:16px}
+  .cli-pagehead{padding:14px 16px}
+  .cli-pagehead h2{font-size:17px}
+  /* Sidebar a pantalla completa */
+  .sidebar-documentos{width:100%;right:-100%}
+}
+@media(max-width:420px){
+  .form-actions .btn-saas span{display:none}
+  .form-actions .btn-saas{flex:0 0 auto;padding:11px 18px}
+}
+</style>
+
+<!-- ==================== CONTENEDOR DEL MÓDULO (ID requerido por tu JS) ==================== -->
+<div id="pClientesLista">
+
+  <!-- APP BAR -->
+  <header class="cli-appbar">
+    <div class="cli-appbar-left">
+      <span class="cli-appbar-logo"><i class="fas fa-users"></i></span>
+      <div style="min-width:0;">
+        <h2 class="cli-appbar-title">Clientes</h2>
+        <div class="cli-appbar-sub">Cartera y Saldos</div>
+      </div>
+    </div>
+    <div class="cli-appbar-right">
+      <button type="button" class="cli-appbar-btn" onclick="window.refrescarTablaManualCliente()" title="Actualizar"><i class="fas fa-sync-alt"></i></button>
+      <button type="button" class="cli-appbar-pill" onclick="window.mostrarVistaAgregarCliente()"><i class="fas fa-plus"></i> Nuevo</button>
+      <span class="cli-appbar-avatar">C</span>
+    </div>
+  </header>
+
+  <!-- CHIPS (escritorio) -->
+  <nav class="cli-chips">
+    <button type="button" class="cli-chip active" onclick="window.volverAPrincipalCliente()"><i class="fas fa-list"></i><span>Lista Clientes</span></button>
+    <button type="button" class="cli-chip" onclick="window.mostrarVistaAgregarCliente()"><i class="fas fa-user-plus"></i><span>Nuevo Cliente</span></button>
+  </nav>
+
+  <!-- BOTTOM NAV (solo móvil) -->
+  <nav class="cli-bottomnav" id="cli_bottomNav">
+    <button type="button" class="cli-bn-item active" data-nav="lista" onclick="window.volverAPrincipalCliente()"><i class="fas fa-users"></i><span>Clientes</span></button>
+    <button type="button" class="cli-bn-item" data-nav="buscar" onclick="window.volverAPrincipalCliente();setTimeout(function(){var i=document.getElementById('cli_searchInput');if(i){i.focus();}},160)"><i class="fas fa-search"></i><span>Buscar</span></button>
+    <button type="button" class="cli-bn-item" data-nav="nuevo" onclick="window.mostrarVistaAgregarCliente()"><i class="fas fa-user-plus"></i><span>Nuevo</span></button>
+    <button type="button" class="cli-bn-item" data-nav="sync" onclick="window.refrescarTablaManualCliente()"><i class="fas fa-sync-alt"></i><span>Actualizar</span></button>
+  </nav>
+
+  <!-- FAB (móvil, lista) -->
+  <button type="button" class="cli-fab" id="cli_fabNuevo" onclick="window.mostrarVistaAgregarCliente()" title="Nuevo cliente"><i class="fas fa-plus"></i></button>
+
+  <!-- OVERLAY + SIDEBAR DOCUMENTOS -->
+  <div id="cli_sidebarOverlay" class="sidebar-overlay" onclick="window.cerrarSidebarCliente()"></div>
+  <div id="cli_sidebarDocumentos" class="sidebar-documentos">
+    <div class="sidebar-header">
+      <h3><i class="fas fa-file-invoice me-2"></i> Documentos Pendientes</h3>
+      <button type="button" class="sidebar-close" onclick="window.cerrarSidebarCliente()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="sidebar-content">
+      <div class="cliente-info-sidebar">
+        <div class="cliente-info-row"><span class="cliente-info-label">Cliente:</span><span class="cliente-info-value" id="cli_sidebarClienteNombre">-</span></div>
+        <div class="cliente-info-row"><span class="cliente-info-label">RIF:</span><span class="cliente-info-value" id="cli_sidebarClienteRif">-</span></div>
+        <div class="cliente-info-row"><span class="cliente-info-label">Saldo Total Bs:</span><span class="cliente-info-value" id="cli_sidebarSaldoTotalBs" style="color: var(--primary-light);">-</span></div>
+        <div class="cliente-info-row"><span class="cliente-info-label">Saldo Total USD:</span><span class="cliente-info-value" id="cli_sidebarSaldoTotalUsd" style="color: #34d399;">-</span></div>
+      </div>
+      <div id="cli_sidebarDocumentosList"></div>
+    </div>
+  </div>
+
+  <!-- ==================== VISTA PRINCIPAL ==================== -->
+  <div id="cli_vistaPrincipal" class="vista activa">
+    <div id="cli_alertServidorError"></div>
+
+    <div class="cli-toolbar">
+      <div class="cli-filters-group">
+        <span class="lbl">Filtros:</span>
+        <button type="button" class="btn-filter active" onclick="window.restablecerFiltroCliente(this)">Todos</button>
+        <button type="button" class="btn-filter" onclick="window.filtrarFormalesCliente(this)">Formales</button>
+        <button type="button" class="btn-filter" onclick="window.filtrarSPECliente(this)">SPE</button>
+      </div>
+
+      <div class="cli-search">
+        <i class="fas fa-search"></i>
+        <input type="text" id="cli_searchInput" placeholder="Buscar cliente o RIF..." onkeyup="window.buscarClientes()">
+      </div>
+
+      <div class="cli-toolbar-actions" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <div class="view-toggle-group">
+          <button type="button" id="cli_btnToggleTabla" class="btn-toggle-view active" onclick="window.cambiarModoVisualizacionCliente('tabla')"><i class="fas fa-table"></i> Tabla</button>
+          <button type="button" id="cli_btnToggleCards" class="btn-toggle-view" onclick="window.cambiarModoVisualizacionCliente('cards')"><i class="fas fa-th-large"></i> Tarjetas</button>
+        </div>
+        <button type="button" class="btn-dynamic hide-mobile" onclick="window.mostrarVistaAgregarCliente()"><i class="fas fa-plus"></i><span>Nuevo Cliente</span></button>
+        <button type="button" class="btn-dynamic aceptar hide-mobile" onclick="window.refrescarTablaManualCliente()"><i class="fas fa-sync-alt"></i><span>Actualizar</span></button>
+      </div>
+    </div>
+
+    <div class="cli-data">
+      <div id="cli_resultadosBusqueda"></div>
+
+      <div id="cli_contenedorTabla" style="display: block;">
+        <div class="cli-tablewrap">
+          <table class="clientes-table">
+            <thead>
+              <tr>
+                <th>ID</th><th>Nombre / Contacto</th><th>RIF</th><th>Tipo</th>
+                <th>Saldo USD</th><th>Saldo Bs</th><th>Responsable</th>
+                <th style="text-align:center;">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="cli_tablaClientesBody">
+              <tr><td colspan="8" style="text-align:center;padding:24px;color:var(--text-light);"><div class="loading"></div> Cargando clientes...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="cli_contenedorCards" class="cards-container" style="display:none;"></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;flex-wrap:wrap;gap:12px;">
+        <span style="color:var(--text-light);font-size:13px;">Mostrando <strong id="cli_totalRegistros" style="color:var(--primary-light);">0</strong> de <strong id="cli_totalClientes">0</strong> clientes</span>
+        <ul class="pagination mb-0" id="cli_pagination"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== VISTA AGREGAR ==================== -->
+  <div id="cli_vistaAgregar" class="vista">
+    <div class="cli-pagehead">
+      <div>
+        <h2><i class="fas fa-user-plus"></i> Nuevo Cliente</h2>
+        <p>Complete la información para registrar un nuevo cliente</p>
+      </div>
+      <button type="button" class="cli-btn-volver" onclick="window.volverAPrincipalCliente()"><i class="fas fa-arrow-left"></i> Volver</button>
+    </div>
+
+    <div class="cli-formcard">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="form-section-saas">
+            <div class="form-section-title"><i class="fas fa-building"></i> Información del Negocio</div>
+            <div class="form-group-saas">
+              <label class="form-label-saas">ID Cliente <span class="required">*</span></label>
+              <input type="text" class="input-saas" id="cli_idAgregar" placeholder="CLI000001">
+            </div>
+            <div class="form-group-saas">
+              <label class="form-label-saas">Nombre del Cliente <span class="required">*</span></label>
+              <input type="text" class="input-saas" id="cli_nombreAgregar" placeholder="Ej: Corporación XYZ, C.A.">
+            </div>
+            <div class="form-group-saas">
+              <label class="form-label-saas">RIF <span class="required">*</span></label>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <input type="text" class="input-saas" id="cli_rifAgregar" placeholder="J-123456789" style="flex:1;min-width:150px;">
+                <button type="button" class="btn-outline-custom" onclick="window.abrirConsultaSENIAT()" style="white-space:nowrap;" title="Abrir SENIAT en pestaña nueva"><i class="fas fa-external-link-alt"></i> Consultar SENIAT</button>
+              </div>
+            </div>
+
+            <!-- Panel de ayuda SENIAT (oculto por defecto) -->
+            <div id="cli_ayudaSeniat" class="form-group-saas" style="display:none;">
+              <div style="background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.3);border-radius:12px;padding:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px;">
+                  <div style="font-weight:700;color:var(--primary-light);font-size:13px;"><i class="fas fa-info-circle me-1"></i> Cómo obtener los datos del SENIAT</div>
+                  <button type="button" onclick="window.cerrarAyudaSENIAT()" style="background:none;border:none;color:var(--text-light);font-size:18px;cursor:pointer;line-height:1;">&times;</button>
+                </div>
+                <ol style="margin:0 0 12px 0;padding-left:20px;color:var(--text-light);font-size:13px;line-height:1.7;">
+                  <li>Se abrió el portal del SENIAT en una pestaña nueva.</li>
+                  <li>Ingrese el RIF <strong id="cli_ayudaRif" style="color:var(--primary-light);">-</strong> en el formulario del SENIAT.</li>
+                  <li>Escriba el código CAPTCHA que aparece en la imagen.</li>
+                  <li>Presione "Buscar" y espere los datos.</li>
+                  <li>Copie el <strong>Nombre/Razón Social</strong> y la <strong>Dirección</strong> y péguelos aquí abajo.</li>
+                </ol>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <button type="button" class="btn-outline-custom" onclick="window.abrirConsultaSENIAT()" style="font-size:12px;"><i class="fas fa-sync-alt"></i> Reabrir SENIAT</button>
+                  <button type="button" class="btn-outline-custom" onclick="window.pegarDesdePortapapeles('cli_nombreAgregar')" style="font-size:12px;"><i class="fas fa-paste"></i> Pegar nombre</button>
+                  <button type="button" class="btn-outline-custom" onclick="window.pegarDesdePortapapeles('cli_direccionAgregar')" style="font-size:12px;"><i class="fas fa-paste"></i> Pegar dirección</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group-saas">
+              <label class="form-label-saas">Dirección Fiscal <span class="required">*</span></label>
+              <textarea class="input-saas" id="cli_direccionAgregar" rows="3" placeholder="Calle, número, ciudad..."></textarea>
+            </div>
+            <div class="form-group-saas mb-0">
+              <label class="form-label-saas">Tipo de Contribuyente <span class="required">*</span></label>
+              <select class="input-saas" id="cli_tipoContribuyenteAgregar">
+                <option value="" disabled selected>Seleccione tipo...</option>
+                <option value="Formal">Formal (IVA General)</option>
+                <option value="SPE">SPE (Sujeto Pasivo Especial)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="form-section-saas">
+            <div class="form-section-title"><i class="fas fa-address-book"></i> Información de Contacto</div>
+            <div class="form-group-saas">
+              <label class="form-label-saas">Correo Electrónico <span class="required">*</span></label>
+              <input type="email" class="input-saas" id="cli_correoAgregar" placeholder="cliente@empresa.com">
+            </div>
+            <div class="form-group-saas mb-0">
+              <label class="form-label-saas">Teléfono <span class="required">*</span></label>
+              <input type="text" class="input-saas" id="cli_telefonoAgregar" placeholder="0412-1234567">
+            </div>
+          </div>
+
+          <div class="form-section-saas mb-0">
+            <div class="form-section-title"><i class="fas fa-percentage"></i> Configuración Fiscal</div>
+            <div class="row g-3">
+              <div class="col-6">
+                <label class="form-label-saas" style="font-size:12px;">Retención IVA (%)</label>
+                <div class="retencion-grid">
+                  <div class="btn-retencion activo" onclick="window.setRetencionCliente('iva', 0)">0%</div>
+                  <div class="btn-retencion" onclick="window.setRetencionCliente('iva', 75)">75%</div>
+                  <div class="btn-retencion" onclick="window.setRetencionCliente('iva', 100)">100%</div>
+                </div>
+                <input type="number" class="input-saas" id="cli_retIVAAgregar" value="0" min="0" max="100">
+              </div>
+              <div class="col-6">
+                <label class="form-label-saas" style="font-size:12px;">Retención ISLR (%)</label>
+                <div class="retencion-grid">
+                  <div class="btn-retencion activo" onclick="window.setRetencionCliente('islr', 0)">0%</div>
+                  <div class="btn-retencion" onclick="window.setRetencionCliente('islr', 1)">1%</div>
+                  <div class="btn-retencion" onclick="window.setRetencionCliente('islr', 2)">2%</div>
+                </div>
+                <input type="number" class="input-saas" id="cli_retISLRAgregar" value="0" min="0" max="100">
+              </div>
+            </div>
+            <div class="form-group-saas" style="margin-top:18px;">
+              <label class="form-label-saas">Responsable</label>
+              <input type="text" class="input-saas" id="cli_responsableAgregar" placeholder="Nombre del responsable">
+            </div>
+            <div class="form-group-saas">
+              <label class="form-label-saas">Status</label>
+              <select class="input-saas" id="cli_statusAgregar">
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-saas btn-saas-secondary" onclick="window.volverAPrincipalCliente()"><i class="fas fa-times"></i> <span>Cancelar</span></button>
+        <button type="button" class="btn-saas btn-saas-primary" onclick="window.guardarDatosCliente(this)"><i class="fas fa-check"></i> <span>Guardar Cliente</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== VISTA EDITAR ==================== -->
+  <div id="cli_vistaEditar" class="vista">
+    <div class="cli-pagehead" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(217, 119, 6, 0.35) 100%);">
+      <div>
+        <h2><i class="fas fa-edit"></i> Editar Cliente</h2>
+        <p>Modifique la información del cliente</p>
+      </div>
+      <button type="button" class="cli-btn-volver" onclick="window.volverAPrincipalCliente()"><i class="fas fa-arrow-left"></i> Volver</button>
+    </div>
+
+    <div class="cli-formcard">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="form-section-saas">
+            <div class="form-section-title"><i class="fas fa-building"></i> Información del Negocio</div>
+            <input type="hidden" id="cli_idEditar">
+            <div class="form-group-saas">
+              <label class="form-label-saas">Nombre del Cliente <span class="required">*</span></label>
+              <input type="text" class="input-saas" id="cli_nombreEditar">
+            </div>
+            <div class="form-group-saas">
+              <label class="form-label-saas">RIF <span class="required">*</span></label>
+              <input type="text" class="input-saas" id="cli_rifEditar">
+            </div>
+            <div class="form-group-saas">
+              <label class="form-label-saas">Dirección <span class="required">*</span></label>
+              <textarea class="input-saas" id="cli_direccionEditar" rows="3"></textarea>
+            </div>
+            <div class="form-group-saas mb-0">
+              <label class="form-label-saas">Tipo de Contribuyente <span class="required">*</span></label>
+              <select class="input-saas" id="cli_tipoContribuyenteEditar">
+                <option value="Formal">Formal (IVA General)</option>
+                <option value="SPE">SPE (Sujeto Pasivo Especial)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="form-section-saas">
+            <div class="form-section-title"><i class="fas fa-address-book"></i> Información de Contacto</div>
+            <div class="form-group-saas">
+              <label class="form-label-saas">Correo Electrónico <span class="required">*</span></label>
+              <input type="email" class="input-saas" id="cli_correoEditar">
+            </div>
+            <div class="form-group-saas mb-0">
+              <label class="form-label-saas">Teléfono <span class="required">*</span></label>
+              <input type="text" class="input-saas" id="cli_telefonoEditar">
+            </div>
+          </div>
+
+          <div class="form-section-saas mb-0">
+            <div class="form-section-title"><i class="fas fa-percentage"></i> Configuración Fiscal</div>
+            <div class="row g-3">
+              <div class="col-6">
+                <label class="form-label-saas">Retención IVA (%)</label>
+                <input type="number" class="input-saas" id="cli_retIVAEditar" min="0" max="100">
+              </div>
+              <div class="col-6">
+                <label class="form-label-saas">Retención ISLR (%)</label>
+                <input type="number" class="input-saas" id="cli_retISLREditar" min="0" max="100">
+              </div>
+            </div>
+            <div class="form-group-saas" style="margin-top:18px;">
+              <label class="form-label-saas">Responsable</label>
+              <input type="text" class="input-saas" id="cli_responsableEditar">
+            </div>
+            <div class="form-group-saas">
+              <label class="form-label-saas">Status</label>
+              <select class="input-saas" id="cli_statusEditar">
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-saas btn-saas-secondary" onclick="window.volverAPrincipalCliente()"><i class="fas fa-times"></i> <span>Cancelar</span></button>
+        <button type="button" class="btn-saas btn-saas-primary" onclick="window.actualizarCliente(this)"><i class="fas fa-save"></i> <span>Actualizar</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== VISTA VER ==================== -->
+  <div id="cli_vistaVer" class="vista">
+    <div class="cli-pagehead" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.35) 100%);">
+      <div>
+        <h2><i class="fas fa-eye"></i> Detalles del Cliente</h2>
+        <p>Información completa del cliente</p>
+      </div>
+      <button type="button" class="cli-btn-volver" onclick="window.volverAPrincipalCliente()"><i class="fas fa-arrow-left"></i> Volver</button>
+    </div>
+
+    <div class="cli-detail">
+      <div class="detail-row"><div class="detail-label">ID Cliente</div><div class="detail-value" id="cli_verId">-</div></div>
+      <div class="detail-row"><div class="detail-label">Nombre</div><div class="detail-value" id="cli_verNombre" style="font-size:16px;font-weight:700;">-</div></div>
+      <div class="detail-row"><div class="detail-label">RIF</div><div class="detail-value" id="cli_verRif">-</div></div>
+      <div class="detail-row"><div class="detail-label">Dirección</div><div class="detail-value" id="cli_verDireccion">-</div></div>
+      <div class="detail-row"><div class="detail-label">Correo</div><div class="detail-value" id="cli_verCorreo">-</div></div>
+      <div class="detail-row"><div class="detail-label">Teléfono</div><div class="detail-value" id="cli_verTelefono">-</div></div>
+      <div class="detail-row"><div class="detail-label">Tipo</div><div class="detail-value"><span id="cli_verTipoContribuyente" class="badge-custom badge-formal">-</span></div></div>
+      <div class="detail-row"><div class="detail-label">Saldo USD</div><div class="detail-value" id="cli_verSaldoUSD" style="color:#34d399;font-weight:700;">-</div></div>
+      <div class="detail-row"><div class="detail-label">Saldo Bs</div><div class="detail-value" id="cli_verSaldoBs" style="color:var(--primary-light);font-weight:700;">-</div></div>
+      <div class="detail-row"><div class="detail-label">Facturas Pendientes</div><div class="detail-value" id="cli_verFacturasPendientes">-</div></div>
+      <div class="detail-row"><div class="detail-label">Responsable</div><div class="detail-value" id="cli_verResponsable">-</div></div>
+      <div class="detail-row"><div class="detail-label">Status</div><div class="detail-value" id="cli_verStatus">-</div></div>
+      <div class="detail-row"><div class="detail-label">Retención IVA</div><div class="detail-value" id="cli_verRetIVA">-</div></div>
+      <div class="detail-row"><div class="detail-label">Retención ISLR</div><div class="detail-value" id="cli_verRetISLR">-</div></div>
+
+      <div class="form-actions" style="margin-top:24px;">
+        <button type="button" class="btn-saas btn-saas-secondary" onclick="window.volverAPrincipalCliente()"><i class="fas fa-arrow-left"></i> <span>Volver</span></button>
+        <button type="button" class="btn-saas btn-saas-primary" onclick="window.editarDesdeVerCliente()"><i class="fas fa-edit"></i> <span>Editar</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== Helper móvil AppSheet (complementa tu JS, no lo modifica) ===== */
+(function(){
+  var root = document.getElementById('pClientesLista');
+  if(!root) return;
+  function esMovil(){ return window.matchMedia('(max-width:768px)').matches; }
+  function sync(){
+    var activa = root.querySelector('.vista.activa');
+    var id = activa ? activa.id : '';
+    var esPrincipal = id === 'cli_vistaPrincipal';
+    root.classList.toggle('cli-submode', !!activa && !esPrincipal);
+    var fab = document.getElementById('cli_fabNuevo');
+    if(fab) fab.style.display = (esMovil() && esPrincipal) ? 'flex' : 'none';
+    var nav = document.getElementById('cli_bottomNav');
+    if(nav && esMovil()){
+      var dataNav = esPrincipal ? 'lista' : (id === 'cli_vistaAgregar' ? 'nuevo' : null);
+      nav.querySelectorAll('.cli-bn-item').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-nav') === dataNav); });
+    }
+  }
+  function observar(){
+    root.querySelectorAll('.vista').forEach(function(v){
+      new MutationObserver(sync).observe(v, {attributes:true, attributeFilter:['class']});
+    });
+    sync();
+  }
+  window.addEventListener('resize', sync);
+  if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', observar); } else { observar(); }
+})();
+</script>
+
+<script>
+// ==================== 1. VARIABLES GLOBALES DE CLIENTES ====================
+window.clientesData = window.clientesData || []; window.filteredDataCliente = window.filteredDataCliente || []; window.modoVisualizacionCliente = 'tabla'; window.currentPageCliente = 1; window.itemsPerPageCliente = 10; window.clienteActualVer = null; window.documentosPendientes = [];
+
+// ==================== 2. HELPER TOAST ====================
+window.showToastCliente = function(icon, title) { if (typeof Swal !== 'undefined') { Swal.fire({ toast: true, position: 'top-end', icon: icon, title: title, showConfirmButton: false, timer: 3000, background: '#0b111e', color: '#f8fafc' }); } else { alert(title); } };
+
+// ============================================================
+// PROTOCOLO DE CICLO DE VIDA SPA (MÓDULO CLIENTES)
+// ============================================================
+function resetearDOMClientes() {
+  window.volverAPrincipalCliente();
+  window.cerrarSidebarCliente();
+  window.limpiarFormularioAgregarCliente();
+  if (typeof window.cerrarAyudaSENIAT === 'function') window.cerrarAyudaSENIAT();
+
+  // Limpiar inputs de edición
+  var idEdit = document.getElementById('cli_idEditar');
+  if (idEdit) idEdit.value = '';
+  var nomEdit = document.getElementById('cli_nombreEditar');
+  if (nomEdit) nomEdit.value = '';
+  var rifEdit = document.getElementById('cli_rifEditar');
+  if (rifEdit) rifEdit.value = '';
+
+  // Limpiar buscador
+  var search = document.getElementById('cli_searchInput');
+  if (search) search.value = '';
+  var alertBox = document.getElementById('cli_resultadosBusqueda');
+  if (alertBox) alertBox.style.display = 'none';
+
+  // Restablecer chip visual a "Todos"
+  var btnTodos = document.querySelector('#pClientesLista .btn-filter');
+  if (btnTodos) window.actualizarBotonFiltroCliente(btnTodos);
+}
+
+window.ModuloClientes = {
+  mount: function() {
+    resetearDOMClientes();
+    window.cargarClientes(false);
+  },
+  unmount: function() {
+    resetearDOMClientes();
+    document.body.style.overflow = '';
+  }
+};
+
+window.initClientesLista = function(transaccion, rol) {
+  window.ModuloClientes.mount();
+};
+
+// ==================== 4. CARGA DE DATOS ====================
+window.cargarClientes = function(silencioso) { if (typeof silencioso === 'undefined') silencioso = false; var tbody = document.getElementById('cli_tablaClientesBody'); if (!silencioso && tbody) { tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 24px; color: var(--text-light);"><div class="loading"></div> Cargando clientes...</td></tr>'; } if (typeof google !== 'undefined' && google.script && google.script.run) { google.script.run.withSuccessHandler(function(data) { window.clientesData = Array.isArray(data) ? data : []; window.filteredDataCliente = window.clientesData.slice(); window.currentPageCliente = 1; window.renderizarVistaCliente(); if (silencioso) window.showToastCliente('success', 'Datos sincronizados'); }).withFailureHandler(function(err) { var errBox = document.getElementById('cli_alertServidorError'); if (errBox) { errBox.style.display = 'block'; errBox.innerHTML = '<strong>Error:</strong> ' + (err.message || err); } if (tbody) { tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: var(--danger);">Error al cargar clientes: ' + (err.message || err) + '</td></tr>'; } }).obtenerClientesConSaldos(); } else { if (tbody) { tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: var(--danger);">No se puede conectar con Google Apps Script</td></tr>'; } } };
+
+// ==================== 5. REFRESCAR TABLA MANUAL ====================
+window.refrescarTablaManualCliente = function() { window.cargarClientes(true); };
+
+// ==================== 6. CAMBIAR VISTA ====================
+window.cambiarVistaCliente = function(vistaId) { var container = document.getElementById('pClientesLista') || document; container.querySelectorAll('.vista').forEach(function(v) { v.classList.remove('activa'); }); var target = document.getElementById(vistaId); if (target) target.classList.add('activa'); };
+
+// ==================== 7. VOLVER A PRINCIPAL ====================
+window.volverAPrincipalCliente = function() { window.cambiarVistaCliente('cli_vistaPrincipal'); };
+
+// ==================== 8. MOSTRAR VISTA AGREGAR ====================
+window.mostrarVistaAgregarCliente = function() { window.limpiarFormularioAgregarCliente(); window.cambiarVistaCliente('cli_vistaAgregar'); };
+
+// ==================== 9. CAMBIAR MODO VISUALIZACIÓN ====================
+window.cambiarModoVisualizacionCliente = function(modo) { window.modoVisualizacionCliente = modo; var btnTabla = document.getElementById('cli_btnToggleTabla'); var btnCards = document.getElementById('cli_btnToggleCards'); var conTabla = document.getElementById('cli_contenedorTabla'); var conCards = document.getElementById('cli_contenedorCards'); if (btnTabla) btnTabla.classList.toggle('active', modo === 'tabla'); if (btnCards) btnCards.classList.toggle('active', modo === 'cards'); if (conTabla) conTabla.style.display = (modo === 'tabla') ? 'block' : 'none'; if (conCards) conCards.style.display = (modo === 'cards') ? 'grid' : 'none'; window.renderizarVistaCliente(); };
+
+// ==================== 10. RENDERIZAR VISTA ====================
+window.renderizarVistaCliente = function() { var start = (window.currentPageCliente - 1) * window.itemsPerPageCliente; var paginatedData = window.filteredDataCliente.slice(start, start + window.itemsPerPageCliente); if (window.modoVisualizacionCliente === 'tabla') { window.renderTablaClientes(paginatedData); } else { window.renderCardsClientes(paginatedData); } window.renderPaginationCliente(); var spanReg = document.getElementById('cli_totalRegistros'); var spanTot = document.getElementById('cli_totalClientes'); if (spanReg) spanReg.textContent = window.filteredDataCliente.length; if (spanTot) spanTot.textContent = window.clientesData.length; };
+
+// ==================== 11. RENDER TABLA CLIENTES ====================
+window.renderTablaClientes = function(data) { var tbody = document.getElementById('cli_tablaClientesBody'); if (!tbody) return; tbody.innerHTML = ''; if (data.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 24px; color: var(--text-light);">No hay registros</td></tr>'; return; } data.forEach(function(c) { var tr = document.createElement('tr'); var badgeClass = (c.TipoContribuyenteCliente === 'SPE') ? 'badge-spe' : 'badge-formal'; var saldoUsd = Number(c.saldoPendienteUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }); var saldoBs = Number(c.saldoPendienteBs || 0).toLocaleString('es-VE', { minimumFractionDigits: 2 }); var colorUsd = c.saldoPendienteUSD > 0 ? '#34d399' : 'inherit'; var colorBs = c.saldoPendienteBs > 0 ? 'var(--primary-light)' : 'inherit'; var nombreEnc = encodeURIComponent(c.NombreClientes || ''); var html = ''; html += '<td><span style="opacity: 0.7; font-size: 12px;">' + (c.idClientes || '-') + '</span></td>'; html += '<td><div style="font-weight: 600;">' + (c.NombreClientes || '-') + '</div><div style="font-size: 12px; color: var(--text-light);">' + (c.CorreoCliente || '-') + '</div></td>'; html += '<td><code>' + (c.RifClientes || '-') + '</code></td>'; html += '<td><span class="badge-custom ' + badgeClass + '">' + (c.TipoContribuyenteCliente || 'Formal') + '</span></td>'; html += '<td><strong style="color: ' + colorUsd + ';">$' + saldoUsd + '</strong></td>'; html += '<td><span style="color: ' + colorBs + '; font-weight: 600;">Bs. ' + saldoBs + '</span></td>'; html += '<td style="font-size: 12px;">' + (c.Responsable || '-') + '</td>'; html += '<td style="text-align: center; white-space: nowrap;"><button class="btn-outline-custom" onclick="window.verCliente(\'' + c.idClientes + '\')" style="padding: 4px 8px;" title="Ver Detalle"><i class="fas fa-eye"></i></button><button class="btn-outline-custom" onclick="window.abrirDocumentosCliente(\'' + c.RifClientes + '\', \'' + nombreEnc + '\', ' + (c.saldoPendienteBs || 0) + ', ' + (c.saldoPendienteUSD || 0) + ')" style="padding: 4px 8px; margin-left: 4px;" title="Ver documentos"><i class="fas fa-file-invoice"></i></button><button class="btn-outline-custom" onclick="window.editarCliente(\'' + c.idClientes + '\')" style="padding: 4px 8px; margin-left: 4px;" title="Editar"><i class="fas fa-edit"></i></button><button class="btn-outline-custom" onclick="window.confirmarEliminarCliente(\'' + c.idClientes + '\')" style="padding: 4px 8px; margin-left: 4px;" title="Eliminar"><i class="fas fa-trash"></i></button></td>'; tr.innerHTML = html; tbody.appendChild(tr); }); };
+
+// ==================== 12. RENDER CARDS CLIENTES ====================
+window.renderCardsClientes = function(data) { var container = document.getElementById('cli_contenedorCards'); if (!container) return; container.innerHTML = ''; if (data.length === 0) { container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 24px; color: var(--text-light);">No hay registros</div>'; return; } data.forEach(function(c) { var card = document.createElement('div'); card.className = 'client-card'; var badgeClass = (c.TipoContribuyenteCliente === 'SPE') ? 'badge-spe' : 'badge-formal'; var saldoUsd = Number(c.saldoPendienteUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }); var saldoBs = Number(c.saldoPendienteBs || 0).toLocaleString('es-VE', { minimumFractionDigits: 2 }); var clsUsd = c.saldoPendienteUSD > 0 ? 'pending-usd' : 'balance-zero'; var clsBs = c.saldoPendienteBs > 0 ? 'pending-bs' : 'balance-zero'; var nombreEnc = encodeURIComponent(c.NombreClientes || ''); var html = ''; html += '<div><div style="display:flex; justify-content:space-between; align-items:start; margin-bottom: 8px;"><div><div style="font-size:15px; font-weight:700; color:#fff;">' + (c.NombreClientes || '') + '</div><div style="font-size:12px; color:var(--text-light);"><i class="fas fa-id-card me-1"></i> ' + (c.RifClientes || '-') + '</div></div><span class="badge-custom ' + badgeClass + '">' + (c.TipoContribuyenteCliente || 'Formal') + '</span></div><div class="balance-box-container"><div><div class="balance-label">Saldo USD</div><div class="balance-val ' + clsUsd + '">$' + saldoUsd + '</div></div><div><div class="balance-label">Saldo Bs</div><div class="balance-val ' + clsBs + '">Bs. ' + saldoBs + '</div></div></div><div style="font-size: 12px; color: var(--text-light); margin-bottom: 6px;"><i class="fas fa-file-invoice-dollar me-1"></i> Facturas: <strong>' + (c.facturasPendientes || 0) + '</strong></div><div style="font-size: 12px; color: var(--text-light); margin-bottom: 6px;"><i class="fas fa-user me-1"></i> ' + (c.Responsable || 'No asignado') + '</div><div style="font-size: 12px; color: var(--text-light);"><i class="fas fa-envelope me-1"></i> ' + (c.CorreoCliente || 'Sin correo') + '</div></div><div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--glass-border); display: flex; justify-content: flex-end; gap: 6px;"><button class="btn-outline-custom" onclick="window.verCliente(\'' + c.idClientes + '\')"><i class="fas fa-eye"></i></button><button class="btn-outline-custom" onclick="window.abrirDocumentosCliente(\'' + c.RifClientes + '\', \'' + nombreEnc + '\', ' + (c.saldoPendienteBs || 0) + ', ' + (c.saldoPendienteUSD || 0) + ')" title="Ver documentos"><i class="fas fa-file-invoice"></i></button><button class="btn-outline-custom" onclick="window.editarCliente(\'' + c.idClientes + '\')"><i class="fas fa-edit"></i></button><button class="btn-outline-custom" onclick="window.confirmarEliminarCliente(\'' + c.idClientes + '\')"><i class="fas fa-trash"></i></button></div>'; card.innerHTML = html; container.appendChild(card); }); };
+
+// ==================== 13. RENDER PAGINACIÓN ====================
+window.renderPaginationCliente = function() { var totalPages = Math.ceil(window.filteredDataCliente.length / window.itemsPerPageCliente); var ul = document.getElementById('cli_pagination'); if (!ul) return; if (totalPages <= 1) { ul.innerHTML = ''; return; } var html = ''; html += '<li class="page-item ' + (window.currentPageCliente === 1 ? 'disabled' : '') + '"><a class="page-link" href="javascript:void(0)" onclick="window.cambiarPaginaCliente(' + (window.currentPageCliente - 1) + ')"><i class="fas fa-chevron-left"></i></a></li>'; for (var i = 1; i <= totalPages; i++) { if (i === 1 || i === totalPages || (i >= window.currentPageCliente - 1 && i <= window.currentPageCliente + 1)) { html += '<li class="page-item ' + (i === window.currentPageCliente ? 'active' : '') + '"><a class="page-link" href="javascript:void(0)" onclick="window.cambiarPaginaCliente(' + i + ')">' + i + '</a></li>'; } } html += '<li class="page-item ' + (window.currentPageCliente === totalPages ? 'disabled' : '') + '"><a class="page-link" href="javascript:void(0)" onclick="window.cambiarPaginaCliente(' + (window.currentPageCliente + 1) + ')"><i class="fas fa-chevron-right"></i></a></li>'; ul.innerHTML = html; };
+
+// ==================== 14. CAMBIAR PÁGINA ====================
+window.cambiarPaginaCliente = function(p) { var total = Math.ceil(window.filteredDataCliente.length / window.itemsPerPageCliente); if (p < 1 || p > total) return; window.currentPageCliente = p; window.renderizarVistaCliente(); };
+
+// ==================== 15. ACTUALIZAR BOTÓN FILTRO ====================
+window.actualizarBotonFiltroCliente = function(btn) { var container = document.getElementById('pClientesLista') || document; container.querySelectorAll('.btn-filter').forEach(function(b) { b.classList.remove('active'); }); if (btn) btn.classList.add('active'); };
+
+// ==================== 16. FILTRAR FORMALES ====================
+window.filtrarFormalesCliente = function(btn) { window.actualizarBotonFiltroCliente(btn); window.filteredDataCliente = window.clientesData.filter(function(p) { return p.TipoContribuyenteCliente === 'Formal'; }); window.currentPageCliente = 1; window.renderizarVistaCliente(); };
+
+// ==================== 17. FILTRAR SPE ====================
+window.filtrarSPECliente = function(btn) { window.actualizarBotonFiltroCliente(btn); window.filteredDataCliente = window.clientesData.filter(function(p) { return p.TipoContribuyenteCliente === 'SPE'; }); window.currentPageCliente = 1; window.renderizarVistaCliente(); };
+
+// ==================== 18. RESTABLECER FILTRO ====================
+window.restablecerFiltroCliente = function(btn) { window.actualizarBotonFiltroCliente(btn); var search = document.getElementById('cli_searchInput'); if (search) search.value = ''; var alertBox = document.getElementById('cli_resultadosBusqueda'); if (alertBox) alertBox.style.display = 'none'; window.filteredDataCliente = window.clientesData.slice(); window.currentPageCliente = 1; window.renderizarVistaCliente(); };
+
+// ==================== 19. BUSCAR CLIENTES ====================
+window.buscarClientes = function() { var term = (document.getElementById('cli_searchInput').value || '').toLowerCase().trim(); var alertBox = document.getElementById('cli_resultadosBusqueda'); if (!term) { window.filteredDataCliente = window.clientesData.slice(); if (alertBox) alertBox.style.display = 'none'; window.currentPageCliente = 1; window.renderizarVistaCliente(); return; } window.filteredDataCliente = window.clientesData.filter(function(p) { return (p.NombreClientes || '').toLowerCase().indexOf(term) !== -1 || (p.RifClientes || '').toLowerCase().indexOf(term) !== -1 || (p.CorreoCliente || '').toLowerCase().indexOf(term) !== -1; }); window.currentPageCliente = 1; window.renderizarVistaCliente(); if (alertBox) { alertBox.style.display = 'block'; alertBox.innerHTML = '<i class="fas fa-search me-2"></i> ' + window.filteredDataCliente.length + ' resultado(s) para "<strong>' + term + '</strong>"'; } };
+
+// ==================== 20. GUARDAR DATOS CLIENTE ====================
+window.guardarDatosCliente = function(button) { var clienteData = { id: document.getElementById('cli_idAgregar').value.trim(), nombre: document.getElementById('cli_nombreAgregar').value.trim(), rif: document.getElementById('cli_rifAgregar').value.trim(), direccion: document.getElementById('cli_direccionAgregar').value.trim(), correo: document.getElementById('cli_correoAgregar').value.trim(), telefono: document.getElementById('cli_telefonoAgregar').value.trim(), tipoContribuyente: document.getElementById('cli_tipoContribuyenteAgregar').value, retIVA: document.getElementById('cli_retIVAAgregar').value || 0, retISLR: document.getElementById('cli_retISLRAgregar').value || 0, responsable: document.getElementById('cli_responsableAgregar').value.trim() || 'No asignado', status: document.getElementById('cli_statusAgregar').value || 'Activo' }; if (!clienteData.id || !clienteData.nombre || !clienteData.rif || !clienteData.direccion || !clienteData.correo || !clienteData.telefono || !clienteData.tipoContribuyente) { window.showToastCliente('error', 'Complete los campos obligatorios'); return; } var txtOriginal = button ? button.innerHTML : ''; if (button) { button.disabled = true; button.innerHTML = '<div class="loading" style="width: 14px; height: 14px; border-width: 2px;"></div> Guardando...'; } if (typeof google !== 'undefined' && google.script && google.script.run) { google.script.run.withSuccessHandler(function(result) { window.showToastCliente('success', (result && result.message) || 'Cliente guardado exitosamente'); window.cargarClientes(false); window.volverAPrincipalCliente(); if (button) { button.disabled = false; button.innerHTML = txtOriginal; } }).withFailureHandler(function(err) { window.showToastCliente('error', err.message || 'Error al guardar'); if (button) { button.disabled = false; button.innerHTML = txtOriginal; } }).guardarCliente(clienteData); } };
+
+// ==================== 21. EDITAR CLIENTE ====================
+window.editarCliente = function(id) { var cliente = window.clientesData.find(function(c) { return String(c.idClientes) === String(id); }); if (!cliente) return; document.getElementById('cli_idEditar').value = cliente.idClientes || ''; document.getElementById('cli_nombreEditar').value = cliente.NombreClientes || ''; document.getElementById('cli_rifEditar').value = cliente.RifClientes || ''; document.getElementById('cli_direccionEditar').value = cliente.DireccionCliente || ''; document.getElementById('cli_correoEditar').value = cliente.CorreoCliente || ''; document.getElementById('cli_telefonoEditar').value = cliente.TelefonoCliente || ''; document.getElementById('cli_tipoContribuyenteEditar').value = cliente.TipoContribuyenteCliente || 'Formal'; document.getElementById('cli_retIVAEditar').value = cliente.RetIVACliente || 0; document.getElementById('cli_retISLREditar').value = cliente.RetISLRCliente || 0; document.getElementById('cli_responsableEditar').value = cliente.Responsable || ''; document.getElementById('cli_statusEditar').value = cliente.Status || 'Activo'; window.cambiarVistaCliente('cli_vistaEditar'); };
+
+// ==================== 22. ACTUALIZAR CLIENTE ====================
+window.actualizarCliente = function(button) { var clienteData = { id: document.getElementById('cli_idEditar').value, nombre: document.getElementById('cli_nombreEditar').value.trim(), rif: document.getElementById('cli_rifEditar').value.trim(), direccion: document.getElementById('cli_direccionEditar').value.trim(), correo: document.getElementById('cli_correoEditar').value.trim(), telefono: document.getElementById('cli_telefonoEditar').value.trim(), tipoContribuyente: document.getElementById('cli_tipoContribuyenteEditar').value, retIVA: document.getElementById('cli_retIVAEditar').value || 0, retISLR: document.getElementById('cli_retISLREditar').value || 0, responsable: document.getElementById('cli_responsableEditar').value.trim(), status: document.getElementById('cli_statusEditar').value || 'Activo' }; var txtOriginal = button ? button.innerHTML : ''; if (button) { button.disabled = true; button.innerHTML = '<div class="loading" style="width: 14px; height: 14px; border-width: 2px;"></div> Actualizando...'; } if (typeof google !== 'undefined' && google.script && google.script.run) { google.script.run.withSuccessHandler(function(result) { window.showToastCliente('success', (result && result.message) || 'Cliente actualizado'); window.cargarClientes(true); window.volverAPrincipalCliente(); if (button) { button.disabled = false; button.innerHTML = txtOriginal; } }).withFailureHandler(function(err) { window.showToastCliente('error', err.message || 'Error al actualizar'); if (button) { button.disabled = false; button.innerHTML = txtOriginal; } }).actualizarCliente(clienteData); } };
+
+// ==================== 23. VER CLIENTE ====================
+window.verCliente = function(id) { var p = window.clientesData.find(function(c) { return String(c.idClientes) === String(id); }); if (!p) return; window.clienteActualVer = p; document.getElementById('cli_verId').textContent = p.idClientes || '-'; document.getElementById('cli_verNombre').textContent = p.NombreClientes || '-'; document.getElementById('cli_verRif').textContent = p.RifClientes || '-'; document.getElementById('cli_verDireccion').textContent = p.DireccionCliente || '-'; document.getElementById('cli_verCorreo').textContent = p.CorreoCliente || '-'; document.getElementById('cli_verTelefono').textContent = p.TelefonoCliente || '-'; document.getElementById('cli_verSaldoUSD').textContent = '$' + Number(p.saldoPendienteUSD || 0).toFixed(2); document.getElementById('cli_verSaldoBs').textContent = 'Bs. ' + Number(p.saldoPendienteBs || 0).toFixed(2); document.getElementById('cli_verFacturasPendientes').textContent = p.facturasPendientes || 0; document.getElementById('cli_verResponsable').textContent = p.Responsable || '-'; document.getElementById('cli_verStatus').textContent = p.Status || 'Activo'; document.getElementById('cli_verRetIVA').textContent = (p.RetIVACliente || '0') + '%'; document.getElementById('cli_verRetISLR').textContent = (p.RetISLRCliente || '0') + '%'; var badge = document.getElementById('cli_verTipoContribuyente'); badge.textContent = p.TipoContribuyenteCliente || 'Formal'; badge.className = 'badge-custom ' + (p.TipoContribuyenteCliente === 'SPE' ? 'badge-spe' : 'badge-formal'); window.cambiarVistaCliente('cli_vistaVer'); };
+
+// ==================== 24. EDITAR DESDE VER CLIENTE ====================
+window.editarDesdeVerCliente = function() { if (window.clienteActualVer && window.clienteActualVer.idClientes) { window.editarCliente(window.clienteActualVer.idClientes); } };
+
+// ==================== 25. CONFIRMAR ELIMINAR CLIENTE ====================
+window.confirmarEliminarCliente = function(id) { if (typeof Swal !== 'undefined') { Swal.fire({ title: '¿Eliminar cliente?', text: 'Esta acción no se puede deshacer', icon: 'warning', showCancelButton: true, confirmButtonColor: '#f43f5e', cancelButtonColor: '#64748b', confirmButtonText: 'Sí, eliminar', background: '#0b111e', color: '#f8fafc' }).then(function(result) { if (result.isConfirmed) window.ejecutarEliminacionCliente(id); }); } else if (confirm('¿Desea eliminar el cliente?')) { window.ejecutarEliminacionCliente(id); } };
+
+// ==================== 26. EJECUTAR ELIMINACIÓN CLIENTE ====================
+window.ejecutarEliminacionCliente = function(id) { if (typeof google !== 'undefined' && google.script && google.script.run) { google.script.run.withSuccessHandler(function() { window.showToastCliente('success', 'Cliente eliminado'); window.cargarClientes(false); }).withFailureHandler(function(err) { window.showToastCliente('error', err.message || 'Error al eliminar'); }).eliminarCliente(String(id)); } };
+
+// ==================== 27. SET RETENCIÓN CLIENTE ====================
+window.setRetencionCliente = function(tipo, val) { var inputId = tipo === 'iva' ? 'cli_retIVAAgregar' : 'cli_retISLRAgregar'; document.getElementById(inputId).value = val; };
+
+// ==================== 28. LIMPIAR FORMULARIO AGREGAR ====================
+window.limpiarFormularioAgregarCliente = function() { document.getElementById('cli_idAgregar').value = ''; document.getElementById('cli_nombreAgregar').value = ''; document.getElementById('cli_rifAgregar').value = ''; document.getElementById('cli_direccionAgregar').value = ''; document.getElementById('cli_correoAgregar').value = ''; document.getElementById('cli_telefonoAgregar').value = ''; document.getElementById('cli_tipoContribuyenteAgregar').selectedIndex = 0; document.getElementById('cli_retIVAAgregar').value = 0; document.getElementById('cli_retISLRAgregar').value = 0; document.getElementById('cli_responsableAgregar').value = ''; document.getElementById('cli_statusAgregar').value = 'Activo'; if (typeof window.resetAyudaSENIAT === 'function') window.resetAyudaSENIAT(); };
+
+// ==================== 29. ABRIR DOCUMENTOS CLIENTE ====================
+window.abrirDocumentosCliente = function(rif, nombreEncoded, saldoBs, saldoUSD) { var nombre = decodeURIComponent(nombreEncoded); document.getElementById('cli_sidebarClienteNombre').textContent = nombre; document.getElementById('cli_sidebarClienteRif').textContent = rif || 'Sin RIF'; document.getElementById('cli_sidebarSaldoTotalBs').textContent = 'Bs. ' + Number(saldoBs || 0).toLocaleString('es-VE', { minimumFractionDigits: 2 }); document.getElementById('cli_sidebarSaldoTotalUsd').textContent = '$' + Number(saldoUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }); var docsList = document.getElementById('cli_sidebarDocumentosList'); docsList.innerHTML = '<div style="text-align: center; padding: 20px;"><div class="loading"></div> Cargando documentos...</div>'; document.getElementById('cli_sidebarOverlay').classList.add('activo'); document.getElementById('cli_sidebarDocumentos').classList.add('activo'); if (typeof google !== 'undefined' && google.script && google.script.run) { google.script.run.withSuccessHandler(function(docs) { window.documentosPendientes = docs || []; window.renderDocumentosSidebarCliente(); }).withFailureHandler(function(err) { docsList.innerHTML = '<div style="color: var(--danger); padding: 20px; text-align: center;"><i class="fas fa-exclamation-circle me-2"></i>Error: ' + (err.message || err) + '</div>'; }).obtenerDocumentosPendientesPorCliente(rif); } else { docsList.innerHTML = '<div style="color: var(--danger); padding: 20px; text-align: center;">No se puede conectar con Google Apps Script</div>'; } };
+
+// ==================== 30. RENDER DOCUMENTOS SIDEBAR ====================
+window.renderDocumentosSidebarCliente = function() { var docsList = document.getElementById('cli_sidebarDocumentosList'); if (!docsList) return; if (window.documentosPendientes.length === 0) { docsList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text-light);">No hay documentos pendientes</div>'; return; } var html = ''; window.documentosPendientes.forEach(function(doc) { var totalF = Number(doc.totalFactura || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }); var saldoBs = Number(doc.saldoBs || 0).toLocaleString('es-VE', { minimumFractionDigits: 2 }); var saldoUsd = Number(doc.saldoUSD || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }); html += '<div class="documento-item"><div class="documento-item-header"><span class="documento-nro">#' + (doc.nroFactura || '-') + '</span><span class="documento-estado">Por Cobrar</span></div><div class="documento-row"><span class="documento-row-label">Fecha:</span><span class="documento-row-value">' + (doc.fechaFactura || '-') + '</span></div><div class="documento-saldo"><div class="documento-saldo-item"><span>Total Factura:</span><span>$' + totalF + '</span></div><div class="documento-saldo-item"><span>Saldo Bs:</span><span class="documento-saldo-bs">Bs. ' + saldoBs + '</span></div><div class="documento-saldo-item"><span>Saldo USD:</span><span class="documento-saldo-usd">$' + saldoUsd + '</span></div></div></div>'; }); docsList.innerHTML = html; };
+
+// ==================== 31. CERRAR SIDEBAR CLIENTE ====================
+window.cerrarSidebarCliente = function() { var overlay = document.getElementById('cli_sidebarOverlay'); var sidebar = document.getElementById('cli_sidebarDocumentos'); if (overlay) overlay.classList.remove('activo'); if (sidebar) sidebar.classList.remove('activo'); };
+
+// ==================== 32. URL SENIAT ====================
+window.SENIAT_URL = 'http://contribuyente.seniat.gob.ve/BuscaRif/BuscaRif.jsp';
+
+// ==================== 33. ABRIR CONSULTA SENIAT ====================
+window.abrirConsultaSENIAT = function() { var rifInput = document.getElementById('cli_rifAgregar'); var rif = (rifInput.value || '').trim(); if (!rif) { window.showToastCliente('warning', 'Ingrese un RIF primero'); rifInput.focus(); return; } window.open(window.SENIAT_URL, '_blank', 'noopener,noreferrer'); var ayuda = document.getElementById('cli_ayudaSeniat'); var rifSpan = document.getElementById('cli_ayudaRif'); if (ayuda) ayuda.style.display = 'block'; if (rifSpan) rifSpan.textContent = rif; window.showToastCliente('info', 'Complete el CAPTCHA en la pestaña del SENIAT'); };
+
+// ==================== 34. CERRAR AYUDA SENIAT ====================
+window.cerrarAyudaSENIAT = function() { var ayuda = document.getElementById('cli_ayudaSeniat'); if (ayuda) ayuda.style.display = 'none'; };
+
+// ==================== 35. PEGAR DESDE PORTAPAPELES ====================
+window.pegarDesdePortapapeles = function(inputId) { var input = document.getElementById(inputId); if (!input) return; if (navigator.clipboard && navigator.clipboard.readText) { navigator.clipboard.readText().then(function(texto) { if (texto && texto.trim()) { input.value = texto.trim(); window.showToastCliente('success', 'Pegado'); } else { window.showToastCliente('warning', 'El portapapeles está vacío'); } }).catch(function() { var manual = prompt('Pegue el contenido aquí:'); if (manual) input.value = manual.trim(); }); } else { var manual = prompt('Pegue el contenido aquí:'); if (manual) input.value = manual.trim(); } };
+
+// ==================== 36. RESET AYUDA SENIAT ====================
+window.resetAyudaSENIAT = function() { var ayuda = document.getElementById('cli_ayudaSeniat'); if (ayuda) ayuda.style.display = 'none'; var rifSpan = document.getElementById('cli_ayudaRif'); if (rifSpan) rifSpan.textContent = '-'; };
+</script>
